@@ -27,7 +27,7 @@
           "type": "sponsored_rail",
           "settings": {
             "side": "right",
-            "product": "stagiaire-en-chef",
+            "product": "alternant",
             "kicker": "Sponsorisé",
             "show_price": true,
             "show_stars": true,
@@ -49,7 +49,7 @@
           "type": "sponsored_rail",
           "settings": {
             "side": "left",
-            "product": "stagiaire-en-chef",
+            "product": "alternant",
             "kicker": "Sponsorisé",
             "show_price": true,
             "show_stars": true,
