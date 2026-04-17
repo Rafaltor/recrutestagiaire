@@ -1,0 +1,383 @@
+{%- comment -%}
+  Layout « mockup » fiche offre / produit (recrute_stagiaire_product_page_mockup.html).
+  Variables attendues : product, collection, section (contexte section).
+{%- endcomment -%}
+{%- assign cv = product.selected_or_first_available_variant -%}
+{%- assign rs_loc = product.metafields.custom.localisation.value
+  | default: product.metafields.custom.localisation
+  | default: product.metafields.custom.ville.value
+  | default: product.metafields.custom.ville
+  | default: section.settings.default_location
+  | default: 'Paris, France'
+-%}
+{%- assign rs_dept_url = '#' -%}
+{%- if product.type != blank -%}
+  {%- assign _ptype_handle = product.type | handle -%}
+  {%- if collections[_ptype_handle] != blank -%}
+    {%- assign rs_dept_url = collections[_ptype_handle].url -%}
+  {%- else -%}
+    {%- assign rs_dept_url = routes.all_products_collection_url -%}
+  {%- endif -%}
+{%- endif -%}
+{%- assign rs_contract = product.metafields.custom.contract_type.value | default: product.metafields.custom.contract_type -%}
+{%- assign rs_dept_detail = product.metafields.custom.department_detail.value | default: product.metafields.custom.department_detail -%}
+{%- assign rs_avail_label = product.metafields.custom.availability_label.value | default: product.metafields.custom.availability_label -%}
+{%- assign rs_collection_badge = product.metafields.custom.collection_badge.value | default: product.metafields.custom.collection_badge -%}
+{%- assign rs_reassurance_block = product.metafields.custom.reassurance.value | default: product.metafields.custom.reassurance -%}
+{%- assign rs_re1 = product.metafields.custom.reassurance_1.value | default: product.metafields.custom.reassurance_1 -%}
+{%- assign rs_re2 = product.metafields.custom.reassurance_2.value | default: product.metafields.custom.reassurance_2 -%}
+{%- assign rs_re3 = product.metafields.custom.reassurance_3.value | default: product.metafields.custom.reassurance_3 -%}
+{%- assign rs_edition_badge = false -%}
+{%- if product.metafields.custom.edition_limitee.value -%}
+  {%- assign rs_edition_badge = true -%}
+{%- endif -%}
+{%- unless rs_edition_badge -%}
+  {%- for rs_t in product.tags -%}
+    {%- assign rs_th = rs_t | handle -%}
+    {%- if rs_th == 'edition-limitee' or rs_th == 'edition-limited' -%}
+      {%- assign rs_edition_badge = true -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endunless -%}
+{%- assign rs_matiere = product.metafields.custom.matiere.value | default: product.metafields.custom.matiere | default: '—' -%}
+{%- if product.type != blank -%}
+  {%- assign rs_dept_meta = product.type -%}
+  {%- if rs_dept_detail != blank -%}
+    {%- assign rs_dept_meta = rs_dept_meta | append: ' / ' | append: rs_dept_detail -%}
+  {%- endif -%}
+{%- elsif rs_dept_detail != blank -%}
+  {%- assign rs_dept_meta = rs_dept_detail -%}
+{%- else -%}
+  {%- assign rs_dept_meta = '—' -%}
+{%- endif -%}
+{%- assign rs_avail_meta = rs_avail_label -%}
+{%- if rs_avail_meta == blank -%}
+  {%- if cv.available -%}
+    {%- assign rs_avail_meta = 'Immédiate' -%}
+  {%- else -%}
+    {%- assign rs_avail_meta = 'Indisponible' -%}
+  {%- endif -%}
+{%- endif -%}
+{%- assign rs_contract_meta = rs_contract -%}
+{%- if rs_contract_meta == blank -%}
+  {%- assign rs_contract_meta = '—' -%}
+{%- endif -%}
+
+{%- if collection -%}
+  {%- assign similar_collection = collections[collection.handle] -%}
+{%- else -%}
+  {%- assign similar_collection = collections.all -%}
+{%- endif -%}
+{%- assign similar_products = similar_collection.products | default: collections.all.products -%}
+
+<div class="rs-pro-mock">
+  <div class="rs-pro-mock__layout">
+    {% if similar_products.size > 1 %}
+      <aside class="rs-pro-mock__rail-left rs-pro-mock__similar-bar rs-pro-mock__similar-bar--desktop" aria-label="Autres offres">
+        <div class="rs-pro-mock__similar-title">{{ section.settings.similar_title | default: 'Autres offres disponibles' }}</div>
+        <div class="rs-pro-mock__similar-grid">
+          {% assign shown_count = 0 %}
+          {% for sim in similar_products limit: 12 %}
+            {% unless sim.id == product.id %}
+              {% assign shown_count = shown_count | plus: 1 %}
+              {% if shown_count <= 3 %}
+                <article class="rs-rail-ad rs-pro-mock__similar-rail-ad">
+                  <span class="rs-rail-ad__sponsored">Autre offre</span>
+                  <a href="{{ sim.url }}" class="rs-rail-ad__media">
+                    {%- if sim.featured_image != blank -%}
+                      <img
+                        src="{{ sim.featured_image | image_url: width: 280 }}"
+                        alt=""
+                        width="110"
+                        height="110"
+                        loading="lazy"
+                        decoding="async"
+                        class="rs-rail-ad__img">
+                    {%- else -%}
+                      <div class="rs-rail-ad__img-fallback">IMG</div>
+                    {%- endif -%}
+                  </a>
+                  <a href="{{ sim.url }}" class="rs-rail-ad__title">{{ sim.title | escape }}</a>
+                  <div class="rs-rail-ad__price"><strong>{{ sim.price | money }}</strong></div>
+                  {%- if sim.type != blank -%}
+                    <div class="rs-rail-ad__type">{{ sim.type | escape }}</div>
+                  {%- endif -%}
+                  <a href="{{ sim.url }}" class="rs-rail-ad__cta">Voir</a>
+                </article>
+              {% endif %}
+            {% endunless %}
+          {% endfor %}
+        </div>
+      </aside>
+    {% endif %}
+
+    <div class="rs-pro-mock__left-top">
+      <div class="rs-pro-mock__tag-row">
+        {% if cv.available %}
+          <span class="rs-pro-mock__tag rs-pro-mock__tag--green">Candidatures ouvertes</span>
+        {% else %}
+          <span class="rs-pro-mock__tag rs-pro-mock__tag--muted">Poste pourvu</span>
+        {% endif %}
+        {% if collection %}
+          <span class="rs-pro-mock__tag rs-pro-mock__tag--blue">{{ collection.title }}</span>
+        {% elsif rs_collection_badge != blank %}
+          <span class="rs-pro-mock__tag rs-pro-mock__tag--blue">{{ rs_collection_badge }}</span>
+        {% endif %}
+        {% if rs_edition_badge %}
+          <span class="rs-pro-mock__tag rs-pro-mock__tag--amber">Édition limitée</span>
+        {% endif %}
+        {%- assign rs_tag_pill_n = 0 -%}
+        {% for tag in product.tags %}
+          {% assign tag_h = tag | handle %}
+          {% unless tag_h == 'edition-limitee' or tag_h == 'edition-limited' %}
+            {% if rs_tag_pill_n < 8 %}
+              <span class="rs-pro-mock__tag">{{ tag }}</span>
+              {% assign rs_tag_pill_n = rs_tag_pill_n | plus: 1 %}
+            {% endif %}
+          {% endunless %}
+        {% endfor %}
+      </div>
+
+      <h1 class="rs-pro-mock__job-title">{{ product.title }}</h1>
+
+      {%- if product.featured_image -%}
+        <div class="rs-pro-mock__img-block">
+          <div class="rs-pro-mock__img-inner">
+            <img
+              id="rs-pro-hero-img"
+              class="rs-pro-mock__hero-img"
+              src="{{ product.featured_image | image_url: width: 1600 }}"
+              alt="{{ product.featured_image.alt | default: product.title | escape }}"
+              loading="eager"
+              decoding="async">
+          </div>
+          <div class="rs-pro-mock__img-overlay">
+            <span class="rs-pro-mock__img-ref">RS-{{ product.id }}{% if cv.sku != blank %} — {{ cv.sku }}{% endif %} · {{ product.title | truncate: 48 }}</span>
+          </div>
+          {%- if product.images.size > 1 -%}
+            <span class="rs-pro-mock__img-corner">{{ product.images.size }} visuels</span>
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        <div class="rs-pro-mock__img-block rs-pro-mock__img-block--empty">
+          <span class="rs-pro-mock__img-ref">RS-{{ product.id }}</span>
+        </div>
+      {%- endif -%}
+
+      {%- if product.images.size > 1 -%}
+        <div class="rs-pro-mock__thumb-row">
+          {%- for image in product.images limit: 8 -%}
+            <button
+              type="button"
+              class="rs-pro-mock__thumb{% if forloop.first %} active{% endif %}"
+              data-src="{{ image | image_url: width: 1200 }}"
+              aria-label="{{ image.alt | default: product.title | escape }} — {{ forloop.index }}">
+              <img
+                src="{{ image | image_url: width: 112, height: 112, crop: 'center' }}"
+                width="56"
+                height="56"
+                alt=""
+                loading="lazy">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+
+    <div class="rs-pro-mock__left-body">
+      <div class="rs-pro-mock__meta-grid">
+        <div class="rs-pro-mock__meta-item">
+          <div class="rs-pro-mock__meta-label">Type de contrat</div>
+          <div class="rs-pro-mock__meta-value">{{ rs_contract_meta }}</div>
+        </div>
+        <div class="rs-pro-mock__meta-item">
+          <div class="rs-pro-mock__meta-label">Disponibilité</div>
+          <div class="rs-pro-mock__meta-value">{{ rs_avail_meta }}</div>
+        </div>
+        <div class="rs-pro-mock__meta-item">
+          <div class="rs-pro-mock__meta-label">Département</div>
+          <div class="rs-pro-mock__meta-value">{{ rs_dept_meta }}</div>
+        </div>
+        <div class="rs-pro-mock__meta-item">
+          <div class="rs-pro-mock__meta-label">Matière</div>
+          <div class="rs-pro-mock__meta-value">{{ rs_matiere }}</div>
+        </div>
+      </div>
+
+      {%- if product.metafields.custom.missions != blank -%}
+        <div class="rs-pro-mock__section">
+          <div class="rs-pro-mock__section-title">{{ section.settings.missions_title | default: 'Missions du poste' }}</div>
+          <div class="rs-pro-mock__mf-body">{{ product.metafields.custom.missions | metafield_tag }}</div>
+        </div>
+      {%- endif -%}
+      <div class="rs-pro-mock__section">
+        <div class="rs-pro-mock__section-title">{{ section.settings.profil_title | default: 'Profil recherché' }}</div>
+        {%- if product.metafields.custom.profil_recherche != blank -%}
+          <div class="rs-pro-mock__mf-body">{{ product.metafields.custom.profil_recherche | metafield_tag }}</div>
+        {%- endif -%}
+      </div>
+      {%- if product.metafields.custom.avantages != blank -%}
+        <div class="rs-pro-mock__section">
+          <div class="rs-pro-mock__section-title">{{ section.settings.avantages_title | default: 'Avantages du poste' }}</div>
+          <div class="rs-pro-mock__mf-body">{{ product.metafields.custom.avantages | metafield_tag }}</div>
+        </div>
+      {%- endif -%}
+
+      {% if product.description != blank %}
+        <div class="rs-pro-mock__section">
+          <div class="rs-pro-mock__section-title">{{ section.settings.description_title | default: 'Description du poste' }}</div>
+          <div class="rs-pro-mock__mf-body rs-pro-mock__mf-body--desc">{{ product.description }}</div>
+        </div>
+      {% endif %}
+
+      {% if similar_products.size > 1 %}
+        <div class="rs-pro-mock__similar-bar rs-pro-mock__similar-bar--mobile">
+          <div class="rs-pro-mock__similar-title">{{ section.settings.similar_title | default: 'Autres offres disponibles' }}</div>
+          <div class="rs-pro-mock__similar-grid">
+            {% assign shown_count = 0 %}
+            {% for sim in similar_products limit: 12 %}
+              {% unless sim.id == product.id %}
+                {% assign shown_count = shown_count | plus: 1 %}
+                {% if shown_count <= 3 %}
+                  <article class="rs-rail-ad rs-pro-mock__similar-rail-ad">
+                    <span class="rs-rail-ad__sponsored">Autre offre</span>
+                    <a href="{{ sim.url }}" class="rs-rail-ad__media">
+                      {%- if sim.featured_image != blank -%}
+                        <img
+                          src="{{ sim.featured_image | image_url: width: 280 }}"
+                          alt=""
+                          width="110"
+                          height="110"
+                          loading="lazy"
+                          decoding="async"
+                          class="rs-rail-ad__img">
+                      {%- else -%}
+                        <div class="rs-rail-ad__img-fallback">IMG</div>
+                      {%- endif -%}
+                    </a>
+                    <a href="{{ sim.url }}" class="rs-rail-ad__title">{{ sim.title | escape }}</a>
+                    <div class="rs-rail-ad__price"><strong>{{ sim.price | money }}</strong></div>
+                    {%- if sim.type != blank -%}
+                      <div class="rs-rail-ad__type">{{ sim.type | escape }}</div>
+                    {%- endif -%}
+                    <a href="{{ sim.url }}" class="rs-rail-ad__cta">Voir</a>
+                  </article>
+                {% endif %}
+              {% endunless %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="rs-pro-mock__right">
+      <div class="rs-pro-mock__apply-card" id="apply-section">
+          {% if cv.available %}
+            <form action="{{ routes.cart_add_url }}" method="post" id="add-to-cart-form">
+              <input type="hidden" name="quantity" value="1">
+              <input type="hidden" name="id" id="product-variant-id" value="{{ cv.id }}">
+
+              <div class="rs-pro-mock__price-block">
+                <div class="rs-pro-mock__price-label">{{ section.settings.price_label | default: 'Rémunération du poste' }}</div>
+                <div class="rs-pro-mock__price" id="rs-pro-price">{{ cv.price | money }}</div>
+                {% if section.settings.free_shipping_text != blank %}
+                  <div class="rs-pro-mock__price-sub">{{ section.settings.free_shipping_text }}</div>
+                {% endif %}
+              </div>
+
+              {% if product.variants.size > 1 %}
+                <div class="rs-pro-mock__size-section">
+                  <div class="rs-pro-mock__size-label">
+                    {{ section.settings.variant_heading | default: 'Sélectionner votre niveau d’expérience' }}
+                  </div>
+                  <div class="rs-pro-mock__size-grid" role="group" aria-label="{{ product.options.first | escape }}">
+                    {% for variant in product.variants %}
+                      <button
+                        type="button"
+                        class="rs-pro-mock__size-btn variant-select{% if variant == cv %} active{% endif %}{% unless variant.available %} unavail{% endunless %}"
+                        data-id="{{ variant.id }}"
+                        data-money="{{ variant.price | money }}"
+                        aria-pressed="{% if variant == cv %}true{% else %}false{% endif %}"
+                        {% unless variant.available %}disabled{% endunless %}>
+                        {%- if product.options.size == 1 -%}
+                          {{- variant.option1 | default: variant.title | truncate: 8 -}}
+                        {%- else -%}
+                          {{- variant.title | truncate: 12 -}}
+                        {%- endif -%}
+                      </button>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+
+              <button type="submit" class="rs-pro-mock__apply-btn">{{ section.settings.add_to_cart_text }}</button>
+              {% if section.settings.save_offer_url != blank %}
+                <a href="{{ section.settings.save_offer_url }}" class="rs-pro-mock__save-btn text-center d-block text-decoration-none">
+                  {{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' }}
+                </a>
+              {% else %}
+                <button
+                  type="button"
+                  class="rs-pro-mock__save-btn"
+                  id="rs-pro-share-offer"
+                  data-reset-label="{{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' | escape }}">
+                  {{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' }}
+                </button>
+              {% endif %}
+
+              {%- liquid
+                assign rs_d1 = rs_re1 | default: section.settings.reassurance_default_1
+                assign rs_d2 = rs_re2 | default: section.settings.reassurance_default_2
+                assign rs_d3 = rs_re3 | default: section.settings.reassurance_default_3
+                assign rs_has_re = false
+                if rs_d1 != blank or rs_d2 != blank or rs_d3 != blank
+                  assign rs_has_re = true
+                endif
+                if rs_reassurance_block != blank
+                  assign rs_has_re = true
+                endif
+              -%}
+              {% if rs_has_re %}
+                <div class="rs-pro-mock__delivery-info">
+                  {% if rs_d1 != blank %}
+                    <div class="rs-pro-mock__delivery-row">
+                      <span class="rs-pro-mock__dot"></span>
+                      <span>{{ rs_d1 }}</span>
+                    </div>
+                  {% endif %}
+                  {% if rs_d2 != blank %}
+                    <div class="rs-pro-mock__delivery-row">
+                      <span class="rs-pro-mock__dot"></span>
+                      <span>{{ rs_d2 }}</span>
+                    </div>
+                  {% endif %}
+                  {% if rs_d3 != blank %}
+                    <div class="rs-pro-mock__delivery-row">
+                      <span class="rs-pro-mock__dot"></span>
+                      <span>{{ rs_d3 }}</span>
+                    </div>
+                  {% endif %}
+                  {% if rs_reassurance_block != blank %}
+                    {% assign _re_lines = rs_reassurance_block | newline_to_br | split: '<br />' %}
+                    {% for _re_piece in _re_lines %}
+                      {% assign _re_piece = _re_piece | strip %}
+                      {% if _re_piece != blank %}
+                        <div class="rs-pro-mock__delivery-row">
+                          <span class="rs-pro-mock__dot"></span>
+                          <span>{{ _re_piece }}</span>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                </div>
+              {% endif %}
+            </form>
+          {% else %}
+            <p class="text-muted mb-0">{{ section.settings.sold_out_message | default: 'Ce poste est actuellement pourvu.' }}</p>
+            <a href="{{ routes.all_products_collection_url }}" class="btn btn-outline-secondary btn-sm mt-3">{{ section.settings.sold_out_cta | default: 'Voir les autres offres' }}</a>
+          {% endif %}
+    </div>
+  </div>
+</div>

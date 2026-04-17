@@ -1,0 +1,27 @@
+{
+  "general": {
+    "password_page": {
+      "login_form_heading": "Ce poste est en accès restreint",
+      "login_form_password_label": "Mot de passe",
+      "login_form_password_placeholder": "Entrez le mot de passe",
+      "login_form_submit": "Accéder",
+      "powered_by_shopify_html": "Propulsé par {{ shopify }}"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Postuler — Ajouter au dossier",
+      "sold_out": "Poste pourvu",
+      "unavailable": "Indisponible"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Mon dossier de candidature",
+      "remove": "Retirer",
+      "subtotal": "Sous-total",
+      "checkout": "Soumettre ma candidature",
+      "empty": "Votre dossier est vide."
+    }
+  }
+}

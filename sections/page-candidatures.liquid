@@ -1,0 +1,572 @@
+{%- assign rs_mode = section.settings.page_mode | default: 'both' -%}
+{%- assign show_profiles = false -%}
+{%- assign show_form = false -%}
+{%- if rs_mode == 'profiles' or rs_mode == 'both' -%}{%- assign show_profiles = true -%}{%- endif -%}
+{%- if rs_mode == 'form' or rs_mode == 'both' -%}{%- assign show_form = true -%}{%- endif -%}
+
+<!-- En-tête page -->
+<div class="gray py-4 border-bottom rs-candidatures-head">
+  <div class="container">
+    <h1 style="font-size:{{ section.settings.page_title_size }}px;font-weight:600;margin:0 0 4px;">
+      {{ section.settings.page_title | default: 'Candidatures ouvertes' }}
+    </h1>
+    <p style="font-size:{{ section.settings.subtitle_size }}px;color:#6c757d;margin:0;">
+      {{ section.settings.page_subtitle | default: 'Découvrez les profils disponibles ou déposez votre candidature.' }}
+    </p>
+  </div>
+</div>
+
+<section class="rs-page-cand" style="padding:{{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;">
+  <div class="container">
+    <div class="row g-0 rs-tile-split align-items-start{% if rs_mode == 'form' %} justify-content-center{% endif %}">
+
+      {%- if show_profiles -%}
+      <div class="{% if rs_mode == 'both' %}col-xl-8 col-lg-8 rs-tile-split__main{% else %}col-12{% endif %} col-md-12">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <h2 style="font-size:{{ section.settings.grid_title_size }}px;font-weight:600;margin:0;">
+            {{ section.settings.grid_title | default: 'Profils disponibles' }}
+          </h2>
+          <span id="rs-count" class="badge bg-success rs-profile-count" style="display:none;"></span>
+        </div>
+
+        <div class="mb-4">
+          <div class="formField icons">
+            <input type="text" id="rs-search" class="form-control lights"
+              style="height:{{ section.settings.search_height }}px;"
+              placeholder="{{ section.settings.search_placeholder | default: 'Rechercher par nom, poste...' }}">
+            <i class="bi bi-search icon"></i>
+          </div>
+        </div>
+
+        <div id="rs-loading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="text-muted mt-3 small">Chargement des profils...</p>
+        </div>
+
+        <div id="rs-grid" class="rs-pe-list" style="display:none;"></div>
+
+        <div id="rs-empty" class="text-center py-5" style="display:none;">
+          <i class="bi bi-people fs-1 text-muted d-block mb-3"></i>
+          <p class="text-muted">Aucun profil disponible pour le moment.</p>
+        </div>
+
+        <div id="rs-config-error" class="alert alert-warning" style="display:none;">
+          <i class="bi bi-gear me-2"></i>
+          Configurez le <strong>Token Airtable</strong> dans le customizer Shopify pour afficher les profils.
+        </div>
+
+        <div id="rs-net-error" class="alert alert-danger" style="display:none;">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          Impossible de charger les profils. Vérifiez le token et le nom de la table.
+        </div>
+
+        {%- if rs_mode == 'profiles' and section.settings.form_page_url != blank -%}
+          <div class="mt-4">
+            <a href="{{ section.settings.form_page_url }}" class="btn btn-primary">
+              {{ section.settings.form_page_link_label | default: 'Déposer ma candidature' }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+      {%- endif -%}
+
+      {%- if show_form -%}
+      <div class="{% if rs_mode == 'both' %}col-xl-4 col-lg-4 rs-tile-split__aside{% else %}col-12 col-lg-8 col-xl-7{% endif %} col-md-12">
+        {%- if rs_mode == 'form' and section.settings.profiles_page_url != blank -%}
+          <div class="mb-3">
+            <a href="{{ section.settings.profiles_page_url }}" class="btn btn-outline-secondary btn-sm">
+              {{ section.settings.profiles_page_link_label | default: 'Voir les profils publiés' }}
+            </a>
+          </div>
+        {%- endif -%}
+
+        <div id="deposer-candidature" class="border rounded overflow-hidden{% if rs_mode == 'form' %} mx-auto{% endif %}"
+          {% if rs_mode == 'both' %}style="position:sticky;top:80px;"{% endif %}>
+          <div style="background:linear-gradient(135deg,{{ section.settings.form_header_from }},{{ section.settings.form_header_to }});padding:20px 24px;">
+            <h4 class="text-white fw-semibold mb-1"
+              style="font-size:{{ section.settings.form_title_size }}px;">
+              {{ section.settings.form_title | default: 'Déposer ma candidature' }}
+            </h4>
+            <p class="text-white small mb-0" style="opacity:.75;">
+              {{ section.settings.form_subtitle | default: 'Votre profil sera visible après modération.' }}
+            </p>
+          </div>
+
+          <div class="p-4">
+
+            <div id="rs-success" class="alert alert-success mb-3" style="display:none;">
+              <i class="bi bi-check-circle-fill me-2"></i>
+              <strong>{{ section.settings.success_title | default: 'Candidature envoyée !' }}</strong><br>
+              <span class="small">{{ section.settings.success_text | default: 'Elle sera visible après validation.' }}</span>
+            </div>
+
+            <div id="rs-form-error" class="alert alert-danger mb-3 small" style="display:none;"></div>
+
+            <form id="rs-form" novalidate>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:{{ section.settings.form_label_size }}px;">
+                  {{ section.settings.label_name | default: 'Nom & Prénom' }} <span class="text-danger">*</span>
+                </label>
+                <input type="text" id="rs-nom" class="form-control"
+                  style="font-size:{{ section.settings.form_input_size }}px;"
+                  placeholder="{{ section.settings.placeholder_name | default: 'ex : Sophie Martin' }}" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:{{ section.settings.form_label_size }}px;">
+                  {{ section.settings.label_email | default: 'Adresse email' }} <span class="text-danger">*</span>
+                </label>
+                <input type="email" id="rs-email" class="form-control"
+                  style="font-size:{{ section.settings.form_input_size }}px;"
+                  placeholder="{{ section.settings.placeholder_email | default: 'votre@email.com' }}" required>
+                {% if section.settings.email_help != blank %}
+                  <div class="form-text" style="font-size:{{ section.settings.form_label_size | minus: 1 }}px;">
+                    {{ section.settings.email_help }}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:{{ section.settings.form_label_size }}px;">
+                  {{ section.settings.label_poste | default: 'Poste recherché' }} <span class="text-danger">*</span>
+                </label>
+                <input type="text" id="rs-poste" class="form-control"
+                  style="font-size:{{ section.settings.form_input_size }}px;"
+                  placeholder="{{ section.settings.placeholder_poste | default: 'ex : Designer textile, Modéliste...' }}" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:{{ section.settings.form_label_size }}px;">
+                  {{ section.settings.label_cv | default: 'Lien vers votre CV' }}
+                </label>
+                <input type="url" id="rs-cv" class="form-control"
+                  style="font-size:{{ section.settings.form_input_size }}px;"
+                  placeholder="{{ section.settings.placeholder_cv | default: 'https://drive.google.com/...' }}">
+                {% if section.settings.cv_help != blank %}
+                  <div class="form-text" style="font-size:{{ section.settings.form_label_size | minus: 1 }}px;">
+                    {{ section.settings.cv_help }}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-semibold" style="font-size:{{ section.settings.form_label_size }}px;">
+                  {{ section.settings.label_portfolio | default: 'Portfolio, LinkedIn ou site web' }}
+                </label>
+                <input type="url" id="rs-portfolio" class="form-control"
+                  style="font-size:{{ section.settings.form_input_size }}px;"
+                  placeholder="{{ section.settings.placeholder_portfolio | default: 'https://...' }}">
+              </div>
+
+              <button type="submit" id="rs-submit" class="btn btn-primary w-100 fw-semibold"
+                style="font-size:{{ section.settings.submit_size }}px;border-radius:{{ section.settings.submit_radius }}px;padding:10px;">
+                <span id="rs-submit-text">
+                  <i class="bi bi-send me-2"></i>{{ section.settings.submit_label | default: 'Envoyer ma candidature' }}
+                </span>
+                <span id="rs-submit-loader" style="display:none;">
+                  <span class="spinner-border spinner-border-sm me-2"></span>Envoi en cours...
+                </span>
+              </button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .rs-pe-list { display: flex; flex-direction: column; gap: {{ section.settings.card_gap_pe | default: 16 }}px; }
+  .rs-pe-card {
+    border: 1px solid #c5d5e4;
+    border-radius: {{ section.settings.card_radius }}px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 40, 100, 0.08);
+    overflow: hidden;
+  }
+  .rs-pe-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 14px;
+    background: linear-gradient(180deg, {{ section.settings.pe_bar_color | default: '#005a9c' }} 0%, {{ section.settings.pe_bar_color_dark | default: '#004578' }} 100%);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .rs-pe-card__status { text-transform: uppercase; }
+  .rs-pe-card__ref { opacity: 0.9; font-weight: 500; font-size: 11px; }
+  .rs-pe-card__body { padding: 16px 18px 14px; }
+  .rs-pe-card__title {
+    margin: 0 0 14px;
+    font-size: {{ section.settings.card_name_size }}px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.25;
+    border-bottom: 2px solid {{ section.settings.pe_accent | default: '#e85d04' }};
+    padding-bottom: 8px;
+  }
+  .rs-pe-dl { margin: 0; }
+  .rs-pe-dl > div {
+    display: grid;
+    grid-template-columns: minmax(120px, 34%) 1fr;
+    gap: 8px 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid #e8eef4;
+    font-size: {{ section.settings.card_role_size }}px;
+  }
+  .rs-pe-dl > div:last-of-type { border-bottom: none; }
+  .rs-pe-dl dt {
+    margin: 0;
+    color: #5a6c7d;
+    font-weight: 600;
+  }
+  .rs-pe-dl dd { margin: 0; color: #222; word-break: break-word; }
+  .rs-pe-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed #cfd8e3;
+  }
+  .rs-pe-card__actions .btn { flex: 1 1 auto; min-width: 120px; }
+  @media (max-width: 576px) {
+    .rs-pe-dl > div { grid-template-columns: 1fr; gap: 2px; }
+    .rs-pe-dl dt { font-size: 11px; }
+  }
+
+  #rs-count.rs-profile-count {
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2;
+    text-align: center;
+    vertical-align: middle;
+    align-self: center;
+    padding: 0.42em 0.75em;
+    box-sizing: border-box;
+  }
+
+</style>
+
+<script>
+(function() {
+  var API = {{ section.settings.rs_api_url | json }};
+
+  var FIELD_POSTE = {{ section.settings.airtable_field_poste | default: 'Poste recherché' | json }};
+  var FIELD_PROF  = {{ section.settings.airtable_field_professions | json }};
+
+  var AVATAR_SIZE  = {{ section.settings.avatar_size }};
+  var CARD_RADIUS  = {{ section.settings.card_radius }};
+  var ROLE_SIZE    = {{ section.settings.card_role_size }};
+  var EMAIL_SIZE   = {{ section.settings.card_email_size }};
+  var BTN_SIZE     = {{ section.settings.card_btn_size }};
+
+  var elGrid     = document.getElementById('rs-grid');
+  var elLoading  = document.getElementById('rs-loading');
+  var elEmpty    = document.getElementById('rs-empty');
+  var elCfgErr   = document.getElementById('rs-config-error');
+  var elNetErr   = document.getElementById('rs-net-error');
+  var elCount    = document.getElementById('rs-count');
+  var elSearch   = document.getElementById('rs-search');
+  var allRecords = [];
+
+  function load() {
+    if (!elGrid || !elLoading) return;
+    if (!API) {
+      elLoading.style.display = 'none';
+      if (elCfgErr) elCfgErr.style.display = 'block';
+      return;
+    }
+    var url = String(API).replace(/\?+$/, '') + '?action=profiles';
+
+    fetch(url)
+      .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function(data) {
+        elLoading.style.display = 'none';
+        var recs = (data && data.profiles) ? data.profiles : [];
+        if (!recs.length) {
+          if (elEmpty) elEmpty.style.display = 'block';
+          return;
+        }
+        // Adaptation format Airtable -> ancien format attendu par render()
+        allRecords = recs.map(function(p) {
+          return {
+            id: p.id || '',
+            fields: {
+              'Nom Prénom': p.name || '',
+              'Email': p.email || '',
+              // Backward compat: allow custom field names in theme settings
+              [FIELD_POSTE]: p.role || '',
+              ...(FIELD_PROF ? { [FIELD_PROF]: p.professions || '' } : {}),
+              'CV': p.cv || '',
+              'Portfolio': p.portfolio || ''
+            }
+          };
+        });
+        if (elCount) {
+          elCount.textContent = allRecords.length + ' profil' + (allRecords.length > 1 ? 's' : '');
+          elCount.style.display = 'inline-flex';
+        }
+        elGrid.style.display = '';
+        render(allRecords);
+      })
+      .catch(function(err) {
+        elLoading.style.display = 'none';
+        if (elNetErr) elNetErr.style.display = 'block';
+        console.error('Airtable error:', err);
+      });
+  }
+
+  function esc(s) {
+    if (s == null || s === '') return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function escAttr(s) {
+    if (s == null || s === '') return '';
+    return String(s).replace(/"/g, '&quot;');
+  }
+
+  function professionText(f) {
+    var pProf = (FIELD_PROF && f[FIELD_PROF]) ? String(f[FIELD_PROF]).trim() : '';
+    var pPoste = f[FIELD_POSTE] ? String(f[FIELD_POSTE]).trim() : '';
+    var parts = [];
+    if (pProf) parts.push(pProf);
+    if (pPoste && pPoste !== pProf) parts.push(pPoste);
+    return parts.join(' — ');
+  }
+
+  function recordSearchBlob(r) {
+    var f = r.fields;
+    return [
+      f['Nom Prénom'], f['Email'], professionText(f),
+      FIELD_PROF ? f[FIELD_PROF] : '', f[FIELD_POSTE] ? f[FIELD_POSTE] : ''
+    ].join(' ').toLowerCase();
+  }
+
+  function render(records) {
+    if (!elGrid) return;
+    elGrid.innerHTML = '';
+    if (!records.length) {
+      elGrid.innerHTML = '<div class="text-center text-muted py-4">Aucun résultat.</div>';
+      return;
+    }
+    records.forEach(function(rec) {
+      var f         = rec.fields;
+      var nom       = f['Nom Prénom'] || 'Candidat';
+      var email     = f['Email'] || '';
+      var prof      = professionText(f);
+      var cv        = f['CV'] || '';
+      var portfolio = f['Portfolio'] || '';
+      var initials  = nom.trim().split(/\s+/).map(function(p){ return p.charAt(0); }).join('').substring(0,2).toUpperCase() || '?';
+      var refId     = (rec.id || '').replace(/^rec/i, '');
+      var refShort  = refId ? refId.substring(0, 8).toUpperCase() : '';
+
+      var profDd = prof
+        ? esc(prof)
+        : '<span class="text-muted" style="font-style:italic;">Non renseigné</span>';
+      var emailDd = email
+        ? '<a href="mailto:' + esc(email) + '">' + esc(email) + '</a>'
+        : '<span class="text-muted">Non communiqué</span>';
+
+      var actions = '';
+      if (cv)        actions += '<a href="' + escAttr(cv) + '" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-secondary" style="font-size:' + BTN_SIZE + 'px;"><i class="bi bi-file-earmark-text me-1"></i>Consulter le CV</a>';
+      if (portfolio) actions += '<a href="' + escAttr(portfolio) + '" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary" style="font-size:' + BTN_SIZE + 'px;"><i class="bi bi-link-45deg me-1"></i>Portfolio / lien</a>';
+      if (email)     actions += '<a href="mailto:' + escAttr(email) + '" class="btn btn-sm btn-primary" style="font-size:' + BTN_SIZE + 'px;"><i class="bi bi-envelope me-1"></i>Contacter</a>';
+      var actionsHtml = actions
+        ? '<div class="rs-pe-card__actions">' + actions + '</div>'
+        : '';
+
+      var div = document.createElement('div');
+      div.className = 'rs-card';
+      div.dataset.search = recordSearchBlob(rec);
+      div.innerHTML =
+        '<article class="rs-pe-card">' +
+          '<div class="rs-pe-card__head">' +
+            '<span class="rs-pe-card__status">Profil disponible</span>' +
+            (refShort ? '<span class="rs-pe-card__ref">N° dossier ' + esc(refShort) + '</span>' : '') +
+          '</div>' +
+          '<div class="rs-pe-card__body">' +
+            '<div class="d-flex gap-3 align-items-start">' +
+              '<div aria-hidden="true" style="width:' + AVATAR_SIZE + 'px;height:' + AVATAR_SIZE + 'px;min-width:' + AVATAR_SIZE + 'px;background:linear-gradient(180deg,#e8eef4,#d4dee8);border:1px solid #b8c9d9;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#005a9c;font-weight:800;font-size:' + Math.round(AVATAR_SIZE * 0.32) + 'px;">' +
+                esc(initials) +
+              '</div>' +
+              '<div class="flex-grow-1 min-w-0">' +
+                '<h3 class="rs-pe-card__title">' + esc(nom) + '</h3>' +
+                '<dl class="rs-pe-dl">' +
+                  '<div><dt>Métier(s) recherché(s)</dt><dd>' + profDd + '</dd></div>' +
+                  '<div><dt>Adresse e-mail</dt><dd style="font-size:' + EMAIL_SIZE + 'px;">' + emailDd + '</dd></div>' +
+                '</dl>' +
+              '</div>' +
+            '</div>' +
+            actionsHtml +
+          '</div>' +
+        '</article>';
+      elGrid.appendChild(div);
+    });
+  }
+
+  if (elSearch) {
+    elSearch.addEventListener('input', function() {
+      var q = this.value.toLowerCase().trim();
+      if (!q) { render(allRecords); return; }
+      render(allRecords.filter(function(r) {
+        return recordSearchBlob(r).indexOf(q) !== -1;
+      }));
+    });
+  }
+
+  var form    = document.getElementById('rs-form');
+  var elSucc  = document.getElementById('rs-success');
+  var elFrmE  = document.getElementById('rs-form-error');
+  var elBtn   = document.getElementById('rs-submit');
+  var elBTxt  = document.getElementById('rs-submit-text');
+  var elBLdr  = document.getElementById('rs-submit-loader');
+
+  if (form && elFrmE && elSucc && elBtn && elBTxt && elBLdr) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      elFrmE.style.display = 'none'; elSucc.style.display = 'none';
+      if (!API) {
+        elFrmE.innerHTML = '<i class="bi bi-x-circle me-2"></i>API non configurée.';
+        elFrmE.style.display = 'block'; return;
+      }
+      var nom  = document.getElementById('rs-nom').value.trim();
+      var email= document.getElementById('rs-email').value.trim();
+      var poste= document.getElementById('rs-poste').value.trim();
+      var cv   = document.getElementById('rs-cv').value.trim();
+      var port = document.getElementById('rs-portfolio').value.trim();
+      if (!nom || !email || !poste) {
+        elFrmE.innerHTML = '<i class="bi bi-x-circle me-2"></i>Veuillez remplir les champs obligatoires.';
+        elFrmE.style.display = 'block'; return;
+      }
+      elBTxt.style.display = 'none'; elBLdr.style.display = 'inline-block'; elBtn.disabled = true;
+      var payload = { name: nom, email: email, role: poste, cv: cv || '', portfolio: port || '' };
+      fetch(String(API).replace(/\?+$/, '') + '?action=submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(function(r) {
+        elBTxt.style.display = 'inline'; elBLdr.style.display = 'none'; elBtn.disabled = false;
+        if (r.ok) {
+          elSucc.style.display = 'block'; form.reset();
+          setTimeout(function() { elSucc.style.display = 'none'; }, 8000);
+        } else {
+          return r.json().then(function(d) {
+            elFrmE.innerHTML = '<i class="bi bi-x-circle me-2"></i>' + ((d && d.error) || 'Erreur. Réessayez.');
+            elFrmE.style.display = 'block';
+          });
+        }
+      })
+      .catch(function() {
+        elBTxt.style.display = 'inline'; elBLdr.style.display = 'none'; elBtn.disabled = false;
+        elFrmE.innerHTML = '<i class="bi bi-x-circle me-2"></i>Erreur réseau.';
+        elFrmE.style.display = 'block';
+      });
+    });
+  }
+
+  if (elGrid) {
+    load();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Page Candidatures",
+  "settings": [
+    { "type": "header", "content": "Structure" },
+    {
+      "type": "select",
+      "id": "page_mode",
+      "label": "Contenu affiché",
+      "options": [
+        { "value": "both", "label": "Profils + formulaire" },
+        { "value": "profiles", "label": "Profils seulement" },
+        { "value": "form", "label": "Formulaire seulement" }
+      ],
+      "default": "both"
+    },
+    { "type": "header", "content": "Liens entre pages" },
+    {
+      "type": "paragraph",
+      "content": "En mode « Profils seulement », indiquez l’URL de la page formulaire. En mode « Formulaire seulement », l’URL de la page profils."
+    },
+    { "type": "url", "id": "form_page_url", "label": "URL page formulaire" },
+    { "type": "text", "id": "form_page_link_label", "label": "Texte bouton → formulaire", "default": "Déposer ma candidature" },
+    { "type": "url", "id": "profiles_page_url", "label": "URL page profils" },
+    { "type": "text", "id": "profiles_page_link_label", "label": "Texte lien → profils", "default": "Voir les profils publiés" },
+    { "type": "header", "content": "En-tête de page" },
+    { "type": "text", "id": "page_title", "label": "Titre", "default": "Candidatures ouvertes" },
+    { "type": "range", "id": "page_title_size", "min": 14, "max": 36, "step": 1, "unit": "px", "label": "Taille titre", "default": 22 },
+    { "type": "text", "id": "page_subtitle", "label": "Sous-titre", "default": "Découvrez les profils disponibles ou déposez votre candidature." },
+    { "type": "range", "id": "subtitle_size", "min": 10, "max": 18, "step": 1, "unit": "px", "label": "Taille sous-titre", "default": 13 },
+    { "type": "header", "content": "Grille des profils" },
+    { "type": "text", "id": "grid_title", "label": "Titre colonne profils", "default": "Profils disponibles" },
+    { "type": "range", "id": "grid_title_size", "min": 12, "max": 28, "step": 1, "unit": "px", "label": "Taille titre grille", "default": 16 },
+    { "type": "text", "id": "search_placeholder", "label": "Placeholder recherche", "default": "Rechercher par nom, poste..." },
+    { "type": "range", "id": "search_height", "min": 30, "max": 58, "step": 2, "unit": "px", "label": "Hauteur barre recherche", "default": 38 },
+    { "type": "range", "id": "card_radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Arrondi cartes profil", "default": 12 },
+    { "type": "range", "id": "avatar_size", "min": 36, "max": 80, "step": 4, "unit": "px", "label": "Taille avatar initiales", "default": 56 },
+    { "type": "range", "id": "card_name_size", "min": 12, "max": 22, "step": 1, "unit": "px", "label": "Taille nom", "default": 15 },
+    { "type": "range", "id": "card_role_size", "min": 10, "max": 16, "step": 1, "unit": "px", "label": "Taille poste", "default": 13 },
+    { "type": "range", "id": "card_email_size", "min": 10, "max": 14, "step": 1, "unit": "px", "label": "Taille email", "default": 12 },
+    { "type": "range", "id": "card_btn_size", "min": 10, "max": 14, "step": 1, "unit": "px", "label": "Taille boutons carte", "default": 12 },
+    { "type": "range", "id": "card_gap_pe", "min": 8, "max": 32, "step": 2, "unit": "px", "label": "Espacement entre les fiches", "default": 16 },
+    { "type": "color", "id": "pe_bar_color", "label": "Bandeau fiche (haut)", "default": "#005a9c" },
+    { "type": "color", "id": "pe_bar_color_dark", "label": "Bandeau fiche (bas)", "default": "#004578" },
+    { "type": "color", "id": "pe_accent", "label": "Accent sous le nom", "default": "#e85d04" },
+    { "type": "header", "content": "Formulaire de candidature" },
+    { "type": "color", "id": "form_header_from", "label": "Gradient formulaire — début", "default": "#0d253f" },
+    { "type": "color", "id": "form_header_to", "label": "Gradient formulaire — fin", "default": "#1a3a5c" },
+    { "type": "text", "id": "form_title", "label": "Titre du formulaire", "default": "Déposer ma candidature" },
+    { "type": "range", "id": "form_title_size", "min": 12, "max": 24, "step": 1, "unit": "px", "label": "Taille titre formulaire", "default": 16 },
+    { "type": "text", "id": "form_subtitle", "label": "Sous-titre formulaire", "default": "Votre profil sera visible après modération." },
+    { "type": "header", "content": "Labels et placeholders" },
+    { "type": "text", "id": "label_name", "label": "Label Nom & Prénom", "default": "Nom & Prénom" },
+    { "type": "text", "id": "placeholder_name", "label": "Placeholder nom", "default": "ex : Sophie Martin" },
+    { "type": "text", "id": "label_email", "label": "Label Email", "default": "Adresse email" },
+    { "type": "text", "id": "placeholder_email", "label": "Placeholder email", "default": "votre@email.com" },
+    { "type": "text", "id": "email_help", "label": "Texte aide email", "default": "Visible publiquement — les entreprises pourront vous contacter." },
+    { "type": "text", "id": "label_poste", "label": "Label Poste", "default": "Poste recherché" },
+    { "type": "text", "id": "placeholder_poste", "label": "Placeholder poste", "default": "ex : Designer textile, Modéliste..." },
+    { "type": "text", "id": "label_cv", "label": "Label CV", "default": "Lien vers votre CV" },
+    { "type": "text", "id": "placeholder_cv", "label": "Placeholder CV", "default": "https://drive.google.com/..." },
+    { "type": "text", "id": "cv_help", "label": "Texte aide CV", "default": "Google Drive, Dropbox, WeTransfer…" },
+    { "type": "text", "id": "label_portfolio", "label": "Label Portfolio", "default": "Portfolio, LinkedIn ou site web" },
+    { "type": "text", "id": "placeholder_portfolio", "label": "Placeholder portfolio", "default": "https://..." },
+    { "type": "header", "content": "Style champs et bouton" },
+    { "type": "range", "id": "form_label_size", "min": 10, "max": 15, "step": 1, "unit": "px", "label": "Taille labels", "default": 12 },
+    { "type": "range", "id": "form_input_size", "min": 11, "max": 16, "step": 1, "unit": "px", "label": "Taille texte champs", "default": 13 },
+    { "type": "text", "id": "submit_label", "label": "Texte bouton envoyer", "default": "Envoyer ma candidature" },
+    { "type": "range", "id": "submit_size", "min": 12, "max": 18, "step": 1, "unit": "px", "label": "Taille texte bouton", "default": 14 },
+    { "type": "range", "id": "submit_radius", "min": 0, "max": 50, "step": 2, "unit": "px", "label": "Arrondi bouton envoyer", "default": 6 },
+    { "type": "header", "content": "Messages de retour" },
+    { "type": "text", "id": "success_title", "label": "Titre succès", "default": "Candidature envoyée !" },
+    { "type": "text", "id": "success_text", "label": "Texte succès", "default": "Elle sera visible sur le site après validation par l'équipe." },
+    { "type": "header", "content": "API (proxy IONOS)" },
+    { "type": "paragraph", "content": "URL du proxy PHP (IONOS). Exemple : https://ton-domaine.com/api/rs-airtable-proxy.php" },
+    { "type": "text", "id": "rs_api_url", "label": "URL API", "default": "https://example.com/api/rs-airtable-proxy.php" },
+    { "type": "text", "id": "airtable_field_poste", "label": "Colonne — poste / métier recherché", "default": "Poste recherché", "info": "Nom exact de la colonne Airtable (souvent « Poste recherché »)." },
+    { "type": "text", "id": "airtable_field_professions", "label": "Colonne — professions (optionnel)", "info": "Si une 2e colonne liste plusieurs métiers, indiquez son nom exact. Sinon laisser vide." },
+    { "type": "header", "content": "Espacement" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Haut", "default": 32 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Bas", "default": 48 }
+  ],
+  "presets": [{ "name": "Page Candidatures" }]
+}
+{% endschema %}

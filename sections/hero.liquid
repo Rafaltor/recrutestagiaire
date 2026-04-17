@@ -1,0 +1,631 @@
+{%- assign rs_url_profils = '/pages/profils-candidats' -%}
+{%- assign rs_url_deposer = '/pages/deposer-candidature' -%}
+{%- assign promo_count = 0 -%}
+{%- assign has_pole_cta = false -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'side_promo' -%}
+    {%- assign promo_count = promo_count | plus: 1 -%}
+  {%- elsif block.type == 'pole_cta' -%}
+    {%- assign has_pole_cta = true -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign search_col = 'col-12' -%}
+{%- if has_pole_cta and promo_count > 0 -%}
+  {%- assign search_col = 'col-12 col-lg-5' -%}
+{%- elsif has_pole_cta -%}
+  {%- assign search_col = 'col-12 col-lg-10' -%}
+{%- elsif promo_count > 0 -%}
+  {%- assign search_col = 'col-12 col-lg-7' -%}
+{%- else -%}
+  {%- assign search_col = 'col-12 col-lg-12' -%}
+{%- endif -%}
+
+<div
+  class="hero-header home-4 rs-hero rs-hero--pole rs-hero--pole-pe"
+  style="background:{{ section.settings.intro_bg }};padding:{{ section.settings.padding_top }}px 0 0;">
+  <div class="container">
+    <div class="rs-hero__intro {{ section.settings.text_align }} pb-3 pb-md-4">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'badge' -%}
+          <div class="mb-2" {{ block.shopify_attributes }}>
+            <span
+              class="badge text-dark py-2 px-3"
+              style="background:{{ block.settings.color }};font-size:{{ block.settings.size }}px;">
+              {{ block.settings.text }}
+            </span>
+          </div>
+        {%- elsif block.type == 'heading' -%}
+          <h1
+            class="rs-hero__title-pe mb-2 mb-md-3"
+            style="font-size:{{ block.settings.size }}px;"
+            {{ block.shopify_attributes }}>
+            {{ block.settings.text | default: 'Les meilleures opportunités vestimentaires du moment.' }}
+          </h1>
+        {%- elsif block.type == 'subheading' -%}
+          <p
+            class="rs-hero__lede-pe mb-3 mb-md-4{% if section.settings.text_align == 'text-center' %} mx-auto{% endif %}"
+            style="font-size:{{ block.settings.size }}px;max-width:{{ block.settings.max_width }}px;{% if section.settings.text_align == 'text-center' %}margin-left:auto;margin-right:auto;{% endif %}"
+            {{ block.shopify_attributes }}>
+            {{ block.settings.text }}
+          </p>
+        {%- elsif block.type == 'buttons' -%}
+          <div class="rs-hero__actions rs-hero__actions--intro rs-intro-cta-row d-flex flex-wrap gap-2 {% if section.settings.text_align == 'text-center' %}justify-content-center{% endif %}" {{ block.shopify_attributes }}>
+            {%- if block.settings.btn1_label != blank -%}
+              <a
+                href="{% if block.settings.btn1_url != blank %}{{ block.settings.btn1_url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}"
+                class="abt-btn rs-caf-btn-dossier text-decoration-none d-inline-flex align-items-center justify-content-center fw-semibold">
+                {{ block.settings.btn1_label }}
+              </a>
+            {%- endif -%}
+            {%- if block.settings.btn2_label != blank -%}
+              <a
+                href="{% if block.settings.btn2_url != blank %}{{ block.settings.btn2_url }}{% else %}{{ rs_url_profils }}{% endif %}"
+                class="abt-btn rs-caf-btn-dossier rs-intro-cta--profils text-decoration-none d-inline-flex align-items-center justify-content-center fw-semibold">
+                {{ block.settings.btn2_label }}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div
+    class="rs-hero__pole-strip"
+    style="background:linear-gradient(180deg,{{ section.settings.strip_bg }} 0%,{{ section.settings.strip_bg_dark }} 100%);padding:0 0 {{ section.settings.padding_bottom }}px;">
+    <div class="container">
+      <div class="row g-0 align-items-stretch rs-hero__tile-row rs-hero__strip-row">
+        {%- if has_pole_cta -%}
+          <div class="col-12 col-lg-2 rs-hero__tile rs-hero__strip-cell rs-hero__strip-cell--cta d-flex align-items-center justify-content-center">
+            {%- assign rs_pole_done = false -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'pole_cta' -%}
+                {%- unless rs_pole_done -%}
+                {%- assign rs_pole_done = true -%}
+              <a
+                href="{% if block.settings.url != blank %}{{ block.settings.url }}{% else %}{{ rs_url_deposer }}{% endif %}"
+                class="rs-hero__pole-orb text-decoration-none d-flex flex-column align-items-center justify-content-center my-3 my-lg-2"
+                style="width:{{ block.settings.size }}px;height:{{ block.settings.size }}px;min-width:{{ block.settings.size }}px;background:{{ block.settings.circle_bg }};color:{{ block.settings.circle_text }};"
+                {{ block.shopify_attributes }}>
+                <span class="rs-hero__pole-orb-label">{{ block.settings.label }}</span>
+                {%- if block.settings.sublabel != blank -%}
+                  <span class="rs-hero__pole-orb-sub">{{ block.settings.sublabel }}</span>
+                {%- endif -%}
+              </a>
+                {%- endunless -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div class="{{ search_col }} rs-hero__tile rs-hero__strip-cell rs-hero__strip-cell--search">
+          <div class="rs-hero__panel rs-hero__search-strip-inner h-100 py-3 px-2 px-lg-3 d-flex flex-column justify-content-center">
+            {%- if section.settings.strip_search_kicker != blank -%}
+              <p class="rs-hero__strip-kicker text-white mb-2 fw-bold small text-uppercase mb-lg-3">
+                {{ section.settings.strip_search_kicker }}
+              </p>
+            {%- endif -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'search_bar' -%}
+                <div class="rs-hero__search rs-hero__search--pole" {{ block.shopify_attributes }}>
+                  <div class="row g-2 align-items-stretch">
+                    <div class="col-12">
+                      <div class="formField icons rs-hero__pole-field">
+                        <form action="{{ routes.search_url }}" method="get">
+                          <input type="hidden" name="type" value="product">
+                          <input
+                            type="text"
+                            name="q"
+                            class="form-control w-100 rs-hero__pole-input"
+                            style="height:{{ block.settings.height }}px;font-size:{{ block.settings.font_size }}px;"
+                            placeholder="{{ block.settings.placeholder | default: 'Nom du poste, collection...' }}">
+                          <i class="bi bi-search icon"></i>
+                        </form>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <a
+                        href="{{ routes.all_products_collection_url }}"
+                        class="btn btn-warning w-100 fw-semibold d-flex align-items-center justify-content-center rs-hero__pole-cta-btn"
+                        style="min-height:{{ block.settings.height }}px;font-size:{{ block.settings.font_size }}px;">
+                        {{ block.settings.btn_label | default: 'Voir toutes les offres' }}
+                      </a>
+                    </div>
+                    {%- if block.settings.secondary_label != blank -%}
+                      <div class="col-12 col-md-4 d-flex align-items-stretch">
+                        <a
+                          href="{% if block.settings.secondary_url != blank %}{{ block.settings.secondary_url }}{% else %}{{ rs_url_profils }}{% endif %}"
+                          class="btn btn-light w-100 fw-semibold d-flex align-items-center justify-content-center border border-2 border-white text-dark"
+                          style="min-height:{{ block.settings.height }}px;font-size:{{ block.settings.font_size | default: 14 | minus: 1 }}px;">
+                          {{ block.settings.secondary_label }}
+                        </a>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+        {%- if promo_count > 0 -%}
+          <div class="col-12 col-lg-5 rs-hero__tile rs-hero__side-stack rs-hero__strip-cell--promos d-flex flex-column">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'side_promo' -%}
+              <article
+                class="rs-fake-promo flex-grow-1"
+                style="background:{{ block.settings.bg_color }};border:1px solid {{ block.settings.border_color }};color:{{ block.settings.text_color }};"
+                {{ block.shopify_attributes }}>
+                {%- if block.settings.kicker != blank -%}
+                  <span class="rs-fake-promo__kicker" style="color:{{ block.settings.kicker_color }};">{{ block.settings.kicker }}</span>
+                {%- endif -%}
+                {%- if block.settings.title != blank -%}
+                  <h4 class="rs-fake-promo__title" style="color:{{ block.settings.title_color }};">{{ block.settings.title }}</h4>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <p class="rs-fake-promo__text">{{ block.settings.text }}</p>
+                {%- endif -%}
+                {%- if block.settings.link_label != blank -%}
+                  <a href="{% if block.settings.link_url != blank %}{{ block.settings.link_url }}{% else %}#{% endif %}" class="rs-fake-promo__link">{{ block.settings.link_label }}</a>
+                {%- endif -%}
+              </article>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Héro principal",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Zone d’intro (au-dessus du bandeau)"
+    },
+    {
+      "type": "color",
+      "id": "intro_bg",
+      "label": "Fond intro",
+      "default": "#e8e8e8"
+    },
+    {
+      "type": "header",
+      "content": "Bandeau type Pôle emploi (recherche)"
+    },
+    {
+      "type": "color",
+      "id": "strip_bg",
+      "label": "Fond bandeau (haut)",
+      "default": "#ffe9a3"
+    },
+    {
+      "type": "color",
+      "id": "strip_bg_dark",
+      "label": "Fond bandeau (bas, dégradé)",
+      "default": "#c99406"
+    },
+    {
+      "type": "text",
+      "id": "strip_search_kicker",
+      "label": "Libellé au-dessus du champ (ex. Offre recherchée)",
+      "default": "Offre ou collection recherchée"
+    },
+    {
+      "type": "header",
+      "content": "Mise en page"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alignement du texte (intro)",
+      "default": "text-center",
+      "options": [
+        { "value": "text-center", "label": "Centré" },
+        { "value": "text-start", "label": "Gauche" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 16,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacement haut (intro)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 16,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacement bas (sous le bandeau)",
+      "default": 28
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pole_cta",
+      "name": "Bouton rond Pôle emploi",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Texte principal",
+          "default": "Candidatures"
+        },
+        {
+          "type": "text",
+          "id": "sublabel",
+          "label": "Sous-texte (optionnel)",
+          "default": "Déposer"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Lien (vide = page Déposer une candidature)"
+        },
+        {
+          "type": "color",
+          "id": "circle_bg",
+          "label": "Fond du rond",
+          "default": "#0033cc"
+        },
+        {
+          "type": "color",
+          "id": "circle_text",
+          "label": "Texte",
+          "default": "#ffffff"
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 88,
+          "max": 140,
+          "step": 4,
+          "unit": "px",
+          "label": "Diamètre",
+          "default": 108
+        }
+      ]
+    },
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Collectif artistique — Paris 2026"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Couleur fond",
+          "default": "#ffc107"
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 9,
+          "max": 16,
+          "step": 1,
+          "unit": "px",
+          "label": "Taille texte",
+          "default": 12
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Titre principal",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte",
+          "default": "Les meilleures opportunités vestimentaires du moment."
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 18,
+          "max": 72,
+          "step": 2,
+          "unit": "px",
+          "label": "Taille",
+          "default": 34
+        }
+      ]
+    },
+    {
+      "type": "subheading",
+      "name": "Sous-titre",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte",
+          "default": "Chaque vêtement est une offre. Chaque achat, une candidature."
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "min": 12,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "label": "Taille",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "max_width",
+          "min": 300,
+          "max": 900,
+          "step": 20,
+          "unit": "px",
+          "label": "Largeur max",
+          "default": 560
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Boutons (intro)",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Bouton principal"
+        },
+        {
+          "type": "text",
+          "id": "btn1_label",
+          "label": "Texte",
+          "default": "Voir les offres en cours"
+        },
+        {
+          "type": "url",
+          "id": "btn1_url",
+          "label": "Lien"
+        },
+        {
+          "type": "color",
+          "id": "btn1_bg",
+          "label": "Fond",
+          "default": "#0033cc"
+        },
+        {
+          "type": "color",
+          "id": "btn1_color",
+          "label": "Texte",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "btn1_border",
+          "label": "Bordure",
+          "default": "#0015a3"
+        },
+        {
+          "type": "header",
+          "content": "Bouton secondaire"
+        },
+        {
+          "type": "text",
+          "id": "btn2_label",
+          "label": "Texte",
+          "default": "Profils candidats"
+        },
+        {
+          "type": "url",
+          "id": "btn2_url",
+          "label": "Lien (vide = page Profils candidats)"
+        },
+        {
+          "type": "color",
+          "id": "btn2_bg",
+          "label": "Fond",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "btn2_color",
+          "label": "Texte",
+          "default": "#212529"
+        },
+        {
+          "type": "color",
+          "id": "btn2_border",
+          "label": "Bordure",
+          "default": "#dee2e6"
+        },
+        {
+          "type": "header",
+          "content": "Style boutons"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 11,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Taille texte",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "padding_v",
+          "min": 4,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Padding vertical",
+          "default": 11
+        },
+        {
+          "type": "range",
+          "id": "padding_h",
+          "min": 8,
+          "max": 60,
+          "step": 2,
+          "unit": "px",
+          "label": "Padding horizontal",
+          "default": 22
+        },
+        {
+          "type": "range",
+          "id": "radius",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Arrondi",
+          "default": 4
+        }
+      ]
+    },
+    {
+      "type": "search_bar",
+      "name": "Barre recherche (bandeau)",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Placeholder",
+          "default": "Nom du poste, collection..."
+        },
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "Texte bouton principal",
+          "default": "Voir toutes les offres"
+        },
+        {
+          "type": "text",
+          "id": "secondary_label",
+          "label": "2e bouton (optionnel, ex. Voir les profils)",
+          "default": "Profils"
+        },
+        {
+          "type": "url",
+          "id": "secondary_url",
+          "label": "2e bouton — lien (vide = Profils candidats)"
+        },
+        {
+          "type": "range",
+          "id": "height",
+          "min": 32,
+          "max": 60,
+          "step": 2,
+          "unit": "px",
+          "label": "Hauteur",
+          "default": 46
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 11,
+          "max": 18,
+          "step": 1,
+          "unit": "px",
+          "label": "Taille texte",
+          "default": 14
+        }
+      ]
+    },
+    {
+      "type": "side_promo",
+      "name": "Encart latéral",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Sur-titre (ex. PUBLICITÉ)",
+          "default": "À ne pas manquer"
+        },
+        {
+          "type": "color",
+          "id": "kicker_color",
+          "label": "Couleur sur-titre",
+          "default": "#8a7212"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Ateliers & rencontres créateurs"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Couleur titre",
+          "default": "#0015a3"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte",
+          "default": "Sessions courtes, inscription libre — façon « encart » portail emploi."
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Couleur texte",
+          "default": "#222222"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Libellé du lien",
+          "default": "En savoir plus →"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "URL du lien"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Fond du bloc",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Bordure",
+          "default": "#666666"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Héro principal",
+      "blocks": [
+        { "type": "badge" },
+        { "type": "heading" },
+        { "type": "subheading" },
+        { "type": "buttons" },
+        { "type": "pole_cta" },
+        { "type": "search_bar" },
+        { "type": "side_promo" },
+        { "type": "side_promo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

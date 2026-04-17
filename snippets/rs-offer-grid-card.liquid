@@ -1,0 +1,221 @@
+{%- comment -%}
+  Carte liste d’offres — desktop : bandeau statut/réf., image pleine largeur, titre + pastille, DL, actions.
+  Mobile : 1 carte / ligne, bandeau = titre du poste, image à gauche, infos + actions à droite (texte compact).
+  Paramètres : product, card_settings, carousel_uid ; optionnel : collection (pour CDI/CDD par handle).
+{%- endcomment -%}
+{%- assign s = card_settings -%}
+{%- assign coll = collection -%}
+{%- assign cv = product.selected_or_first_available_variant -%}
+{%- assign _ns = carousel_uid | default: 'c' | replace: '__', '-' | replace: ' ', '-' -%}
+{%- assign uid = _ns | append: '-' | append: product.id -%}
+{%- assign title_px = s.card_title_size | default: s.title_size_card | default: s.title_size | default: 16 -%}
+{%- assign dl_px = s.card_dl_size | default: s.type_size | default: 13 -%}
+{%- assign media_h = s.offer_media_height | default: 220 -%}
+{%- assign bar_from = s.offer_bar_from | default: '#5b86e5' -%}
+{%- assign bar_to = s.offer_bar_to | default: '#001a57' -%}
+{%- assign accent = s.offer_accent | default: '#c9a400' -%}
+{%- if cv.sku != blank -%}
+  {%- assign ref_val = cv.sku -%}
+{%- else -%}
+  {%- assign ref_val = 'RS-' | append: product.id -%}
+{%- endif -%}
+{%- assign status_open = s.badge_open | default: 'Offre active' -%}
+{%- assign status_closed = s.badge_closed | default: 'Pourvu' -%}
+{%- assign cta_label = s.offer_cta_label | default: "Voir l'offre" -%}
+{%- assign carousel_interval = s.offer_carousel_interval | default: 0 -%}
+{%- assign location_pill = s.offer_location_pill | default: 'Paris' -%}
+{%- assign cart_label = s.offer_cart_label | default: 'Candidater' -%}
+{%- assign show_cart_btn = true -%}
+{%- if s.show_offer_cart == false -%}{%- assign show_cart_btn = false -%}{%- endif -%}
+
+{%- assign lbl_cdi = s.contract_label_cdi | default: 'CDI' -%}
+{%- assign lbl_cdd = s.contract_label_cdd | default: 'CDD' -%}
+{%- assign contract_line_text = lbl_cdd -%}
+{%- assign cur_handle = '' -%}
+{%- if coll != blank and coll.handle != blank -%}
+  {%- assign cur_handle = coll.handle | strip | downcase -%}
+{%- endif -%}
+{%- capture newline -%}
+
+{%- endcapture -%}
+{%- assign raw_handles = s.contract_cdi_collection_handles | default: '' | downcase | replace: ', ', ',' | replace: ' ,', ',' | replace: newline, ',' -%}
+{%- assign handle_parts = raw_handles | split: ',' -%}
+{%- for p in handle_parts -%}
+  {%- assign ps = p | strip -%}
+  {%- if ps != '' and ps == cur_handle -%}
+    {%- assign contract_line_text = lbl_cdi -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign tag_override = true -%}
+{%- if s.contract_tag_override == false -%}{%- assign tag_override = false -%}{%- endif -%}
+{%- if tag_override -%}
+  {%- assign tg = product.tags | join: ',' | downcase -%}
+  {%- if tg contains 'cdi' -%}
+    {%- assign contract_line_text = lbl_cdi -%}
+  {%- elsif tg contains 'cdd' -%}
+    {%- assign contract_line_text = lbl_cdd -%}
+  {%- endif -%}
+{%- endif -%}
+{%- assign show_contract_line = true -%}
+{%- if s.show_contract_line == false -%}{%- assign show_contract_line = false -%}{%- endif -%}
+
+<article class="rs-offer-list-card rs-offer-list-card--responsive rs-pe-card position-relative h-100" style="border-radius:{{ s.card_radius }}px;">
+  <div class="rs-pe-card__head rs-offer-list-card__head rs-offer-list-card__head--mobile-title d-md-none"
+    style="background:linear-gradient(180deg,{{ bar_from }} 0%,{{ bar_to }} 100%);">
+    <a href="{{ product.url }}" class="rs-offer-list-card__title-in-band">{{ product.title | escape }}</a>
+    {%- unless cv.available -%}
+      <span class="rs-offer-list-card__band-nook">{{ status_closed }}</span>
+    {%- endunless -%}
+  </div>
+
+  <div class="rs-pe-card__head rs-offer-list-card__head rs-offer-list-card__head--desktop-meta d-none d-md-flex"
+    style="background:linear-gradient(180deg,{{ bar_from }} 0%,{{ bar_to }} 100%);">
+    <span class="rs-pe-card__status">
+      {%- if cv.available -%}{{ status_open }}{%- else -%}{{ status_closed }}{%- endif -%}
+    </span>
+    <span class="rs-pe-card__ref">{{ s.offer_ref_prefix | default: 'Réf.' }} {{ ref_val }}</span>
+  </div>
+
+  <div class="rs-offer-list-card__split">
+    <div class="rs-offer-list-card__media">
+      {%- if product.images.size > 1 and s.offer_carousel != false -%}
+        <div id="offer-carousel-{{ uid }}"
+          class="carousel slide rs-offer-list-card__carousel h-100"
+          {% if carousel_interval > 0 %}data-bs-ride="carousel" data-bs-interval="{{ carousel_interval }}"{% else %}data-bs-interval="false"{% endif %}>
+          <div class="carousel-indicators">
+            {%- for image in product.images limit: 8 -%}
+              <button type="button" data-bs-target="#offer-carousel-{{ uid }}" data-bs-slide-to="{{ forloop.index0 }}"
+                {% if forloop.first %}class="active" aria-current="true"{% endif %}
+                aria-label="Photo {{ forloop.index }}"></button>
+            {%- endfor -%}
+          </div>
+          <div class="carousel-inner h-100">
+            {%- for image in product.images limit: 8 -%}
+              <div class="carousel-item h-100{% if forloop.first %} active{% endif %}">
+                <a href="{{ product.url }}" class="d-block h-100">
+                  <img src="{{ image | img_url: '900x680', crop: 'center' }}"
+                    class="d-block w-100 rs-offer-list-card__img"
+                    style="height:calc({{ media_h }}px * var(--rs-uni-text-pct, 100) / 100);object-fit:cover;"
+                    alt="{{ image.alt | default: product.title | escape }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+                </a>
+              </div>
+            {%- endfor -%}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#offer-carousel-{{ uid }}" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Précédent</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#offer-carousel-{{ uid }}" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Suivant</span>
+          </button>
+        </div>
+      {%- elsif product.featured_image -%}
+        <a href="{{ product.url }}" class="d-block h-100">
+          <img src="{{ product.featured_image | img_url: '900x680', crop: 'center' }}"
+            class="w-100 rs-offer-list-card__img"
+            style="height:calc({{ media_h }}px * var(--rs-uni-text-pct, 100) / 100);object-fit:cover;"
+            alt="{{ product.title | escape }}" loading="lazy">
+        </a>
+      {%- else -%}
+        <div class="rs-offer-list-card__placeholder d-flex align-items-center justify-content-center fw-bold text-muted h-100"
+          style="height:calc({{ media_h }}px * var(--rs-uni-text-pct, 100) / 100);background:linear-gradient(180deg,#e8eef4,#d4dee8);">
+          RS
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="rs-pe-card__body rs-offer-list-card__body" style="padding:calc({{ s.card_padding | default: 16 }}px * var(--rs-uni-text-pct, 100) / 100);">
+      <div class="rs-offer-list-card__desktop-block d-none d-md-flex flex-column flex-grow-1">
+        <div class="rs-offer-list-card__title-row d-flex align-items-start justify-content-between gap-2"
+          style="border-bottom:2px solid {{ accent }};padding-bottom:8px;margin-bottom:12px;">
+          <h3 class="rs-pe-card__title rs-offer-list-card__title flex-grow-1 mb-0"
+            style="font-size:calc({{ title_px }}px * var(--rs-uni-text-pct, 100) / 100);line-height:1.25;font-weight:700;">
+            <a href="{{ product.url }}" class="text-decoration-none text-dark d-inline-block">{{ product.title }}</a>
+          </h3>
+          {%- if location_pill != blank -%}
+            <span class="rs-offer-list-card__loc-pill flex-shrink-0">{{ location_pill }}</span>
+          {%- endif -%}
+        </div>
+
+        <dl class="rs-pe-dl rs-offer-list-card__dl flex-grow-1" style="font-size:calc({{ dl_px }}px * var(--rs-uni-text-pct, 100) / 100);">
+          {%- if s.show_offer_meta != false -%}
+            <div>
+              <dt>{{ s.label_price | default: 'Salaire' }}</dt>
+              <dd>
+                {%- if cv.compare_at_price > cv.price -%}
+                  <span class="text-muted text-decoration-line-through me-1">{{ cv.compare_at_price | money }}</span>
+                {%- endif -%}
+                <strong>{{ cv.price | money }}</strong>
+              </dd>
+            </div>
+          {%- endif -%}
+          {%- if s.card_logistics != blank -%}
+            <div>
+              <dt>{{ s.label_logistics | default: 'Logistique' }}</dt>
+              <dd>{{ s.card_logistics }}</dd>
+            </div>
+          {%- endif -%}
+        </dl>
+
+        <div class="rs-pe-card__actions rs-offer-list-card__actions d-flex flex-column flex-sm-row gap-2 mt-auto pt-1">
+          <a href="{{ product.url }}" class="btn btn-sm btn-primary flex-fill">{{ cta_label }}</a>
+          {%- if show_cart_btn -%}
+            <form class="js-rs-offer-cart-form flex-fill" method="post" action="{{ routes.cart_add_url }}" accept-charset="UTF-8" enctype="multipart/form-data">
+              <input type="hidden" name="id" value="{{ cv.id }}">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="btn btn-sm btn-warning w-100 text-dark fw-semibold" {% unless cv.available %}disabled aria-disabled="true"{% endunless %}>
+                {{ cart_label }}
+              </button>
+            </form>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="rs-offer-list-card__mobile-block d-md-none d-flex flex-column flex-grow-1">
+        {%- if s.show_offer_meta != false -%}
+          <div class="rs-offer-list-card__mob-bankpanel rs-offer-list-card__mob-bankpanel--price">
+            <div class="rs-offer-list-card__mob-bankrow">
+              <span class="rs-offer-list-card__bank-k">{{ s.label_price | default: 'Salaire' }}</span>
+              <span class="rs-offer-list-card__bank-v">
+                {%- if cv.compare_at_price > cv.price -%}
+                  <span class="text-decoration-line-through me-1" style="font-size:9px;color:#64748b;">{{ cv.compare_at_price | money }}</span>
+                {%- endif -%}
+                {{ cv.price | money }}
+              </span>
+            </div>
+          </div>
+        {%- endif -%}
+        {%- if location_pill != blank or show_contract_line -%}
+          <div class="rs-offer-list-card__mob-bankpanel rs-offer-list-card__mob-bankpanel--meta">
+            <div class="rs-offer-list-card__mob-bankrow rs-offer-list-card__mob-bankrow--sym
+              {%- if location_pill != blank and show_contract_line %} rs-offer-list-card__mob-bankrow--duo
+              {%- elsif location_pill != blank %} rs-offer-list-card__mob-bankrow--city-only
+              {%- elsif show_contract_line %} rs-offer-list-card__mob-bankrow--chip-only
+              {%- endif -%}">
+              {%- if location_pill != blank -%}
+                <span class="rs-offer-list-card__bank-city">{{ location_pill }}</span>
+              {%- endif -%}
+              {%- if show_contract_line -%}
+                <span class="rs-offer-list-card__bank-chip">{{ contract_line_text }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div class="rs-offer-list-card__mob-actions d-flex flex-column gap-1 mt-auto pt-1">
+          <a href="{{ product.url }}" class="btn btn-sm btn-primary w-100">{{ cta_label }}</a>
+          {%- if show_cart_btn -%}
+            <form class="js-rs-offer-cart-form w-100" method="post" action="{{ routes.cart_add_url }}" accept-charset="UTF-8" enctype="multipart/form-data">
+              <input type="hidden" name="id" value="{{ cv.id }}">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="btn btn-sm btn-warning w-100 text-dark fw-semibold" {% unless cv.available %}disabled aria-disabled="true"{% endunless %}>
+                {{ cart_label }}
+              </button>
+            </form>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

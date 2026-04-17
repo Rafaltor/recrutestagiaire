@@ -1,0 +1,33 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-cart",
+      "settings": {},
+      "blocks": {
+        "order_summary": {
+          "type": "order_summary",
+          "settings": {}
+        },
+        "checkout_button": {
+          "type": "checkout_button",
+          "settings": {}
+        },
+        "continue_button": {
+          "type": "continue_button",
+          "settings": {}
+        },
+        "trust_text": {
+          "type": "trust_text",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "order_summary",
+        "checkout_button",
+        "continue_button",
+        "trust_text"
+      ]
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,35 @@
+<!-- Cart notification -->
+<div id="cartNotif" style="display:none;position:fixed;top:20px;right:20px;z-index:9999;background:#0033cc;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;">
+  Ajouté au dossier !
+</div>
+<script>
+document.addEventListener('submit', function(e) {
+  var form = e.target;
+  if (!form || form.tagName !== 'FORM') return;
+  if (form.id !== 'add-to-cart-form' && !form.classList.contains('js-rs-offer-cart-form')) return;
+  e.preventDefault();
+  fetch('/cart/add.js', { method: 'POST', body: new FormData(form) })
+    .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, j: j }; }); })
+    .then(function (res) {
+      if (!res.ok) throw new Error((res.j && (res.j.description || res.j.message)) || 'Erreur panier');
+      var n = document.getElementById('cartNotif');
+      n.style.display = 'block';
+      setTimeout(function () { n.style.display = 'none'; }, 2000);
+      return fetch('/cart.js');
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (c) {
+      document.querySelectorAll('.cart-count').forEach(function (el) { el.textContent = c.item_count; });
+    })
+    .catch(function () {
+      var n = document.getElementById('cartNotif');
+      if (!n) return;
+      n.textContent = 'Impossible d’ajouter au dossier.';
+      n.style.display = 'block';
+      setTimeout(function () {
+        n.style.display = 'none';
+        n.textContent = 'Ajouté au dossier !';
+      }, 2200);
+    });
+});
+</script>

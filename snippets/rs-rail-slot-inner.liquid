@@ -1,0 +1,6 @@
+{%- assign slot_mode = block.settings.content_type | default: 'product' -%}
+{%- if slot_mode == 'profiles_api' -%}
+  {%- render 'rs-sponsored-rail-candidate-ad' -%}
+{%- else -%}
+  {%- render 'rs-sponsored-rail-ad', block: block -%}
+{%- endif -%}

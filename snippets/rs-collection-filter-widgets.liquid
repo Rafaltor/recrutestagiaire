@@ -1,0 +1,80 @@
+{%- comment -%}
+  Filtres collection — réutilisé dans la colonne desktop et l'offcanvas.
+  Paramètre : id_suffix (string unique pour éviter les IDs dupliqués).
+{%- endcomment -%}
+{%- assign suf = id_suffix | default: 'a' -%}
+{%- for block in section.blocks -%}
+
+  {%- if block.type == 'filter_search' -%}
+    <div class="widget mb-4" {{ block.shopify_attributes }}>
+      <h5 class="widgetTitle">{{ block.settings.label | default: 'Recherche' }}</h5>
+      <form action="{{ routes.search_url }}" method="get">
+        <input type="hidden" name="type" value="product">
+        <div class="formField icons">
+          <input type="text" name="q" class="form-control lights"
+            placeholder="{{ block.settings.placeholder | default: 'Nom du poste...' }}">
+          <i class="bi bi-search icon"></i>
+        </div>
+      </form>
+    </div>
+
+  {%- elsif block.type == 'filter_checkboxes' -%}
+    <div class="widget mb-4" {{ block.shopify_attributes }}>
+      <h5 class="widgetTitle">{{ block.settings.label }}</h5>
+      <div class="formField">
+        {% assign items = block.settings.values | split: ',' %}
+        {% for item in items %}
+          {% assign t = item | strip %}
+          <div class="form-check mb-2">
+            <input class="form-check-input tag-filter" type="checkbox"
+              id="filter-{{ block.id }}-{{ forloop.index }}-{{ suf }}"
+              data-tag="{{ t | downcase | replace: ' ', '-' }}">
+            <label class="form-check-label" for="filter-{{ block.id }}-{{ forloop.index }}-{{ suf }}">{{ t }}</label>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  {%- elsif block.type == 'filter_collections' -%}
+    <div class="widget mb-4" {{ block.shopify_attributes }}>
+      <h5 class="widgetTitle">{{ block.settings.label | default: 'Collection' }}</h5>
+      <div class="formField lights">
+        <select class="form-control" onchange="window.location=this.value">
+          <option value="">Toutes</option>
+          {% for col in collections limit: 20 %}
+            <option value="{{ col.url }}"{% if col.handle == collection.handle %} selected{% endif %}>
+              {{ col.title }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+  {%- elsif block.type == 'filter_sort' -%}
+    <div class="widget mb-4" {{ block.shopify_attributes }}>
+      <h5 class="widgetTitle">{{ block.settings.label | default: 'Trier par' }}</h5>
+      <div class="formField">
+        {% assign sort_labels = 'Récent,Prix croissant,Prix décroissant,A-Z' | split: ',' %}
+        {% assign sort_vals = 'created-descending,price-ascending,price-descending,title-ascending' | split: ',' %}
+        {% for opt in sort_labels %}
+          <div class="form-check mb-1">
+            <input class="form-check-input js-rs-sortby" type="radio" name="sortby-{{ suf }}"
+              id="sort-{{ block.id }}-{{ forloop.index }}-{{ suf }}"
+              value="{{ sort_vals[forloop.index0] }}"
+              {% if collection.sort_by == sort_vals[forloop.index0] %}checked{% endif %}>
+            <label class="form-check-label" for="sort-{{ block.id }}-{{ forloop.index }}-{{ suf }}">{{ opt }}</label>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  {%- elsif block.type == 'filter_button' -%}
+    <div class="widget" {{ block.shopify_attributes }}>
+      <button type="button" class="btn btn-primary w-100 js-rs-apply-filters">
+        {{ block.settings.label | default: 'Filtrer les offres' }}
+      </button>
+    </div>
+
+  {%- endif -%}
+
+{%- endfor -%}

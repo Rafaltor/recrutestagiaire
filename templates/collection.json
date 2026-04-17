@@ -1,0 +1,42 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "products_per_page": 12,
+        "collection_page_bg": "#ffffff",
+        "collection_strip_top": "#ffe9a3",
+        "collection_strip_bot": "#c99406",
+        "collection_cell_border": "#888888",
+        "rs_api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php",
+        "cand_email_btn_label": "E-mail",
+        "cand_cv_btn_label": "CV"
+      },
+      "blocks": {
+        "rail_left_a": {
+          "type": "sponsored_rail",
+          "settings": { "side": "left", "content_type": "profiles_api" }
+        },
+        "rail_left_b": {
+          "type": "sponsored_rail",
+          "settings": { "side": "left", "content_type": "profiles_api" }
+        },
+        "rail_right_a": {
+          "type": "sponsored_rail",
+          "settings": { "side": "right", "content_type": "profiles_api" }
+        },
+        "rail_right_b": {
+          "type": "sponsored_rail",
+          "settings": { "side": "right", "content_type": "profiles_api" }
+        }
+      },
+      "block_order": [
+        "rail_left_a",
+        "rail_left_b",
+        "rail_right_a",
+        "rail_right_b"
+      ]
+    }
+  },
+  "order": ["main"]
+}

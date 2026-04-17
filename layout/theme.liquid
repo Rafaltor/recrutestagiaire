@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html
+  lang="{{ request.locale.iso_code | default: 'fr' }}"
+  class="{% if settings.rs_viewport_desktop_wrap and request.page_type == 'index' %}rs-viewport-desktop{% endif %}">
+<head>
+  <meta charset="UTF-8">
+  {%- unless request.page_type == 'index' -%}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {%- endunless -%}
+  {%- assign rs_lw = settings.rs_viewport_fixed_width | default: 1180 | round -%}
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- else -%}
+    <link rel="icon" type="image/png" href="{{ 'rs-logo-eu.png' | asset_url }}">
+    <link rel="apple-touch-icon" href="{{ 'rs-logo-eu.png' | asset_url }}">
+  {%- endif -%}
+
+  {{ content_for_header }}
+
+  {%- comment -%}
+    Viewport « bureau sur mobile » :
+    - UNIQUEMENT sur l'accueil (index) pour l'effet "dézoom rétro"
+    Après content_for_header pour écraser la meta Shopify.
+  {%- endcomment -%}
+  {%- if request.page_type == 'index' -%}
+    <meta
+      id="rs-viewport-meta"
+      name="viewport"
+      data-layout-w="{{ rs_lw }}"
+      content="width={{ rs_lw }}, initial-scale=1, viewport-fit=cover">
+    <script>
+      (function () {
+        /* iOS Safari : modifier initial-scale relance layout → innerWidth/visualViewport bougent →
+           resize en rafale = zoom/dézoom infini. On fige la largeur après 1ère mesure ; pas d’écoute
+           visualViewport/resize sur iOS sauf changement d’orientation. */
+        var isIOS =
+          /iP(ad|hone|od)/.test(navigator.userAgent) ||
+          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+        var lastScaleApplied = null;
+
+        function rsVpStripDupes() {
+          var keep = document.getElementById('rs-viewport-meta');
+          if (!keep) return;
+          document.querySelectorAll('meta[name="viewport"]').forEach(function (meta) {
+            if (meta !== keep) meta.parentNode.removeChild(meta);
+          });
+        }
+
+        function rsVpReadWidth() {
+          if (isIOS && window._rsVpIosLockW != null) {
+            return window._rsVpIosLockW;
+          }
+          var vw = 0;
+          if (!isIOS && window.visualViewport && window.visualViewport.width) {
+            vw = window.visualViewport.width;
+          }
+          if (!vw) vw = window.innerWidth || document.documentElement.clientWidth || 0;
+          if (!vw && typeof screen !== 'undefined') vw = screen.width || 0;
+          if (isIOS && vw > 0) {
+            window._rsVpIosLockW = vw;
+          }
+          return vw;
+        }
+
+        function rsVpApply() {
+          rsVpStripDupes();
+          var m = document.getElementById('rs-viewport-meta');
+          if (!m) return;
+          var lw = parseInt(m.getAttribute('data-layout-w'), 10) || 1180;
+          var vw = rsVpReadWidth();
+          if (vw <= 0) return;
+          if (vw >= lw) {
+            if (lastScaleApplied === 1) return;
+            lastScaleApplied = 1;
+            m.setAttribute(
+              'content',
+              'width=' + lw + ', initial-scale=1, maximum-scale=3, user-scalable=yes, viewport-fit=cover'
+            );
+            return;
+          }
+          var s = Math.max(0.1, Math.min(1, vw / lw));
+          s = Math.round(s * 10000) / 10000;
+          if (lastScaleApplied !== null && Math.abs(s - lastScaleApplied) < 0.02) {
+            return;
+          }
+          lastScaleApplied = s;
+          m.setAttribute(
+            'content',
+            'width=' +
+              lw +
+              ', initial-scale=' +
+              s +
+              ', minimum-scale=0.1, maximum-scale=3, user-scalable=yes, viewport-fit=cover'
+          );
+        }
+
+        rsVpApply();
+        if (!isIOS) {
+          requestAnimationFrame(rsVpApply);
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            rsVpStripDupes();
+            rsVpApply();
+            if (!isIOS) {
+              requestAnimationFrame(rsVpApply);
+            }
+          });
+        }
+
+        window.addEventListener('orientationchange', function () {
+          window._rsVpIosLockW = null;
+          lastScaleApplied = null;
+          setTimeout(function () {
+            rsVpStripDupes();
+            rsVpApply();
+          }, 350);
+        });
+
+        if (!isIOS) {
+          if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', function () {
+              clearTimeout(window._rsVvT);
+              window._rsVvT = setTimeout(rsVpApply, 120);
+            });
+          }
+          var _rsT;
+          window.addEventListener('resize', function () {
+            clearTimeout(_rsT);
+            _rsT = setTimeout(rsVpApply, 150);
+          });
+        }
+      })();
+    </script>
+  {%- endif -%}
+
+  <!-- Variables CSS globales pilotées par le customizer -->
+  <style>
+    :root {
+      --rs-primary:         {{ settings.color_primary | default: '#0033cc' }};
+      --rs-primary-hover:   {{ settings.color_primary_hover | default: '#0015a3' }};
+      --rs-secondary:       {{ settings.color_secondary | default: '#6c757d' }};
+      --rs-text:            {{ settings.color_text | default: '#212529' }};
+      --rs-text-muted:      {{ settings.color_text_muted | default: '#6c757d' }};
+      --rs-body-bg:         {{ settings.color_body_bg | default: '#ffffff' }};
+      --rs-gray-bg:         {{ settings.color_gray_bg | default: '#f8f9fa' }};
+      --rs-badge-open-bg:   {{ settings.color_badge_open_bg | default: '#198754' }};
+      --rs-badge-open-text: {{ settings.color_badge_open_text | default: '#ffffff' }};
+      --rs-badge-closed-bg: {{ settings.color_badge_closed_bg | default: '#6c757d' }};
+      --rs-card-radius:     {{ settings.card_border_radius | default: 12 }}px;
+      --rs-card-border:     {{ settings.card_border_color | default: '#e9ecef' }};
+      --rs-card-hover:      {{ settings.card_hover_border | default: '#0033cc' }};
+      --rs-btn-radius:      {{ settings.btn_border_radius | default: 6 }}px;
+      --rs-btn-font-size:   {{ settings.btn_font_size | default: 14 }}px;
+      --rs-input-radius:    {{ settings.input_border_radius | default: 6 }}px;
+      --rs-input-font-size: {{ settings.input_font_size | default: 13 }}px;
+      --rs-header-bg:       {{ settings.header_bg | default: '#ffffff' }};
+      --rs-header-text:     {{ settings.header_text | default: '#212529' }};
+      --rs-header-border:   {{ settings.header_border | default: '#e2e8f0' }};
+      --rs-header-height:   {{ settings.header_height | default: 64 }}px;
+      --rs-footer-bg:       {{ settings.footer_bg | default: '#ffffff' }};
+      --rs-footer-text:     {{ settings.footer_text | default: '#6c757d' }};
+      --rs-footer-border:   {{ settings.footer_border | default: '#e2e8f0' }};
+      --rs-page-width:      {{ settings.page_width | default: 1140 }}px;
+      --rs-font-size:       {{ settings.font_size_base | default: 14 }}px;
+    }
+
+    /* Appliquer les variables globales aux composants Jobhill */
+    body { font-size: var(--rs-font-size); background: var(--rs-body-bg); color: var(--rs-text); }
+    .gray { background: var(--rs-gray-bg) !important; }
+    .container { max-width: var(--rs-page-width); padding: 0 {{ settings.container_padding | default: 20 }}px; }
+
+    .site-header {
+      height: var(--rs-header-height);
+      background: var(--rs-header-bg);
+      border-bottom: 1px solid var(--rs-header-border);
+    }
+    .site-header .logo, .site-header .nav-link { color: var(--rs-header-text); }
+    .nav-link { font-size: {{ settings.nav_font_size | default: 13 }}px; }
+    .main-nav { gap: {{ settings.nav_gap | default: 24 }}px; }
+    {% if settings.logo %}
+      .logo img { width: {{ settings.logo_width | default: 140 }}px; }
+    {% endif %}
+
+    .site-footer {
+      background: var(--rs-footer-bg);
+      border-top: 1px solid var(--rs-footer-border);
+      padding: {{ settings.footer_padding | default: 24 }}px 0;
+    }
+    .footer-copy, .footer-links a { color: var(--rs-footer-text); font-size: {{ settings.footer_font_size | default: 12 }}px; }
+
+    .btn-primary { background: var(--rs-primary) !important; border-color: var(--rs-primary) !important; border-radius: var(--rs-btn-radius) !important; font-size: var(--rs-btn-font-size) !important; }
+    .btn-primary:hover { background: var(--rs-primary-hover) !important; border-color: var(--rs-primary-hover) !important; }
+    .btn-apply { background: var(--rs-primary); border-radius: var(--rs-btn-radius); }
+    .btn-apply:hover { background: var(--rs-primary-hover); }
+
+    .form-control { border-radius: var(--rs-input-radius) !important; font-size: var(--rs-input-font-size) !important; }
+
+    .jobgrid.JobhillShdaow { border-radius: var(--rs-card-radius) !important; border-color: var(--rs-card-border) !important; }
+    .jobgrid.JobhillShdaow:hover { border-color: var(--rs-card-hover) !important; }
+
+    .jobBadge.fulltime { background: var(--rs-badge-open-bg) !important; color: var(--rs-badge-open-text) !important; }
+  </style>
+
+  {{ 'jobhill-vendors.css' | asset_url | stylesheet_tag }}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  {{ 'jobhill-style.css' | asset_url | stylesheet_tag }}
+  {{ 'theme-overrides.css' | asset_url | stylesheet_tag }}
+
+  {% if settings.custom_head_code != blank %}
+    {{ settings.custom_head_code }}
+  {% endif %}
+</head>
+
+<body
+  data-rs-page="{{ request.page_type }}"
+  {% if settings.rs_viewport_desktop_wrap and request.page_type == 'index' %}class="rs-viewport-desktop"{% endif %}
+>
+  {% section 'header' %}
+  <main>{{ content_for_layout }}</main>
+  {%- render 'footer' -%}
+  {%- render 'cart-modal' -%}
+  <script src="{{ 'jobhill-vendors.js' | asset_url }}" defer></script>
+  <script src="{{ 'jobhill-custom.js' | asset_url }}" defer></script>
+</body>
+</html>

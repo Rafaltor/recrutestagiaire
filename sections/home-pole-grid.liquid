@@ -1,0 +1,390 @@
+{%- comment -%}
+  Grille type portail (Pôle emploi) : blocs côte à côte, largeur réglable (12 col),
+  ordre = ordre dans l’éditeur de thème, passage automatique à la ligne suivante.
+{%- endcomment -%}
+<section
+  class="rs-pole-home-grid"
+  style="--rs-pole-gap: {{ section.settings.grid_gap }}px;background:{{ section.settings.section_bg }};padding:{{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;"
+  {{ section.shopify_attributes }}>
+  {%- if section.settings.show_band -%}
+    <div
+      class="rs-pole-home-grid__band"
+      style="background:linear-gradient(180deg,{{ section.settings.band_bg_top }} 0%,{{ section.settings.band_bg_bottom }} 100%);color:{{ section.settings.band_text }};">
+      <div class="container">
+        <h2 class="rs-pole-home-grid__band-title">{{ section.settings.band_title | escape }}</h2>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="container">
+    <div class="rs-pole-home-grid__inner">
+      {%- for block in section.blocks -%}
+        <article
+          class="rs-pole-panel rs-pole-panel--{{ block.settings.layout_style }}"
+          data-span="{{ block.settings.col_span | default: 12 }}"
+          style="background:{{ block.settings.bg_color }};border-color:{{ block.settings.border_color }};"
+          {{ block.shopify_attributes }}>
+          {%- if block.settings.layout_style == 'service' -%}
+            <div class="rs-pole-panel__service">
+              {%- if block.settings.circle_label != blank -%}
+                <div
+                  class="rs-pole-panel__circle"
+                  style="background:{{ block.settings.circle_bg }};color:{{ block.settings.circle_text }};">
+                  <span>{{ block.settings.circle_label | escape }}</span>
+                </div>
+              {%- endif -%}
+              <div class="rs-pole-panel__main">
+                {%- if block.settings.kicker != blank -%}
+                  <p class="rs-pole-panel__kicker">{{ block.settings.kicker | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.title != blank -%}
+                  <h3 class="rs-pole-panel__title">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <div class="rs-pole-panel__richtext">{{ block.settings.text }}</div>
+                {%- endif -%}
+                <ul class="rs-pole-panel__links list-unstyled mb-0">
+                  {%- for i in (1..5) -%}
+                    {%- assign lk = 'link_' | append: i | append: '_label' -%}
+                    {%- assign uk = 'link_' | append: i | append: '_url' -%}
+                    {%- assign lab = block.settings[lk] -%}
+                    {%- assign url = block.settings[uk] -%}
+                    {%- if lab != blank -%}
+                      <li>
+                        <a href="{% if url != blank %}{{ url }}{% else %}#{% endif %}" class="rs-pole-panel__link">{{ lab | escape }}</a>
+                      </li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+                {%- if block.settings.footer_link_label != blank -%}
+                  <a href="{% if block.settings.footer_link_url != blank %}{{ block.settings.footer_link_url }}{% else %}#{% endif %}" class="rs-pole-panel__footer-link">
+                    {{ block.settings.footer_link_label | escape }}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- else -%}
+            <div class="rs-pole-panel__encart">
+              {%- if block.settings.kicker != blank -%}
+                <p class="rs-pole-panel__kicker">{{ block.settings.kicker | escape }}</p>
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}
+                <h3 class="rs-pole-panel__title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="rs-pole-panel__richtext">{{ block.settings.text }}</div>
+              {%- endif -%}
+              <ul class="rs-pole-panel__links list-unstyled mb-0">
+                {%- for i in (1..5) -%}
+                  {%- assign lk = 'link_' | append: i | append: '_label' -%}
+                  {%- assign uk = 'link_' | append: i | append: '_url' -%}
+                  {%- assign lab = block.settings[lk] -%}
+                  {%- assign url = block.settings[uk] -%}
+                  {%- if lab != blank -%}
+                    <li>
+                      <a href="{% if url != blank %}{{ url }}{% else %}#{% endif %}" class="rs-pole-panel__link">{{ lab | escape }}</a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+              {%- if block.settings.footer_link_label != blank -%}
+                <a href="{% if block.settings.footer_link_url != blank %}{{ block.settings.footer_link_url }}{% else %}#{% endif %}" class="rs-pole-panel__footer-link">
+                  {{ block.settings.footer_link_label | escape }}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Grille accueil type PE",
+  "tag": "section",
+  "class": "section-home-pole-grid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_band",
+      "label": "Bandeau titre au-dessus",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "band_title",
+      "label": "Titre du bandeau",
+      "default": "Services & actualités"
+    },
+    {
+      "type": "color",
+      "id": "band_bg_top",
+      "label": "Bandeau — dégradé haut",
+      "default": "#4d79ff"
+    },
+    {
+      "type": "color",
+      "id": "band_bg_bottom",
+      "label": "Bandeau — dégradé bas",
+      "default": "#0033cc"
+    },
+    {
+      "type": "color",
+      "id": "band_text",
+      "label": "Texte bandeau",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Fond de la zone grille",
+      "default": "#eceff4"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Espacement entre blocs",
+      "default": 0,
+      "info": "0 = blocs jointifs (style portail)."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Marge haute section",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Marge basse section",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "panel",
+      "name": "Bloc grille",
+      "settings": [
+        {
+          "type": "select",
+          "id": "col_span",
+          "label": "Largeur (12 = ligne)",
+          "options": [
+            { "value": "3", "label": "1/4 (3 colonnes)" },
+            { "value": "4", "label": "1/3 (4 colonnes)" },
+            { "value": "6", "label": "1/2 (6 colonnes)" },
+            { "value": "8", "label": "2/3 (8 colonnes)" },
+            { "value": "9", "label": "3/4 (9 colonnes)" },
+            { "value": "12", "label": "Pleine largeur" }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "select",
+          "id": "layout_style",
+          "label": "Mise en forme",
+          "options": [
+            { "value": "encart", "label": "Encart (texte + liens)" },
+            { "value": "service", "label": "Services (rond + liens)" }
+          ],
+          "default": "encart"
+        },
+        {
+          "type": "header",
+          "content": "Style « Services »"
+        },
+        {
+          "type": "text",
+          "id": "circle_label",
+          "label": "Texte dans le rond",
+          "default": "Candidat"
+        },
+        {
+          "type": "color",
+          "id": "circle_bg",
+          "label": "Fond du rond",
+          "default": "#d4a038"
+        },
+        {
+          "type": "color",
+          "id": "circle_text",
+          "label": "Texte du rond",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Contenu"
+        },
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Sur-titre (optionnel)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre du bloc",
+          "default": "Titre"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texte (optionnel)"
+        },
+        {
+          "type": "header",
+          "content": "Liens (1 à 5)"
+        },
+        {
+          "type": "text",
+          "id": "link_1_label",
+          "label": "Lien 1 — libellé"
+        },
+        {
+          "type": "url",
+          "id": "link_1_url",
+          "label": "Lien 1 — URL"
+        },
+        {
+          "type": "text",
+          "id": "link_2_label",
+          "label": "Lien 2 — libellé"
+        },
+        {
+          "type": "url",
+          "id": "link_2_url",
+          "label": "Lien 2 — URL"
+        },
+        {
+          "type": "text",
+          "id": "link_3_label",
+          "label": "Lien 3 — libellé"
+        },
+        {
+          "type": "url",
+          "id": "link_3_url",
+          "label": "Lien 3 — URL"
+        },
+        {
+          "type": "text",
+          "id": "link_4_label",
+          "label": "Lien 4 — libellé"
+        },
+        {
+          "type": "url",
+          "id": "link_4_url",
+          "label": "Lien 4 — URL"
+        },
+        {
+          "type": "text",
+          "id": "link_5_label",
+          "label": "Lien 5 — libellé"
+        },
+        {
+          "type": "url",
+          "id": "link_5_url",
+          "label": "Lien 5 — URL"
+        },
+        {
+          "type": "header",
+          "content": "Lien bas de bloc"
+        },
+        {
+          "type": "text",
+          "id": "footer_link_label",
+          "label": "Libellé (ex. Tout voir)"
+        },
+        {
+          "type": "url",
+          "id": "footer_link_url",
+          "label": "URL"
+        },
+        {
+          "type": "header",
+          "content": "Cadre"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Fond du bloc",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Bordure",
+          "default": "#888888"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grille accueil type PE",
+      "settings": {
+        "show_band": true,
+        "band_title": "À la une du collectif",
+        "section_bg": "#e8edf2",
+        "grid_gap": 0,
+        "padding_bottom": 32
+      },
+      "blocks": [
+        {
+          "type": "panel",
+          "settings": {
+            "col_span": "4",
+            "layout_style": "service",
+            "circle_label": "Offres",
+            "circle_bg": "#d4a038",
+            "title": "Parcourir les collections",
+            "link_1_label": "Voir toutes les offres",
+            "link_2_label": "Collections vedettes",
+            "footer_link_label": "Tout voir →",
+            "bg_color": "#ffffff"
+          }
+        },
+        {
+          "type": "panel",
+          "settings": {
+            "col_span": "4",
+            "layout_style": "service",
+            "circle_label": "Candidat",
+            "circle_bg": "#0033cc",
+            "title": "Espace candidat",
+            "link_1_label": "Profils candidats",
+            "link_2_label": "Déposer une candidature",
+            "footer_link_label": "Accéder à l’espace →",
+            "bg_color": "#ffffff"
+          }
+        },
+        {
+          "type": "panel",
+          "settings": {
+            "col_span": "4",
+            "layout_style": "encart",
+            "kicker": "ACTUALITÉS",
+            "title": "Infos & annonces",
+            "text": "<p>Annonces du collectif, dates de pop-up et rappels utiles.</p>",
+            "footer_link_label": "Toutes les actus →",
+            "bg_color": "#ffffff"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

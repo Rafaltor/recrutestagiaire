@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-candidatures",
+      "settings": {
+        "page_mode": "both",
+        "page_title": "Candidatures ouvertes",
+        "page_subtitle": "Découvrez les profils disponibles ou déposez votre CV pour rejoindre le collectif.",
+        "form_title": "Déposer ma candidature",
+        "form_subtitle": "Remplissez le formulaire pour apparaître dans la liste.",
+        "rs_api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php"
+      }
+    }
+  },
+  "order": ["main"]
+}

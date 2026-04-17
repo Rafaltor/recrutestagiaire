@@ -1,0 +1,57 @@
+<div class="header-wrap">
+  <div class="container">
+    <nav id="navigation" class="navigation navigation-landscape">
+      <div class="nav-header">
+        <a class="nav-brand" href="{{ routes.root_url }}" style="text-decoration:none;">
+          <span class="logo main-logo" style="color:#fff;font-size:20px;font-weight:bold;font-family:Arial,sans-serif;letter-spacing:-0.5px;">{{ shop.name | upcase }}</span>
+          <span class="logo change-logo" style="color:#fff;font-size:20px;font-weight:bold;font-family:Arial,sans-serif;">{{ shop.name | upcase }}</span>
+          <span class="logo mobile-logo" style="color:#fff;font-size:18px;font-weight:bold;font-family:Arial,sans-serif;">{{ shop.name | upcase }}</span>
+        </a>
+        <div class="nav-toggle"></div>
+        <div class="mobile_nav">
+          <ul>
+            <li><a href="{{ routes.cart_url }}" style="color:#fff;"><i class="bi bi-bag me-1"></i><span class="cart-count">{{ cart.item_count }}</span></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="nav-menus-wrapper">
+        <ul class="nav-menu">
+          <li{% if request.page_type == 'index' %} class="active"{% endif %}>
+            <a href="{{ routes.root_url }}">Accueil</a>
+          </li>
+          <li{% if request.page_type == 'collection' %} class="active"{% endif %}>
+            <a href="{{ routes.collections_url }}">Offres en cours<span class="submenu-indicator"></span></a>
+            <ul class="nav-dropdown nav-submenu">
+              {% for collection in collections limit: 8 %}
+                <li><a href="{{ collection.url }}">{{ collection.title }}</a></li>
+              {% endfor %}
+              <li><a href="{{ routes.all_products_collection_url }}">Toutes les offres</a></li>
+            </ul>
+          </li>
+          <li{% if request.path contains 'profils-candidats' or request.path contains 'deposer-candidature' or request.path contains 'candidatures' %} class="active"{% endif %}>
+            <a href="/pages/profils-candidats">Profils candidats</a>
+          </li>
+          <li{% if request.path contains 'deposer-candidature' %} class="active"{% endif %}>
+            <a href="/pages/deposer-candidature">Déposer une candidature</a>
+          </li>
+          <li>
+            <a href="/pages/about">Le collectif</a>
+          </li>
+          <li>
+            <a href="/pages/contact">Contact</a>
+          </li>
+        </ul>
+        <ul class="nav-menu nav-menu-social align-to-right">
+          <li>
+            <a href="{{ routes.cart_url }}" class="abt-btn d-flex align-items-center gap-1" style="text-decoration:none;font-size:12px;">
+              <i class="bi bi-bag" style="font-size:13px;"></i> Mon dossier
+              {% if cart.item_count > 0 %}
+                <span style="background:#a94442;color:#fff;border-radius:2px;font-size:10px;padding:1px 5px;margin-left:2px;">{{ cart.item_count }}</span>
+              {% endif %}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>

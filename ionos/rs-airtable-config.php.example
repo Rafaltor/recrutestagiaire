@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copiez ce fichier en `rs-airtable-config.php` (même dossier) et renseignez les valeurs.
+ *
+ * IMPORTANT
+ * - Ne mettez JAMAIS ce fichier dans un dépôt public.
+ * - Placez idéalement `rs-airtable-config.php` hors du webroot (ex: /home/...),
+ *   puis modifiez `rs-airtable-proxy.php` pour l'inclure via un chemin absolu.
+ */
+
+// Airtable
+define('RS_AIRTABLE_TOKEN', 'pat_xxx');            // Personal Access Token (PAT)
+define('RS_AIRTABLE_BASE',  'appXXXXXXXXXXXXXX'); // Base ID
+define('RS_AIRTABLE_TABLE', 'RecruteStagiaire');   // Nom exact de la table
+
+// Sécurité / CORS
+// Mets ici ton domaine Shopify (ou laisse '*' temporairement).
+// Ex: https://recrute-stagiaire.myshopify.com
+define('RS_ALLOWED_ORIGINS', [
+  '*',
+]);
+
+// Limite simple anti-abus (par IP)
+define('RS_RATE_LIMIT_PER_MIN', 60);
+
+// Champs Airtable utilisés (adapte si ton Airtable a des noms différents)
+define('RS_FIELD_NAME',  'Nom Prénom');       // ou "Nom & Prénom"
+define('RS_FIELD_EMAIL', 'Email');
+define('RS_FIELD_ROLE',  'Poste recherché');
+define('RS_FIELD_PROF',  'Professions');      // optionnel
+define('RS_FIELD_CV',    'CV');               // optionnel
+define('RS_FIELD_PORTF', 'Portfolio');        // optionnel
+define('RS_FIELD_OK',    'Approuvé');         // bool
+

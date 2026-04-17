@@ -1,0 +1,336 @@
+{%- comment -%}
+  Fragment d’une cellule de la page d’accueil unifiée (voir section home-unified-page).
+{%- endcomment -%}
+{%- assign b = block.settings %}
+{%- case block.type -%}
+
+  {%- when 'blue_band' -%}
+    <div
+      class="rs-uni-blue-band py-2 px-1"
+      style="background:linear-gradient(180deg,{{ b.band_bg_top }} 0%,{{ b.band_bg_bottom }} 100%);color:{{ b.band_text }};">
+      <h2 class="rs-uni-blue-band__title">{{ b.band_title | escape }}</h2>
+    </div>
+
+  {%- when 'hero_intro_bundle' -%}
+    <div class="rs-intro-bundle h-100 d-flex flex-column {% if b.text_align == 'text-start' %}text-start{% else %}text-center{% endif %}">
+      {%- if b.show_band -%}
+        <div
+          class="rs-intro-bundle__band py-2 px-3"
+          style="background:linear-gradient(180deg,{{ b.band_bg_top }} 0%,{{ b.band_bg_bottom }} 100%);color:{{ b.band_text }};">
+          <h2 class="rs-intro-bundle__band-title mb-0">{{ b.band_title | escape }}</h2>
+        </div>
+      {%- endif -%}
+      <div class="rs-intro-bundle__body flex-grow-1 d-flex flex-column justify-content-center py-3 px-3 {% if b.text_align == 'text-start' %}text-start{% else %}text-center{% endif %}">
+        {%- if b.badge_text != blank -%}
+          <div class="mb-2">
+            <span
+              class="badge rs-intro-bundle__badge py-2 px-3"
+              style="background:{{ b.badge_color }};font-size:calc({{ b.badge_size }}px * var(--rs-uni-text-pct, 100) / 100);">
+              {{ b.badge_text }}
+            </span>
+          </div>
+        {%- endif -%}
+        {%- if b.heading_text != blank -%}
+          <h1 class="rs-hero__title-pe mb-2 mb-md-3" style="font-size:calc({{ b.heading_size }}px * var(--rs-uni-text-pct, 100) / 100);line-height:1.2;">
+            {{ b.heading_text }}
+          </h1>
+        {%- endif -%}
+        {%- if b.subheading_text != blank -%}
+          <p
+            class="rs-hero__lede-pe mb-3 mb-md-4{% if b.text_align == 'text-center' %} mx-auto{% endif %}"
+            style="font-size:calc({{ b.subheading_size }}px * var(--rs-uni-text-pct, 100) / 100);max-width:min({{ b.subheading_max_width }}px, 100%);width:100%;box-sizing:border-box;{% if b.text_align == 'text-center' %}margin-left:auto;margin-right:auto;{% endif %}">
+            {{ b.subheading_text }}
+          </p>
+        {%- endif -%}
+        <div class="rs-hero__actions rs-hero__actions--intro rs-intro-cta-row d-flex flex-wrap gap-2 {% if b.text_align == 'text-center' %}justify-content-center{% endif %}">
+          {%- if b.btn1_label != blank -%}
+            <a
+              href="{% if b.btn1_url != blank %}{{ b.btn1_url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}"
+              class="abt-btn rs-caf-btn-dossier text-decoration-none d-inline-flex align-items-center justify-content-center fw-semibold">
+              {{ b.btn1_label }}
+            </a>
+          {%- endif -%}
+          {%- if b.btn2_label != blank -%}
+            <a
+              href="{% if b.btn2_url != blank %}{{ b.btn2_url }}{% else %}{{ rs_url_profils }}{% endif %}"
+              class="abt-btn rs-caf-btn-dossier rs-intro-cta--profils text-decoration-none d-inline-flex align-items-center justify-content-center fw-semibold">
+              {{ b.btn2_label }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+  {%- when 'hero_badge' -%}
+    <div class="{{ section.settings.text_align }}">
+      <span
+        class="badge text-dark py-2 px-3"
+        style="background:{{ b.color }};font-size:calc({{ b.size }}px * var(--rs-uni-text-pct, 100) / 100);">
+        {{ b.text }}
+      </span>
+    </div>
+
+  {%- when 'hero_heading' -%}
+    <h1
+      class="rs-hero__title-pe mb-0 {{ section.settings.text_align }}"
+      style="font-size:calc({{ b.size }}px * var(--rs-uni-text-pct, 100) / 100);line-height:1.2;">
+      {{ b.text | default: 'Les meilleures opportunités vestimentaires du moment.' }}
+    </h1>
+
+  {%- when 'hero_subheading' -%}
+    <p
+      class="rs-hero__lede-pe mb-0 {{ section.settings.text_align }}{% if section.settings.text_align == 'text-center' %} mx-auto{% endif %}"
+      style="font-size:calc({{ b.size }}px * var(--rs-uni-text-pct, 100) / 100);max-width:min({{ b.max_width }}px, 100%);width:100%;box-sizing:border-box;{% if section.settings.text_align == 'text-center' %}margin-left:auto;margin-right:auto;{% endif %}">
+      {{ b.text }}
+    </p>
+
+  {%- when 'hero_buttons' -%}
+    <div class="rs-hero__actions rs-hero__actions--intro rs-intro-cta-row d-flex flex-wrap gap-2 {% if section.settings.text_align == 'text-center' %}justify-content-center{% endif %}">
+      {%- if b.btn1_label != blank -%}
+        <a
+          href="{% if b.btn1_url != blank %}{{ b.btn1_url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}"
+          class="abt-btn rs-caf-btn-dossier text-decoration-none d-inline-flex align-items-center justify-content-center fw-semibold">
+          {{ b.btn1_label }}
+        </a>
+      {%- endif -%}
+      {%- if b.btn2_label != blank -%}
+        <a
+          href="{% if b.btn2_url != blank %}{{ b.btn2_url }}{% else %}{{ rs_url_profils }}{% endif %}"
+          class="abt-btn rs-caf-btn-dossier rs-intro-cta--profils text-decoration-none d-inline-flex align-items-center justify-content-center fw-semibold">
+          {{ b.btn2_label }}
+        </a>
+      {%- endif -%}
+    </div>
+
+  {%- when 'hero_pole_cta' -%}
+    <div class="d-flex align-items-center justify-content-center h-100 py-2">
+      <a
+        href="{% if b.url != blank %}{{ b.url }}{% else %}{{ rs_url_deposer }}{% endif %}"
+        class="rs-hero__pole-orb text-decoration-none d-flex flex-column align-items-center justify-content-center"
+        style="width:calc({{ b.size }}px * var(--rs-uni-text-pct, 100) / 100);height:calc({{ b.size }}px * var(--rs-uni-text-pct, 100) / 100);min-width:calc({{ b.size }}px * var(--rs-uni-text-pct, 100) / 100);background:{{ b.circle_bg }};color:{{ b.circle_text }};">
+        <span class="rs-hero__pole-orb-label">{{ b.label }}</span>
+        {%- if b.sublabel != blank -%}
+          <span class="rs-hero__pole-orb-sub">{{ b.sublabel }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+  {%- when 'hero_search' -%}
+    {%- assign _hs_layout = b.layout_variant | default: 'panel' -%}
+    <div class="rs-hero__search-strip-inner rs-uni-search-stack h-100 d-flex flex-column justify-content-center">
+      {%- if _hs_layout == 'metro' -%}
+        <div class="rs-hero-search-metro">
+          {%- if b.strip_kicker != blank -%}
+            <div class="rs-hero-search-metro__titlebar">{{ b.strip_kicker }}</div>
+          {%- endif -%}
+          <div class="rs-hero-search-metro__sheet">
+            <div class="rs-hero-search-metro__line">
+              <span class="rs-hero-search-metro__tag">Q</span>
+              <form action="{{ routes.search_url }}" method="get" class="rs-hero-search-metro__form">
+                <input type="hidden" name="type" value="product">
+                <label class="visually-hidden" for="rs-home-search-m-{{ block.id }}">Recherche</label>
+                <input
+                  id="rs-home-search-m-{{ block.id }}"
+                  type="text"
+                  name="q"
+                  class="form-control rs-hero__pole-input rs-hero-search-metro__input"
+                  style="height:calc({{ b.height }}px * var(--rs-uni-text-pct, 100) / 100);font-size:calc({{ b.font_size }}px * var(--rs-uni-text-pct, 100) / 100);"
+                  placeholder="{{ b.placeholder | default: 'Nom du poste, collection...' }}">
+              </form>
+            </div>
+            <div class="rs-hero-search-metro__split{% if b.secondary_label == blank %} rs-hero-search-metro__split--single{% endif %}">
+              <a
+                href="{{ routes.all_products_collection_url }}"
+                class="rs-hero-search-metro__cell rs-hero-search-metro__cell--offres btn btn-warning fw-bold rs-hero__pole-cta-btn"
+                style="min-height:calc({{ b.height }}px * var(--rs-uni-text-pct, 100) / 100);font-size:calc({{ b.font_size }}px * var(--rs-uni-text-pct, 100) / 100);">
+                {{ b.btn_label | default: 'Voir toutes les offres' }}
+              </a>
+              {%- if b.secondary_label != blank -%}
+                <a
+                  href="{% if b.secondary_url != blank %}{{ b.secondary_url }}{% else %}{{ rs_url_profils }}{% endif %}"
+                  class="rs-hero-search-metro__cell rs-hero-search-metro__cell--cand btn btn-light fw-bold"
+                  style="min-height:calc({{ b.height }}px * var(--rs-uni-text-pct, 100) / 100);font-size:calc({{ b.font_size | default: 14 | minus: 1 }}px * var(--rs-uni-text-pct, 100) / 100);">
+                  {{ b.secondary_label }}
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- else -%}
+        <div class="rs-hero-search-2010">
+          {%- if b.strip_kicker != blank -%}
+            <div class="rs-hero-search-2010__ribbon" role="presentation">{{ b.strip_kicker }}</div>
+          {%- endif -%}
+          <div class="rs-hero-search-2010__panel">
+            <div class="rs-hero-search-2010__row">
+              <label class="rs-hero-search-2010__label" for="rs-home-search-q-{{ block.id }}">Mots-clés</label>
+              <div class="rs-hero-search-2010__field formField icons rs-hero__pole-field">
+                <form action="{{ routes.search_url }}" method="get" class="rs-hero-search-2010__form">
+                  <input type="hidden" name="type" value="product">
+                  <input
+                    id="rs-home-search-q-{{ block.id }}"
+                    type="text"
+                    name="q"
+                    class="form-control w-100 rs-hero__pole-input rs-hero-search-2010__input"
+                    style="height:calc({{ b.height }}px * var(--rs-uni-text-pct, 100) / 100);font-size:calc({{ b.font_size }}px * var(--rs-uni-text-pct, 100) / 100);"
+                    placeholder="{{ b.placeholder | default: 'Nom du poste, collection...' }}">
+                  <i class="bi bi-search icon"></i>
+                </form>
+              </div>
+            </div>
+            <div class="rs-hero-search-2010__actions">
+              <a
+                href="{{ routes.all_products_collection_url }}"
+                class="btn btn-warning w-100 fw-bold rs-hero__pole-cta-btn rs-hero-search-2010__btn-offres"
+                style="min-height:calc({{ b.height }}px * var(--rs-uni-text-pct, 100) / 100);font-size:calc({{ b.font_size }}px * var(--rs-uni-text-pct, 100) / 100);">
+                {{ b.btn_label | default: 'Voir toutes les offres' }}
+              </a>
+              {%- if b.secondary_label != blank -%}
+                <a
+                  href="{% if b.secondary_url != blank %}{{ b.secondary_url }}{% else %}{{ rs_url_profils }}{% endif %}"
+                  class="btn btn-light w-100 fw-bold border rs-hero-search-2010__btn-cand"
+                  style="min-height:calc({{ b.height }}px * var(--rs-uni-text-pct, 100) / 100);font-size:calc({{ b.font_size | default: 14 | minus: 1 }}px * var(--rs-uni-text-pct, 100) / 100);">
+                  {{ b.secondary_label }}
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+  {%- when 'hero_promo' -%}
+    <article
+      class="rs-fake-promo h-100"
+      style="background:{{ b.bg_color }};border:1px solid {{ b.border_color }};color:{{ b.text_color }};">
+      {%- if b.kicker != blank -%}
+        <span class="rs-fake-promo__kicker" style="color:{{ b.kicker_color }};">{{ b.kicker }}</span>
+      {%- endif -%}
+      {%- if b.title != blank -%}
+        <h4 class="rs-fake-promo__title" style="color:{{ b.title_color }};">{{ b.title }}</h4>
+      {%- endif -%}
+      {%- if b.text != blank -%}
+        <p class="rs-fake-promo__text">{{ b.text }}</p>
+      {%- endif -%}
+      {%- if b.link_label != blank -%}
+        <a href="{% if b.link_url != blank %}{{ b.link_url }}{% else %}#{% endif %}" class="rs-fake-promo__link">{{ b.link_label }}</a>
+      {%- endif -%}
+    </article>
+
+  {%- when 'grid_panel' -%}
+    <div class="rs-pole-panel rs-pole-panel--{{ b.layout_style }} h-100" style="background:{{ b.bg_color }};border-color:{{ b.border_color }};border-width:0;">
+      {%- if b.layout_style == 'service' -%}
+        <div class="rs-pole-panel__service">
+          {%- if b.circle_label != blank -%}
+            {%- assign _circ_l = b.circle_label | strip | downcase -%}
+            {%- assign _circ_offres = false -%}
+            {%- if _circ_l contains 'offre' -%}
+              {%- assign _circ_offres = true -%}
+            {%- endif -%}
+            {%- assign _circ_cand = false -%}
+            {%- if _circ_l contains 'candidat' -%}
+              {%- assign _circ_cand = true -%}
+            {%- endif -%}
+            <div
+              class="rs-pole-panel__circle{% if _circ_offres %} rs-pole-panel__circle--offres-pale{% endif %}{% if _circ_cand %} rs-pole-panel__circle--candidat{% endif %}"
+              style="{% unless _circ_offres %}background:{{ b.circle_bg }};{% endunless %}color:{{ b.circle_text }};">
+              <span>{{ b.circle_label | escape }}</span>
+            </div>
+          {%- endif -%}
+          <div class="rs-pole-panel__main">
+            {%- if b.kicker != blank -%}
+              <p class="rs-pole-panel__kicker">{{ b.kicker | escape }}</p>
+            {%- endif -%}
+            {%- if b.title != blank -%}
+              <h3 class="rs-pole-panel__title">{{ b.title | escape }}</h3>
+            {%- endif -%}
+            {%- if b.text != blank -%}
+              <div class="rs-pole-panel__richtext">{{ b.text }}</div>
+            {%- endif -%}
+            <ul class="rs-pole-panel__links list-unstyled mb-0">
+              {%- for i in (1..5) -%}
+                {%- assign lk = 'link_' | append: i | append: '_label' -%}
+                {%- assign uk = 'link_' | append: i | append: '_url' -%}
+                {%- assign lab = b[lk] -%}
+                {%- assign url = b[uk] -%}
+                {%- if lab != blank -%}
+                  <li>
+                    <a href="{% if url != blank %}{{ url }}{% else %}#{% endif %}" class="rs-pole-panel__link">{{ lab | escape }}</a>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+            {%- if b.footer_link_label != blank -%}
+              <a href="{% if b.footer_link_url != blank %}{{ b.footer_link_url }}{% else %}#{% endif %}" class="rs-pole-panel__footer-link">
+                {{ b.footer_link_label | escape }}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- else -%}
+        <div class="rs-pole-panel__encart">
+          {%- if b.kicker != blank -%}
+            <p class="rs-pole-panel__kicker">{{ b.kicker | escape }}</p>
+          {%- endif -%}
+          {%- if b.title != blank -%}
+            <h3 class="rs-pole-panel__title">{{ b.title | escape }}</h3>
+          {%- endif -%}
+          {%- if b.text != blank -%}
+            <div class="rs-pole-panel__richtext">{{ b.text }}</div>
+          {%- endif -%}
+          <ul class="rs-pole-panel__links list-unstyled mb-0">
+            {%- for i in (1..5) -%}
+              {%- assign lk = 'link_' | append: i | append: '_label' -%}
+              {%- assign uk = 'link_' | append: i | append: '_url' -%}
+              {%- assign lab = b[lk] -%}
+              {%- assign url = b[uk] -%}
+              {%- if lab != blank -%}
+                <li>
+                  <a href="{% if url != blank %}{{ url }}{% else %}#{% endif %}" class="rs-pole-panel__link">{{ lab | escape }}</a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+          {%- if b.footer_link_label != blank -%}
+            <a href="{% if b.footer_link_url != blank %}{{ b.footer_link_url }}{% else %}#{% endif %}" class="rs-pole-panel__footer-link">
+              {{ b.footer_link_label | escape }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+  {%- when 'kitsch_counter' -%}
+    <div
+      class="rs-stat-kitsch{% if b.tile_mode %} rs-stat-kitsch--tile h-100{% else %} rs-tile-frame mx-auto{% endif %}"
+      {% unless b.tile_mode %}style="max-width:520px;"{% endunless %}
+      data-rs-kitsch="1"
+      data-api="{{ section.settings.rs_api_url | escape }}"
+      hidden>
+      <span class="rs-stat-kitsch__ribbon">{{ b.ribbon_text | default: '★ CHIFFRE OFFICIEL ★' }}</span>
+      <p class="rs-stat-kitsch__line">
+        <span class="rs-stat-kitsch__n" data-rs-kitsch-n>—</span>
+        <span class="rs-stat-kitsch__suffix">
+          {{ b.suffix_text | default: ' candidat(s) actuellement recensé(e)s dans la base nationale' }}
+          <strong>{{ b.brand_name | default: 'Recrute Stagiaire' }}</strong>
+        </span>
+      </p>
+      <p class="rs-stat-kitsch__sub">{{ b.sub_text | default: 'Mise à jour en temps quasi réel — merci de votre confiance !!' }}</p>
+    </div>
+
+  {%- when 'product_offer' -%}
+    <div class="rs-uni-single-offer h-100">
+      {%- if b.product != blank -%}
+        {%- assign _carousel_uid = section.id | append: '_' | append: block.id -%}
+        {% render 'rs-offer-grid-card', product: b.product, card_settings: b, carousel_uid: _carousel_uid %}
+      {%- else -%}
+        <div class="p-3 text-muted small border border-dashed rounded-2 h-100 d-flex align-items-center justify-content-center text-center">
+          Bloc offre : sélectionnez un produit dans la barre latérale du thème.
+        </div>
+      {%- endif -%}
+    </div>
+
+  {%- when 'featured_products' -%}
+    {%- comment -%}Bloc grille « en vedette » retiré — ne rien afficher (cf. boucle section).{%- endcomment -%}
+
+{%- endcase -%}

@@ -1,0 +1,187 @@
+<!-- Breadcrumb (retour + fil type mockup) -->
+<div class="gray py-3 border-bottom">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <a href="{{ collection.url | default: routes.all_products_collection_url }}" class="btn btn-sm btn-light-primary rounded-pill fw-medium px-4">
+        <i class="bi bi-box-arrow-in-left me-2"></i>Retour aux offres
+      </a>
+      <div class="rs-pro-mock__breadcrumb-top small text-muted ms-md-auto text-md-end">
+        <a href="{{ routes.all_products_collection_url }}" class="text-muted text-decoration-none">Offres en cours</a>
+        {% if collection %}
+          <span class="text-muted"> › </span>
+          <a href="{{ collection.url }}" class="text-muted text-decoration-none">{{ collection.title }}</a>
+        {% endif %}
+        <span class="text-muted"> › </span>
+        <span class="text-body">{{ section.settings.breadcrumb_ref_prefix | default: 'Poste n°' }}RS-{{ product.id }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="rs-uni-page pt-4 pb-5">
+  <div class="container">
+    {% render 'rs-product-page-mockup', product: product, section: section, collection: collection %}
+  </div>
+</section>
+
+<script>
+(function () {
+  var main = document.getElementById('rs-pro-hero-img');
+  document.querySelectorAll('.rs-pro-mock__thumb[data-src]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var src = this.getAttribute('data-src');
+      if (main && src) main.setAttribute('src', src);
+      document.querySelectorAll('.rs-pro-mock__thumb').forEach(function (t) {
+        t.classList.remove('active');
+      });
+      this.classList.add('active');
+    });
+  });
+
+  var variantInput = document.getElementById('product-variant-id');
+  var priceEl = document.getElementById('rs-pro-price');
+  if (!variantInput) return;
+  document.querySelectorAll('.variant-select').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.variant-select').forEach(function (b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      this.classList.add('active');
+      this.setAttribute('aria-pressed', 'true');
+      variantInput.value = this.dataset.id;
+      if (priceEl && this.dataset.money) priceEl.textContent = this.dataset.money;
+      if (typeof history !== 'undefined' && history.replaceState) {
+        try {
+          var u = new URL(window.location.href);
+          u.searchParams.set('variant', this.dataset.id);
+          history.replaceState({}, '', u);
+        } catch (e) {}
+      }
+    });
+  });
+
+  var shareBtn = document.getElementById('rs-pro-share-offer');
+  if (shareBtn) {
+    var resetLabel = shareBtn.getAttribute('data-reset-label') || "Sauvegarder l'offre";
+    shareBtn.addEventListener('click', function () {
+      var url = window.location.href;
+      if (navigator.share) {
+        navigator.share({ title: document.title, url: url }).catch(function () {});
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function () {
+          shareBtn.textContent = 'Lien copié';
+          setTimeout(function () {
+            shareBtn.textContent = resetLabel;
+          }, 2000);
+        });
+      } else {
+        window.prompt('Copier le lien :', url);
+      }
+    });
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Fiche produit",
+  "settings": [
+    { "type": "text", "id": "breadcrumb_ref_prefix", "label": "Préfixe fil d’Ariane (réf.)", "default": "Poste n°" },
+    { "type": "text", "id": "price_label", "label": "Libellé prix", "default": "Rémunération du poste" },
+    { "type": "text", "id": "variant_heading", "label": "Libellé choix variante", "default": "Sélectionner votre niveau d’expérience" },
+    { "type": "text", "id": "add_to_cart_text", "label": "Texte bouton postuler", "default": "Postuler — Ajouter au dossier" },
+    { "type": "text", "id": "free_shipping_text", "label": "Sous-texte prix (ex. livraison)", "default": "Livraison offerte dès 200 € de candidatures" },
+    { "type": "text", "id": "save_offer_label", "label": "Libellé bouton secondaire", "default": "Sauvegarder l’offre" },
+    { "type": "url", "id": "save_offer_url", "label": "Lien « Sauvegarder l’offre » (optionnel)", "info": "Vide = partage / copie du lien au clic." },
+    { "type": "text", "id": "similar_title", "label": "Titre offres similaires", "default": "Autres offres disponibles" },
+    { "type": "text", "id": "description_title", "label": "Titre bloc description", "default": "Description du poste" },
+    { "type": "text", "id": "sold_out_message", "label": "Message poste pourvu", "default": "Ce poste est actuellement pourvu." },
+    { "type": "text", "id": "sold_out_cta", "label": "Bouton poste pourvu", "default": "Voir les autres offres" },
+    {
+      "type": "text",
+      "id": "reassurance_default_1",
+      "label": "Puce réassurance 1 (si pas de métachamp)",
+      "default": "Poste disponible immédiatement"
+    },
+    {
+      "type": "text",
+      "id": "reassurance_default_2",
+      "label": "Puce réassurance 2",
+      "default": "Expédition sous 48h ouvrées"
+    },
+    {
+      "type": "text",
+      "id": "reassurance_default_3",
+      "label": "Puce réassurance 3",
+      "default": "Retour sous 14 jours si inadéquation"
+    },
+    { "type": "header", "content": "Fiche offre (valeurs par défaut)" },
+    {
+      "type": "paragraph",
+      "content": "Métachamps : `custom.contract_type`, `department_detail`, `availability_label`, `matiere`, `missions`, `profil_recherche`, `avantages`, `reassurance_*`, `edition_limitee`, `collection_badge`, `localisation` / `ville`. Voir docs/product-offer-field-map.md."
+    },
+    { "type": "text", "id": "default_location", "label": "Localisation (métadonnées / SEO)", "default": "Paris, France", "info": "Utilisée si métachamps localisation absents." },
+    { "type": "text", "id": "employer_label", "label": "Nom employeur", "default": "Recrute Stagiaire" },
+    { "type": "url", "id": "employer_url", "label": "Lien employeur", "info": "Vide = accueil boutique." },
+    { "type": "header", "content": "Titres blocs métachamps" },
+    { "type": "text", "id": "missions_title", "label": "Titre — Missions", "default": "Missions du poste" },
+    { "type": "text", "id": "profil_title", "label": "Titre — Profil", "default": "Profil recherché" },
+    { "type": "text", "id": "avantages_title", "label": "Titre — Avantages", "default": "Avantages du poste" }
+  ],
+  "blocks": [
+    {
+      "type": "sponsored_rail",
+      "name": "Pub rail latéral",
+      "settings": [
+        {
+          "type": "select",
+          "id": "side",
+          "label": "Côté",
+          "default": "right",
+          "options": [
+            { "value": "left", "label": "Gauche" },
+            { "value": "right", "label": "Droite" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "content_type",
+          "label": "Contenu",
+          "default": "profiles_api",
+          "options": [
+            { "value": "product", "label": "Offre Shopify" },
+            { "value": "profiles_api", "label": "Profil candidat (API)" }
+          ]
+        },
+        { "type": "product", "id": "product", "label": "Produit" },
+        { "type": "text", "id": "kicker", "label": "Mention", "default": "Sponsorisé" },
+        { "type": "checkbox", "id": "show_price", "label": "Afficher le prix", "default": true },
+        { "type": "checkbox", "id": "show_stars", "label": "Étoiles décoratives", "default": true },
+        { "type": "text", "id": "cta_label", "label": "Bouton", "default": "Voir" }
+      ]
+    },
+    {
+      "type": "candidate_rail",
+      "name": "Profil API (ancien)",
+      "settings": [
+        {
+          "type": "select",
+          "id": "side",
+          "label": "Côté",
+          "default": "right",
+          "options": [
+            { "value": "left", "label": "Gauche" },
+            { "value": "right", "label": "Droite" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fiche produit"
+    }
+  ]
+}
+{% endschema %}

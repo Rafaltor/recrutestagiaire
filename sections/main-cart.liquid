@@ -1,0 +1,415 @@
+<div class="gray py-4 border-bottom">
+  <div class="container">
+    <h1 style="font-size:{{ section.settings.title_size }}px;font-weight:{{ section.settings.title_weight }};margin:0;">
+      {{ section.settings.page_title | default: 'Mon dossier de candidature' }}
+    </h1>
+    {% if cart.item_count > 0 %}
+      <p style="font-size:13px;color:#6c757d;margin:4px 0 0;">
+        {{ cart.item_count }} pièce{% if cart.item_count > 1 %}s{% endif %} sélectionnée{% if cart.item_count > 1 %}s{% endif %}
+      </p>
+    {% endif %}
+  </div>
+</div>
+
+<section style="padding:{{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;">
+  <div class="container">
+    {% if cart.item_count > 0 %}
+      <form action="{{ routes.cart_url }}" method="post">
+        <div class="row g-4">
+
+          <!-- Articles -->
+          <div class="col-lg-8">
+            {% for item in cart.items %}
+              <div class="d-flex gap-3 align-items-start border-bottom pb-3 mb-3">
+                <div style="width:{{ section.settings.thumb_size }}px;height:{{ section.settings.thumb_size }}px;flex-shrink:0;border-radius:{{ section.settings.thumb_radius }}px;overflow:hidden;background:#f8f9fa;border:1px solid #dee2e6;">
+                  {% if item.image %}
+                    <img src="{{ item.image | img_url: '160x160', crop: 'center' }}" style="width:100%;height:100%;object-fit:cover;" alt="">
+                  {% endif %}
+                </div>
+                <div class="flex-grow-1">
+                  <h6 style="margin-bottom:4px;font-size:14px;font-weight:600;">
+                    <a href="{{ item.url }}" style="color:inherit;text-decoration:none;">{{ item.product.title }}</a>
+                  </h6>
+                  {% unless item.variant.title == 'Default Title' %}
+                    <p style="font-size:12px;color:#6c757d;margin-bottom:4px;">{{ item.variant.title }}</p>
+                  {% endunless %}
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="input-group input-group-sm" style="width:90px;">
+                      <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}"
+                        class="btn btn-outline-secondary btn-sm" style="font-size:12px;padding:2px 8px;">−</a>
+                      <span class="input-group-text" style="font-size:12px;">{{ item.quantity }}</span>
+                      <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}"
+                        class="btn btn-outline-secondary btn-sm" style="font-size:12px;padding:2px 8px;">+</a>
+                    </div>
+                    <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
+                      style="font-size:12px;color:#dc3545;text-decoration:none;">
+                      {{ section.settings.remove_label | default: 'Retirer' }}
+                    </a>
+                  </div>
+                </div>
+                <div style="font-size:14px;font-weight:600;white-space:nowrap;">{{ item.final_line_price | money }}</div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Récapitulatif -->
+          <div class="col-lg-4">
+            <div style="background:#f8f9fa;border:1px solid #dee2e6;border-radius:{{ section.settings.summary_radius }}px;padding:{{ section.settings.summary_padding }}px;">
+
+              {%- for block in section.blocks -%}
+
+                {%- if block.type == 'order_summary' -%}
+                  <h5 style="font-size:16px;font-weight:600;margin-bottom:14px;" {{ block.shopify_attributes }}>
+                    {{ block.settings.title | default: 'Récapitulatif' }}
+                  </h5>
+                  <div class="d-flex justify-content-between mb-2" style="font-size:13px;color:#6c757d;">
+                    <span>{{ block.settings.subtotal_label | default: 'Sous-total' }}</span>
+                    <span>{{ cart.total_price | money }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-3" style="font-size:13px;color:#6c757d;">
+                    <span>{{ block.settings.shipping_label | default: 'Livraison' }}</span>
+                    <span>{{ block.settings.shipping_text | default: "Calculée à l'étape suivante" }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between fw-bold border-top pt-3 mb-4" style="font-size:15px;">
+                    <span>{{ block.settings.total_label | default: 'Total' }}</span>
+                    <span>{{ cart.total_price | money }}</span>
+                  </div>
+
+                {%- elsif block.type == 'checkout_button' -%}
+                  <button type="submit" name="checkout"
+                    class="btn btn-primary w-100"
+                    style="font-size:{{ block.settings.font_size }}px;padding:{{ block.settings.padding }}px;font-weight:600;border-radius:{{ block.settings.radius }}px;"
+                    {{ block.shopify_attributes }}>
+                    {{ block.settings.label | default: 'Soumettre ma candidature' }}
+                  </button>
+
+                {%- elsif block.type == 'continue_button' -%}
+                  <a href="{{ routes.all_products_collection_url }}"
+                    class="btn btn-outline-secondary w-100 mt-2"
+                    style="font-size:{{ block.settings.font_size }}px;padding:{{ block.settings.padding }}px;border-radius:{{ block.settings.radius }}px;"
+                    {{ block.shopify_attributes }}>
+                    {{ block.settings.label | default: "Voir d'autres offres" }}
+                  </a>
+
+                {%- elsif block.type == 'trust_text' -%}
+                  <p style="font-size:{{ block.settings.font_size }}px;color:#6c757d;text-align:center;margin-top:12px;margin-bottom:0;"
+                    {{ block.shopify_attributes }}>
+                    <i class="bi bi-shield-check me-1"></i>{{ block.settings.text }}
+                  </p>
+
+                {%- endif -%}
+
+              {%- endfor -%}
+
+            </div>
+          </div>
+        </div>
+      </form>
+
+    {% else %}
+      <!-- Panier vide -->
+      <div class="text-center py-5">
+        <span class="d-inline-block mb-3" style="color:#dee2e6;line-height:0;">{% render 'icon-folder-dossier', w: 56, h: 44 %}</span>
+        <h4 style="font-size:18px;color:#6c757d;margin-bottom:12px;">
+          {{ section.settings.empty_title | default: 'Votre dossier est vide' }}
+        </h4>
+        {% if section.settings.empty_text != blank %}
+          <p style="font-size:14px;color:#adb5bd;margin-bottom:20px;">{{ section.settings.empty_text }}</p>
+        {% endif %}
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary px-5" style="font-size:15px;padding:10px 32px;">
+          {{ section.settings.empty_btn_label | default: 'Consulter les offres' }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Panier",
+  "settings": [
+    {
+      "type": "header",
+      "content": "En-tête"
+    },
+    {
+      "type": "text",
+      "id": "page_title",
+      "label": "Titre de page",
+      "default": "Mon dossier de candidature"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Taille du titre",
+      "default": 22
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Graisse du titre",
+      "default": "600",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-gras" },
+        { "value": "700", "label": "Gras" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Articles"
+    },
+    {
+      "type": "range",
+      "id": "thumb_size",
+      "min": 50,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Taille vignette",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "thumb_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Arrondi vignette",
+      "default": 8
+    },
+    {
+      "type": "text",
+      "id": "remove_label",
+      "label": "Texte retirer",
+      "default": "Retirer"
+    },
+    {
+      "type": "header",
+      "content": "Récapitulatif"
+    },
+    {
+      "type": "range",
+      "id": "summary_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Arrondi bloc récap",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "summary_padding",
+      "min": 12,
+      "max": 36,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bloc récap",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Panier vide"
+    },
+    {
+      "type": "text",
+      "id": "empty_title",
+      "label": "Titre panier vide",
+      "default": "Votre dossier est vide"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Texte panier vide",
+      "default": "Vous n'avez encore postulé à aucun poste."
+    },
+    {
+      "type": "text",
+      "id": "empty_btn_label",
+      "label": "Texte bouton",
+      "default": "Consulter les offres"
+    },
+    {
+      "type": "header",
+      "content": "Espacement"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacement haut",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacement bas",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "order_summary",
+      "name": "Récapitulatif commande",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Récapitulatif"
+        },
+        {
+          "type": "text",
+          "id": "subtotal_label",
+          "label": "Label sous-total",
+          "default": "Sous-total"
+        },
+        {
+          "type": "text",
+          "id": "shipping_label",
+          "label": "Label livraison",
+          "default": "Livraison"
+        },
+        {
+          "type": "text",
+          "id": "shipping_text",
+          "label": "Texte livraison",
+          "default": "Calculée à l'étape suivante"
+        },
+        {
+          "type": "text",
+          "id": "total_label",
+          "label": "Label total",
+          "default": "Total"
+        }
+      ]
+    },
+    {
+      "type": "checkout_button",
+      "name": "Bouton commander",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Texte du bouton",
+          "default": "Soumettre ma candidature"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 12,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Taille du texte",
+          "default": 15
+        },
+        {
+          "type": "text",
+          "id": "padding",
+          "label": "Padding (px)",
+          "default": "12"
+        },
+        {
+          "type": "range",
+          "id": "radius",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Arrondi",
+          "default": 6
+        }
+      ]
+    },
+    {
+      "type": "continue_button",
+      "name": "Bouton continuer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Texte du bouton",
+          "default": "Voir d'autres offres"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 11,
+          "max": 18,
+          "step": 1,
+          "unit": "px",
+          "label": "Taille du texte",
+          "default": 13
+        },
+        {
+          "type": "text",
+          "id": "padding",
+          "label": "Padding (px)",
+          "default": "10"
+        },
+        {
+          "type": "range",
+          "id": "radius",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Arrondi",
+          "default": 6
+        }
+      ]
+    },
+    {
+      "type": "trust_text",
+      "name": "Texte de confiance",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Paiement sécurisé — Retours sous 14 jours"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 10,
+          "max": 14,
+          "step": 1,
+          "unit": "px",
+          "label": "Taille du texte",
+          "default": 11
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Panier",
+      "blocks": [
+        { "type": "order_summary" },
+        { "type": "checkout_button" },
+        { "type": "continue_button" },
+        { "type": "trust_text" }
+      ]
+    }
+  ]
+}
+{% endschema %}

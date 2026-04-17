@@ -1,0 +1,629 @@
+{%- liquid
+  assign rs_url_profils = '/pages/profils-candidats'
+  assign rs_url_deposer = '/pages/deposer-candidature'
+  assign cand_rail_url = section.settings.cand_profiles_url | default: rs_url_profils
+  assign rail_profiles = false
+  if section.settings.sidebar_ads and section.settings.rail_content == 'profiles'
+    assign rail_profiles = true
+  endif
+  assign rs_home_shell_api = false
+  if rail_profiles
+    assign rs_home_shell_api = true
+  else
+    for b in section.blocks
+      if b.type == 'sponsored_rail' and b.settings.content_type == 'profiles_api'
+        assign rs_home_shell_api = true
+      endif
+    endfor
+  endif
+  assign rs_uni_text_pct = 100
+  if section.settings.sidebar_ads
+    assign rc = section.settings.rail_center_max | default: 720
+    assign rs_uni_text_pct = rc | times: 100 | divided_by: 900
+    if rs_uni_text_pct > 100
+      assign rs_uni_text_pct = 100
+    endif
+    if rs_uni_text_pct < 68
+      assign rs_uni_text_pct = 68
+    endif
+  endif
+-%}
+{%- capture rs_uni_grid_inner -%}
+{%- for block in section.blocks -%}
+  {%- liquid
+    assign _rs_skip_cell = false
+    if block.type == 'sponsored_rail'
+      assign _rs_skip_cell = true
+    endif
+    assign _rs_bt = block.type | default: '' | strip | downcase
+    if _rs_bt contains 'featured_products'
+      assign _rs_skip_cell = true
+    endif
+  -%}
+  {%- unless _rs_skip_cell -%}
+    {%- assign pad = block.settings.cell_padding | default: 16 -%}
+    {%- assign span_n = block.settings.col_span | default: 12 | plus: 0 -%}
+    {%- if span_n < 1 or span_n > 12 -%}
+      {%- assign span_n = 12 -%}
+    {%- endif -%}
+    {%- if block.type == 'blue_band' or block.type == 'hero_intro_bundle' -%}
+      {%- assign pad = 0 -%}
+    {%- endif -%}
+    <div
+      class="rs-uni-cell{% if block.settings.use_strip_bg %} rs-uni-cell--strip{% endif %}{% if block.type == 'blue_band' %} rs-uni-cell--blue-band{% endif %}"
+      data-span="{{ span_n }}"
+      style="{% if block.settings.use_strip_bg %}padding: {{ pad }}px {{ pad }}px {{ pad | plus: section.settings.strip_padding_bottom }}px {{ pad }}px;{% else %}padding: {{ pad }}px;{% endif %}{% if block.settings.use_strip_bg == false and block.settings.cell_bg != blank %}background: {{ block.settings.cell_bg }};{% endif %}border-color: {% if block.settings.cell_border != blank %}{{ block.settings.cell_border }}{% else %}{{ section.settings.default_cell_border }}{% endif %};"
+      {{ block.shopify_attributes }}>
+      {%- render 'rs-unified-block',
+        block: block,
+        section: section,
+        rs_url_profils: rs_url_profils,
+        rs_url_deposer: rs_url_deposer
+      -%}
+    </div>
+  {%- endunless -%}
+{%- endfor -%}
+{%- endcapture -%}
+<section
+  class="rs-uni-page{% if section.settings.sidebar_ads %} rs-uni-page--rails{% endif %}"
+  style="--rs-uni-gap: {{ section.settings.grid_gap }}px;--rs-uni-strip-top: {{ section.settings.strip_bg }};--rs-uni-strip-bot: {{ section.settings.strip_bg_dark }};--rs-uni-cell-border: {{ section.settings.default_cell_border }};--rs-uni-center-max: {{ section.settings.rail_center_max | default: 720 }}px;--rs-uni-text-pct: {{ rs_uni_text_pct }};padding-top: {{ section.settings.page_padding_top }}px;padding-bottom: {{ section.settings.page_padding_bottom }}px;background: {{ section.settings.page_bg }};"
+  {{ section.shopify_attributes }}>
+  {%- if section.settings.sidebar_ads -%}
+    <div
+      class="rs-uni-shell"
+      {% if rs_home_shell_api %}
+        data-rs-cand-ads="1"
+        data-api="{{ section.settings.rs_api_url | escape }}"
+        data-kicker="{{ section.settings.cand_kicker | default: 'Sponsorisé' | escape }}"
+        data-url="{{ cand_rail_url | escape }}"
+        data-cand-label-email="{{ section.settings.cand_email_btn_label | default: 'E-mail' | escape }}"
+        data-cand-label-cv="{{ section.settings.cand_cv_btn_label | default: 'CV' | escape }}"
+      {% endif %}>
+      <aside class="rs-uni-rail rs-uni-rail--left" aria-label="Publicités">
+        {%- if rail_profiles -%}
+          {%- assign ln = section.settings.rail_left_count | default: 2 | plus: 0 -%}
+          {%- if ln < 0 -%}{%- assign ln = 0 -%}{%- endif -%}
+          {%- for i in (1..ln) -%}
+            <div class="rs-uni-rail__slot">
+              {% render 'rs-sponsored-rail-candidate-ad' %}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'sponsored_rail' and block.settings.side == 'left' -%}
+              <div class="rs-uni-rail__slot" {{ block.shopify_attributes }}>
+                {% render 'rs-rail-slot-inner', block: block %}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </aside>
+      <div class="rs-uni-main">
+        <div class="container">
+          <div class="rs-uni-grid">
+            {{ rs_uni_grid_inner }}
+          </div>
+        </div>
+      </div>
+      <aside class="rs-uni-rail rs-uni-rail--right" aria-label="Publicités">
+        {%- if rail_profiles -%}
+          {%- assign rn = section.settings.rail_right_count | default: 2 | plus: 0 -%}
+          {%- if rn < 0 -%}{%- assign rn = 0 -%}{%- endif -%}
+          {%- for i in (1..rn) -%}
+            <div class="rs-uni-rail__slot">
+              {% render 'rs-sponsored-rail-candidate-ad' %}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'sponsored_rail' and block.settings.side == 'right' -%}
+              <div class="rs-uni-rail__slot" {{ block.shopify_attributes }}>
+                {% render 'rs-rail-slot-inner', block: block %}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </aside>
+    </div>
+  {%- else -%}
+    <div class="container">
+      <div class="rs-uni-grid">
+        {{ rs_uni_grid_inner }}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<script>
+(function () {
+  function normalizeApi(api) {
+    return String(api || '').replace(/\?+$/, '');
+  }
+  function run(root) {
+    var api = root.getAttribute('data-api');
+    var elN = root.querySelector('[data-rs-kitsch-n]');
+    if (!api || !elN) return;
+    fetch(normalizeApi(api) + '?action=count')
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (d) {
+        elN.textContent = String(d && d.count != null ? d.count : '—');
+        root.hidden = false;
+      })
+      .catch(function () { root.hidden = true; });
+  }
+
+  function runAll() {
+    document.querySelectorAll('[data-rs-kitsch="1"]').forEach(run);
+  }
+
+  // Theme editor can inject sections asynchronously → run multiple times.
+  runAll();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runAll);
+  }
+  window.addEventListener('load', runAll);
+  setTimeout(runAll, 600);
+})();
+</script>
+
+{%- if rs_home_shell_api -%}
+  {% render 'rs-candidate-rails-script' %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Page accueil unifiée",
+  "tag": "section",
+  "class": "section-home-unified-page",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Dès 768 px de largeur d’écran, chaque bloc utilise sa valeur « Largeur colonnes » (sur 12). Ex. trois blocs en 4 + 4 + 4 tiennent sur une ligne. Vérifiez ce réglage dans chaque bloc."
+    },
+    { "type": "header", "content": "Page" },
+    { "type": "color", "id": "page_bg", "label": "Fond autour cellules", "default": "#ffffff" },
+    { "type": "range", "id": "page_padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Marge haute page", "default": 0 },
+    { "type": "range", "id": "page_padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Marge basse page", "default": 0 },
+    { "type": "range", "id": "grid_gap", "min": 0, "max": 24, "step": 1, "unit": "px", "label": "Espacement des cellules", "default": 0 },
+    { "type": "color", "id": "default_cell_border", "label": "Bordure cellules défaut", "default": "#888888" },
+    { "type": "header", "content": "Rails pubs latéraux" },
+    {
+      "type": "checkbox",
+      "id": "sidebar_ads",
+      "label": "Activer rails sponsorisés",
+      "default": true,
+      "info": "Mode « Offres Shopify » : blocs « Pub rail latéral », contenu réglable par bloc (offre ou API). Mode « Profils candidats » : nombre de pubs ci‑dessous."
+    },
+    {
+      "type": "select",
+      "id": "rail_content",
+      "label": "Contenu des rails",
+      "default": "products",
+      "options": [
+        { "value": "products", "label": "Offres Shopify (blocs)" },
+        { "value": "profiles", "label": "Profils candidats (API)" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "rail_left_count",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "label": "Pubs gauche (mode API)",
+      "default": 2,
+      "info": "Utilisé si « Profils candidats »."
+    },
+    {
+      "type": "range",
+      "id": "rail_right_count",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "label": "Pubs droite (mode API)",
+      "default": 2,
+      "info": "Utilisé si « Profils candidats »."
+    },
+    {
+      "type": "text",
+      "id": "cand_kicker",
+      "label": "Mention (rails profils)",
+      "default": "Sponsorisé"
+    },
+    {
+      "type": "text",
+      "id": "cand_email_btn_label",
+      "label": "Libellé bouton E-mail (profil API)",
+      "default": "E-mail"
+    },
+    {
+      "type": "text",
+      "id": "cand_cv_btn_label",
+      "label": "Libellé bouton CV (profil API)",
+      "default": "CV"
+    },
+    {
+      "type": "url",
+      "id": "cand_profiles_url",
+      "label": "Lien des pubs profils",
+      "info": "Vide = page Profils candidats."
+    },
+    {
+      "type": "range",
+      "id": "rail_center_max",
+      "min": 620,
+      "max": 920,
+      "step": 20,
+      "unit": "px",
+      "label": "Largeur max zone centrale",
+      "default": 720,
+      "info": "Plus bas = plus de place pour les pubs. Visible si écran assez large."
+    },
+    { "type": "header", "content": "API (proxy IONOS)" },
+    { "type": "text", "id": "rs_api_url", "label": "URL API (rs-airtable-proxy.php)", "default": "https://example.com/api/rs-airtable-proxy.php" },
+    { "type": "header", "content": "Intro (texte du haut)" },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alignement intro",
+      "default": "text-center",
+      "options": [
+        { "value": "text-center", "label": "Centré" },
+        { "value": "text-start", "label": "Gauche" }
+      ]
+    },
+    { "type": "header", "content": "Bandeau (recherche / strip)" },
+    { "type": "color", "id": "strip_bg", "label": "Dégradé — haut", "default": "#ffe9a3" },
+    { "type": "color", "id": "strip_bg_dark", "label": "Dégradé — bas", "default": "#c99406" },
+    { "type": "range", "id": "strip_padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Marge bas bandeau rouge", "default": 28 }
+  ],
+  "blocks": [
+    {
+      "type": "blue_band",
+      "name": "Bandeau bleu",
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "12", "options": [
+          { "value": "12", "label": "12 — Pleine largeur" }, { "value": "9", "label": "9" }, { "value": "8", "label": "8" }, { "value": "6", "label": "6 — 1/2" }, { "value": "4", "label": "4 — 1/3" }, { "value": "3", "label": "3 — 1/4" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Padding cellule", "default": 0 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (défaut page)" },
+        { "type": "text", "id": "band_title", "label": "Titre", "default": "Services & parcours" },
+        { "type": "color", "id": "band_bg_top", "label": "Dégradé haut", "default": "#4d79ff" },
+        { "type": "color", "id": "band_bg_bottom", "label": "Dégradé bas", "default": "#0033cc" },
+        { "type": "color", "id": "band_text", "label": "Couleur texte", "default": "#ffffff" }
+      ]
+    },
+    {
+      "type": "hero_intro_bundle",
+      "name": "Intro unifiée 9/12",
+      "limit": 1,
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "9", "options": [
+          { "value": "12", "label": "12" }, { "value": "9", "label": "9 — 3/4" }, { "value": "8", "label": "8" }, { "value": "6", "label": "6" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule", "default": "#e8e8e8" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 32, "step": 2, "unit": "px", "label": "Padding cellule", "default": 0 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "header", "content": "Bandeau bleu haut" },
+        { "type": "checkbox", "id": "show_band", "label": "Afficher le bandeau", "default": true },
+        { "type": "text", "id": "band_title", "label": "Titre bandeau", "default": "Services & parcours" },
+        { "type": "color", "id": "band_bg_top", "label": "Dégradé haut", "default": "#4d79ff" },
+        { "type": "color", "id": "band_bg_bottom", "label": "Dégradé bas", "default": "#0033cc" },
+        { "type": "color", "id": "band_text", "label": "Texte bandeau", "default": "#ffffff" },
+        { "type": "header", "content": "Textes & boutons" },
+        { "type": "select", "id": "text_align", "label": "Alignement", "default": "text-center", "options": [
+          { "value": "text-center", "label": "Centré" }, { "value": "text-start", "label": "Gauche" }
+        ]},
+        { "type": "text", "id": "badge_text", "label": "Badge", "default": "Collectif artistique — Paris 2026" },
+        { "type": "color", "id": "badge_color", "label": "Fond badge", "default": "#f5f8ff" },
+        { "type": "range", "id": "badge_size", "min": 9, "max": 16, "step": 1, "unit": "px", "label": "Taille badge", "default": 12 },
+        { "type": "textarea", "id": "heading_text", "label": "Titre principal", "default": "Les meilleures opportunités vestimentaires du moment." },
+        { "type": "range", "id": "heading_size", "min": 18, "max": 72, "step": 2, "unit": "px", "label": "Taille titre", "default": 34 },
+        { "type": "textarea", "id": "subheading_text", "label": "Sous-titre", "default": "Chaque vêtement est une offre. Chaque achat, une candidature." },
+        { "type": "range", "id": "subheading_size", "min": 12, "max": 28, "step": 1, "unit": "px", "label": "Taille sous-titre", "default": 16 },
+        { "type": "range", "id": "subheading_max_width", "min": 300, "max": 900, "step": 20, "unit": "px", "label": "Largeur max sous-titre", "default": 560 },
+        { "type": "text", "id": "btn1_label", "label": "Bouton 1 — texte", "default": "Voir les offres en cours" },
+        { "type": "url", "id": "btn1_url", "label": "Bouton 1 — lien" },
+        { "type": "color", "id": "btn1_bg", "label": "Bouton 1 — fond", "default": "#0033cc" },
+        { "type": "color", "id": "btn1_color", "label": "Bouton 1 — texte", "default": "#ffffff" },
+        { "type": "color", "id": "btn1_border", "label": "Bouton 1 — bordure", "default": "#0015a3" },
+        { "type": "text", "id": "btn2_label", "label": "Bouton 2 — texte", "default": "Profils candidats" },
+        { "type": "url", "id": "btn2_url", "label": "Bouton 2 — lien" },
+        { "type": "color", "id": "btn2_bg", "label": "Bouton 2 — fond", "default": "#ffffff" },
+        { "type": "color", "id": "btn2_color", "label": "Bouton 2 — texte", "default": "#212529" },
+        { "type": "color", "id": "btn2_border", "label": "Bouton 2 — bordure", "default": "#dee2e6" },
+        { "type": "range", "id": "btn_font_size", "min": 11, "max": 20, "step": 1, "unit": "px", "label": "Taille texte boutons", "default": 14 },
+        { "type": "range", "id": "btn_padding_v", "min": 4, "max": 24, "step": 1, "unit": "px", "label": "Padding vertical boutons", "default": 11 },
+        { "type": "range", "id": "btn_padding_h", "min": 8, "max": 60, "step": 2, "unit": "px", "label": "Padding H boutons", "default": 22 },
+        { "type": "range", "id": "btn_radius", "min": 0, "max": 50, "step": 2, "unit": "px", "label": "Arrondi boutons", "default": 4 }
+      ]
+    },
+    {
+      "type": "hero_badge",
+      "name": "Badge intro",
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "12", "options": [
+          { "value": "12", "label": "12" }, { "value": "9", "label": "9" }, { "value": "8", "label": "8" }, { "value": "6", "label": "6" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule", "default": "#e8e8e8" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 48, "step": 2, "unit": "px", "label": "Padding cellule", "default": 16 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "text", "id": "text", "label": "Texte", "default": "Collectif artistique — Paris 2026" },
+        { "type": "color", "id": "color", "label": "Fond badge", "default": "#ffc107" },
+        { "type": "range", "id": "size", "min": 9, "max": 16, "step": 1, "unit": "px", "label": "Taille texte", "default": 12 }
+      ]
+    },
+    {
+      "type": "hero_heading",
+      "name": "Titre intro",
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "12", "options": [
+          { "value": "12", "label": "12" }, { "value": "9", "label": "9" }, { "value": "8", "label": "8" }, { "value": "6", "label": "6" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule", "default": "#e8e8e8" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 48, "step": 2, "unit": "px", "label": "Padding cellule", "default": 12 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "textarea", "id": "text", "label": "Texte", "default": "Les meilleures opportunités vestimentaires du moment." },
+        { "type": "range", "id": "size", "min": 18, "max": 72, "step": 2, "unit": "px", "label": "Taille", "default": 34 }
+      ]
+    },
+    {
+      "type": "hero_subheading",
+      "name": "Sous-titre intro",
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "12", "options": [
+          { "value": "12", "label": "12" }, { "value": "9", "label": "9" }, { "value": "8", "label": "8" }, { "value": "6", "label": "6" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule", "default": "#e8e8e8" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 48, "step": 2, "unit": "px", "label": "Padding cellule", "default": 8 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "textarea", "id": "text", "label": "Texte", "default": "Chaque vêtement est une offre. Chaque achat, une candidature." },
+        { "type": "range", "id": "size", "min": 12, "max": 28, "step": 1, "unit": "px", "label": "Taille", "default": 16 },
+        { "type": "range", "id": "max_width", "min": 300, "max": 900, "step": 20, "unit": "px", "label": "Largeur max texte", "default": 560 }
+      ]
+    },
+    {
+      "type": "hero_buttons",
+      "name": "Boutons intro",
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "12", "options": [
+          { "value": "12", "label": "12" }, { "value": "9", "label": "9" }, { "value": "8", "label": "8" }, { "value": "6", "label": "6" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule", "default": "#e8e8e8" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 48, "step": 2, "unit": "px", "label": "Padding cellule", "default": 16 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "text", "id": "btn1_label", "label": "Bouton 1 — texte", "default": "Voir les offres en cours" },
+        { "type": "url", "id": "btn1_url", "label": "Bouton 1 — lien" },
+        { "type": "color", "id": "btn1_bg", "label": "Bouton 1 — fond", "default": "#0033cc" },
+        { "type": "color", "id": "btn1_color", "label": "Bouton 1 — texte", "default": "#ffffff" },
+        { "type": "color", "id": "btn1_border", "label": "Bouton 1 — bordure", "default": "#0015a3" },
+        { "type": "text", "id": "btn2_label", "label": "Bouton 2 — texte", "default": "Profils candidats" },
+        { "type": "url", "id": "btn2_url", "label": "Bouton 2 — lien" },
+        { "type": "color", "id": "btn2_bg", "label": "Bouton 2 — fond", "default": "#ffffff" },
+        { "type": "color", "id": "btn2_color", "label": "Bouton 2 — texte", "default": "#212529" },
+        { "type": "color", "id": "btn2_border", "label": "Bouton 2 — bordure", "default": "#dee2e6" },
+        { "type": "range", "id": "font_size", "min": 11, "max": 20, "step": 1, "unit": "px", "label": "Taille texte", "default": 14 },
+        { "type": "range", "id": "padding_v", "min": 4, "max": 24, "step": 1, "unit": "px", "label": "Padding vertical", "default": 11 },
+        { "type": "range", "id": "padding_h", "min": 8, "max": 60, "step": 2, "unit": "px", "label": "Padding horizontal", "default": 22 },
+        { "type": "range", "id": "radius", "min": 0, "max": 50, "step": 2, "unit": "px", "label": "Arrondi", "default": 4 }
+      ]
+    },
+    {
+      "type": "hero_pole_cta",
+      "name": "Rond CTA bandeau",
+      "limit": 1,
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "2", "options": [
+          { "value": "12", "label": "12" }, { "value": "6", "label": "6" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3" }, { "value": "2", "label": "2" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": true },
+        { "type": "color", "id": "cell_bg", "label": "Fond hors bandeau rouge" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 32, "step": 2, "unit": "px", "label": "Padding cellule", "default": 8 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "text", "id": "label", "label": "Texte principal", "default": "Candidatures" },
+        { "type": "text", "id": "sublabel", "label": "Sous-texte", "default": "Déposer" },
+        { "type": "url", "id": "url", "label": "Lien" },
+        { "type": "color", "id": "circle_bg", "label": "Fond du rond", "default": "#0033cc" },
+        { "type": "color", "id": "circle_text", "label": "Texte rond", "default": "#ffffff" },
+        { "type": "range", "id": "size", "min": 88, "max": 140, "step": 4, "unit": "px", "label": "Diamètre", "default": 108 }
+      ]
+    },
+    {
+      "type": "hero_search",
+      "name": "Recherche bandeau",
+      "limit": 1,
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "3", "options": [
+          { "value": "12", "label": "12" }, { "value": "9", "label": "9" }, { "value": "6", "label": "6" }, { "value": "5", "label": "5" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3 — 1/4" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": true },
+        { "type": "color", "id": "cell_bg", "label": "Fond hors bandeau rouge" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 32, "step": 2, "unit": "px", "label": "Padding cellule", "default": 12 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        {
+          "type": "select",
+          "id": "layout_variant",
+          "label": "Style du bloc recherche",
+          "default": "panel",
+          "info": "A : panneau gris + libellé Mots-clés. B : bandeau bleu + ligne Q + 2 boutons côte à côte.",
+          "options": [
+            { "value": "panel", "label": "A — Panneau relief + champ mots-clés" },
+            { "value": "metro", "label": "B — Bandeau type ANPE, 2 boutons" }
+          ]
+        },
+        { "type": "text", "id": "strip_kicker", "label": "Texte au-dessus champ", "default": "Offre ou collection recherchée" },
+        { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "Nom du poste, collection..." },
+        { "type": "text", "id": "btn_label", "label": "Texte bouton principal", "default": "Voir toutes les offres" },
+        { "type": "text", "id": "secondary_label", "label": "2e bouton", "default": "Profils" },
+        { "type": "url", "id": "secondary_url", "label": "2e bouton — URL" },
+        { "type": "range", "id": "height", "min": 32, "max": 60, "step": 2, "unit": "px", "label": "Hauteur champs", "default": 46 },
+        { "type": "range", "id": "font_size", "min": 11, "max": 18, "step": 1, "unit": "px", "label": "Taille texte", "default": 14 }
+      ]
+    },
+    {
+      "type": "hero_promo",
+      "name": "Encart bandeau",
+      "limit": 4,
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "4", "options": [
+          { "value": "12", "label": "12" }, { "value": "6", "label": "6" }, { "value": "5", "label": "5" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": true },
+        { "type": "color", "id": "cell_bg", "label": "Fond hors bandeau rouge" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Padding cellule", "default": 8 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Partenaire" },
+        { "type": "color", "id": "kicker_color", "label": "Couleur sur-titre", "default": "#8a7212" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Les ateliers du collectif" },
+        { "type": "color", "id": "title_color", "label": "Couleur titre", "default": "#0015a3" },
+        { "type": "textarea", "id": "text", "label": "Texte", "default": "Sessions courtes — modélisme, patronage, image." },
+        { "type": "color", "id": "text_color", "label": "Couleur texte", "default": "#222222" },
+        { "type": "text", "id": "link_label", "label": "Libellé lien", "default": "Consulter le programme →" },
+        { "type": "url", "id": "link_url", "label": "URL lien" },
+        { "type": "color", "id": "bg_color", "label": "Fond encart", "default": "#ffffff" },
+        { "type": "color", "id": "border_color", "label": "Bordure encart", "default": "#555555" }
+      ]
+    },
+    {
+      "type": "grid_panel",
+      "name": "Bloc liens (grille)",
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "4", "options": [
+          { "value": "12", "label": "12" }, { "value": "9", "label": "9" }, { "value": "8", "label": "8" }, { "value": "6", "label": "6" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule", "default": "#ffffff" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Padding cellule", "default": 0 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "select", "id": "layout_style", "label": "Mise en forme", "default": "encart", "options": [
+          { "value": "encart", "label": "Encart" }, { "value": "service", "label": "Services (rond)" }
+        ]},
+        { "type": "text", "id": "circle_label", "label": "Texte rond", "default": "Candidat" },
+        { "type": "color", "id": "circle_bg", "label": "Fond rond", "default": "#d4a038" },
+        { "type": "color", "id": "circle_text", "label": "Texte rond", "default": "#ffffff" },
+        { "type": "text", "id": "kicker", "label": "Sur-titre" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Titre" },
+        { "type": "richtext", "id": "text", "label": "Texte" },
+        { "type": "text", "id": "link_1_label", "label": "Lien 1 — libellé" },
+        { "type": "url", "id": "link_1_url", "label": "Lien 1 — URL" },
+        { "type": "text", "id": "link_2_label", "label": "Lien 2 — libellé" },
+        { "type": "url", "id": "link_2_url", "label": "Lien 2 — URL" },
+        { "type": "text", "id": "link_3_label", "label": "Lien 3 — libellé" },
+        { "type": "url", "id": "link_3_url", "label": "Lien 3 — URL" },
+        { "type": "text", "id": "link_4_label", "label": "Lien 4 — libellé" },
+        { "type": "url", "id": "link_4_url", "label": "Lien 4 — URL" },
+        { "type": "text", "id": "link_5_label", "label": "Lien 5 — libellé" },
+        { "type": "url", "id": "link_5_url", "label": "Lien 5 — URL" },
+        { "type": "text", "id": "footer_link_label", "label": "Lien bas — libellé" },
+        { "type": "url", "id": "footer_link_url", "label": "Lien bas — URL" },
+        { "type": "color", "id": "bg_color", "label": "Fond bloc", "default": "#ffffff" },
+        { "type": "color", "id": "border_color", "label": "Bordure bloc", "default": "#888888" }
+      ]
+    },
+    {
+      "type": "kitsch_counter",
+      "name": "Compteur candidats",
+      "limit": 1,
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "3", "options": [
+          { "value": "12", "label": "12" }, { "value": "9", "label": "9" }, { "value": "8", "label": "8" }, { "value": "6", "label": "6" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3 — 1/4 ligne" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule", "default": "#ffffff" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 48, "step": 2, "unit": "px", "label": "Padding cellule", "default": 0 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "checkbox", "id": "tile_mode", "label": "Tuile : hauteur voisins", "default": false },
+        { "type": "text", "id": "ribbon_text", "label": "Ruban", "default": "★ CHIFFRE OFFICIEL ★" },
+        { "type": "text", "id": "suffix_text", "label": "Texte après le nombre", "default": " candidat(s) actuellement recensé(e)s dans la base nationale" },
+        { "type": "text", "id": "brand_name", "label": "Marque (gras)", "default": "Recrute Stagiaire" },
+        { "type": "text", "id": "sub_text", "label": "Sous-ligne", "default": "Mise à jour en temps quasi réel — merci de votre confiance !!" }
+      ]
+    },
+    {
+      "type": "product_offer",
+      "name": "Offre (1 produit)",
+      "settings": [
+        { "type": "select", "id": "col_span", "label": "Largeur colonnes", "default": "4", "options": [
+          { "value": "12", "label": "12" }, { "value": "9", "label": "9" }, { "value": "8", "label": "8" },
+          { "value": "6", "label": "6" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3" }
+        ]},
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule", "default": "#ffffff" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 32, "step": 2, "unit": "px", "label": "Padding cellule", "default": 8 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "product", "id": "product", "label": "Produit (offre)" },
+        { "type": "header", "content": "Carte" },
+        { "type": "range", "id": "offer_media_height", "min": 140, "max": 400, "step": 10, "unit": "px", "label": "Hauteur photo", "default": 220 },
+        { "type": "range", "id": "card_radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Arrondi carte", "default": 12 },
+        { "type": "range", "id": "card_padding", "min": 8, "max": 28, "step": 2, "unit": "px", "label": "Padding carte", "default": 16 },
+        { "type": "checkbox", "id": "offer_carousel", "label": "Carrousel photos", "default": true },
+        { "type": "text", "id": "badge_open", "label": "Badge ouvert", "default": "Offre active" },
+        { "type": "text", "id": "badge_closed", "label": "Badge pourvu", "default": "Pourvu" },
+        { "type": "text", "id": "offer_cta_label", "label": "Bouton", "default": "Voir l'offre" },
+        { "type": "color", "id": "offer_bar_from", "label": "Bandeau haut", "default": "#005a9c" },
+        { "type": "color", "id": "offer_bar_to", "label": "Bandeau bas", "default": "#004578" },
+        { "type": "color", "id": "offer_accent", "label": "Accent titre", "default": "#c9a400" }
+      ]
+    },
+    {
+      "type": "sponsored_rail",
+      "name": "Pub rail latéral",
+      "settings": [
+        {
+          "type": "select",
+          "id": "side",
+          "label": "Côté",
+          "default": "left",
+          "options": [
+            { "value": "left", "label": "Gauche" },
+            { "value": "right", "label": "Droite" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "content_type",
+          "label": "Contenu",
+          "default": "product",
+          "options": [
+            { "value": "product", "label": "Offre Shopify" },
+            { "value": "profiles_api", "label": "Profil candidat (API)" }
+          ]
+        },
+        { "type": "product", "id": "product", "label": "Produit" },
+        { "type": "text", "id": "kicker", "label": "Mention", "default": "Sponsorisé" },
+        { "type": "checkbox", "id": "show_price", "label": "Afficher le prix", "default": true },
+        { "type": "checkbox", "id": "show_stars", "label": "Étoiles décoratives", "default": true },
+        { "type": "text", "id": "cta_label", "label": "Bouton", "default": "Voir" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page accueil unifiée",
+      "settings": {
+        "text_align": "text-center",
+        "strip_padding_bottom": 28,
+        "grid_gap": 0,
+        "page_bg": "#ffffff",
+        "sidebar_ads": true,
+        "rail_center_max": 720
+      },
+      "blocks": [
+        { "type": "hero_intro_bundle", "settings": { "col_span": "9", "cell_padding": 0, "cell_bg": "#e8e8e8" } },
+        { "type": "hero_search", "settings": { "col_span": "3", "use_strip_bg": true, "cell_padding": 12 } },
+        { "type": "kitsch_counter", "settings": { "col_span": "3", "tile_mode": true, "cell_padding": 0, "cell_bg": "#ffffff" } },
+        { "type": "grid_panel", "settings": { "col_span": "3", "layout_style": "service", "circle_label": "Offres", "title": "Collections" } },
+        { "type": "grid_panel", "settings": { "col_span": "3", "layout_style": "service", "circle_label": "Candidat", "circle_bg": "#0033cc", "title": "Espace candidat" } },
+        { "type": "grid_panel", "settings": { "col_span": "3", "layout_style": "encart", "kicker": "ACTUS", "title": "Infos" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

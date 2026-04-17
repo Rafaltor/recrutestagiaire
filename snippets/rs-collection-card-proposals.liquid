@@ -1,0 +1,39 @@
+{%- comment -%}
+  5 propositions (VRAIMENT différentes) de cartes “offre d’emploi”.
+  Affichage en 2 colonnes (desktop), 1 colonne (mobile).
+  Paramètres: product, card_settings, carousel_uid
+{%- endcomment -%}
+
+{%- if product != blank -%}
+  <section class="rs-card-proposals-v2" aria-label="Propositions de fiches produit (style offre d’emploi)">
+    <div class="rs-card-proposals-v2__grid">
+
+      <div class="rs-card-proposals-v2__cell rs-card-proposals-v2__cell--1">
+        <div class="rs-card-proposals-v2__label">1 — Classique (compact)</div>
+        {%- render 'rs-offer-grid-card', product: product, card_settings: card_settings, carousel_uid: carousel_uid -%}
+      </div>
+
+      <div class="rs-card-proposals-v2__cell rs-card-proposals-v2__cell--2">
+        <div class="rs-card-proposals-v2__label">2 — Prix en badge (en haut)</div>
+        {%- render 'rs-offer-grid-card', product: product, card_settings: card_settings, carousel_uid: carousel_uid -%}
+      </div>
+
+      <div class="rs-card-proposals-v2__cell rs-card-proposals-v2__cell--3">
+        <div class="rs-card-proposals-v2__label">3 — Carte “dossier” (bordure + ombre)</div>
+        {%- render 'rs-offer-grid-card', product: product, card_settings: card_settings, carousel_uid: carousel_uid -%}
+      </div>
+
+      <div class="rs-card-proposals-v2__cell rs-card-proposals-v2__cell--4">
+        <div class="rs-card-proposals-v2__label">4 — Dense infos (DL en 2 colonnes)</div>
+        {%- render 'rs-offer-grid-card', product: product, card_settings: card_settings, carousel_uid: carousel_uid -%}
+      </div>
+
+      <div class="rs-card-proposals-v2__cell rs-card-proposals-v2__cell--5">
+        <div class="rs-card-proposals-v2__label">5 — “Job board” (en-tête bleu + CTA plein)</div>
+        {%- render 'rs-offer-grid-card', product: product, card_settings: card_settings, carousel_uid: carousel_uid -%}
+      </div>
+
+    </div>
+  </section>
+{%- endif -%}
+

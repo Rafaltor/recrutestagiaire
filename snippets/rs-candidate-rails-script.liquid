@@ -1,0 +1,134 @@
+{%- comment -%}
+  Remplit les encarts `rs-sponsored-rail-candidate-ad` via ?action=profiles.
+  Chaque section pose `data-rs-cand-ads="1"` + data-api sur `.rs-uni-shell`.
+{%- endcomment -%}
+<script>
+(function () {
+  function normalizeApi(u) {
+    return String(u || '').replace(/\?+$/, '');
+  }
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = arr[i];
+      arr[i] = arr[j];
+      arr[j] = t;
+    }
+    return arr;
+  }
+  function cvUrl(cv) {
+    if (!cv) return '';
+    if (typeof cv === 'string' && /^https?:\/\//i.test(cv)) return cv;
+    if (Array.isArray(cv) && cv.length && cv[0]) {
+      if (typeof cv[0] === 'object' && cv[0].url) return String(cv[0].url);
+      if (typeof cv[0] === 'string') return cv[0];
+    }
+    if (typeof cv === 'object' && cv !== null && cv.url) return String(cv.url);
+    return '';
+  }
+
+  function fillRoot(root) {
+    var api = root.getAttribute('data-api');
+    if (!api) return;
+    var kicker = root.getAttribute('data-kicker') || 'Sponsorisé';
+    var url = root.getAttribute('data-url') || '/pages/candidatures';
+    var labelEmail = root.getAttribute('data-cand-label-email') || 'E-mail';
+    var labelCv = root.getAttribute('data-cand-label-cv') || 'CV';
+    var slots = Array.from(root.querySelectorAll('[data-rs-cand-ad="1"]'));
+    if (!slots.length) return;
+
+    fetch(normalizeApi(api) + '?action=profiles')
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function (d) {
+        var profiles = (d && d.profiles) ? d.profiles : [];
+        profiles = profiles.filter(function (p) {
+          return p && (p.name || p.role || p.professions);
+        });
+        if (!profiles.length) return;
+        shuffle(profiles);
+
+        slots.forEach(function (slot, idx) {
+          var p = profiles[idx % profiles.length];
+          var name = p.name || 'Candidat';
+          var role = p.role || '';
+          var prof = p.professions || '';
+          var ref = (p.id || '').slice(-6).toUpperCase();
+          var email = (p.email && String(p.email).trim()) || '';
+          var cv = cvUrl(p.cv);
+
+          var elK = slot.querySelector('[data-rs-cand-kicker]');
+          if (elK) elK.textContent = kicker;
+
+          var elName = slot.querySelector('[data-rs-cand-name]');
+          if (elName) elName.textContent = String(name);
+
+          var elRole = slot.querySelector('[data-rs-cand-role]');
+          if (elRole) elRole.textContent = role ? String(role) : 'Poste recherché';
+
+          var elProf = slot.querySelector('[data-rs-cand-prof]');
+          if (elProf) {
+            elProf.textContent = prof ? String(prof) : '';
+            elProf.style.display = prof ? '' : 'none';
+          }
+
+          var elRef = slot.querySelector('[data-rs-cand-ref]');
+          if (elRef) {
+            elRef.textContent = ref ? ('Réf. CND-' + ref) : '';
+            elRef.style.display = ref ? '' : 'none';
+          }
+
+          var elMail = slot.querySelector('[data-rs-cand-email]');
+          if (elMail) {
+            elMail.textContent = labelEmail;
+            if (email) {
+              elMail.setAttribute('href', 'mailto:' + email);
+              elMail.classList.remove('rs-rail-ad__cta--disabled');
+              elMail.removeAttribute('aria-disabled');
+            } else {
+              elMail.setAttribute('href', '#');
+              elMail.classList.add('rs-rail-ad__cta--disabled');
+              elMail.setAttribute('aria-disabled', 'true');
+            }
+          }
+
+          var elCv = slot.querySelector('[data-rs-cand-cv]');
+          if (elCv) {
+            elCv.textContent = labelCv;
+            if (cv) {
+              elCv.setAttribute('href', cv);
+              elCv.classList.remove('rs-rail-ad__cta--disabled');
+              elCv.removeAttribute('aria-disabled');
+            } else {
+              elCv.setAttribute('href', '#');
+              elCv.classList.add('rs-rail-ad__cta--disabled');
+              elCv.setAttribute('aria-disabled', 'true');
+            }
+          }
+
+          slot.querySelectorAll('[data-rs-cand-name]').forEach(function (a) {
+            a.setAttribute('href', url);
+          });
+        });
+      })
+      .catch(function (err) {
+        if (typeof console !== 'undefined' && console.warn) {
+          console.warn('[rs-candidate-rails] API profils indisponible', err);
+        }
+      });
+  }
+
+  function run() {
+    document.querySelectorAll('[data-rs-cand-ads="1"]').forEach(fillRoot);
+  }
+
+  run();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  }
+  window.addEventListener('load', run);
+  setTimeout(run, 500);
+})();
+</script>

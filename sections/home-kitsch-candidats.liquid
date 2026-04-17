@@ -1,0 +1,58 @@
+{%- comment -%}
+  Bandeau kitsch : nombre de candidats Airtable (Approuvé) — à placer sur l’accueil.
+  Renseigner le même token / base / table que la page Candidatures.
+{%- endcomment -%}
+<section class="rs-home-kitsch-section rs-tile-band" style="padding:{{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;{% if section.settings.tint_section %}background:{{ section.settings.bg_color }};{% else %}background:transparent;{% endif %}border-top:1px solid #888;border-bottom:1px solid #888;">
+  <div class="container">
+    <div id="home-rs-stat-kitsch" class="rs-stat-kitsch rs-tile-frame mx-auto" style="max-width:520px;" hidden>
+      <span class="rs-stat-kitsch__ribbon">{{ section.settings.ribbon_text | default: '★ CHIFFRE OFFICIEL ★' }}</span>
+      <p class="rs-stat-kitsch__line">
+        <span class="rs-stat-kitsch__n" id="home-rs-stat-n">—</span>
+        <span class="rs-stat-kitsch__suffix">{{ section.settings.suffix_text | default: ' candidat(s) actuellement recensé(e)s dans la base nationale' }} <strong>{{ section.settings.brand_name | default: 'Recrute Stagiaire' }}</strong></span>
+      </p>
+      <p class="rs-stat-kitsch__sub">{{ section.settings.sub_text | default: 'Mise à jour en temps quasi réel — merci de votre confiance !!' }}</p>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  var API = {{ section.settings.rs_api_url | json }};
+  var elBox = document.getElementById('home-rs-stat-kitsch');
+  var elN   = document.getElementById('home-rs-stat-n');
+  if (!elBox || !elN) return;
+  if (!API) return;
+
+  fetch(String(API).replace(/\?+$/, '') + '?action=count')
+    .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(d) {
+      elN.textContent = String(d && d.count != null ? d.count : '—');
+      elBox.hidden = false;
+    })
+    .catch(function() { elBox.hidden = true; });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Compteur candidats",
+  "tag": "section",
+  "class": "section-home-kitsch-candidats",
+  "settings": [
+    { "type": "header", "content": "API (proxy IONOS)" },
+    { "type": "paragraph", "content": "URL du proxy PHP (IONOS). Exemple : https://ton-domaine.com/api/rs-airtable-proxy.php" },
+    { "type": "text", "id": "rs_api_url", "label": "URL API", "default": "https://example.com/api/rs-airtable-proxy.php" },
+    { "type": "header", "content": "Textes" },
+    { "type": "text", "id": "ribbon_text", "label": "Ruban", "default": "★ CHIFFRE OFFICIEL ★" },
+    { "type": "text", "id": "suffix_text", "label": "Texte après le nombre", "default": " candidat(s) actuellement recensé(e)s dans la base nationale" },
+    { "type": "text", "id": "brand_name", "label": "Nom de la marque (gras)", "default": "Recrute Stagiaire" },
+    { "type": "text", "id": "sub_text", "label": "Sous-ligne", "default": "Mise à jour en temps quasi réel — merci de votre confiance !!" },
+    { "type": "header", "content": "Mise en page" },
+    { "type": "checkbox", "id": "tint_section", "label": "Fond coloré sous la bannière", "default": false, "info": "Désactivé par défaut : pas de bande grise autour du bloc kitsch." },
+    { "type": "color", "id": "bg_color", "label": "Couleur du fond (si activé)", "default": "#f3f3f3" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 64, "step": 4, "unit": "px", "label": "Espacement haut", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 64, "step": 4, "unit": "px", "label": "Espacement bas", "default": 0 }
+  ],
+  "presets": [{ "name": "Compteur candidats" }]
+}
+{% endschema %}

@@ -1,0 +1,45 @@
+{%- comment -%}
+  Mini pub produit façon Amazon ~2012 — rail latéral (bloc sponsored_rail).
+{%- endcomment -%}
+{%- assign b = block.settings -%}
+{%- assign p = b.product -%}
+{%- if p == blank -%}
+  <div class="rs-rail-ad rs-rail-ad--placeholder">
+    <span class="rs-rail-ad__sponsored">Sponsorisé</span>
+    <p class="rs-rail-ad__placeholder-text mb-0">Choisissez un produit.</p>
+  </div>
+{%- else -%}
+  {%- assign v = p.selected_or_first_available_variant -%}
+  <article class="rs-rail-ad">
+    <span class="rs-rail-ad__sponsored">{{ b.kicker | default: 'Sponsorisé' | escape }}</span>
+    {%- if b.show_stars -%}
+      <div class="rs-rail-ad__stars" aria-hidden="true">★★★★☆</div>
+    {%- endif -%}
+    <a href="{{ p.url }}" class="rs-rail-ad__media">
+      {%- if p.featured_image != blank -%}
+        <img
+          src="{{ p.featured_image | image_url: width: 280 }}"
+          alt=""
+          width="110"
+          height="110"
+          loading="lazy"
+          class="rs-rail-ad__img">
+      {%- else -%}
+        <div class="rs-rail-ad__img-fallback">IMG</div>
+      {%- endif -%}
+    </a>
+    <a href="{{ p.url }}" class="rs-rail-ad__title">{{ p.title | escape }}</a>
+    {%- if b.show_price -%}
+      <div class="rs-rail-ad__price">
+        {%- if v.compare_at_price > v.price -%}
+          <span class="rs-rail-ad__was">{{ v.compare_at_price | money }}</span>
+        {%- endif -%}
+        <strong>{{ v.price | money }}</strong>
+      </div>
+    {%- endif -%}
+    {%- if p.type != blank -%}
+      <div class="rs-rail-ad__type">{{ p.type | escape }}</div>
+    {%- endif -%}
+    <a href="{{ p.url }}" class="rs-rail-ad__cta">{{ b.cta_label | default: 'Voir' | escape }}</a>
+  </article>
+{%- endif -%}

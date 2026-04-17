@@ -1,0 +1,632 @@
+{%- assign rs_profiles_url = section.settings.cand_profiles_url | default: '/pages/candidatures' -%}
+{%- assign rs_strip_top = section.settings.collection_strip_top | default: '#f3f6ff' -%}
+{%- assign rs_strip_bot = section.settings.collection_strip_bot | default: '#ffffff' -%}
+
+<div class="rs-collection-head border-bottom" style="background: linear-gradient(180deg, {{ rs_strip_top }} 0%, {{ rs_strip_bot }} 100%);">
+  <div class="container py-2 py-md-3">
+    <h1 class="rs-collection-head__title mb-1 mb-md-2" style="font-size:{{ section.settings.title_size }}px;font-weight:{{ section.settings.title_weight }};">
+      {{ collection.title }}
+    </h1>
+    {% if section.settings.show_breadcrumb %}
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb rs-collection-head__crumb mb-0 small">
+          <li class="breadcrumb-item"><a href="{{ routes.root_url }}">Accueil</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ collection.title }}</li>
+        </ol>
+      </nav>
+    {% endif %}
+  </div>
+</div>
+
+{%- assign rs_needs_api = false -%}
+{%- for b in section.blocks -%}
+  {%- if b.type == 'sponsored_rail' and b.settings.content_type == 'profiles_api' -%}
+    {%- assign rs_needs_api = true -%}
+  {%- endif -%}
+{%- endfor -%}
+<section
+  class="rs-uni-page rs-collection-pole{% if section.settings.sidebar_candidate_ads %} rs-uni-page--rails{% endif %}"
+  style="--rs-uni-center-max: {{ section.settings.rail_center_max | default: 720 }}px;--rs-uni-cell-border: {{ section.settings.collection_cell_border | default: '#888888' }};background: {{ section.settings.collection_page_bg | default: '#ffffff' }};padding-top:{{ section.settings.padding_top }}px;padding-bottom:{{ section.settings.padding_bottom }}px;"
+  {{ section.shopify_attributes }}>
+  <div
+    class="rs-uni-shell"
+    {% if section.settings.sidebar_candidate_ads and rs_needs_api %}
+      data-rs-cand-ads="1"
+      data-api="{{ section.settings.rs_api_url | escape }}"
+      data-kicker="{{ section.settings.cand_kicker | default: 'Sponsorisé' | escape }}"
+      data-url="{{ rs_profiles_url | escape }}"
+      data-cand-label-email="{{ section.settings.cand_email_btn_label | default: 'E-mail' | escape }}"
+      data-cand-label-cv="{{ section.settings.cand_cv_btn_label | default: 'CV' | escape }}"
+    {% endif %}>
+    {%- if section.settings.sidebar_candidate_ads -%}
+      <aside class="rs-uni-rail rs-uni-rail--left" aria-label="Rails sponsorisés">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'sponsored_rail' and block.settings.side == 'left' -%}
+            <div class="rs-uni-rail__slot" {{ block.shopify_attributes }}>
+              {%- render 'rs-rail-slot-inner', block: block -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </aside>
+    {%- endif -%}
+    <div class="rs-uni-main">
+      <div class="container">
+        <div class="row g-4">
+
+      <!-- Grille produits -->
+      <div class="col-12 col-md-12">
+
+        <!-- Produits -->
+        {% assign col_class = 'col-12 col-md-6 col-lg-6 col-xl-6' %}
+        {% if section.settings.grid_cols == '1' %}{% assign col_class = 'col-12' %}{% endif %}
+        {% if section.settings.grid_cols == '3' %}{% assign col_class = 'col-12 col-md-6 col-lg-4 col-xl-4' %}{% endif %}
+
+        {% paginate collection.products by section.settings.products_per_page %}
+          <div class="row g-3 rs-tile-grid rs-tile-grid--floating" id="products-grid">
+            {% for product in collection.products %}
+              <div class="{{ col_class }} product-item d-flex align-items-stretch"
+                data-tags="{{ product.tags | join: ',' | downcase }}"
+                data-type="{{ product.type | downcase }}">
+                <div class="w-100">
+                  {% render 'rs-offer-grid-card', product: product, card_settings: section.settings, collection: collection, carousel_uid: section.id %}
+                </div>
+              </div>
+            {% else %}
+              <div class="col-12 text-center py-5 text-muted">Aucun poste disponible pour le moment.</div>
+            {% endfor %}
+          </div>
+
+          {% if paginate.pages > 1 %}
+            <div class="d-flex justify-content-center mt-4">
+              <ul class="pagination">
+                {% if paginate.previous %}<li class="page-item"><a class="page-link" href="{{ paginate.previous.url }}">←</a></li>{% endif %}
+                {% for part in paginate.parts %}
+                  {% if part.is_link %}
+                    <li class="page-item"><a class="page-link" href="{{ part.url }}">{{ part.title }}</a></li>
+                  {% else %}
+                    <li class="page-item active"><span class="page-link">{{ part.title }}</span></li>
+                  {% endif %}
+                {% endfor %}
+                {% if paginate.next %}<li class="page-item"><a class="page-link" href="{{ paginate.next.url }}">→</a></li>{% endif %}
+              </ul>
+            </div>
+          {% endif %}
+
+        {% endpaginate %}
+      </div>
+    </div>
+        </div>
+      </div>
+    {%- if section.settings.sidebar_candidate_ads -%}
+      <aside class="rs-uni-rail rs-uni-rail--right" aria-label="Rails sponsorisés">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'sponsored_rail' and block.settings.side == 'right' -%}
+            <div class="rs-uni-rail__slot" {{ block.shopify_attributes }}>
+              {%- render 'rs-rail-slot-inner', block: block -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </aside>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- if section.settings.sidebar_candidate_ads and rs_needs_api -%}
+  {% render 'rs-candidate-rails-script' %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Liste des offres",
+  "tag": "section",
+  "class": "section-main-collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Style (comme l’accueil)"
+    },
+    {
+      "type": "color",
+      "id": "collection_page_bg",
+      "label": "Fond de page",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "collection_strip_top",
+      "label": "Bandeau titre — haut",
+      "default": "#ffe9a3"
+    },
+    {
+      "type": "color",
+      "id": "collection_strip_bot",
+      "label": "Bandeau titre — bas",
+      "default": "#c99406"
+    },
+    {
+      "type": "color",
+      "id": "collection_cell_border",
+      "label": "Bordure grille (tuiles)",
+      "default": "#888888"
+    },
+    {
+      "type": "header",
+      "content": "En-tête de page"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Taille titre",
+      "default": 22
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Graisse titre",
+      "default": "600",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-gras" },
+        { "value": "700", "label": "Gras" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Afficher le fil d'ariane",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Grille produits"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 6,
+      "max": 48,
+      "step": 6,
+      "label": "Produits par page",
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "grid_cols",
+      "label": "Colonnes",
+      "default": "2",
+      "options": [
+        { "value": "1", "label": "1 colonne" },
+        { "value": "2", "label": "2 colonnes" },
+        { "value": "3", "label": "3 colonnes" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "card_gap",
+      "label": "Espacement cartes",
+      "default": "3",
+      "options": [
+        { "value": "2", "label": "Serré" },
+        { "value": "3", "label": "Normal" },
+        { "value": "4", "label": "Large" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Arrondi cartes",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding interne cartes",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Contenu des cartes"
+    },
+    {
+      "type": "range",
+      "id": "logo_size",
+      "min": 40,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Taille logo",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "logo_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Arrondi logo",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "title_size_card",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Taille titre carte",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Taille sous-titre carte",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "type_size",
+      "min": 9,
+      "max": 14,
+      "step": 1,
+      "unit": "px",
+      "label": "Taille ligne rayon",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "tag_size",
+      "min": 9,
+      "max": 14,
+      "step": 1,
+      "unit": "px",
+      "label": "Taille tags",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_size",
+      "min": 9,
+      "max": 14,
+      "step": 1,
+      "unit": "px",
+      "label": "Taille badge statut",
+      "default": 11
+    },
+    {
+      "type": "checkbox",
+      "id": "show_type",
+      "label": "Afficher rayon / univers",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "label_rayon",
+      "label": "Libellé rayon",
+      "default": "Rayon / univers"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor_line",
+      "label": "Ligne marque + logistique",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "card_logistics",
+      "label": "Texte logistique (après la marque)",
+      "default": "Expédition France"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_offer_meta",
+      "label": "Bloc fiche (réf., prix, etc.)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_location",
+      "label": "Localisation (si ligne marque désactivée)",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "location_text",
+      "label": "Texte localisation",
+      "default": "Paris, France"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Afficher les tags",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_location_tag",
+      "label": "Tag localisation",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "location_tag",
+      "label": "Texte tag localisation",
+      "default": "Paris"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_tag",
+      "label": "Tag prix",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "max_tags",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "label": "Nb max tags produit",
+      "default": 1
+    },
+    {
+      "type": "text",
+      "id": "badge_open",
+      "label": "Badge ouvert",
+      "default": "Offre active"
+    },
+    {
+      "type": "text",
+      "id": "badge_closed",
+      "label": "Badge pourvu",
+      "default": "Pourvu"
+    },
+    {
+      "type": "header",
+      "content": "Cartes (style fiche PE)"
+    },
+    {
+      "type": "range",
+      "id": "offer_media_height",
+      "min": 140,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "label": "Hauteur zone photo",
+      "default": 220
+    },
+    {
+      "type": "checkbox",
+      "id": "offer_carousel",
+      "label": "Carrousel si plusieurs photos",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "offer_carousel_interval",
+      "min": 0,
+      "max": 8000,
+      "step": 500,
+      "unit": "ms",
+      "label": "Auto (0 = manuel)",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "offer_bar_from",
+      "label": "Bandeau carte — haut",
+      "default": "#5b86e5"
+    },
+    {
+      "type": "color",
+      "id": "offer_bar_to",
+      "label": "Bandeau carte — bas",
+      "default": "#001a57"
+    },
+    {
+      "type": "color",
+      "id": "offer_accent",
+      "label": "Accent sous le titre",
+      "default": "#e85d04"
+    },
+    {
+      "type": "text",
+      "id": "offer_ref_prefix",
+      "label": "Préfixe référence",
+      "default": "Réf."
+    },
+    {
+      "type": "text",
+      "id": "offer_cta_label",
+      "label": "Bouton principal",
+      "default": "Voir l'offre"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_offer_cart",
+      "label": "Bouton « Candidater » (ajout panier)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "offer_cart_label",
+      "label": "Libellé bouton panier",
+      "default": "Candidater"
+    },
+    {
+      "type": "text",
+      "id": "offer_location_pill",
+      "label": "Pastille à côté du titre (ex: Paris)",
+      "default": "Paris"
+    },
+    {
+      "type": "header",
+      "content": "Contrat (CDI / CDD)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_contract_line",
+      "label": "Afficher la ligne contrat (mobile)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "contract_label_cdi",
+      "label": "Libellé CDI",
+      "default": "CDI"
+    },
+    {
+      "type": "text",
+      "id": "contract_label_cdd",
+      "label": "Libellé CDD",
+      "default": "CDD"
+    },
+    {
+      "type": "textarea",
+      "id": "contract_cdi_collection_handles",
+      "label": "Handles collection → CDI",
+      "default": "permanent,permanents",
+      "info": "Handles Shopify (segment d’URL de la collection). Séparés par virgule ou par ligne. Si la collection affichée est listée → CDI, sinon → CDD. Les tags produit « cdi » / « cdd » outrepassent si l’option est cochée."
+    },
+    {
+      "type": "checkbox",
+      "id": "contract_tag_override",
+      "label": "Priorité tags produit (cdi / cdd)",
+      "default": true,
+      "info": "Si le produit a le tag « cdi » ou « cdd », ce libellé remplace la détection par collection."
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Taille titre carte",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_dl_size",
+      "min": 10,
+      "max": 15,
+      "step": 1,
+      "unit": "px",
+      "label": "Taille texte fiche (dl)",
+      "default": 13
+    },
+    {
+      "type": "text",
+      "id": "label_vendor",
+      "label": "Libellé marque",
+      "default": "Marque"
+    },
+    {
+      "type": "text",
+      "id": "label_price",
+      "label": "Libellé prix",
+      "default": "Salaire"
+    },
+    {
+      "type": "text",
+      "id": "label_logistics",
+      "label": "Libellé logistique",
+      "default": "Logistique"
+    },
+    {
+      "type": "header",
+      "content": "Espacement"
+    },
+    {
+      "type": "header",
+      "content": "Rails latéraux"
+    },
+    { "type": "text", "id": "rs_api_url", "label": "URL API (rs-airtable-proxy.php)", "default": "https://example.com/api/rs-airtable-proxy.php" },
+    { "type": "checkbox", "id": "sidebar_candidate_ads", "label": "Afficher les rails latéraux", "default": true, "info": "Ajoutez des blocs « Pub rail latéral » (gauche/droite). Chaque bloc : offre Shopify ou profil API." },
+    { "type": "range", "id": "rail_center_max", "min": 560, "max": 920, "step": 20, "unit": "px", "label": "Largeur max zone centrale", "default": 720 },
+    { "type": "text", "id": "cand_kicker", "label": "Mention (slots profil API)", "default": "Sponsorisé" },
+    { "type": "text", "id": "cand_email_btn_label", "label": "Libellé bouton E-mail (profil API)", "default": "E-mail" },
+    { "type": "text", "id": "cand_cv_btn_label", "label": "Libellé bouton CV (profil API)", "default": "CV" },
+    { "type": "url", "id": "cand_profiles_url", "label": "Lien fiche / page profils (clic sur le nom)" },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacement haut",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacement bas",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "sponsored_rail",
+      "name": "Pub rail latéral",
+      "settings": [
+        {
+          "type": "select",
+          "id": "side",
+          "label": "Côté",
+          "default": "left",
+          "options": [
+            { "value": "left", "label": "Gauche" },
+            { "value": "right", "label": "Droite" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "content_type",
+          "label": "Contenu",
+          "default": "profiles_api",
+          "options": [
+            { "value": "product", "label": "Offre Shopify" },
+            { "value": "profiles_api", "label": "Profil candidat (API)" }
+          ]
+        },
+        { "type": "product", "id": "product", "label": "Produit" },
+        { "type": "text", "id": "kicker", "label": "Mention", "default": "Sponsorisé" },
+        { "type": "checkbox", "id": "show_price", "label": "Afficher le prix", "default": true },
+        { "type": "checkbox", "id": "show_stars", "label": "Étoiles décoratives", "default": true },
+        { "type": "text", "id": "cta_label", "label": "Bouton", "default": "Voir" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Liste des offres",
+      "blocks": [
+        { "type": "sponsored_rail", "settings": { "side": "left", "content_type": "profiles_api" } },
+        { "type": "sponsored_rail", "settings": { "side": "left", "content_type": "profiles_api" } },
+        { "type": "sponsored_rail", "settings": { "side": "right", "content_type": "profiles_api" } },
+        { "type": "sponsored_rail", "settings": { "side": "right", "content_type": "profiles_api" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
