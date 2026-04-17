@@ -1,1 +1,130 @@
-{"current":{"logo_width":140,"color_primary":"#0033cc","color_primary_hover":"#0015a3","color_secondary":"#6c757d","color_text":"#212529","color_text_muted":"#6c757d","color_body_bg":"#ffffff","color_gray_bg":"#f8f9fa","color_badge_open_bg":"#198754","color_badge_open_text":"#ffffff","color_badge_closed_bg":"#6c757d","color_badge_closed_text":"#ffffff","font_size_base":14,"page_width":1140,"container_padding":20,"rs_viewport_desktop_wrap":true,"rs_viewport_fixed_width":1180,"header_height":64,"header_bg":"#ffffff","header_text":"#212529","header_border":"#e2e8f0","nav_font_size":13,"nav_gap":24,"cart_label":"Mon dossier","show_cart_count":true,"footer_bg":"#ffffff","footer_text":"#6c757d","footer_border":"#e2e8f0","footer_padding":24,"footer_tagline":"Collectif artistique mode & textile, Paris","footer_font_size":12,"card_border_radius":12,"card_border_color":"#e9ecef","card_hover_border":"#0033cc","btn_border_radius":6,"btn_font_size":14,"input_border_radius":6,"input_font_size":13,"sections":{"header":{"type":"header","settings":{"show_kitsch_pop":true,"kitsch_pop_text":"★ OFFRE FLASH ★ -30% sur votre 2e candidature — AGISSEZ VITE !!! ★","kitsch_pop_bg_a":"#ffffff","kitsch_pop_bg_b":"#ffee00","kitsch_pop_fg":"#315c0a","brand_image":"","brand_max_height":56,"banner_image":"shopify:\/\/shop_images\/hands-typing.jpg","show_site_name":true,"site_title":"","nav_offres_label":"Offres","menu_offres_1_label":"Collection ABCDRS","menu_offres_1_link":"","menu_offres_2_label":"Les stagiaires de base","menu_offres_2_link":"","nav_candidatures_label":"Candidatures","menu_cand_1_label":"Profils candidats","menu_cand_1_link":"shopify:\/\/pages\/candidatures","menu_cand_2_label":"Déposer sa candidature","menu_cand_2_link":"shopify:\/\/pages\/depot-candidature","nav_collectif_label":"Le collectif","menu_coll_1_label":"Histoire","menu_coll_1_link":"","menu_coll_2_label":"Contact","menu_coll_2_link":"shopify:\/\/pages\/contact","cart_label":"Mon dossier","show_cart_count":true}}},"content_for_index":[]},"presets":{"Default":{"color_primary":"#0033cc","color_primary_hover":"#0015a3","color_secondary":"#6c757d","color_text":"#212529","color_text_muted":"#6c757d","color_body_bg":"#ffffff","color_gray_bg":"#f8f9fa","color_badge_open_bg":"#198754","color_badge_open_text":"#ffffff","color_badge_closed_bg":"#6c757d","color_badge_closed_text":"#ffffff","font_size_base":14,"page_width":1140,"container_padding":20,"header_height":64,"header_bg":"#ffffff","header_text":"#212529","header_border":"#e2e8f0","nav_font_size":13,"nav_gap":24,"cart_label":"Mon dossier","show_cart_count":true,"footer_bg":"#ffffff","footer_text":"#6c757d","footer_border":"#e2e8f0","footer_padding":24,"footer_tagline":"Collectif artistique mode & textile, Paris","footer_font_size":12,"logo_width":140,"card_border_radius":12,"card_border_color":"#e9ecef","card_hover_border":"#0033cc","btn_border_radius":6,"btn_font_size":14,"input_border_radius":6,"input_font_size":13,"rs_viewport_desktop_wrap":true,"rs_viewport_fixed_width":1180}}}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "logo": "shopify://shop_images/rs-poleemploi.png",
+    "logo_width": 140,
+    "favicon": "shopify://shop_images/rs-poleemploi.png",
+    "color_primary": "#0033cc",
+    "color_primary_hover": "#0015a3",
+    "color_secondary": "#6c757d",
+    "color_text": "#212529",
+    "color_text_muted": "#6c757d",
+    "color_body_bg": "#ffffff",
+    "color_gray_bg": "#f8f9fa",
+    "color_badge_open_bg": "#198754",
+    "color_badge_open_text": "#ffffff",
+    "color_badge_closed_bg": "#6c757d",
+    "color_badge_closed_text": "#ffffff",
+    "font_size_base": 14,
+    "page_width": 1140,
+    "container_padding": 20,
+    "rs_viewport_desktop_wrap": true,
+    "rs_viewport_fixed_width": 1180,
+    "header_height": 64,
+    "header_bg": "#ffffff",
+    "header_text": "#212529",
+    "header_border": "#e2e8f0",
+    "nav_font_size": 13,
+    "nav_gap": 24,
+    "cart_label": "Mon dossier",
+    "show_cart_count": true,
+    "footer_bg": "#ffffff",
+    "footer_text": "#6c757d",
+    "footer_border": "#e2e8f0",
+    "footer_padding": 24,
+    "footer_tagline": "Collectif artistique mode & textile, Paris",
+    "footer_font_size": 12,
+    "card_border_radius": 12,
+    "card_border_color": "#e9ecef",
+    "card_hover_border": "#0033cc",
+    "btn_border_radius": 6,
+    "btn_font_size": 14,
+    "input_border_radius": 6,
+    "input_font_size": 13,
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "show_kitsch_pop": true,
+          "kitsch_pop_text": "★ OFFRE FLASH ★ -30% sur votre 2e candidature — AGISSEZ VITE !!! ★",
+          "kitsch_pop_bg_a": "#ffffff",
+          "kitsch_pop_bg_b": "#ffee00",
+          "kitsch_pop_fg": "#315c0a",
+          "brand_image": "shopify://shop_images/rs-poleemploi.png",
+          "brand_max_height": 56,
+          "banner_image": "shopify://shop_images/geometric-glass-city-architecture.jpg",
+          "show_site_name": true,
+          "site_title": "",
+          "nav_offres_label": "Offres",
+          "menu_offres_1_label": "Collection ABCDRS",
+          "menu_offres_1_link": "",
+          "menu_offres_2_label": "Les stagiaires de base",
+          "menu_offres_2_link": "",
+          "nav_candidatures_label": "Candidatures",
+          "menu_cand_1_label": "Profils candidats",
+          "menu_cand_1_link": "shopify://pages/candidatures",
+          "menu_cand_2_label": "Déposer sa candidature",
+          "menu_cand_2_link": "shopify://pages/depot-candidature",
+          "nav_collectif_label": "Le collectif",
+          "menu_coll_1_label": "Histoire",
+          "menu_coll_1_link": "",
+          "menu_coll_2_label": "Contact",
+          "menu_coll_2_link": "shopify://pages/contact",
+          "cart_label": "Mon dossier",
+          "show_cart_count": true
+        }
+      }
+    },
+    "content_for_index": []
+  },
+  "presets": {
+    "Default": {
+      "color_primary": "#0033cc",
+      "color_primary_hover": "#0015a3",
+      "color_secondary": "#6c757d",
+      "color_text": "#212529",
+      "color_text_muted": "#6c757d",
+      "color_body_bg": "#ffffff",
+      "color_gray_bg": "#f8f9fa",
+      "color_badge_open_bg": "#198754",
+      "color_badge_open_text": "#ffffff",
+      "color_badge_closed_bg": "#6c757d",
+      "color_badge_closed_text": "#ffffff",
+      "font_size_base": 14,
+      "page_width": 1140,
+      "container_padding": 20,
+      "header_height": 64,
+      "header_bg": "#ffffff",
+      "header_text": "#212529",
+      "header_border": "#e2e8f0",
+      "nav_font_size": 13,
+      "nav_gap": 24,
+      "cart_label": "Mon dossier",
+      "show_cart_count": true,
+      "footer_bg": "#ffffff",
+      "footer_text": "#6c757d",
+      "footer_border": "#e2e8f0",
+      "footer_padding": 24,
+      "footer_tagline": "Collectif artistique mode & textile, Paris",
+      "footer_font_size": 12,
+      "logo_width": 140,
+      "card_border_radius": 12,
+      "card_border_color": "#e9ecef",
+      "card_hover_border": "#0033cc",
+      "btn_border_radius": 6,
+      "btn_font_size": 14,
+      "input_border_radius": 6,
+      "input_font_size": 13,
+      "rs_viewport_desktop_wrap": true,
+      "rs_viewport_fixed_width": 1180
+    }
+  }
+}
