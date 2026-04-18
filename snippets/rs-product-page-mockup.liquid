@@ -314,7 +314,7 @@
                       break
                     endif
                   endfor
-                  if rs_size_opt == nil and section.settings.sizes_use_second_option and product.options_with_values.size >= 2
+                  if rs_size_opt == nil and section.settings.sizes_use_second_option != false and product.options_with_values.size >= 2
                     assign rs_size_opt = product.options_with_values[1]
                   endif
                   assign rs_size_pos = 0
@@ -331,12 +331,13 @@
                     <span class="rs-pro-mock__price-avail-label">{{ section.settings.sizes_block_heading | default: 'Tailles disponibles' }}</span>
                     <span class="rs-pro-mock__price-avail-values">{{ mf_tailles | strip | escape }}</span>
                   </div>
-                {%- elsif rs_size_opt != nil and rs_size_opt.values.size > 0 -%}
+                {%- elsif rs_size_opt and rs_size_opt.values.size > 0 -%}
                   <div class="rs-pro-mock__price-avail rs-pro-mock__price-avail--sizes">
                     <span class="rs-pro-mock__price-avail-label">{{ section.settings.sizes_block_heading | default: 'Tailles disponibles' }}</span>
                     <span class="rs-pro-mock__price-avail-values">
                       {%- for val in rs_size_opt.values -%}
-                        {%- unless forloop.first -%}, {% endunless -%}{{- val | escape -}}
+                        {%- assign vlabel = val.name | default: val -%}
+                        {%- unless forloop.first -%}, {% endunless -%}{{- vlabel | escape -}}
                       {%- endfor -%}
                     </span>
                   </div>
@@ -358,7 +359,8 @@
                         <span class="rs-pro-mock__price-avail-label">{{ option.name | escape }} :</span>
                         <span class="rs-pro-mock__price-avail-values">
                           {%- for val in option.values -%}
-                            {%- unless forloop.first -%}, {% endunless -%}{{- val | escape -}}
+                            {%- assign vlabel = val.name | default: val -%}
+                            {%- unless forloop.first -%}, {% endunless -%}{{- vlabel | escape -}}
                           {%- endfor -%}
                         </span>
                       </div>

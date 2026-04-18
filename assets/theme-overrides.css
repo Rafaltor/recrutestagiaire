@@ -1791,8 +1791,10 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   margin-bottom: 4px;
 }
 .rs-pro-mock__price-avail-values {
+  display: block;
   font-weight: 700;
   color: var(--rs-logo-blue-deep);
+  word-break: break-word;
 }
 .rs-pro-mock__price-avail--sizes {
   margin-top: 12px;
