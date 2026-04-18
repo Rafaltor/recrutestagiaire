@@ -70,6 +70,7 @@ Aujourd’hui, une grande partie peut tenir dans **`product.description`** (HTML
 |----------------|--------|--------|
 | Rémunération | `variant.price` | Déjà affiché. |
 | « Sélectionner votre niveau… » | `product.options` + variantes | Libellé de l’option à renommer dans l’admin produit (ex. « Taille » → libellé marketing). |
+| **Tailles disponibles** (bloc prix) | Option nom/handle `taille`, `size`, `pointure`, etc. **ou** 2ᵉ option si réglage activé **ou** métachamp texte `custom.tailles_disponibles` | Liste des valeurs dans le bloc prix ; pastilles inchangées. |
 | Bouton principal | Formulaire `cart/add` | Déjà en place. |
 | Note sous prix (livraison / seuil) | `section.settings.free_shipping_text` | Déjà en place. |
 | **Sauvegarder l’offre** | Hors natif | Liste de souhaits (app), favori compte, ou lien « Partager » — à trancher produit. |

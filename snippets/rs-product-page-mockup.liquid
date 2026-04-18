@@ -279,18 +279,98 @@
               <input type="hidden" name="quantity" value="1">
               <input type="hidden" name="id" id="product-variant-id" value="{{ cv.id }}">
 
+              {%- liquid
+                assign rs_apply_lead = section.settings.apply_lead_text | strip
+                if rs_apply_lead == blank
+                  assign rs_apply_lead = section.settings.variant_heading | default: "Sélectionnez votre niveau d'expérience."
+                endif
+              -%}
+              {% if rs_apply_lead != blank %}
+                <p class="rs-pro-mock__apply-lead">{{ rs_apply_lead }}</p>
+              {% endif %}
+
               <div class="rs-pro-mock__price-block">
                 <div class="rs-pro-mock__price-label">{{ section.settings.price_label | default: 'Rémunération du poste' }}</div>
                 <div class="rs-pro-mock__price" id="rs-pro-price">{{ cv.price | money }}</div>
                 {% if section.settings.free_shipping_text != blank %}
                   <div class="rs-pro-mock__price-sub">{{ section.settings.free_shipping_text }}</div>
                 {% endif %}
+
+                {%- liquid
+                  assign rs_size_opt = nil
+                  assign rs_size_markers = 'taille,tailles,size,sizes,pointure,dimensions,taille-vetement,coupe,eu-size,us-size'
+                  assign rs_size_markers_arr = rs_size_markers | split: ','
+                  for option in product.options_with_values
+                    assign oph = option.name | handle
+                    assign rs_opt_hit = false
+                    for m in rs_size_markers_arr
+                      if oph == m
+                        assign rs_opt_hit = true
+                        break
+                      endif
+                    endfor
+                    if rs_opt_hit
+                      assign rs_size_opt = option
+                      break
+                    endif
+                  endfor
+                  if rs_size_opt == nil and section.settings.sizes_use_second_option and product.options_with_values.size >= 2
+                    assign rs_size_opt = product.options_with_values[1]
+                  endif
+                  assign rs_size_pos = 0
+                  if rs_size_opt
+                    assign rs_size_pos = rs_size_opt.position
+                  endif
+                -%}
+
+                {%- assign mf_tailles = product.metafields.custom.tailles_disponibles.value
+                  | default: product.metafields.custom.tailles_disponibles
+                -%}
+                {%- if mf_tailles != blank -%}
+                  <div class="rs-pro-mock__price-avail rs-pro-mock__price-avail--sizes">
+                    <span class="rs-pro-mock__price-avail-label">{{ section.settings.sizes_block_heading | default: 'Tailles disponibles' }}</span>
+                    <span class="rs-pro-mock__price-avail-values">{{ mf_tailles | strip | escape }}</span>
+                  </div>
+                {%- elsif rs_size_opt != nil and rs_size_opt.values.size > 0 -%}
+                  <div class="rs-pro-mock__price-avail rs-pro-mock__price-avail--sizes">
+                    <span class="rs-pro-mock__price-avail-label">{{ section.settings.sizes_block_heading | default: 'Tailles disponibles' }}</span>
+                    <span class="rs-pro-mock__price-avail-values">
+                      {%- for val in rs_size_opt.values -%}
+                        {%- unless forloop.first -%}, {% endunless -%}{{- val | escape -}}
+                      {%- endfor -%}
+                    </span>
+                  </div>
+                {%- endif -%}
+
+                {%- comment -%} Autres options (niveau, couleur…) — sans dupliquer la ligne tailles {%- endcomment -%}
+                {%- for option in product.options_with_values -%}
+                  {%- unless rs_size_pos > 0 and option.position == rs_size_pos -%}
+                    {%- assign _oname = option.name | downcase | strip -%}
+                    {%- assign _skip_opt = false -%}
+                    {%- if _oname == 'title' and option.values.size == 1 -%}
+                      {%- assign _v0 = option.values.first | downcase | strip -%}
+                      {%- if _v0 == 'default title' -%}
+                        {%- assign _skip_opt = true -%}
+                      {%- endif -%}
+                    {%- endif -%}
+                    {%- unless _skip_opt -%}
+                      <div class="rs-pro-mock__price-avail">
+                        <span class="rs-pro-mock__price-avail-label">{{ option.name | escape }} :</span>
+                        <span class="rs-pro-mock__price-avail-values">
+                          {%- for val in option.values -%}
+                            {%- unless forloop.first -%}, {% endunless -%}{{- val | escape -}}
+                          {%- endfor -%}
+                        </span>
+                      </div>
+                    {%- endunless -%}
+                  {%- endunless -%}
+                {%- endfor -%}
               </div>
 
               {% if product.variants.size > 1 %}
                 <div class="rs-pro-mock__size-section">
-                  <div class="rs-pro-mock__size-label">
-                    {{ section.settings.variant_heading | default: 'Sélectionner votre niveau d’expérience' }}
+                  <div class="rs-pro-mock__size-label rs-pro-mock__size-label--short">
+                    {{ section.settings.variant_grid_caption | default: 'Votre choix' }}
                   </div>
                   <div class="rs-pro-mock__size-grid" role="group" aria-label="{{ product.options.first | escape }}">
                     {% for variant in product.variants %}

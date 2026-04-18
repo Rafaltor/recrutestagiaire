@@ -238,12 +238,20 @@ html.rs-viewport-desktop body {
   z-index: 2;
 }
 
-/* Bannière 1 : logo + dossier (fond clair type portail public) */
+/* Rangée unique : mobile = colonne (marque → actions → onglets) ; desktop = marque | onglets centrés | actions */
+.header-wrap .rs-header-main-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* Bannière marque seule (actions déplacées à droite de la rangée desktop) */
 .header-wrap .rs-banner-top.rs-header-pole-brand {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
   flex-wrap: nowrap;
   float: none !important;
@@ -253,19 +261,19 @@ html.rs-viewport-desktop body {
 }
 
 .header-wrap .rs-banner-top .nav-brand {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
 }
 
 .header-wrap .rs-banner-top__cart {
   flex-shrink: 0;
-  margin-left: 12px;
+  margin-left: 0;
 }
 
 /* Header top actions (Mon dossier + Mon espace) */
 .header-wrap .rs-banner-top__actions {
   flex-shrink: 0;
-  margin-left: 12px;
+  margin-left: 0;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -316,6 +324,151 @@ body[data-rs-page="index"] .header-wrap .rs-banner-nav.rs-header-pole-tabs {
   justify-content: flex-end;
   /* Aide le navigateur à ne pas traiter la bandeau comme une zone scroll interne */
   touch-action: pan-y;
+}
+
+/*
+ * Bureau : 2 rangées — (1) logo + titre | Mon dossier + Mon espace  (2) onglets pleine largeur.
+ * Ordre DOM : marque, nav, actions → placement explicite en grille.
+ */
+@media (min-width: 992px) {
+  .header-wrap .rs-header-main-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 20px;
+    row-gap: 0;
+    width: 100%;
+    padding: 6px 0 0;
+    border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.12);
+    box-sizing: border-box;
+  }
+
+  .header-wrap .rs-header-main-row > .rs-banner-top.rs-header-pole-brand {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    align-self: center;
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 4px 0 8px;
+    border-bottom: none;
+    justify-content: flex-start;
+  }
+
+  .header-wrap .rs-header-main-row > .rs-banner-top__actions {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    align-self: center;
+    width: auto;
+    max-width: 100%;
+    padding: 4px 0 8px;
+    margin-left: 0;
+    border-bottom: none;
+    flex-wrap: nowrap;
+  }
+
+  .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: stretch;
+    align-self: stretch;
+    width: 100%;
+    max-width: none;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+    border-radius: 0;
+    box-sizing: border-box;
+  }
+
+  /* Onglets sur toute la largeur utile du bandeau (aligné avec le « main » sous le header) */
+  .header-wrap .rs-header-main-row .rs-subnav.rs-subnav--buttons {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    gap: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .header-wrap .rs-header-main-row .rs-subnav__item {
+    min-width: 0;
+  }
+
+  .header-wrap .rs-nav-brand__img {
+    max-height: 44px !important;
+    width: auto;
+  }
+}
+
+/*
+ * Accueil « viewport bureau sur mobile » : la largeur CSS peut rester < 992px
+ * alors que le layout doit rester type bureau — même grille que ci-dessus.
+ */
+html.rs-viewport-desktop .header-wrap .rs-header-main-row,
+body.rs-viewport-desktop .header-wrap .rs-header-main-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-rows: auto auto !important;
+  align-items: center !important;
+  column-gap: 16px !important;
+  row-gap: 0 !important;
+  width: 100% !important;
+  padding: 6px 0 0 !important;
+  border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.12);
+  box-sizing: border-box;
+}
+
+html.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-top.rs-header-pole-brand,
+body.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-top.rs-header-pole-brand {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  order: unset !important;
+  justify-self: start;
+  align-self: center;
+  border-bottom: none;
+  padding: 4px 0 8px !important;
+}
+
+html.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-top__actions,
+body.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-top__actions {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  order: unset !important;
+  justify-self: end;
+  align-self: center;
+  width: auto !important;
+  border-bottom: none;
+  padding: 4px 0 8px !important;
+}
+
+html.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs,
+body.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  order: unset !important;
+  justify-self: stretch !important;
+  align-self: stretch !important;
+  width: 100% !important;
+  max-width: none !important;
+  padding: 0 !important;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+html.rs-viewport-desktop .header-wrap .rs-header-main-row .rs-subnav.rs-subnav--buttons,
+body.rs-viewport-desktop .header-wrap .rs-header-main-row .rs-subnav.rs-subnav--buttons {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  gap: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
 }
 
 /* Trois onglets : grille 3 colonnes égales (portail + boutique, tous viewports). */
@@ -395,6 +548,79 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
 }
 
 @media (max-width: 991.98px) {
+  /*
+   * Mobile (hors viewport bureau) : ligne 1 = logo (grossi) + actions alignées ;
+   * ligne 2 = onglets regroupés et centrés.
+   */
+  body:not(.rs-viewport-desktop) .header-wrap .rs-header-main-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 4px;
+  }
+
+  body:not(.rs-viewport-desktop) .header-wrap .rs-header-main-row > .rs-banner-top.rs-header-pole-brand {
+    grid-column: 1;
+    grid-row: 1;
+    order: unset;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    padding: 8px 0 6px;
+    border-bottom: none;
+    justify-content: flex-start;
+  }
+
+  body:not(.rs-viewport-desktop) .header-wrap .rs-banner-top .nav-brand {
+    flex: 0 1 auto;
+    align-items: center;
+  }
+
+  body:not(.rs-viewport-desktop) .header-wrap .rs-nav-brand__img {
+    max-height: 48px !important;
+    width: auto;
+  }
+
+  body:not(.rs-viewport-desktop) .header-wrap .rs-header-main-row > .rs-banner-top__actions {
+    grid-column: 2;
+    grid-row: 1;
+    order: unset;
+    width: auto;
+    max-width: none;
+    justify-self: end;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 8px 0 6px;
+    border-bottom: none;
+  }
+
+  body:not(.rs-viewport-desktop) .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    order: unset;
+    width: 100%;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body:not(.rs-viewport-desktop) .header-wrap .rs-banner-nav.rs-header-pole-tabs .rs-subnav.rs-subnav--buttons {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    gap: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   body[data-rs-page="index"] .header-wrap .rs-banner-nav.rs-header-pole-tabs {
     padding: 6px 4px 0;
   }
@@ -403,84 +629,112 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
     padding: 6px 4px 0;
   }
 
+  .header-wrap .rs-banner-top.rs-header-pole-brand {
+    min-height: 56px;
+  }
+
+  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
+    padding: 10px 18px !important;
+    font-size: 14px !important;
+    min-height: 46px;
+  }
+
+  .header-wrap .rs-banner-top__actions svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .header-wrap .rs-nav-brand__name.logo {
+    font-size: 18px !important;
+  }
+
   .header-wrap .rs-subnav.rs-subnav--buttons {
-    gap: 4px;
+    gap: 6px;
   }
 
   .header-wrap .rs-subnav__trigger {
     white-space: normal;
-    line-height: 1.25;
-    padding: 10px 6px;
-    font-size: 10px;
-    border-radius: 6px 6px 0 0;
+    line-height: 1.3;
+    padding: 12px 8px;
+    font-size: 13px;
+    min-height: 48px;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .header-wrap .rs-subnav__dropdown a {
+    padding: 14px 18px;
+    font-size: 15px;
   }
 }
 
-/* ===== Mobile: header proche desktop mais usable téléphone ===== */
+/* ===== Très petit mobile : garde les tailles confortables (accueil + boutique) ===== */
 @media (max-width: 575.98px) {
-  body:not([data-rs-page="index"]) .header-wrap .container {
+  .header-wrap .container {
     padding: 0 10px;
   }
 
-  body:not([data-rs-page="index"]) .header-wrap .rs-banner-top.rs-header-pole-brand {
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 6px 0 10px;
-  }
-
-  body:not([data-rs-page="index"]) .header-wrap .rs-banner-top .nav-brand {
-    flex: 1 1 100%;
-  }
-
-  body:not([data-rs-page="index"]) .header-wrap .rs-banner-top__actions {
-    margin-left: 0;
-    width: 100%;
-    justify-content: flex-end;
+  .header-wrap .rs-banner-top.rs-header-pole-brand {
+    flex-wrap: nowrap;
     gap: 8px;
+    padding: 8px 0 6px;
   }
 
-  body:not([data-rs-page="index"]) .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
-    padding: 6px 12px !important;
-    font-size: 12px !important;
+  /* Ne pas forcer le logo sur toute la largeur : conserve la grille logo | actions */
+  body:not(.rs-viewport-desktop) .header-wrap .rs-banner-top .nav-brand {
+    flex: 0 1 auto;
+    min-width: 0;
   }
 
-  body:not([data-rs-page="index"]) .header-wrap .rs-nav-brand__name.logo {
-    font-size: 16px !important;
+  body:not(.rs-viewport-desktop) .header-wrap .rs-nav-brand__img {
+    max-height: 52px !important;
   }
 
-  body:not([data-rs-page="index"]) .header-wrap .rs-banner-nav.rs-header-pole-tabs {
+  .header-wrap .rs-banner-top__actions {
+    gap: 8px;
+    padding: 8px 0 6px;
+  }
+
+  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
+    padding: 11px 20px !important;
+    font-size: 15px !important;
+    min-height: 48px;
+  }
+
+  .header-wrap .rs-nav-brand__name.logo {
+    font-size: 19px !important;
+  }
+
+  .header-wrap .rs-banner-nav.rs-header-pole-tabs {
     overflow: visible;
-    padding: 6px 4px 0;
+    padding: 8px 4px 0;
   }
 
-  body:not([data-rs-page="index"]) .header-wrap .rs-subnav.rs-subnav--buttons {
-    /* plus d overflow-x:auto : sur mobile ça créait une zone scrollable qui « bougeait » les onglets au doigt */
+  .header-wrap .rs-subnav.rs-subnav--buttons {
     overflow-x: visible;
     overflow-y: visible;
     width: 100%;
     min-width: 0;
     max-width: 100%;
-    gap: 4px;
-    padding: 0 2px;
+    gap: 6px;
+    padding: 0 3px;
   }
 
-  body:not([data-rs-page="index"]) .header-wrap .rs-subnav__trigger {
-    min-height: 40px;
-    padding: 9px 10px;
-    font-size: 11px;
-    white-space: nowrap;
-  }
-
-  body:not([data-rs-page="index"]) .header-wrap .rs-subnav__dropdown {
-    min-width: 220px;
-    width: max(220px, 78vw);
-  }
-
-  body:not([data-rs-page="index"]) .header-wrap .rs-subnav__dropdown a {
-    padding: 12px 16px;
+  .header-wrap .rs-subnav__trigger {
+    min-height: 50px;
+    padding: 12px 10px;
     font-size: 14px;
   }
 
+  .header-wrap .rs-subnav__dropdown {
+    min-width: 240px;
+    width: max(240px, 82vw);
+  }
+
+  .header-wrap .rs-subnav__dropdown a {
+    padding: 15px 18px;
+    font-size: 15px;
+  }
 }
 
 /*
@@ -1309,12 +1563,17 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   border-color: #cfd8e6;
 }
 .rs-pro-mock__job-title {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  font-weight: 800;
   color: var(--rs-logo-blue-deep);
-  margin: 0 0 8px;
-  line-height: 1.25;
+  margin: 0 0 10px;
+  line-height: 1.18;
   letter-spacing: 0.01em;
+}
+@media (min-width: 992px) {
+  .rs-pro-mock__job-title {
+    font-size: clamp(1.65rem, 2.2vw, 2.05rem);
+  }
 }
 .rs-pro-mock__company-line {
   font-size: 13px;
@@ -1503,8 +1762,55 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   border-top: 3px solid var(--rs-gold-shadow);
 }
+.rs-pro-mock__apply-lead {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--rs-logo-blue-deep);
+  margin: 0 0 12px;
+  font-weight: 600;
+  opacity: 0.92;
+}
 .rs-pro-mock__price-block {
   margin-bottom: 1.25rem;
+}
+.rs-pro-mock__price-avail {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(0, 51, 171, 0.18);
+  font-size: 12px;
+  line-height: 1.45;
+  color: #333;
+}
+.rs-pro-mock__price-avail-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rs-pole-blue-muted);
+  margin-bottom: 4px;
+}
+.rs-pro-mock__price-avail-values {
+  font-weight: 700;
+  color: var(--rs-logo-blue-deep);
+}
+.rs-pro-mock__price-avail--sizes {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(138, 111, 18, 0.28);
+  background: linear-gradient(180deg, rgba(255, 248, 232, 0.55) 0%, transparent 100%);
+  border-radius: 6px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-left: -4px;
+  margin-right: -4px;
+}
+.rs-pro-mock__price-avail--sizes .rs-pro-mock__price-avail-label {
+  color: var(--rs-gold-ink, #5c4a0a);
+}
+.rs-pro-mock__price-avail--sizes .rs-pro-mock__price-avail-values {
+  font-size: 13px;
+  letter-spacing: 0.02em;
 }
 .rs-pro-mock__price-label {
   font-size: 10px;
@@ -1532,6 +1838,13 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   color: var(--rs-logo-blue-deep);
   margin-bottom: 8px;
   font-weight: 600;
+}
+.rs-pro-mock__size-label--short {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rs-pole-blue-muted);
 }
 .rs-pro-mock__size-grid {
   display: flex;

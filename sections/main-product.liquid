@@ -89,7 +89,44 @@
   "settings": [
     { "type": "text", "id": "breadcrumb_ref_prefix", "label": "Préfixe fil d’Ariane (réf.)", "default": "Poste n°" },
     { "type": "text", "id": "price_label", "label": "Libellé prix", "default": "Rémunération du poste" },
-    { "type": "text", "id": "variant_heading", "label": "Libellé choix variante", "default": "Sélectionner votre niveau d’expérience" },
+    {
+      "type": "text",
+      "id": "apply_lead_text",
+      "label": "Texte d’intro (bloc postuler)",
+      "default": "Sélectionnez votre niveau d’expérience.",
+      "info": "Affiché en petit au-dessus du prix. Si vide, le libellé « choix variante » ci-dessous est utilisé."
+    },
+    {
+      "type": "text",
+      "id": "variant_heading",
+      "label": "Libellé choix variante (repli si intro vide)",
+      "default": "Sélectionnez votre niveau d’expérience."
+    },
+    {
+      "type": "text",
+      "id": "variant_grid_caption",
+      "label": "Légende au-dessus des boutons de variante",
+      "default": "Votre choix",
+      "info": "Court libellé sous le bloc prix, au-dessus des pastilles."
+    },
+    {
+      "type": "text",
+      "id": "sizes_block_heading",
+      "label": "Titre du bloc tailles (dans le prix)",
+      "default": "Tailles disponibles",
+      "info": "Affiché au-dessus de la liste des tailles détectées (option Shopify ou métachamp)."
+    },
+    {
+      "type": "checkbox",
+      "id": "sizes_use_second_option",
+      "label": "Repli : traiter la 2ᵉ option comme « tailles »",
+      "default": true,
+      "info": "Si aucune option ne s’appelle Taille/Size/etc., utilise la 2ᵉ option (ex. Couleur + Taille). Désactive si ta 2ᵉ option n’est pas une taille."
+    },
+    {
+      "type": "paragraph",
+      "content": "Optionnel : métachamp texte `custom.tailles_disponibles` sur le produit pour forcer l’affichage (ex. « XS, S, M, L ») même sans variante « Taille »."
+    },
     { "type": "text", "id": "add_to_cart_text", "label": "Texte bouton postuler", "default": "Postuler — Ajouter au dossier" },
     { "type": "text", "id": "free_shipping_text", "label": "Sous-texte prix (ex. livraison)", "default": "Livraison offerte dès 200 € de candidatures" },
     { "type": "text", "id": "save_offer_label", "label": "Libellé bouton secondaire", "default": "Sauvegarder l’offre" },
