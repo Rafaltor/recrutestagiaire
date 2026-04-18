@@ -31,7 +31,7 @@
     var api = root.getAttribute('data-api');
     if (!api) return;
     var kicker = root.getAttribute('data-kicker') || 'Sponsorisé';
-    var url = root.getAttribute('data-url') || '/pages/candidatures';
+    var url = root.getAttribute('data-url') || {{ settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils' | json }};
     var labelEmail = root.getAttribute('data-cand-label-email') || 'E-mail';
     var labelCv = root.getAttribute('data-cand-label-cv') || 'CV';
     var slots = Array.from(root.querySelectorAll('[data-rs-cand-ad="1"]'));

@@ -1,6 +1,24 @@
 {%- assign slot_mode = block.settings.content_type | default: 'product' -%}
 {%- if slot_mode == 'profiles_api' -%}
-  {%- render 'rs-sponsored-rail-candidate-ad' -%}
+  <div class="rs-uni-rail__stack">
+    {%- render 'rs-sponsored-rail-candidate-ad' -%}
+    {%- if section != blank and section.settings.rail_profiles_under_product != blank -%}
+      {%- render 'rs-sponsored-rail-ad',
+        block: block,
+        inline_product: section.settings.rail_profiles_under_product,
+        inline_kicker: section.settings.rail_profiles_under_kicker,
+        inline_show_price: section.settings.rail_profiles_under_show_price,
+        inline_show_stars: section.settings.rail_profiles_under_show_stars,
+        inline_cta: section.settings.rail_profiles_under_cta,
+        rail_compact: true
+      -%}
+    {%- endif -%}
+  </div>
 {%- else -%}
-  {%- render 'rs-sponsored-rail-ad', block: block -%}
+  <div class="rs-uni-rail__stack{% if block.settings.product_below == blank %} rs-uni-rail__stack--single{% endif %}">
+    {%- render 'rs-sponsored-rail-ad', block: block -%}
+    {%- if block.settings.product_below != blank -%}
+      {%- render 'rs-sponsored-rail-ad', block: block, rail_product: block.settings.product_below, rail_compact: true -%}
+    {%- endif -%}
+  </div>
 {%- endif -%}

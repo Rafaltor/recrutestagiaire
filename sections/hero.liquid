@@ -1,5 +1,5 @@
-{%- assign rs_url_profils = '/pages/profils-candidats' -%}
-{%- assign rs_url_deposer = '/pages/deposer-candidature' -%}
+{%- assign rs_url_profils = settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils' -%}
+{%- assign rs_url_deposer = settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot' -%}
 {%- assign promo_count = 0 -%}
 {%- assign has_pole_cta = false -%}
 {%- for block in section.blocks -%}

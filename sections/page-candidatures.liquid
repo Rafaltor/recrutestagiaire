@@ -52,12 +52,12 @@
 
         <div id="rs-config-error" class="alert alert-warning" style="display:none;">
           <i class="bi bi-gear me-2"></i>
-          Configurez le <strong>Token Airtable</strong> dans le customizer Shopify pour afficher les profils.
+          Indiquez l’<strong>URL du proxy API</strong> (IONOS) dans le customizer Shopify pour afficher les profils.
         </div>
 
         <div id="rs-net-error" class="alert alert-danger" style="display:none;">
           <i class="bi bi-exclamation-triangle me-2"></i>
-          Impossible de charger les profils. Vérifiez le token et le nom de la table.
+          Impossible de charger les profils. Vérifiez l’URL du proxy, la config Supabase sur IONOS et le CORS.
         </div>
 
         {%- if rs_mode == 'profiles' and section.settings.form_page_url != blank -%}
@@ -103,6 +103,31 @@
             <div id="rs-form-error" class="alert alert-danger mb-3 small" style="display:none;"></div>
 
             <form id="rs-form" novalidate>
+              {%- if section.settings.cv_affinda_intro != blank -%}
+                <p class="small text-muted mb-3">{{ section.settings.cv_affinda_intro }}</p>
+              {%- endif -%}
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold" for="rs-cv-file" style="font-size:{{ section.settings.form_label_size }}px;">
+                  {{ section.settings.label_cv | default: 'Votre CV' }} <span class="text-danger">*</span>
+                </label>
+                <input type="file" id="rs-cv-file" name="file" class="form-control"
+                  style="font-size:{{ section.settings.form_input_size }}px;"
+                  accept=".pdf,.doc,.docx,.odt,.rtf,.txt,.html,.htm,image/png,image/jpeg,image/tiff,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  required
+                  {% if section.settings.cv_help != blank %}aria-describedby="rs-cv-help"{% endif %}>
+                {% if section.settings.cv_help != blank %}
+                  <div id="rs-cv-help" class="form-text" style="font-size:{{ section.settings.form_label_size | minus: 1 }}px;">
+                    {{ section.settings.cv_help }}
+                  </div>
+                {% endif %}
+                <div class="d-flex flex-wrap align-items-stretch gap-2 mt-2">
+                  <button type="button" class="btn btn-outline-primary btn-sm" id="rs-extract-cv">
+                    <i class="bi bi-magic me-1" aria-hidden="true"></i>{{ section.settings.cv_extract_label | default: 'Extraire les infos du CV' }}
+                  </button>
+                  <span class="small text-muted align-self-center" id="rs-extract-status" style="display:none;" role="status"></span>
+                </div>
+              </div>
 
               <div class="mb-3">
                 <label class="form-label fw-semibold" style="font-size:{{ section.settings.form_label_size }}px;">
@@ -136,23 +161,9 @@
                   placeholder="{{ section.settings.placeholder_poste | default: 'ex : Designer textile, Modéliste...' }}" required>
               </div>
 
-              <div class="mb-3">
-                <label class="form-label fw-semibold" style="font-size:{{ section.settings.form_label_size }}px;">
-                  {{ section.settings.label_cv | default: 'Lien vers votre CV' }}
-                </label>
-                <input type="url" id="rs-cv" class="form-control"
-                  style="font-size:{{ section.settings.form_input_size }}px;"
-                  placeholder="{{ section.settings.placeholder_cv | default: 'https://drive.google.com/...' }}">
-                {% if section.settings.cv_help != blank %}
-                  <div class="form-text" style="font-size:{{ section.settings.form_label_size | minus: 1 }}px;">
-                    {{ section.settings.cv_help }}
-                  </div>
-                {% endif %}
-              </div>
-
               <div class="mb-4">
                 <label class="form-label fw-semibold" style="font-size:{{ section.settings.form_label_size }}px;">
-                  {{ section.settings.label_portfolio | default: 'Portfolio, LinkedIn ou site web' }}
+                  {{ section.settings.label_portfolio | default: 'Portfolio ou site web' }}
                 </label>
                 <input type="url" id="rs-portfolio" class="form-control"
                   style="font-size:{{ section.settings.form_input_size }}px;"
@@ -296,10 +307,14 @@
           if (elEmpty) elEmpty.style.display = 'block';
           return;
         }
-        // Adaptation format Airtable -> ancien format attendu par render()
+        // Format API (proxy) -> format attendu par render()
         allRecords = recs.map(function(p) {
+          var sc = p.score;
+          var num = typeof sc === 'number' && !isNaN(sc) ? sc : parseFloat(sc);
+          if (isNaN(num)) num = 0;
           return {
             id: p.id || '',
+            _rsScore: num,
             fields: {
               'Nom Prénom': p.name || '',
               'Email': p.email || '',
@@ -311,6 +326,13 @@
             }
           };
         });
+        allRecords.sort(function(a, b) {
+          var d = (b._rsScore || 0) - (a._rsScore || 0);
+          if (d !== 0) return d;
+          var na = (a.fields && a.fields['Nom Prénom']) ? String(a.fields['Nom Prénom']) : '';
+          var nb = (b.fields && b.fields['Nom Prénom']) ? String(b.fields['Nom Prénom']) : '';
+          return na.localeCompare(nb, 'fr', { sensitivity: 'base' });
+        });
         if (elCount) {
           elCount.textContent = allRecords.length + ' profil' + (allRecords.length > 1 ? 's' : '');
           elCount.style.display = 'inline-flex';
@@ -321,7 +343,7 @@
       .catch(function(err) {
         elLoading.style.display = 'none';
         if (elNetErr) elNetErr.style.display = 'block';
-        console.error('Airtable error:', err);
+        console.error('Profils API error:', err);
       });
   }
 
@@ -428,12 +450,67 @@
     });
   }
 
-  var form    = document.getElementById('rs-form');
-  var elSucc  = document.getElementById('rs-success');
-  var elFrmE  = document.getElementById('rs-form-error');
-  var elBtn   = document.getElementById('rs-submit');
-  var elBTxt  = document.getElementById('rs-submit-text');
-  var elBLdr  = document.getElementById('rs-submit-loader');
+  var form     = document.getElementById('rs-form');
+  var elSucc   = document.getElementById('rs-success');
+  var elFrmE   = document.getElementById('rs-form-error');
+  var elBtn    = document.getElementById('rs-submit');
+  var elBTxt   = document.getElementById('rs-submit-text');
+  var elBLdr   = document.getElementById('rs-submit-loader');
+  var elFile   = document.getElementById('rs-cv-file');
+  var elExBtn  = document.getElementById('rs-extract-cv');
+  var elExStat = document.getElementById('rs-extract-status');
+
+  if (elExBtn && elExStat) {
+    elExBtn.addEventListener('click', function() {
+      if (!elFrmE) return;
+      elFrmE.style.display = 'none';
+      if (!API) {
+        elFrmE.innerHTML = '<i class="bi bi-x-circle me-2"></i>API non configurée : impossible d’analyser le CV.';
+        elFrmE.style.display = 'block';
+        return;
+      }
+      if (!elFile || !elFile.files || !elFile.files[0]) {
+        elExStat.textContent = 'Sélectionnez d’abord un fichier PDF ou Word.';
+        elExStat.style.display = 'inline';
+        return;
+      }
+      elExBtn.disabled = true;
+      elExStat.textContent = 'Analyse en cours…';
+      elExStat.style.display = 'inline';
+      var fd = new FormData();
+      fd.append('file', elFile.files[0], elFile.files[0].name);
+      var url = String(API).replace(/\?+$/, '') + '?action=parse_cv';
+      fetch(url, { method: 'POST', body: fd, mode: 'cors' })
+        .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, s: r.status, d: d }; }); })
+        .then(function(x) {
+          elExBtn.disabled = false;
+          if (x.ok && x.d) {
+            var p = x.d;
+            if (p.name) document.getElementById('rs-nom').value = p.name;
+            if (p.email) document.getElementById('rs-email').value = p.email;
+            if (p.role) document.getElementById('rs-poste').value = p.role;
+            if (p.portfolio) document.getElementById('rs-portfolio').value = p.portfolio;
+            elExStat.textContent = p.note || 'Vérifiez les champs et envoyez la candidature.';
+            elExStat.style.display = 'inline';
+            return;
+          }
+          elExStat.textContent = '';
+          elExStat.style.display = 'none';
+          var det = (x.d && x.d.details != null) ? String(x.d.details) : '';
+          var msg = (x.d && x.d.error) || det || ('HTTP ' + (x.s || ''));
+          if (x.s === 501 && x.d && x.d.info) {
+            msg = msg + ' — ' + String(x.d.info);
+          }
+          elFrmE.innerHTML = '<i class="bi bi-exclamation-triangle me-2"></i>' + esc(msg);
+          elFrmE.style.display = 'block';
+        })
+        .catch(function() {
+          elExBtn.disabled = false;
+          elExStat.textContent = 'Erreur réseau.';
+          elExStat.style.display = 'inline';
+        });
+    });
+  }
 
   if (form && elFrmE && elSucc && elBtn && elBTxt && elBLdr) {
     form.addEventListener('submit', function(e) {
@@ -446,23 +523,34 @@
       var nom  = document.getElementById('rs-nom').value.trim();
       var email= document.getElementById('rs-email').value.trim();
       var poste= document.getElementById('rs-poste').value.trim();
-      var cv   = document.getElementById('rs-cv').value.trim();
-      var port = document.getElementById('rs-portfolio').value.trim();
+      var port = document.getElementById('rs-portfolio') ? document.getElementById('rs-portfolio').value.trim() : '';
+      if (!elFile || !elFile.files || !elFile.files[0]) {
+        elFrmE.innerHTML = '<i class="bi bi-x-circle me-2"></i>Joignez votre CV (fichier).';
+        elFrmE.style.display = 'block'; return;
+      }
       if (!nom || !email || !poste) {
         elFrmE.innerHTML = '<i class="bi bi-x-circle me-2"></i>Veuillez remplir les champs obligatoires.';
         elFrmE.style.display = 'block'; return;
       }
       elBTxt.style.display = 'none'; elBLdr.style.display = 'inline-block'; elBtn.disabled = true;
-      var payload = { name: nom, email: email, role: poste, cv: cv || '', portfolio: port || '' };
+      var fdata = new FormData();
+      fdata.append('name', nom);
+      fdata.append('email', email);
+      fdata.append('role', poste);
+      fdata.append('cv', '');
+      fdata.append('portfolio', port || '');
+      fdata.append('file', elFile.files[0], elFile.files[0].name);
       fetch(String(API).replace(/\?+$/, '') + '?action=submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: fdata,
+        mode: 'cors'
       })
       .then(function(r) {
         elBTxt.style.display = 'inline'; elBLdr.style.display = 'none'; elBtn.disabled = false;
         if (r.ok) {
-          elSucc.style.display = 'block'; form.reset();
+          elSucc.style.display = 'block';
+          form.reset();
+          if (elExStat) { elExStat.textContent = ''; elExStat.style.display = 'none'; }
           setTimeout(function() { elSucc.style.display = 'none'; }, 8000);
         } else {
           return r.json().then(function(d) {
@@ -544,10 +632,11 @@
     { "type": "text", "id": "email_help", "label": "Texte aide email", "default": "Visible publiquement — les entreprises pourront vous contacter." },
     { "type": "text", "id": "label_poste", "label": "Label Poste", "default": "Poste recherché" },
     { "type": "text", "id": "placeholder_poste", "label": "Placeholder poste", "default": "ex : Designer textile, Modéliste..." },
-    { "type": "text", "id": "label_cv", "label": "Label CV", "default": "Lien vers votre CV" },
-    { "type": "text", "id": "placeholder_cv", "label": "Placeholder CV", "default": "https://drive.google.com/..." },
-    { "type": "text", "id": "cv_help", "label": "Texte aide CV", "default": "Google Drive, Dropbox, WeTransfer…" },
-    { "type": "text", "id": "label_portfolio", "label": "Label Portfolio", "default": "Portfolio, LinkedIn ou site web" },
+    { "type": "text", "id": "label_cv", "label": "Label dépôt CV (fichier)", "default": "Votre CV" },
+    { "type": "text", "id": "cv_extract_label", "label": "Libellé du bouton d’extraction Affinda", "default": "Extraire les infos du CV" },
+    { "type": "textarea", "id": "cv_affinda_intro", "label": "Texte d’intro (optionnel) sous l’en-tête du formulaire", "default": "Déposez votre CV. Vous pourrez lancer une extraction automatique des champs, puis vérifier avant d’envoyer." },
+    { "type": "text", "id": "cv_help", "label": "Texte aide (formats CV)", "default": "PDF ou Word recommandés. Taille max côté proxy (Affinda + Supabase Storage) — voir ionos/README.md." },
+    { "type": "text", "id": "label_portfolio", "label": "Label Portfolio", "default": "Portfolio ou site web" },
     { "type": "text", "id": "placeholder_portfolio", "label": "Placeholder portfolio", "default": "https://..." },
     { "type": "header", "content": "Style champs et bouton" },
     { "type": "range", "id": "form_label_size", "min": 10, "max": 15, "step": 1, "unit": "px", "label": "Taille labels", "default": 12 },
@@ -559,10 +648,10 @@
     { "type": "text", "id": "success_title", "label": "Titre succès", "default": "Candidature envoyée !" },
     { "type": "text", "id": "success_text", "label": "Texte succès", "default": "Elle sera visible sur le site après validation par l'équipe." },
     { "type": "header", "content": "API (proxy IONOS)" },
-    { "type": "paragraph", "content": "URL du proxy PHP (IONOS). Exemple : https://ton-domaine.com/api/rs-airtable-proxy.php" },
-    { "type": "text", "id": "rs_api_url", "label": "URL API", "default": "https://example.com/api/rs-airtable-proxy.php" },
-    { "type": "text", "id": "airtable_field_poste", "label": "Colonne — poste / métier recherché", "default": "Poste recherché", "info": "Nom exact de la colonne Airtable (souvent « Poste recherché »)." },
-    { "type": "text", "id": "airtable_field_professions", "label": "Colonne — professions (optionnel)", "info": "Si une 2e colonne liste plusieurs métiers, indiquez son nom exact. Sinon laisser vide." },
+    { "type": "paragraph", "content": "Même URL pour Supabase et pour Affinda (clé côté rs-airtable-config.php). Ex. https://votre-hébergeur/rs-airtable-proxy.php" },
+    { "type": "text", "id": "rs_api_url", "label": "URL API (proxy)", "default": "https://example.com/rs-airtable-proxy.php" },
+    { "type": "text", "id": "airtable_field_poste", "label": "Libellé interne — poste / métier (affichage)", "default": "Poste recherché", "info": "Clé utilisée côté thème pour regrouper poste et professions dans la recherche." },
+    { "type": "text", "id": "airtable_field_professions", "label": "Libellé interne — professions (optionnel)", "info": "Champ texte optionnel pour la recherche ; laisser vide si non utilisé." },
     { "type": "header", "content": "Espacement" },
     { "type": "range", "id": "padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Haut", "default": 32 },
     { "type": "range", "id": "padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Bas", "default": 48 }

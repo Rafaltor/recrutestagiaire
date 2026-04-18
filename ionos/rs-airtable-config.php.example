@@ -1,34 +1,62 @@
 <?php
 /**
- * Copiez ce fichier en `rs-airtable-config.php` (même dossier) et renseignez les valeurs.
+ * Copiez ce fichier en `rs-airtable-config.php` (même dossier que rs-airtable-proxy.php).
  *
- * IMPORTANT
- * - Ne mettez JAMAIS ce fichier dans un dépôt public.
- * - Placez idéalement `rs-airtable-config.php` hors du webroot (ex: /home/...),
- *   puis modifiez `rs-airtable-proxy.php` pour l'inclure via un chemin absolu.
+ * IMPORTANT : ne commitez jamais `rs-airtable-config.php` rempli. Clé service_role = secrète.
  */
 
-// Airtable
-define('RS_AIRTABLE_TOKEN', 'pat_xxx');            // Personal Access Token (PAT)
-define('RS_AIRTABLE_BASE',  'appXXXXXXXXXXXXXX'); // Base ID
-define('RS_AIRTABLE_TABLE', 'RecruteStagiaire');   // Nom exact de la table
+// --- Supabase (obligatoire) ---------------------------------------------------
+define('RS_SUPABASE_URL', 'https://VOTRE_REF.supabase.co');
+define('RS_SUPABASE_SERVICE_KEY', 'VOTRE_CLE_SERVICE_ROLE');
+// Nom exact de la table dans Supabase (sensible à la casse : ex. profiles, pas profils)
+define('RS_SUPABASE_TABLE', 'profiles');
 
-// Sécurité / CORS
-// Mets ici ton domaine Shopify (ou laisse '*' temporairement).
-// Ex: https://recrute-stagiaire.myshopify.com
+// Filtrer / insérer une colonne bool « publié » (true = visible). false si la table n’a pas cette colonne.
+define('RS_SUPABASE_USE_APPROVED_FILTER', false);
+// Si true plus haut : nom exact de la colonne (ex. approved, published, is_visible)
+// define('RS_SUPABASE_COL_APPROVED', 'approved');
+
+define('RS_SUPABASE_COL_SCORE', 'score');
+
+// Compteur accueil : approved = seulement lignes avec colonne bool = true (nécessite USE_APPROVED_FILTER true) | all = toutes les lignes
+define('RS_SUPABASE_COUNT_MODE', 'all');
+
+define('RS_SUPABASE_COL_NAME', 'full_name');
+define('RS_SUPABASE_COL_EMAIL', 'email');
+define('RS_SUPABASE_COL_ROLE', 'role');
+define('RS_SUPABASE_COL_PROF', 'professions');
+define('RS_SUPABASE_COL_CV', 'cv_url');
+define('RS_SUPABASE_COL_PORTF', 'portfolio_url');
+
+// --- Supabase Storage (dépôt des fichiers CV) — requis si envoi multipart avec fichier
+// Créer un bucket dans le dashboard (Storage) ; le rendre public si le site doit afficher le lien du CV.
+define('RS_SUPABASE_STORAGE_BUCKET', 'cvs');
+// Sous-dossier optionnel dans le bucket, ex. "candidats" : les fichiers seront candidats/cv-xxxxx.pdf
+// define('RS_SUPABASE_STORAGE_PREFIX', 'candidats');
+// Si l’URL publique des objets n’est pas l’URL du projet (rare) — sinon laisser commenté
+// define('RS_SUPABASE_OBJECT_PUBLIC_BASE', 'https://VOTRE_REF.supabase.co');
+
+// --- CORS : origines exactes autorisées (schéma + hôte, sans chemin) ----------
 define('RS_ALLOWED_ORIGINS', [
-  '*',
+  'https://recrute-stagiaire.myshopify.com',
+  'https://www.votredomaine.fr',
 ]);
 
-// Limite simple anti-abus (par IP)
+// shopify theme dev (http://127.0.0.1:9292, etc.) — mettre false ou commenter en prod si vous préférez lister chaque origine
+define('RS_CORS_ALLOW_LOCAL_DEV', true);
+
+// Variante manuelle au lieu de la ligne ci-dessus : ajouter par ex. 'http://127.0.0.1:9292', 'http://localhost:9292'
+// define('RS_ALLOWED_ORIGINS', ['*']); // tests uniquement
+
 define('RS_RATE_LIMIT_PER_MIN', 60);
 
-// Champs Airtable utilisés (adapte si ton Airtable a des noms différents)
-define('RS_FIELD_NAME',  'Nom Prénom');       // ou "Nom & Prénom"
-define('RS_FIELD_EMAIL', 'Email');
-define('RS_FIELD_ROLE',  'Poste recherché');
-define('RS_FIELD_PROF',  'Professions');      // optionnel
-define('RS_FIELD_CV',    'CV');               // optionnel
-define('RS_FIELD_PORTF', 'Portfolio');        // optionnel
-define('RS_FIELD_OK',    'Approuvé');         // bool
+// --- Affinda (analyse de CV) — requis pour POST ?action=parse_cv ----------------
+// Compte https://affinda.com — clé API (région EU : API host api.eu1.affinda.com, défaut dans le proxy)
+define('RS_AFFINDA_API_KEY', 'VOTRE_CLE_AFFINDA');
+// optionnel : si autre hébergement (ex. US) ; le défaut est https://api.eu1.affinda.com
+// define('RS_AFFINDA_BASE', 'https://api.eu1.affinda.com');
+// Taille max upload (octets) pour CV, parse et enregistrement
+// define('RS_CV_MAX_BYTES', 5242880);
 
+// Optionnel : si la table n’a pas de colonne score au INSERT (action=submit)
+// define('RS_SUPABASE_SUBMIT_INCLUDE_SCORE', false);

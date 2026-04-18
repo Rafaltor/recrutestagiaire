@@ -43,9 +43,9 @@ L’objectif est de **remplir la fiche produit** comme une offre (RH + e-commerc
 
 | Libellé mockup | Clé métachamp suggérée (`namespace.key`) | Type Admin Shopify | Contenu exemple mockup |
 |----------------|------------------------------------------|--------------------|-------------------------|
-| Type de contrat | `custom.contract_type` | Texte une ligne | Pièce permanente |
+| Type de contrat | `custom.contrat_type` (repli : `custom.contract_type`) | Texte une ligne, liste ou type compatible `metafield_text` | Pièce permanente |
 | Disponibilité (texte libre) | `custom.availability_label` | Texte une ligne | *Optionnel* si vous voulez plus fin que « Immédiate / Indisponible » issu du stock. Sinon : uniquement logique variante. |
-| Département (détail) | `custom.department_detail` | Texte une ligne | Opérations / Terrain (complète `product.type`) |
+| Département (détail) | `custom.departement_detail`, `custom.department_detai` (clé boutique), ou `custom.department_detail` | Texte une ligne ou liste | Opérations / Terrain (complète `product.type`) |
 | Matière | `custom.matiere` | Texte une ligne (ou texte multi-lignes) | Déjà utilisé sur `main-product`. |
 
 **Champs déjà couverts sans métachamp** : prix (`money`), disponibilité binaire (stock), type produit (département court).
@@ -69,8 +69,8 @@ Aujourd’hui, une grande partie peut tenir dans **`product.description`** (HTML
 | Élément mockup | Source | Notes |
 |----------------|--------|--------|
 | Rémunération | `variant.price` | Déjà affiché. |
-| « Sélectionner votre niveau… » | `product.options` + variantes | Libellé de l’option à renommer dans l’admin produit (ex. « Taille » → libellé marketing). |
-| **Tailles disponibles** (bloc prix) | Option nom/handle `taille`, `size`, `pointure`, etc. **ou** 2ᵉ option si réglage activé **ou** métachamp texte `custom.tailles_disponibles` | Liste des valeurs dans le bloc prix ; pastilles inchangées. |
+| « Sélectionnez votre niveau… » + pastilles S / M / L | `product.options` + variantes | Texte de section au-dessus de la grille ; les **valeurs** ne sont plus répétées sous le prix / livraison (uniquement les boutons de choix). |
+| **Quantité** | Champ `quantity` du formulaire panier | Champ nombre visible dans le bloc prix (plus de champ caché seul). |
 | Bouton principal | Formulaire `cart/add` | Déjà en place. |
 | Note sous prix (livraison / seuil) | `section.settings.free_shipping_text` | Déjà en place. |
 | **Sauvegarder l’offre** | Hors natif | Liste de souhaits (app), favori compte, ou lien « Partager » — à trancher produit. |

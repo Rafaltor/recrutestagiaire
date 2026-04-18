@@ -1,41 +1,34 @@
-# IONOS — Proxy Airtable (sécuriser le token)
+# IONOS — Proxy API (`rs-airtable-proxy.php`)
 
-## Pourquoi
-Le token Airtable **ne doit pas** être utilisé depuis le navigateur (thème Shopify), sinon il est visible publiquement.
+Le thème Shopify appelle ce script **HTTPS** (jamais la clé Supabase dans le navigateur).
 
-Ce proxy PHP fait les appels Airtable côté serveur IONOS et renvoie au thème uniquement les données utiles.
+## Fichiers
 
-## Installation (IONOS hébergement web classique)
-
-1. Sur ton FTP / espace web IONOS, crée un dossier, ex: `api/`
-2. Upload :
-   - `rs-airtable-proxy.php`
-   - copie `rs-airtable-config.php.example` → `rs-airtable-config.php` puis renseigne :
-     - `RS_AIRTABLE_TOKEN`
-     - `RS_AIRTABLE_BASE`
-     - `RS_AIRTABLE_TABLE`
-     - `RS_ALLOWED_ORIGINS` (mets ton domaine Shopify au minimum)
-
-URL finale typique :
-`https://ton-domaine.com/api/rs-airtable-proxy.php`
+1. `rs-airtable-proxy.php` — à uploader sur Ionos (nom inchangé pour compatibilité des URLs Shopify).
+2. `rs-airtable-config.php` — **créé sur le serveur** à partir de `rs-airtable-config.php.example` ; contient URL projet, **clé service_role**, nom de table et colonnes.  
+   **`RS_SUPABASE_TABLE`** doit être le **nom exact** de la table dans l’éditeur Supabase (souvent `profiles` en anglais, pas `profils`).  
+   Si la table n’a **pas** de colonne bool du type `approved` / `published`, mettez **`RS_SUPABASE_USE_APPROVED_FILTER`** à **`false`** (voir l’exemple de config) ; sinon PostgREST renverra « column … approved does not exist ».
 
 ## Endpoints
 
-- **Compteur** (accueil)  
-  `GET rs-airtable-proxy.php?action=count` → `{ "count": 123 }`
+- `GET ?action=count` → `{ "count": N }`
+- `GET ?action=profiles` → `{ "profiles": [ { id, name, email, role, professions, cv, portfolio, score }, ... ] }`
+- `POST ?action=parse_cv` — `multipart/form-data` avec le champ `file` (un CV) → appelle Affinda et retourne JSON : `name`, `email`, `role`, `portfolio`, `note`, `source: affinda`. Nécessite `RS_AFFINDA_API_KEY` dans `rs-airtable-config.php` (dossier `ionos/`, côté serveur uniquement).
+- `POST ?action=submit`  
+  - **Recommandé** (thème) : `multipart/form-data` avec champs `name`, `email`, `role`, `cv` (texte optionnel) et le même `file` que l’analyse. Le script **envoie le fichier dans Supabase Storage** (`RS_SUPABASE_STORAGE_BUCKET`) et enregistre l’**URL publique** `…/storage/v1/object/public/{bucket}/…` dans la colonne CV. Aucun dépôt de fichier sur IONOS.  
+  - **Alternative** : JSON `{ "name", "email", "role", "cv", "portfolio" }` (sans envoi de fichier) si vous ne faites qu’un lien texte.  
+  Insertion Supabase (`approved` = false, `score` = 0 par défaut).  
+  Si la table n’a pas de colonne `score`, définir dans `rs-airtable-config.php` :  
+  `define('RS_SUPABASE_SUBMIT_INCLUDE_SCORE', false);`
 
-- **Liste profils (approuvés)**  
-  `GET rs-airtable-proxy.php?action=profiles` → `{ "profiles": [ ... ] }`
+## CORS
 
-- **Déposer candidature**  
-  `POST rs-airtable-proxy.php?action=submit` JSON:
+`RS_ALLOWED_ORIGINS` doit lister les origines exactes (ex. `https://recrute-stagiaire.myshopify.com`, votre domaine public).
 
-```json
-{ "name":"...", "email":"...", "role":"...", "cv":"", "portfolio":"" }
-```
+Pour **`shopify theme dev`** (`http://127.0.0.1:9292`, etc.), soit vous ajoutez ces URLs dans `RS_ALLOWED_ORIGINS`, soit vous activez **`RS_CORS_ALLOW_LOCAL_DEV`** à `true` dans `rs-airtable-config.php` (et vous uploadez la version récente du proxy qui la prend en charge).
 
-## Sécurité
+## Candidature par fichier CV (page thème « Candidatures »)
 
-- **CORS** : restreins `RS_ALLOWED_ORIGINS` à `https://recrute-stagiaire.myshopify.com` (ou ton domaine custom).
-- **Token** : si le token a déjà été exposé dans le thème, **révoque-le** dans Airtable et regénère un nouveau PAT.
-
+1. **Supabase Storage** : dans le [dashboard](https://supabase.com/dashboard) → Storage, créez un **bucket** (ex. `cvs`). Pour que le site puisse proposer le lien *Consulter le CV* côté vitrine, rendez le bucket **public** (policies / *Public bucket* selon l’UI). Renseignez le même nom dans **`RS_SUPABASE_STORAGE_BUCKET`** côté `rs-airtable-config.php`. L’API Storage est appelée avec la **même** clé `service_role` (jamais exposée au navigateur) ; IONOS ne sert qu’au script PHP, pas de stockage disque.
+2. **`RS_AFFINDA_API_KEY`** (optionnel pour l’extraction) : [Affinda / EU](https://affinda.com) — le proxy utilise `https://api.eu1.affinda.com` par défaut (surcharge possible avec `RS_AFFINDA_BASE` dans la config).
+3. Le thème appelle d’abord `?action=parse_cv` pour remplir les champs, puis `?action=submit` en **multipart** avec le même fichier : upload Storage + ligne dans la table.

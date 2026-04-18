@@ -1,5 +1,10 @@
 {% comment %} En-tête type portail : bandeau kitsch, marque + panier, onglets (Offres / Candidatures / Collectif), menus au survol. {% endcomment %}
 {% liquid
+  assign rs_p_prof = settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils'
+  assign rs_p_dep = settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot'
+  assign rs_p_vote = settings.rs_portail_url_vote | default: 'https://portail.recrutestagiaire.eu/vote'
+  assign rs_p_login = settings.rs_portail_url_connexion | default: 'https://portail.recrutestagiaire.eu/connexion'
+
   assign rs_default_logo = 'rs-logo-eu.png'
   if section.settings.brand_image != blank
     assign brand_image = section.settings.brand_image
@@ -21,13 +26,18 @@
     assign o2 = '/collections/les-stagiaires-de-base'
   endif
 
-  comment
-    Important: on force la redirection vers le portail.
-    Les settings Shopify peuvent être remplis dans le customizer, donc un simple fallback "si blank"
-    ne suffit pas (sinon ça reste sur /pages/...).
-  endcomment
-  assign c1 = 'https://portail.recrutestagiaire.eu/profils'
-  assign c2 = 'https://portail.recrutestagiaire.eu/depot'
+  assign c1 = section.settings.menu_cand_1_link | default: '' | strip
+  if c1 == blank or c1 contains '/pages/candidatures' or c1 contains 'pages/candidatures'
+    assign c1 = rs_p_prof
+  endif
+  assign c2 = section.settings.menu_cand_2_link | default: '' | strip
+  if c2 == blank
+    assign c2 = rs_p_dep
+  endif
+  assign c3 = section.settings.menu_cand_3_link | default: '' | strip
+  if c3 == blank
+    assign c3 = rs_p_vote
+  endif
 
   assign k1 = section.settings.menu_coll_1_link
   if k1 == blank
@@ -46,8 +56,9 @@
 
   assign l_o1 = section.settings.menu_offres_1_label | default: 'Collection ABCDRS'
   assign l_o2 = section.settings.menu_offres_2_label | default: 'Les stagiaires de base'
-  assign l_c1 = section.settings.menu_cand_1_label | default: 'Candidatures'
+  assign l_c1 = section.settings.menu_cand_1_label | default: 'Profils candidats'
   assign l_c2 = section.settings.menu_cand_2_label | default: 'Déposer sa candidature'
+  assign l_c3 = section.settings.menu_cand_3_label | default: 'Vote (swipe)'
   assign l_k1 = section.settings.menu_coll_1_label | default: 'Histoire'
   assign l_k2 = section.settings.menu_coll_2_label | default: 'Contact'
 
@@ -55,7 +66,7 @@
   if template.name == 'collection' or template.name == 'product' or template.name == 'list-collections' or template.name == 'index'
     assign rs_nav_active = 'offres'
   elsif template.name == 'page'
-    if page.handle == 'profils-candidats' or page.handle == 'deposer-candidature' or page.handle == 'candidatures'
+    if page.handle == 'candidatures'
       assign rs_nav_active = 'cand'
     elsif page.handle == 'about' or page.handle == 'contact'
       assign rs_nav_active = 'coll'
@@ -88,72 +99,77 @@
   {%- endif -%}
   <div class="container">
     <header class="rs-header-two-tier" aria-label="En-tête du site">
-      <div class="rs-banner-top rs-header-pole-brand">
-        <a class="nav-brand rs-nav-brand" href="{{ routes.root_url }}">
-          {%- if brand_image != blank -%}
-            <img
-              class="rs-nav-brand__img"
-              src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 320 }}{% endif %}"
-              alt="{{ shop.name | escape }}"
-              style="max-height: {{ section.settings.brand_max_height | default: 40 }}px; width: auto;"
-              loading="eager"
-              decoding="async">
-          {%- endif -%}
-          {%- if section.settings.show_site_name -%}
-            <span class="rs-nav-brand__name logo">
-              {%- if section.settings.site_title != blank -%}
-                {{ section.settings.site_title | upcase }}
-              {%- else -%}
-                {{ shop.name | upcase }}
+      <div class="rs-header-main-row">
+        <div class="rs-header-top-line">
+          <div class="rs-banner-top rs-header-pole-brand">
+            <a class="nav-brand rs-nav-brand" href="{{ routes.root_url }}">
+              {%- if brand_image != blank -%}
+                <img
+                  class="rs-nav-brand__img"
+                  src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 320 }}{% endif %}"
+                  alt="{{ shop.name | escape }}"
+                  style="max-height: {{ section.settings.brand_max_height | default: 40 }}px; width: auto;"
+                  loading="eager"
+                  decoding="async">
               {%- endif -%}
-            </span>
-          {%- endif -%}
-        </a>
+              {%- if section.settings.show_site_name -%}
+                <span class="rs-nav-brand__name logo">
+                  {%- if section.settings.site_title != blank -%}
+                    {{ section.settings.site_title | upcase }}
+                  {%- else -%}
+                    {{ shop.name | upcase }}
+                  {%- endif -%}
+                </span>
+              {%- endif -%}
+            </a>
+          </div>
 
-        <div class="rs-banner-top__actions d-inline-flex align-items-center">
-          <a href="{{ routes.cart_url }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__cart d-inline-flex align-items-center gap-2 text-decoration-none">
-            {% render 'icon-folder-dossier', w: 16, h: 16 %}
-            <span class="rs-caf-btn-dossier__label">{{ cart_lbl }}</span>
-            {% if section.settings.show_cart_count and cart.item_count > 0 %}
-              <span class="rs-cart-badge">{{ cart.item_count }}</span>
-            {% endif %}
-          </a>
+          <div class="rs-banner-top__actions d-inline-flex align-items-center">
+            <a href="{{ routes.cart_url }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__cart d-inline-flex align-items-center gap-2 text-decoration-none">
+              {% render 'icon-folder-dossier', w: 16, h: 16 %}
+              <span class="rs-caf-btn-dossier__label">{{ cart_lbl }}</span>
+              {% if section.settings.show_cart_count and cart.item_count > 0 %}
+                <span class="rs-cart-badge">{{ cart.item_count }}</span>
+              {% endif %}
+            </a>
 
-          <a href="https://portail.recrutestagiaire.eu/connexion" class="abt-btn rs-caf-btn-dossier rs-banner-top__account d-inline-flex align-items-center gap-2 text-decoration-none">
-            <svg class="rs-icon-account" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21a8 8 0 0 0-16 0"/>
-              <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/>
-            </svg>
-            <span class="rs-caf-btn-dossier__label">Mon espace</span>
-          </a>
+            <a href="{{ rs_p_login }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__account d-inline-flex align-items-center gap-2 text-decoration-none" rel="noopener noreferrer">
+              <svg class="rs-icon-account" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21a8 8 0 0 0-16 0"/>
+                <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/>
+              </svg>
+              <span class="rs-caf-btn-dossier__label">Mon espace</span>
+            </a>
+          </div>
         </div>
-      </div>
 
-      <nav class="rs-banner-nav rs-header-pole-tabs" aria-label="Navigation principale">
-        <ul class="rs-subnav rs-subnav--buttons" role="menubar">
-          <li class="rs-subnav__item{% if rs_nav_active == 'offres' %} is-active{% endif %}">
-            <button type="button" class="rs-subnav__trigger">{{ lbl_offres }}</button>
-            <ul class="rs-subnav__dropdown">
-              <li><a href="{{ o1 }}">{{ l_o1 }}</a></li>
-              <li><a href="{{ o2 }}">{{ l_o2 }}</a></li>
-            </ul>
-          </li>
-          <li class="rs-subnav__item{% if rs_nav_active == 'cand' %} is-active{% endif %}">
-            <button type="button" class="rs-subnav__trigger">{{ lbl_cand }}</button>
-            <ul class="rs-subnav__dropdown">
-              <li><a href="{{ c1 }}">{{ l_c1 }}</a></li>
-              <li><a href="{{ c2 }}">{{ l_c2 }}</a></li>
-            </ul>
-          </li>
-          <li class="rs-subnav__item{% if rs_nav_active == 'coll' %} is-active{% endif %}">
-            <button type="button" class="rs-subnav__trigger">{{ lbl_coll }}</button>
-            <ul class="rs-subnav__dropdown">
-              <li><a href="{{ k1 }}">{{ l_k1 }}</a></li>
-              <li><a href="{{ k2 }}">{{ l_k2 }}</a></li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
+        <nav class="rs-banner-nav rs-header-pole-tabs" aria-label="Navigation principale">
+          <ul class="rs-subnav rs-subnav--buttons" role="menubar">
+            <li class="rs-subnav__item{% if rs_nav_active == 'offres' %} is-active{% endif %}">
+              <button type="button" class="rs-subnav__trigger">{{ lbl_offres }}</button>
+              <ul class="rs-subnav__dropdown">
+                <li><a href="{{ o1 }}">{{ l_o1 }}</a></li>
+                <li><a href="{{ o2 }}">{{ l_o2 }}</a></li>
+              </ul>
+            </li>
+            <li class="rs-subnav__item{% if rs_nav_active == 'cand' %} is-active{% endif %}">
+              <button type="button" class="rs-subnav__trigger">{{ lbl_cand }}</button>
+              <ul class="rs-subnav__dropdown">
+                <li><a href="{{ c1 }}" rel="noopener noreferrer">{{ l_c1 }}</a></li>
+                <li><a href="{{ c2 }}" rel="noopener noreferrer">{{ l_c2 }}</a></li>
+                <li><a href="{{ c3 }}" rel="noopener noreferrer">{{ l_c3 }}</a></li>
+              </ul>
+            </li>
+            <li class="rs-subnav__item{% if rs_nav_active == 'coll' %} is-active{% endif %}">
+              <button type="button" class="rs-subnav__trigger">{{ lbl_coll }}</button>
+              <ul class="rs-subnav__dropdown">
+                <li><a href="{{ k1 }}">{{ l_k1 }}</a></li>
+                <li><a href="{{ k2 }}">{{ l_k2 }}</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
   </div>
 </div>
@@ -286,7 +302,9 @@
     { "type": "text", "id": "menu_cand_1_label", "label": "Sous-lien 1 — libellé", "default": "Profils candidats" },
     { "type": "url", "id": "menu_cand_1_link", "label": "Sous-lien 1 — URL" },
     { "type": "text", "id": "menu_cand_2_label", "label": "Sous-lien 2 — libellé", "default": "Déposer sa candidature" },
-    { "type": "url", "id": "menu_cand_2_link", "label": "Sous-lien 2 — URL (vide = ancre formulaire)" },
+    { "type": "url", "id": "menu_cand_2_link", "label": "Sous-lien 2 — URL (vide = portail dépôt)" },
+    { "type": "text", "id": "menu_cand_3_label", "label": "Sous-lien 3 — libellé (vote / swipe)", "default": "Vote (swipe)" },
+    { "type": "url", "id": "menu_cand_3_link", "label": "Sous-lien 3 — URL (vide = portail vote)" },
     { "type": "header", "content": "Menu — Le collectif" },
     { "type": "text", "id": "nav_collectif_label", "label": "Libellé du bouton", "default": "Le collectif" },
     { "type": "text", "id": "menu_coll_1_label", "label": "Sous-lien 1 — libellé", "default": "Histoire" },

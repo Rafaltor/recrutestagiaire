@@ -99,6 +99,19 @@ body[data-rs-page='product'] .container {
   max-width: 1140px;
 }
 
+/*
+ * jobhill-style.css met overflow-x:hidden sur body — en Chrome ça casse position:sticky
+ * pour la colonne « postuler ». Sur fiche produit desktop on rétablit le défilement racine.
+ */
+@media (min-width: 992px) {
+  body[data-rs-page='product'] {
+    overflow-x: visible !important;
+  }
+  body[data-rs-page='product'] main {
+    overflow-x: visible !important;
+  }
+}
+
 /* Accueil unifié : fond blanc continu + pas de languette grise au-dessus du footer */
 .shopify-section.section-home-unified-page {
   margin-bottom: 0 !important;
@@ -238,7 +251,7 @@ html.rs-viewport-desktop body {
   z-index: 2;
 }
 
-/* Rangée unique : mobile = colonne (marque → actions → onglets) ; desktop = marque | onglets centrés | actions */
+/* Rangée 1 : logo + Mon dossier / Mon espace ; rangée 2 : onglets (structure .rs-header-top-line) */
 .header-wrap .rs-header-main-row {
   display: flex;
   flex-direction: column;
@@ -246,13 +259,33 @@ html.rs-viewport-desktop body {
   width: 100%;
 }
 
-/* Bannière marque seule (actions déplacées à droite de la rangée desktop) */
+.header-wrap .rs-header-top-line {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.12);
+}
+
+/* Bloc marque : ne pas prendre 100 % de la ligne (sinon les boutons passent sous le logo) */
+.header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  max-width: 100%;
+  border-bottom: none;
+}
+
+/* Bannière marque (contenu interne logo + titre) */
 .header-wrap .rs-banner-top.rs-header-pole-brand {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  width: 100%;
   flex-wrap: nowrap;
   float: none !important;
   min-height: 52px;
@@ -286,8 +319,8 @@ html.rs-viewport-desktop body {
   gap: 8px; /* lock spacing to match portal */
 }
 
-/* Boutique (hors accueil) : air entre la barre Mon dossier / Mon espace et les onglets — comme sur le portail */
-body:not([data-rs-page="index"]) .header-wrap .rs-banner-top.rs-header-pole-brand {
+/* Boutique (hors accueil) : air sous la barre logo + boutons */
+body:not([data-rs-page="index"]) .header-wrap .rs-header-top-line {
   padding: 6px 0 10px;
 }
 
@@ -295,8 +328,7 @@ body:not([data-rs-page="index"]) .header-wrap .rs-banner-nav.rs-header-pole-tabs
   padding: 6px 6px 0;
 }
 
-/* Accueil : même écart logo / boutons dossier–espace et bandeau à onglets */
-body[data-rs-page="index"] .header-wrap .rs-banner-top.rs-header-pole-brand {
+body[data-rs-page="index"] .header-wrap .rs-header-top-line {
   padding: 6px 0 10px;
 }
 
@@ -326,56 +358,41 @@ body[data-rs-page="index"] .header-wrap .rs-banner-nav.rs-header-pole-tabs {
   touch-action: pan-y;
 }
 
-/*
- * Bureau : 2 rangées — (1) logo + titre | Mon dossier + Mon espace  (2) onglets pleine largeur.
- * Ordre DOM : marque, nav, actions → placement explicite en grille.
- */
+/* Bureau : colonne (ligne logo+boutons, ligne onglets) — plus de grille sur 3 frères */
 @media (min-width: 992px) {
   .header-wrap .rs-header-main-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: auto auto;
-    align-items: center;
-    column-gap: 20px;
-    row-gap: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     width: 100%;
     padding: 6px 0 0;
-    border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.12);
+    border-bottom: none;
     box-sizing: border-box;
   }
 
-  .header-wrap .rs-header-main-row > .rs-banner-top.rs-header-pole-brand {
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: start;
-    align-self: center;
-    width: auto;
-    max-width: 100%;
-    min-width: 0;
-    margin: 0;
+  .header-wrap .rs-header-top-line {
+    align-items: center;
+    column-gap: 20px;
     padding: 4px 0 8px;
+    border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.12);
+  }
+
+  .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand {
+    margin: 0;
+    padding: 0;
     border-bottom: none;
     justify-content: flex-start;
   }
 
-  .header-wrap .rs-header-main-row > .rs-banner-top__actions {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: end;
-    align-self: center;
-    width: auto;
-    max-width: 100%;
-    padding: 4px 0 8px;
+  .header-wrap .rs-header-top-line .rs-banner-top__actions {
+    flex-shrink: 0;
     margin-left: 0;
+    padding: 0;
     border-bottom: none;
     flex-wrap: nowrap;
   }
 
   .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    justify-self: stretch;
-    align-self: stretch;
     width: 100%;
     max-width: none;
     margin-top: 0;
@@ -412,48 +429,49 @@ body[data-rs-page="index"] .header-wrap .rs-banner-nav.rs-header-pole-tabs {
  */
 html.rs-viewport-desktop .header-wrap .rs-header-main-row,
 body.rs-viewport-desktop .header-wrap .rs-header-main-row {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) auto !important;
-  grid-template-rows: auto auto !important;
-  align-items: center !important;
-  column-gap: 16px !important;
-  row-gap: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
   width: 100% !important;
   padding: 6px 0 0 !important;
-  border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.12);
+  border-bottom: none !important;
   box-sizing: border-box;
 }
 
-html.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-top.rs-header-pole-brand,
-body.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-top.rs-header-pole-brand {
-  grid-column: 1 !important;
-  grid-row: 1 !important;
-  order: unset !important;
-  justify-self: start;
-  align-self: center;
-  border-bottom: none;
+html.rs-viewport-desktop .header-wrap .rs-header-top-line,
+body.rs-viewport-desktop .header-wrap .rs-header-top-line {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  column-gap: 16px !important;
   padding: 4px 0 8px !important;
+  border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.12) !important;
+  box-sizing: border-box;
 }
 
-html.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-top__actions,
-body.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-top__actions {
-  grid-column: 2 !important;
-  grid-row: 1 !important;
-  order: unset !important;
-  justify-self: end;
-  align-self: center;
+html.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand,
+body.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: 100% !important;
+  border-bottom: none;
+  padding: 0 !important;
+}
+
+html.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top__actions,
+body.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top__actions {
+  flex-shrink: 0 !important;
   width: auto !important;
   border-bottom: none;
-  padding: 4px 0 8px !important;
+  padding: 0 !important;
 }
 
 html.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs,
 body.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs {
-  grid-column: 1 / -1 !important;
-  grid-row: 2 !important;
-  order: unset !important;
-  justify-self: stretch !important;
-  align-self: stretch !important;
   width: 100% !important;
   max-width: none !important;
   padding: 0 !important;
@@ -553,22 +571,29 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
    * ligne 2 = onglets regroupés et centrés.
    */
   body:not(.rs-viewport-desktop) .header-wrap .rs-header-main-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: auto auto;
-    align-items: center;
-    column-gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     row-gap: 4px;
   }
 
-  body:not(.rs-viewport-desktop) .header-wrap .rs-header-main-row > .rs-banner-top.rs-header-pole-brand {
-    grid-column: 1;
-    grid-row: 1;
-    order: unset;
-    width: auto;
+  body:not(.rs-viewport-desktop) .header-wrap .rs-header-top-line {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    column-gap: 10px;
+    padding: 8px 0 6px;
+  }
+
+  body:not(.rs-viewport-desktop) .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand {
+    flex: 1 1 auto;
     min-width: 0;
     max-width: 100%;
-    padding: 8px 0 6px;
+    width: auto;
+    padding: 0;
     border-bottom: none;
     justify-content: flex-start;
   }
@@ -583,24 +608,18 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
     width: auto;
   }
 
-  body:not(.rs-viewport-desktop) .header-wrap .rs-header-main-row > .rs-banner-top__actions {
-    grid-column: 2;
-    grid-row: 1;
-    order: unset;
+  body:not(.rs-viewport-desktop) .header-wrap .rs-header-top-line .rs-banner-top__actions {
+    flex-shrink: 0;
     width: auto;
     max-width: none;
-    justify-self: end;
     justify-content: flex-end;
     flex-wrap: nowrap;
     gap: 8px;
-    padding: 8px 0 6px;
+    padding: 0;
     border-bottom: none;
   }
 
   body:not(.rs-viewport-desktop) .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    order: unset;
     width: 100%;
     align-self: stretch;
     display: flex;
@@ -674,13 +693,13 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
     padding: 0 10px;
   }
 
-  .header-wrap .rs-banner-top.rs-header-pole-brand {
+  .header-wrap .rs-header-top-line {
     flex-wrap: nowrap;
     gap: 8px;
     padding: 8px 0 6px;
   }
 
-  /* Ne pas forcer le logo sur toute la largeur : conserve la grille logo | actions */
+  /* Ne pas forcer le logo sur toute la largeur : conserve logo | actions */
   body:not(.rs-viewport-desktop) .header-wrap .rs-banner-top .nav-brand {
     flex: 0 1 auto;
     min-width: 0;
@@ -690,9 +709,9 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
     max-height: 52px !important;
   }
 
-  .header-wrap .rs-banner-top__actions {
+  .header-wrap .rs-header-top-line .rs-banner-top__actions {
     gap: 8px;
-    padding: 8px 0 6px;
+    padding: 0;
   }
 
   .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
@@ -1392,9 +1411,21 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
     grid-column: 2;
     grid-row: 2;
   }
+  /*
+   * Sticky sur la colonne (pas seulement la carte) + align-self:start : évite l’étirement
+   * de la cellule grille qui annule l’effet « barre latérale » (cf. rail gauche).
+   */
   .rs-pro-mock__right {
     grid-column: 3;
     grid-row: 1 / span 2;
+    align-self: start;
+    position: sticky;
+    top: 72px;
+    z-index: 2;
+    max-height: calc(100vh - 88px);
+    max-height: calc(100dvh - 88px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .rs-pro-mock__rail-left.rs-pro-mock__similar-bar--desktop {
     margin-top: 0;
@@ -1757,8 +1788,6 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   border: 1px solid #ddd;
   border-radius: 3px;
   padding: 1.25rem;
-  position: sticky;
-  top: 1rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   border-top: 3px solid var(--rs-gold-shadow);
 }
@@ -1769,6 +1798,10 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   margin: 0 0 12px;
   font-weight: 600;
   opacity: 0.92;
+}
+.rs-pro-mock__apply-lead--above-variants {
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 .rs-pro-mock__price-block {
   margin-bottom: 1.25rem;
@@ -1807,9 +1840,6 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   margin-left: -4px;
   margin-right: -4px;
 }
-.rs-pro-mock__price-avail--sizes .rs-pro-mock__price-avail-label {
-  color: var(--rs-gold-ink, #5c4a0a);
-}
 .rs-pro-mock__price-avail--sizes .rs-pro-mock__price-avail-values {
   font-size: 13px;
   letter-spacing: 0.02em;
@@ -1831,6 +1861,37 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   font-size: 12px;
   color: var(--rs-pole-blue-muted);
   margin-top: 4px;
+}
+.rs-pro-mock__qty-row {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(0, 51, 171, 0.18);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.rs-pro-mock__qty-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rs-pole-blue-muted);
+}
+.rs-pro-mock__qty-input {
+  width: 4.5rem;
+  min-width: 4rem;
+  padding: 6px 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--rs-logo-blue-deep);
+  border: 1px solid rgba(0, 51, 171, 0.25);
+  border-radius: 4px;
+  background: #fff;
+}
+.rs-pro-mock__qty-input:focus {
+  outline: 2px solid rgba(138, 111, 18, 0.45);
+  outline-offset: 1px;
 }
 .rs-pro-mock__size-section {
   margin-bottom: 1.25rem;
@@ -3559,10 +3620,10 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   max-width: none;
 }
 
-/* Rails latéraux : centre volontairement étroit → place pour les pubs */
+/* Rails : centre = % de l’écran (déf. 60 %), côtés = 1fr chacun (≈ 20 % chacun si 60 % au milieu) */
 .rs-uni-page--rails .rs-uni-shell {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, min(100%, var(--rs-uni-center-max, 720px))) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) var(--rs-uni-center-width-pct, 60%) minmax(0, 1fr);
   width: 100%;
   max-width: 100%;
   align-items: start;
@@ -3603,10 +3664,12 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   position: sticky;
   top: 72px;
   z-index: 2;
-  padding: 12px 10px 28px;
+  padding: 10px 6px 24px;
   overflow: visible;
   box-sizing: border-box;
   min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 .rs-uni-rail--left {
   display: flex;
@@ -3620,9 +3683,16 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 }
 .rs-uni-rail__slot {
   width: 100%;
-  max-width: min(168px, 100%);
-  margin-bottom: 16px;
+  max-width: 100%;
+  margin-bottom: 14px;
   flex-shrink: 0;
+}
+.rs-uni-rail__stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  align-items: stretch;
 }
 .rs-rail-ad {
   background: linear-gradient(180deg, #fffef8 0%, #ececec 100%);
@@ -3631,9 +3701,83 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   box-shadow:
     3px 3px 0 rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
-  padding: 10px 10px 12px;
+  padding: 12px 12px 14px;
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
+}
+.rs-rail-ad--compact {
+  padding: 8px 8px 10px;
+}
+.rs-rail-ad--compact .rs-rail-ad__sponsored {
+  font-size: 9px;
+  margin-bottom: 2px;
+}
+.rs-rail-ad--compact .rs-rail-ad__stars {
+  font-size: 10px;
+  margin-bottom: 3px;
+}
+.rs-rail-ad--compact .rs-rail-ad__media {
+  max-width: min(168px, 100%);
+  margin-bottom: 4px;
+  padding: 3px;
+}
+.rs-rail-ad--compact .rs-rail-ad__title {
+  font-size: 11px;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rs-rail-ad--compact .rs-rail-ad__price {
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+.rs-rail-ad--compact .rs-rail-ad__type {
+  display: none;
+}
+.rs-rail-ad--compact .rs-rail-ad__cta {
+  padding: 5px 6px;
+  font-size: 10px;
+}
+/* Rails : 3 encarts « seuls » = même hauteur / même largeur visuelle (classe rs-uni-rail__stack--single) */
+@media (min-width: 960px) {
+  .rs-uni-rail--left .rs-uni-rail__stack--single .rs-rail-ad:not(.rs-rail-ad--compact),
+  .rs-uni-rail--right .rs-uni-rail__stack--single .rs-rail-ad:not(.rs-rail-ad--compact) {
+    min-height: 20.5rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+  .rs-uni-rail--left .rs-uni-rail__stack--single .rs-rail-ad__title,
+  .rs-uni-rail--right .rs-uni-rail__stack--single .rs-rail-ad__title {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .rs-uni-rail--left .rs-uni-rail__stack--single .rs-rail-ad__media,
+  .rs-uni-rail--right .rs-uni-rail__stack--single .rs-rail-ad__media {
+    width: 100%;
+    max-width: min(100%, 15rem);
+    max-height: none;
+    margin-left: auto;
+    margin-right: auto;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+  }
+  .rs-uni-rail--left .rs-uni-rail__stack--single .rs-rail-ad__price,
+  .rs-uni-rail--left .rs-uni-rail__stack--single .rs-rail-ad__type,
+  .rs-uni-rail--right .rs-uni-rail__stack--single .rs-rail-ad__price,
+  .rs-uni-rail--right .rs-uni-rail__stack--single .rs-rail-ad__type {
+    flex: 0 0 auto;
+  }
+  .rs-uni-rail--left .rs-uni-rail__stack--single .rs-rail-ad__cta,
+  .rs-uni-rail--right .rs-uni-rail__stack--single .rs-rail-ad__cta {
+    margin-top: auto;
+  }
 }
 .rs-rail-ad__sponsored {
   display: block;
@@ -3654,14 +3798,21 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 .rs-rail-ad__media {
   display: block;
   width: 100%;
-  max-width: 118px;
+  max-width: 100%;
   aspect-ratio: 1 / 1;
-  margin: 0 auto 6px;
+  margin: 0 auto 8px;
   background: #fff;
   border: 1px solid #b8b8b8;
-  padding: 4px;
+  padding: 5px;
   line-height: 0;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+@media (min-width: 960px) {
+  .rs-uni-rail--left .rs-rail-ad:not(.rs-rail-ad--compact) .rs-rail-ad__media,
+  .rs-uni-rail--right .rs-rail-ad:not(.rs-rail-ad--compact) .rs-rail-ad__media {
+    width: 100%;
+  }
 }
 .rs-rail-ad__img {
   width: 100%;
@@ -3673,7 +3824,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 }
 .rs-rail-ad__title {
   display: block;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--rs-logo-blue);
   text-decoration: none;

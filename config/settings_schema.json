@@ -8,11 +8,24 @@
     "theme_support_url": "https://recrute-stagiaire.fr"
   },
   {
-    "name": "Pages candidatures (éviter le 404)",
+    "name": "Portail Recrute Stagiaire (liens boutique ↔ portail)",
     "settings": [
       {
         "type": "paragraph",
-        "content": "Les liens du menu pointent vers /pages/profils-candidats et /pages/deposer-candidature. Vous devez créer ces pages dans la boutique : Administration → Boutique en ligne → Pages → Ajouter une page. Pour chaque page, ouvrez « Visibilité du moteur de recherche » / l’aperçu du lien pour définir l’URL (handle) exactement : profils-candidats puis deposer-candidature. Dans la barre latérale droite, sous « Modèle de thème », choisissez respectivement « profils-candidats » et « deposer-candidature » (noms des modèles fournis par ce thème). Enregistrez. Sans ces deux pages, Shopify renvoie une erreur 404."
+        "content": "URLs du portail externe. Elles servent de défaut pour le menu « Candidatures », le pied de page, l’accueil et les CTA. La page Shopify « candidatures » peut rester pour afficher la liste API ; les liens menu pointent par défaut vers le portail."
+      },
+      { "type": "text", "id": "rs_portail_url_profils", "label": "Portail — Profils / annuaire (URL complète)", "default": "https://portail.recrutestagiaire.eu/profils", "info": "Champ texte : les réglages de type « URL » Shopify n’acceptent pas les https externes en valeur par défaut." },
+      { "type": "text", "id": "rs_portail_url_depot", "label": "Portail — Déposer une candidature", "default": "https://portail.recrutestagiaire.eu/depot" },
+      { "type": "text", "id": "rs_portail_url_vote", "label": "Portail — Vote / swipe", "default": "https://portail.recrutestagiaire.eu/vote" },
+      { "type": "text", "id": "rs_portail_url_connexion", "label": "Portail — Connexion (Mon espace)", "default": "https://portail.recrutestagiaire.eu/connexion" }
+    ]
+  },
+  {
+    "name": "Pages candidatures (Shopify)",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Page optionnelle sur la boutique (handle candidatures) pour afficher les profils via l’API IONOS. Les entrées de menu « Candidatures » renvoient par défaut vers le portail (réglages Portail ci-dessus) ; vous pouvez surcharger chaque lien dans l’en-tête."
       }
     ]
   },

@@ -28,11 +28,14 @@
               <li><a href="{{ routes.all_products_collection_url }}">Toutes les offres</a></li>
             </ul>
           </li>
-          <li{% if request.path contains 'profils-candidats' or request.path contains 'deposer-candidature' or request.path contains 'candidatures' %} class="active"{% endif %}>
-            <a href="/pages/profils-candidats">Profils candidats</a>
+          <li{% if request.path contains '/pages/candidatures' %} class="active"{% endif %}>
+            <a href="{{ settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils' }}" rel="noopener noreferrer">Profils candidats</a>
           </li>
-          <li{% if request.path contains 'deposer-candidature' %} class="active"{% endif %}>
-            <a href="/pages/deposer-candidature">Déposer une candidature</a>
+          <li>
+            <a href="{{ settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot' }}" rel="noopener noreferrer">Déposer une candidature</a>
+          </li>
+          <li>
+            <a href="{{ settings.rs_portail_url_vote | default: 'https://portail.recrutestagiaire.eu/vote' }}" rel="noopener noreferrer">Vote (swipe)</a>
           </li>
           <li>
             <a href="/pages/about">Le collectif</a>

@@ -1,4 +1,4 @@
-{%- assign rs_profiles_url = section.settings.cand_profiles_url | default: '/pages/candidatures' -%}
+{%- assign rs_profiles_url = section.settings.cand_profiles_url | default: settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils' -%}
 {%- assign rs_strip_top = section.settings.collection_strip_top | default: '#f3f6ff' -%}
 {%- assign rs_strip_bot = section.settings.collection_strip_bot | default: '#ffffff' -%}
 
@@ -26,7 +26,7 @@
 {%- endfor -%}
 <section
   class="rs-uni-page rs-collection-pole{% if section.settings.sidebar_candidate_ads %} rs-uni-page--rails{% endif %}"
-  style="--rs-uni-center-max: {{ section.settings.rail_center_max | default: 720 }}px;--rs-uni-cell-border: {{ section.settings.collection_cell_border | default: '#888888' }};background: {{ section.settings.collection_page_bg | default: '#ffffff' }};padding-top:{{ section.settings.padding_top }}px;padding-bottom:{{ section.settings.padding_bottom }}px;"
+  style="--rs-uni-center-width-pct: {{ section.settings.center_column_pct | default: 60 }}%;--rs-uni-center-max: {{ section.settings.rail_center_max | default: 900 }}px;--rs-uni-cell-border: {{ section.settings.collection_cell_border | default: '#888888' }};background: {{ section.settings.collection_page_bg | default: '#ffffff' }};padding-top:{{ section.settings.padding_top }}px;padding-bottom:{{ section.settings.padding_bottom }}px;"
   {{ section.shopify_attributes }}>
   <div
     class="rs-uni-shell"
@@ -43,7 +43,7 @@
         {%- for block in section.blocks -%}
           {%- if block.type == 'sponsored_rail' and block.settings.side == 'left' -%}
             <div class="rs-uni-rail__slot" {{ block.shopify_attributes }}>
-              {%- render 'rs-rail-slot-inner', block: block -%}
+              {%- render 'rs-rail-slot-inner', block: block, section: section -%}
             </div>
           {%- endif -%}
         {%- endfor -%}
@@ -102,7 +102,7 @@
         {%- for block in section.blocks -%}
           {%- if block.type == 'sponsored_rail' and block.settings.side == 'right' -%}
             <div class="rs-uni-rail__slot" {{ block.shopify_attributes }}>
-              {%- render 'rs-rail-slot-inner', block: block -%}
+              {%- render 'rs-rail-slot-inner', block: block, section: section -%}
             </div>
           {%- endif -%}
         {%- endfor -%}
@@ -556,13 +556,24 @@
       "type": "header",
       "content": "Rails latéraux"
     },
-    { "type": "text", "id": "rs_api_url", "label": "URL API (rs-airtable-proxy.php)", "default": "https://example.com/api/rs-airtable-proxy.php" },
+    { "type": "text", "id": "rs_api_url", "label": "URL API (proxy Supabase)", "default": "https://example.com/rs-airtable-proxy.php" },
     { "type": "checkbox", "id": "sidebar_candidate_ads", "label": "Afficher les rails latéraux", "default": true, "info": "Ajoutez des blocs « Pub rail latéral » (gauche/droite). Chaque bloc : offre Shopify ou profil API." },
-    { "type": "range", "id": "rail_center_max", "min": 560, "max": 920, "step": 20, "unit": "px", "label": "Largeur max zone centrale", "default": 720 },
+    {
+      "type": "range",
+      "id": "center_column_pct",
+      "min": 50,
+      "max": 75,
+      "step": 1,
+      "unit": "%",
+      "label": "Largeur zone centrale (écran)",
+      "default": 60,
+      "info": "Chaque rail occupe environ la moitié du reste. Les visuels pub s’agrandissent en largeur."
+    },
+    { "type": "range", "id": "rail_center_max", "min": 560, "max": 1200, "step": 20, "unit": "px", "label": "Échelle typo (réf. px, optionnel)", "default": 900, "info": "Ajuste la variable --rs-uni-text-pct sur la grille, pas la largeur des colonnes." },
     { "type": "text", "id": "cand_kicker", "label": "Mention (slots profil API)", "default": "Sponsorisé" },
     { "type": "text", "id": "cand_email_btn_label", "label": "Libellé bouton E-mail (profil API)", "default": "E-mail" },
     { "type": "text", "id": "cand_cv_btn_label", "label": "Libellé bouton CV (profil API)", "default": "CV" },
-    { "type": "url", "id": "cand_profiles_url", "label": "Lien fiche / page profils (clic sur le nom)" },
+    { "type": "url", "id": "cand_profiles_url", "label": "Lien fiche / page profils (clic sur le nom)", "info": "Vide = URL profils du portail (Thème → Portail)." },
     {
       "type": "range",
       "id": "padding_top",
@@ -613,7 +624,13 @@
         { "type": "text", "id": "kicker", "label": "Mention", "default": "Sponsorisé" },
         { "type": "checkbox", "id": "show_price", "label": "Afficher le prix", "default": true },
         { "type": "checkbox", "id": "show_stars", "label": "Étoiles décoratives", "default": true },
-        { "type": "text", "id": "cta_label", "label": "Bouton", "default": "Voir" }
+        { "type": "text", "id": "cta_label", "label": "Bouton", "default": "Voir" },
+        {
+          "type": "product",
+          "id": "product_below",
+          "label": "2e offre sous la pub",
+          "info": "Laissez vide pour une seule carte par slot. Renseignez pour une 2e carte compacte."
+        }
       ]
     }
   ],

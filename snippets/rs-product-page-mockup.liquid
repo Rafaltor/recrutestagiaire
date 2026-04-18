@@ -19,8 +19,89 @@
     {%- assign rs_dept_url = routes.all_products_collection_url -%}
   {%- endif -%}
 {%- endif -%}
-{%- assign rs_contract = product.metafields.custom.contract_type.value | default: product.metafields.custom.contract_type -%}
-{%- assign rs_dept_detail = product.metafields.custom.department_detail.value | default: product.metafields.custom.department_detail -%}
+{%- comment -%}
+  Contrat / département : clés FR (`contrat_type`, `departement_detail`) + `department_detail` + `department_detai` (clé boutique) + EN.
+  `metafield_text` puis repli `.value` (texte, liste → join) pour les types où le filtre renvoie vide.
+{%- endcomment -%}
+{%- assign rs_contract = '' -%}
+{%- assign _mf_ct = product.metafields.custom.contrat_type -%}
+{%- if _mf_ct != blank -%}
+  {%- assign rs_contract = _mf_ct | metafield_text | strip -%}
+  {%- if rs_contract == blank and _mf_ct.value != blank -%}
+    {%- assign _mv_ct = _mf_ct.value -%}
+    {%- assign _jn_ct = _mv_ct | join: '~~~rs~~~' -%}
+    {%- if _jn_ct contains '~~~rs~~~' -%}
+      {%- assign rs_contract = _mv_ct | join: ', ' | strip -%}
+    {%- else -%}
+      {%- assign rs_contract = _mv_ct | strip -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+{%- if rs_contract == blank -%}
+  {%- assign _mf_ct_en = product.metafields.custom.contract_type -%}
+  {%- if _mf_ct_en != blank -%}
+    {%- assign rs_contract = _mf_ct_en | metafield_text | strip -%}
+    {%- if rs_contract == blank and _mf_ct_en.value != blank -%}
+      {%- assign _mv_cte = _mf_ct_en.value -%}
+      {%- assign _jn_cte = _mv_cte | join: '~~~rs~~~' -%}
+      {%- if _jn_cte contains '~~~rs~~~' -%}
+        {%- assign rs_contract = _mv_cte | join: ', ' | strip -%}
+      {%- else -%}
+        {%- assign rs_contract = _mv_cte | strip -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+{%- if rs_contract == blank -%}
+  {%- assign rs_contract = _mf_ct.value | default: _mf_ct | default: _mf_ct_en.value | default: _mf_ct_en -%}
+{%- endif -%}
+{%- assign rs_dept_detail = '' -%}
+{%- assign _mf_dd = product.metafields.custom.departement_detail -%}
+{%- if _mf_dd != blank -%}
+  {%- assign rs_dept_detail = _mf_dd | metafield_text | strip -%}
+  {%- if rs_dept_detail == blank and _mf_dd.value != blank -%}
+    {%- assign _mv_dd = _mf_dd.value -%}
+    {%- assign _jn_dd = _mv_dd | join: '~~~rs~~~' -%}
+    {%- if _jn_dd contains '~~~rs~~~' -%}
+      {%- assign rs_dept_detail = _mv_dd | join: ', ' | strip -%}
+    {%- else -%}
+      {%- assign rs_dept_detail = _mv_dd | strip -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+{%- if rs_dept_detail == blank -%}
+  {%- assign _mf_dd_en = product.metafields.custom.department_detail -%}
+  {%- if _mf_dd_en != blank -%}
+    {%- assign rs_dept_detail = _mf_dd_en | metafield_text | strip -%}
+    {%- if rs_dept_detail == blank and _mf_dd_en.value != blank -%}
+      {%- assign _mv_dde = _mf_dd_en.value -%}
+      {%- assign _jn_dde = _mv_dde | join: '~~~rs~~~' -%}
+      {%- if _jn_dde contains '~~~rs~~~' -%}
+        {%- assign rs_dept_detail = _mv_dde | join: ', ' | strip -%}
+      {%- else -%}
+        {%- assign rs_dept_detail = _mv_dde | strip -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+{%- if rs_dept_detail == blank -%}
+  {%- assign _mf_dd_alt = product.metafields.custom.department_detai -%}
+  {%- if _mf_dd_alt != blank -%}
+    {%- assign rs_dept_detail = _mf_dd_alt | metafield_text | strip -%}
+    {%- if rs_dept_detail == blank and _mf_dd_alt.value != blank -%}
+      {%- assign _mv_dda = _mf_dd_alt.value -%}
+      {%- assign _jn_dda = _mv_dda | join: '~~~rs~~~' -%}
+      {%- if _jn_dda contains '~~~rs~~~' -%}
+        {%- assign rs_dept_detail = _mv_dda | join: ', ' | strip -%}
+      {%- else -%}
+        {%- assign rs_dept_detail = _mv_dda | strip -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+{%- if rs_dept_detail == blank -%}
+  {%- assign rs_dept_detail = _mf_dd.value | default: _mf_dd | default: _mf_dd_en.value | default: _mf_dd_en | default: _mf_dd_alt.value | default: _mf_dd_alt -%}
+{%- endif -%}
 {%- assign rs_avail_label = product.metafields.custom.availability_label.value | default: product.metafields.custom.availability_label -%}
 {%- assign rs_collection_badge = product.metafields.custom.collection_badge.value | default: product.metafields.custom.collection_badge -%}
 {%- assign rs_reassurance_block = product.metafields.custom.reassurance.value | default: product.metafields.custom.reassurance -%}
@@ -276,18 +357,7 @@
       <div class="rs-pro-mock__apply-card" id="apply-section">
           {% if cv.available %}
             <form action="{{ routes.cart_add_url }}" method="post" id="add-to-cart-form">
-              <input type="hidden" name="quantity" value="1">
               <input type="hidden" name="id" id="product-variant-id" value="{{ cv.id }}">
-
-              {%- liquid
-                assign rs_apply_lead = section.settings.apply_lead_text | strip
-                if rs_apply_lead == blank
-                  assign rs_apply_lead = section.settings.variant_heading | default: "Sélectionnez votre niveau d'expérience."
-                endif
-              -%}
-              {% if rs_apply_lead != blank %}
-                <p class="rs-pro-mock__apply-lead">{{ rs_apply_lead }}</p>
-              {% endif %}
 
               <div class="rs-pro-mock__price-block">
                 <div class="rs-pro-mock__price-label">{{ section.settings.price_label | default: 'Rémunération du poste' }}</div>
@@ -296,84 +366,33 @@
                   <div class="rs-pro-mock__price-sub">{{ section.settings.free_shipping_text }}</div>
                 {% endif %}
 
-                {%- liquid
-                  assign rs_size_opt = nil
-                  assign rs_size_markers = 'taille,tailles,size,sizes,pointure,dimensions,taille-vetement,coupe,eu-size,us-size'
-                  assign rs_size_markers_arr = rs_size_markers | split: ','
-                  for option in product.options_with_values
-                    assign oph = option.name | handle
-                    assign rs_opt_hit = false
-                    for m in rs_size_markers_arr
-                      if oph == m
-                        assign rs_opt_hit = true
-                        break
-                      endif
-                    endfor
-                    if rs_opt_hit
-                      assign rs_size_opt = option
-                      break
-                    endif
-                  endfor
-                  if rs_size_opt == nil and section.settings.sizes_use_second_option != false and product.options_with_values.size >= 2
-                    assign rs_size_opt = product.options_with_values[1]
-                  endif
-                  assign rs_size_pos = 0
-                  if rs_size_opt
-                    assign rs_size_pos = rs_size_opt.position
-                  endif
-                -%}
-
-                {%- assign mf_tailles = product.metafields.custom.tailles_disponibles.value
-                  | default: product.metafields.custom.tailles_disponibles
-                -%}
-                {%- if mf_tailles != blank -%}
-                  <div class="rs-pro-mock__price-avail rs-pro-mock__price-avail--sizes">
-                    <span class="rs-pro-mock__price-avail-label">{{ section.settings.sizes_block_heading | default: 'Tailles disponibles' }}</span>
-                    <span class="rs-pro-mock__price-avail-values">{{ mf_tailles | strip | escape }}</span>
-                  </div>
-                {%- elsif rs_size_opt and rs_size_opt.values.size > 0 -%}
-                  <div class="rs-pro-mock__price-avail rs-pro-mock__price-avail--sizes">
-                    <span class="rs-pro-mock__price-avail-label">{{ section.settings.sizes_block_heading | default: 'Tailles disponibles' }}</span>
-                    <span class="rs-pro-mock__price-avail-values">
-                      {%- for val in rs_size_opt.values -%}
-                        {%- assign vlabel = val.name | default: val -%}
-                        {%- unless forloop.first -%}, {% endunless -%}{{- vlabel | escape -}}
-                      {%- endfor -%}
-                    </span>
-                  </div>
-                {%- endif -%}
-
-                {%- comment -%} Autres options (niveau, couleur…) — sans dupliquer la ligne tailles {%- endcomment -%}
-                {%- for option in product.options_with_values -%}
-                  {%- unless rs_size_pos > 0 and option.position == rs_size_pos -%}
-                    {%- assign _oname = option.name | downcase | strip -%}
-                    {%- assign _skip_opt = false -%}
-                    {%- if _oname == 'title' and option.values.size == 1 -%}
-                      {%- assign _v0 = option.values.first | downcase | strip -%}
-                      {%- if _v0 == 'default title' -%}
-                        {%- assign _skip_opt = true -%}
-                      {%- endif -%}
-                    {%- endif -%}
-                    {%- unless _skip_opt -%}
-                      <div class="rs-pro-mock__price-avail">
-                        <span class="rs-pro-mock__price-avail-label">{{ option.name | escape }} :</span>
-                        <span class="rs-pro-mock__price-avail-values">
-                          {%- for val in option.values -%}
-                            {%- assign vlabel = val.name | default: val -%}
-                            {%- unless forloop.first -%}, {% endunless -%}{{- vlabel | escape -}}
-                          {%- endfor -%}
-                        </span>
-                      </div>
-                    {%- endunless -%}
-                  {%- endunless -%}
-                {%- endfor -%}
+                <div class="rs-pro-mock__qty-row">
+                  <label class="rs-pro-mock__qty-label" for="rs-pro-qty">{{ section.settings.qty_label | default: 'Quantité' }}</label>
+                  <input
+                    id="rs-pro-qty"
+                    class="rs-pro-mock__qty-input"
+                    type="number"
+                    name="quantity"
+                    value="1"
+                    min="1"
+                    max="99"
+                    step="1"
+                    inputmode="numeric"
+                    aria-label="{{ section.settings.qty_label | default: 'Quantité' }}">
+                </div>
               </div>
 
               {% if product.variants.size > 1 %}
+                {%- liquid
+                  assign rs_variant_lead = section.settings.apply_lead_text | strip
+                  if rs_variant_lead == blank
+                    assign rs_variant_lead = section.settings.variant_heading | default: "Sélectionnez votre niveau d'expérience."
+                  endif
+                -%}
                 <div class="rs-pro-mock__size-section">
-                  <div class="rs-pro-mock__size-label rs-pro-mock__size-label--short">
-                    {{ section.settings.variant_grid_caption | default: 'Votre choix' }}
-                  </div>
+                  {% if rs_variant_lead != blank %}
+                    <p class="rs-pro-mock__apply-lead rs-pro-mock__apply-lead--above-variants">{{ rs_variant_lead }}</p>
+                  {% endif %}
                   <div class="rs-pro-mock__size-grid" role="group" aria-label="{{ product.options.first | escape }}">
                     {% for variant in product.variants %}
                       <button

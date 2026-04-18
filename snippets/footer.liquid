@@ -33,8 +33,9 @@
           <h4 class="widget-title">Le collectif</h4>
           <ul class="footer-menu">
             <li><a href="/pages/about">À propos</a></li>
-            <li><a href="/pages/profils-candidats">Profils candidats</a></li>
-            <li><a href="/pages/deposer-candidature">Déposer une candidature</a></li>
+            <li><a href="{{ settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils' }}" rel="noopener noreferrer">Profils candidats</a></li>
+            <li><a href="{{ settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot' }}" rel="noopener noreferrer">Déposer une candidature</a></li>
+            <li><a href="{{ settings.rs_portail_url_vote | default: 'https://portail.recrutestagiaire.eu/vote' }}" rel="noopener noreferrer">Vote (swipe)</a></li>
             <li><a href="/pages/contact">Contact</a></li>
           </ul>
         </div>

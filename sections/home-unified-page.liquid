@@ -1,6 +1,6 @@
 {%- liquid
-  assign rs_url_profils = '/pages/profils-candidats'
-  assign rs_url_deposer = '/pages/deposer-candidature'
+  assign rs_url_profils = settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils'
+  assign rs_url_deposer = settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot'
   assign cand_rail_url = section.settings.cand_profiles_url | default: rs_url_profils
   assign rail_profiles = false
   if section.settings.sidebar_ads and section.settings.rail_content == 'profiles'
@@ -18,7 +18,7 @@
   endif
   assign rs_uni_text_pct = 100
   if section.settings.sidebar_ads
-    assign rc = section.settings.rail_center_max | default: 720
+    assign rc = section.settings.rail_center_max | default: 900
     assign rs_uni_text_pct = rc | times: 100 | divided_by: 900
     if rs_uni_text_pct > 100
       assign rs_uni_text_pct = 100
@@ -66,7 +66,7 @@
 {%- endcapture -%}
 <section
   class="rs-uni-page{% if section.settings.sidebar_ads %} rs-uni-page--rails{% endif %}"
-  style="--rs-uni-gap: {{ section.settings.grid_gap }}px;--rs-uni-strip-top: {{ section.settings.strip_bg }};--rs-uni-strip-bot: {{ section.settings.strip_bg_dark }};--rs-uni-cell-border: {{ section.settings.default_cell_border }};--rs-uni-center-max: {{ section.settings.rail_center_max | default: 720 }}px;--rs-uni-text-pct: {{ rs_uni_text_pct }};padding-top: {{ section.settings.page_padding_top }}px;padding-bottom: {{ section.settings.page_padding_bottom }}px;background: {{ section.settings.page_bg }};"
+  style="--rs-uni-gap: {{ section.settings.grid_gap }}px;--rs-uni-strip-top: {{ section.settings.strip_bg }};--rs-uni-strip-bot: {{ section.settings.strip_bg_dark }};--rs-uni-cell-border: {{ section.settings.default_cell_border }};--rs-uni-center-width-pct: {{ section.settings.center_column_pct | default: 60 }}%;--rs-uni-center-max: {{ section.settings.rail_center_max | default: 900 }}px;--rs-uni-text-pct: {{ rs_uni_text_pct }};padding-top: {{ section.settings.page_padding_top }}px;padding-bottom: {{ section.settings.page_padding_bottom }}px;background: {{ section.settings.page_bg }};"
   {{ section.shopify_attributes }}>
   {%- if section.settings.sidebar_ads -%}
     <div
@@ -85,14 +85,26 @@
           {%- if ln < 0 -%}{%- assign ln = 0 -%}{%- endif -%}
           {%- for i in (1..ln) -%}
             <div class="rs-uni-rail__slot">
-              {% render 'rs-sponsored-rail-candidate-ad' %}
+              <div class="rs-uni-rail__stack">
+                {% render 'rs-sponsored-rail-candidate-ad' %}
+                {%- if section.settings.rail_profiles_under_product != blank -%}
+                  {%- render 'rs-sponsored-rail-ad',
+                    inline_product: section.settings.rail_profiles_under_product,
+                    inline_kicker: section.settings.rail_profiles_under_kicker,
+                    inline_show_price: section.settings.rail_profiles_under_show_price,
+                    inline_show_stars: section.settings.rail_profiles_under_show_stars,
+                    inline_cta: section.settings.rail_profiles_under_cta,
+                    rail_compact: true
+                  -%}
+                {%- endif -%}
+              </div>
             </div>
           {%- endfor -%}
         {%- else -%}
           {%- for block in section.blocks -%}
             {%- if block.type == 'sponsored_rail' and block.settings.side == 'left' -%}
               <div class="rs-uni-rail__slot" {{ block.shopify_attributes }}>
-                {% render 'rs-rail-slot-inner', block: block %}
+                {% render 'rs-rail-slot-inner', block: block, section: section %}
               </div>
             {%- endif -%}
           {%- endfor -%}
@@ -111,14 +123,26 @@
           {%- if rn < 0 -%}{%- assign rn = 0 -%}{%- endif -%}
           {%- for i in (1..rn) -%}
             <div class="rs-uni-rail__slot">
-              {% render 'rs-sponsored-rail-candidate-ad' %}
+              <div class="rs-uni-rail__stack">
+                {% render 'rs-sponsored-rail-candidate-ad' %}
+                {%- if section.settings.rail_profiles_under_product != blank -%}
+                  {%- render 'rs-sponsored-rail-ad',
+                    inline_product: section.settings.rail_profiles_under_product,
+                    inline_kicker: section.settings.rail_profiles_under_kicker,
+                    inline_show_price: section.settings.rail_profiles_under_show_price,
+                    inline_show_stars: section.settings.rail_profiles_under_show_stars,
+                    inline_cta: section.settings.rail_profiles_under_cta,
+                    rail_compact: true
+                  -%}
+                {%- endif -%}
+              </div>
             </div>
           {%- endfor -%}
         {%- else -%}
           {%- for block in section.blocks -%}
             {%- if block.type == 'sponsored_rail' and block.settings.side == 'right' -%}
               <div class="rs-uni-rail__slot" {{ block.shopify_attributes }}>
-                {% render 'rs-rail-slot-inner', block: block %}
+                {% render 'rs-rail-slot-inner', block: block, section: section %}
               </div>
             {%- endif -%}
           {%- endfor -%}
@@ -246,21 +270,66 @@
       "type": "url",
       "id": "cand_profiles_url",
       "label": "Lien des pubs profils",
-      "info": "Vide = page Profils candidats."
+      "info": "Vide = URL « Profils » du thème (réglages Portail), par défaut le portail."
+    },
+    {
+      "type": "range",
+      "id": "center_column_pct",
+      "min": 50,
+      "max": 75,
+      "step": 1,
+      "unit": "%",
+      "label": "Largeur zone centrale (écran)",
+      "default": 60,
+      "info": "Chaque rail latéral occupe le reste (environ 20 % chacun si 60 % au centre). Les encarts s’agrandissent en largeur et les visuels produit suivent."
     },
     {
       "type": "range",
       "id": "rail_center_max",
-      "min": 620,
-      "max": 920,
+      "min": 640,
+      "max": 1200,
       "step": 20,
       "unit": "px",
-      "label": "Largeur max zone centrale",
-      "default": 720,
-      "info": "Plus bas = plus de place pour les pubs. Visible si écran assez large."
+      "label": "Échelle typo (réf. px, optionnel)",
+      "default": 900,
+      "info": "Ajuste la taille de texte des offres (variable --rs-uni-text-pct). N’impose plus la largeur de la colonne (celle-ci suit « Largeur zone centrale » en % ci-dessus)."
+    },
+    {
+      "type": "header",
+      "content": "Sous les pubs profils (mode « Profils candidats »)"
+    },
+    {
+      "type": "product",
+      "id": "rail_profiles_under_product",
+      "label": "Offre sous chaque encart profil",
+      "info": "Optionnel. Carte compacte sous chaque slot API gauche/droite."
+    },
+    {
+      "type": "text",
+      "id": "rail_profiles_under_kicker",
+      "label": "Mention (sous profil)",
+      "default": "Offre"
+    },
+    {
+      "type": "checkbox",
+      "id": "rail_profiles_under_show_price",
+      "label": "Afficher le prix (sous profil)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "rail_profiles_under_show_stars",
+      "label": "Étoiles (sous profil)",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "rail_profiles_under_cta",
+      "label": "Bouton (sous profil)",
+      "default": "Voir"
     },
     { "type": "header", "content": "API (proxy IONOS)" },
-    { "type": "text", "id": "rs_api_url", "label": "URL API (rs-airtable-proxy.php)", "default": "https://example.com/api/rs-airtable-proxy.php" },
+    { "type": "text", "id": "rs_api_url", "label": "URL API (proxy Supabase / rs-airtable-proxy.php)", "default": "https://example.com/rs-airtable-proxy.php" },
     { "type": "header", "content": "Intro (texte du haut)" },
     {
       "type": "select",
@@ -600,7 +669,13 @@
         { "type": "text", "id": "kicker", "label": "Mention", "default": "Sponsorisé" },
         { "type": "checkbox", "id": "show_price", "label": "Afficher le prix", "default": true },
         { "type": "checkbox", "id": "show_stars", "label": "Étoiles décoratives", "default": true },
-        { "type": "text", "id": "cta_label", "label": "Bouton", "default": "Voir" }
+        { "type": "text", "id": "cta_label", "label": "Bouton", "default": "Voir" },
+        {
+          "type": "product",
+          "id": "product_below",
+          "label": "2e offre sous la pub",
+          "info": "Laissez vide pour n’afficher qu’une carte par slot (recommandé pour 3 encarts de même taille). Renseignez pour une 2e carte compacte en dessous."
+        }
       ]
     }
   ],
@@ -613,7 +688,8 @@
         "grid_gap": 0,
         "page_bg": "#ffffff",
         "sidebar_ads": true,
-        "rail_center_max": 720
+        "center_column_pct": 60,
+        "rail_center_max": 900
       },
       "blocks": [
         { "type": "hero_intro_bundle", "settings": { "col_span": "9", "cell_padding": 0, "cell_bg": "#e8e8e8" } },

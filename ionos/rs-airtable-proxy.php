@@ -1,8 +1,10 @@
 <?php
 declare(strict_types=1);
 
-// --- Config ----------------------------------------------------
-// In production, copy rs-airtable-config.php.example -> rs-airtable-config.php
+/**
+ * Proxy API Recrute Stagiaire — données Supabase uniquement (compteur, profils, dépôt).
+ * Fichier conservé sous ce nom pour ne pas casser les URLs déjà configurées dans Shopify.
+ */
 $configPath = __DIR__ . '/rs-airtable-config.php';
 if (!file_exists($configPath)) {
   http_response_code(500);
@@ -12,7 +14,6 @@ if (!file_exists($configPath)) {
 }
 require $configPath;
 
-// --- Helpers ---------------------------------------------------
 function rs_json($data, int $code = 200): void {
   http_response_code($code);
   header('Content-Type: application/json; charset=utf-8');
@@ -21,9 +22,18 @@ function rs_json($data, int $code = 200): void {
 }
 
 function rs_origin_allowed(?string $origin): bool {
-  if (!$origin) return false;
+  if (!$origin) {
+    return false;
+  }
+  if (defined('RS_CORS_ALLOW_LOCAL_DEV') && RS_CORS_ALLOW_LOCAL_DEV === true) {
+    if (preg_match('#\Ahttps?://(127\.0\.0\.1|localhost)(:\d+)?\z#', $origin) === 1) {
+      return true;
+    }
+  }
   $allowed = defined('RS_ALLOWED_ORIGINS') ? RS_ALLOWED_ORIGINS : [];
-  if (in_array('*', $allowed, true)) return true;
+  if (in_array('*', $allowed, true)) {
+    return true;
+  }
   return in_array($origin, $allowed, true);
 }
 
@@ -36,146 +46,220 @@ function rs_set_cors(): void {
     header('Access-Control-Allow-Origin: *');
   }
   header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-  header('Access-Control-Allow-Headers: Content-Type');
+  header('Access-Control-Allow-Headers: Content-Type, Accept, Origin, X-Requested-With');
   header('Access-Control-Max-Age: 86400');
 }
 
 function rs_rate_limit(): void {
   $limit = defined('RS_RATE_LIMIT_PER_MIN') ? (int)RS_RATE_LIMIT_PER_MIN : 0;
-  if ($limit <= 0) return;
-
+  if ($limit <= 0) {
+    return;
+  }
   $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
   $bucket = 'rs_rl_' . md5($ip . '_' . (string)floor(time() / 60));
-
-  // Use APCu if available; otherwise no rate limit.
-  if (!function_exists('apcu_inc') || !function_exists('apcu_add')) return;
+  if (!function_exists('apcu_inc') || !function_exists('apcu_add')) {
+    return;
+  }
   if (!apcu_add($bucket, 1, 70)) {
     $n = apcu_inc($bucket, 1);
-    if ($n > $limit) rs_json(['error' => 'rate_limited'], 429);
+    if ($n > $limit) {
+      rs_json(['error' => 'rate_limited'], 429);
+    }
   }
-}
-
-function rs_airtable_request(string $method, string $path, ?array $body = null): array {
-  $url = 'https://api.airtable.com/v0/' . rawurlencode(RS_AIRTABLE_BASE) . '/' . rawurlencode(RS_AIRTABLE_TABLE) . $path;
-  $headers = [
-    'Authorization: Bearer ' . RS_AIRTABLE_TOKEN,
-    'Content-Type: application/json',
-  ];
-
-  $opts = [
-    'http' => [
-      'method' => $method,
-      'header' => implode("\r\n", $headers),
-      'ignore_errors' => true,
-      'timeout' => 12,
-    ],
-  ];
-  if ($body !== null) {
-    $opts['http']['content'] = json_encode($body, JSON_UNESCAPED_UNICODE);
-  }
-
-  $ctx = stream_context_create($opts);
-  $resp = @file_get_contents($url, false, $ctx);
-  $statusLine = $http_response_header[0] ?? 'HTTP/1.1 500';
-  if (!preg_match('/\s(\d{3})\s/', $statusLine, $m)) $code = 500;
-  else $code = (int)$m[1];
-
-  $data = $resp ? json_decode($resp, true) : null;
-  if ($code < 200 || $code >= 300) {
-    return ['ok' => false, 'code' => $code, 'data' => $data ?: ['raw' => $resp]];
-  }
-  return ['ok' => true, 'code' => $code, 'data' => $data];
 }
 
 function rs_field(string $const, string $fallback): string {
   return defined($const) ? constant($const) : $fallback;
 }
 
-// --- CORS preflight -------------------------------------------
-rs_set_cors();
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-  http_response_code(204);
-  exit;
+function rs_supabase_configured(): bool {
+  return defined('RS_SUPABASE_URL') && RS_SUPABASE_URL !== ''
+    && defined('RS_SUPABASE_SERVICE_KEY') && RS_SUPABASE_SERVICE_KEY !== ''
+    && defined('RS_SUPABASE_TABLE') && RS_SUPABASE_TABLE !== '';
 }
 
-rs_rate_limit();
+/**
+ * @return array{ok:bool,code:int,data:mixed,headers:array<string,string>}
+ */
+function rs_supabase_request(string $method, string $pathQuery, array $extraHeaders = [], ?string $body = null): array {
+  if (!rs_supabase_configured()) {
+    return ['ok' => false, 'code' => 500, 'data' => ['error' => 'supabase_not_configured'], 'headers' => []];
+  }
+  $url = rtrim(RS_SUPABASE_URL, '/') . $pathQuery;
+  $key = RS_SUPABASE_SERVICE_KEY;
+  $baseHeaders = [
+    'apikey: ' . $key,
+    'Authorization: Bearer ' . $key,
+  ];
+  if ($body !== null) {
+    $baseHeaders[] = 'Content-Type: application/json';
+  }
+  $headers = array_merge($baseHeaders, $extraHeaders);
 
-// --- Routing ---------------------------------------------------
-$action = $_GET['action'] ?? '';
-
-if ($action === 'count') {
-  $filter = urlencode('{' . rs_field('RS_FIELD_OK', 'Approuvé') . '}=TRUE()');
-  $path = '?filterByFormula=' . $filter . '&pageSize=100';
-  $sum = 0;
-
-  while (true) {
-    $r = rs_airtable_request('GET', $path, null);
-    if (!$r['ok']) rs_json(['error' => 'airtable', 'details' => $r['data']], 502);
-    $records = $r['data']['records'] ?? [];
-    $sum += is_array($records) ? count($records) : 0;
-    $offset = $r['data']['offset'] ?? null;
-    if (!$offset) break;
-    $path = '?filterByFormula=' . $filter . '&pageSize=100&offset=' . rawurlencode((string)$offset);
+  if (!function_exists('curl_init')) {
+    return ['ok' => false, 'code' => 500, 'data' => ['error' => 'curl_required'], 'headers' => []];
   }
 
-  rs_json(['count' => $sum]);
+  $ch = curl_init($url);
+  $respHeaders = [];
+  curl_setopt_array($ch, [
+    CURLOPT_CUSTOMREQUEST => $method,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_HEADER => false,
+    CURLOPT_TIMEOUT => 20,
+    CURLOPT_HTTPHEADER => $headers,
+    CURLOPT_HEADERFUNCTION => static function ($curl, $header) use (&$respHeaders) {
+      $len = strlen($header);
+      $parts = explode(':', $header, 2);
+      if (count($parts) === 2) {
+        $respHeaders[strtolower(trim($parts[0]))] = trim($parts[1]);
+      }
+      return $len;
+    },
+  ]);
+  if ($body !== null) {
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+  }
+
+  $respBody = curl_exec($ch);
+  $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+
+  $data = $respBody !== false && $respBody !== '' ? json_decode($respBody, true) : null;
+  if ($code < 200 || $code >= 300) {
+    return ['ok' => false, 'code' => $code, 'data' => $data ?: ['raw' => $respBody], 'headers' => $respHeaders];
+  }
+  return ['ok' => true, 'code' => $code, 'data' => $data, 'headers' => $respHeaders];
 }
 
-if ($action === 'profiles') {
-  $filter = urlencode('{' . rs_field('RS_FIELD_OK', 'Approuvé') . '}=TRUE()');
-  $sort = '&sort[0][field]=' . rawurlencode(rs_field('RS_FIELD_NAME', 'Nom Prénom')) . '&sort[0][direction]=asc';
-  $path = '?filterByFormula=' . $filter . '&pageSize=100' . $sort;
-
-  $all = [];
-  while (true) {
-    $r = rs_airtable_request('GET', $path, null);
-    if (!$r['ok']) rs_json(['error' => 'airtable', 'details' => $r['data']], 502);
-    $records = $r['data']['records'] ?? [];
-    if (is_array($records)) $all = array_merge($all, $records);
-    $offset = $r['data']['offset'] ?? null;
-    if (!$offset) break;
-    $path = '?filterByFormula=' . $filter . '&pageSize=100&offset=' . rawurlencode((string)$offset) . $sort;
+function rs_supabase_count(): int {
+  $table = rawurlencode(RS_SUPABASE_TABLE);
+  $colId = 'id';
+  $mode = defined('RS_SUPABASE_COUNT_MODE') ? strtolower(trim((string)RS_SUPABASE_COUNT_MODE)) : 'approved';
+  $q = "/rest/v1/{$table}?select={$colId}&limit=1";
+  $appCol = rs_supabase_approved_column();
+  if ($mode === 'all' || $appCol === null) {
+    $path = $q;
+  } else {
+    $path = $q . '&' . rawurlencode($appCol) . '=eq.true';
   }
 
-  $FN = rs_field('RS_FIELD_NAME', 'Nom Prénom');
-  $FE = rs_field('RS_FIELD_EMAIL', 'Email');
-  $FR = rs_field('RS_FIELD_ROLE', 'Poste recherché');
-  $FP = rs_field('RS_FIELD_PROF', 'Professions');
-  $FCV = rs_field('RS_FIELD_CV', 'CV');
-  $FPO = rs_field('RS_FIELD_PORTF', 'Portfolio');
+  $r = rs_supabase_request('GET', $path, ['Prefer: count=exact']);
+  if (!$r['ok']) {
+    rs_json(['error' => 'supabase', 'details' => $r['data']], 502);
+  }
+  $cr = $r['headers']['content-range'] ?? '';
+  if (preg_match('/\/(\d+)\s*$/', $cr, $m)) {
+    return (int)$m[1];
+  }
+  if (preg_match('/\*\/(\d+)\s*$/', $cr, $m2)) {
+    return (int)$m2[1];
+  }
+  return 0;
+}
 
+function rs_supabase_col(string $const, string $fallback): string {
+  return rs_field($const, $fallback);
+}
+
+/**
+ * Colonne bool « visible / approuvé » pour filtrer count + liste. null = pas de colonne, pas de filtre.
+ */
+function rs_supabase_approved_column(): ?string {
+  if (defined('RS_SUPABASE_USE_APPROVED_FILTER') && RS_SUPABASE_USE_APPROVED_FILTER === false) {
+    return null;
+  }
+  $col = trim((string)rs_field('RS_SUPABASE_COL_APPROVED', 'approved'));
+  if ($col === '' || strcasecmp($col, 'none') === 0) {
+    return null;
+  }
+  return $col;
+}
+
+function rs_supabase_row_to_profile(array $row): array {
+  $n = rs_supabase_col('RS_SUPABASE_COL_NAME', 'full_name');
+  $e = rs_supabase_col('RS_SUPABASE_COL_EMAIL', 'email');
+  $r = rs_supabase_col('RS_SUPABASE_COL_ROLE', 'role');
+  $p = rs_supabase_col('RS_SUPABASE_COL_PROF', 'professions');
+  $cv = rs_supabase_col('RS_SUPABASE_COL_CV', 'cv_url');
+  $po = rs_supabase_col('RS_SUPABASE_COL_PORTF', 'portfolio_url');
+  $sc = rs_supabase_col('RS_SUPABASE_COL_SCORE', 'score');
+
+  $prof = $row[$p] ?? '';
+  if (is_array($prof)) {
+    $prof = implode(', ', $prof);
+  } else {
+    $prof = (string)$prof;
+  }
+
+  $score = 0.0;
+  if (isset($row[$sc]) && is_numeric($row[$sc])) {
+    $score = (float)$row[$sc];
+  }
+
+  $cvUrl = '';
+  $rawCv = $row[$cv] ?? '';
+  if (is_string($rawCv) && $rawCv !== '') {
+    $cvUrl = $rawCv;
+  } elseif (is_array($rawCv) && isset($rawCv[0]) && is_array($rawCv[0]) && !empty($rawCv[0]['url'])) {
+    $cvUrl = (string)$rawCv[0]['url'];
+  }
+
+  return [
+    'id' => (string)($row['id'] ?? ''),
+    'name' => (string)($row[$n] ?? 'Candidat'),
+    'email' => (string)($row[$e] ?? ''),
+    'role' => (string)($row[$r] ?? ''),
+    'professions' => $prof,
+    'cv' => $cvUrl,
+    'portfolio' => (string)($row[$po] ?? ''),
+    'score' => $score,
+  ];
+}
+
+function rs_supabase_profiles(): array {
+  $table = rawurlencode(RS_SUPABASE_TABLE);
+  $appCol = rs_supabase_approved_column();
+  $sc = rawurlencode(rs_field('RS_SUPABASE_COL_SCORE', 'score'));
+  $select = '*';
+  $batch = 1000;
+  $offset = 0;
   $out = [];
-  foreach ($all as $rec) {
-    $id = $rec['id'] ?? '';
-    $f = $rec['fields'] ?? [];
-    $prof = $f[$FP] ?? '';
-    if (is_array($prof)) $prof = implode(', ', $prof);
-    $rawCv = $f[$FCV] ?? '';
-    $cvUrl = '';
-    if (is_string($rawCv) && $rawCv !== '') {
-      $cvUrl = $rawCv;
-    } elseif (is_array($rawCv) && isset($rawCv[0]) && is_array($rawCv[0]) && !empty($rawCv[0]['url'])) {
-      $cvUrl = (string)$rawCv[0]['url'];
+
+  while (true) {
+    $path = "/rest/v1/{$table}?select={$select}";
+    if ($appCol !== null) {
+      $path .= '&' . rawurlencode($appCol) . '=eq.true';
     }
-    $out[] = [
-      'id' => $id,
-      'name' => $f[$FN] ?? ($f['Nom & Prénom'] ?? ($f['Nom'] ?? 'Candidat')),
-      'email' => $f[$FE] ?? '',
-      'role' => $f[$FR] ?? '',
-      'professions' => $prof ?: '',
-      'cv' => $cvUrl,
-      'portfolio' => $f[$FPO] ?? '',
-    ];
+    $path .= "&order={$sc}.desc.nullslast&limit={$batch}&offset={$offset}";
+    $r = rs_supabase_request('GET', $path, []);
+    if (!$r['ok']) {
+      rs_json(['error' => 'supabase', 'details' => $r['data']], 502);
+    }
+    $rows = $r['data'];
+    if (!is_array($rows) || !count($rows)) {
+      break;
+    }
+    foreach ($rows as $row) {
+      if (!is_array($row)) {
+        continue;
+      }
+      $out[] = rs_supabase_row_to_profile($row);
+    }
+    if (count($rows) < $batch) {
+      break;
+    }
+    $offset += $batch;
   }
 
-  rs_json(['profiles' => $out]);
+  usort($out, static function (array $a, array $b): int {
+    return ($b['score'] <=> $a['score']);
+  });
+
+  return $out;
 }
 
-if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-  $raw = file_get_contents('php://input');
-  $payload = $raw ? json_decode($raw, true) : null;
-  if (!is_array($payload)) rs_json(['error' => 'invalid_json'], 400);
-
+function rs_supabase_submit(array $payload): void {
   $name = trim((string)($payload['name'] ?? ''));
   $email = trim((string)($payload['email'] ?? ''));
   $role = trim((string)($payload['role'] ?? ''));
@@ -186,26 +270,473 @@ if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     rs_json(['error' => 'missing_fields'], 400);
   }
 
-  $FN = rs_field('RS_FIELD_NAME', 'Nom Prénom');
-  $FE = rs_field('RS_FIELD_EMAIL', 'Email');
-  $FR = rs_field('RS_FIELD_ROLE', 'Poste recherché');
-  $FCV = rs_field('RS_FIELD_CV', 'CV');
-  $FPO = rs_field('RS_FIELD_PORTF', 'Portfolio');
-  $FOK = rs_field('RS_FIELD_OK', 'Approuvé');
+  $table = rawurlencode(RS_SUPABASE_TABLE);
+  $n = rs_supabase_col('RS_SUPABASE_COL_NAME', 'full_name');
+  $e = rs_supabase_col('RS_SUPABASE_COL_EMAIL', 'email');
+  $r = rs_supabase_col('RS_SUPABASE_COL_ROLE', 'role');
+  $fcv = rs_supabase_col('RS_SUPABASE_COL_CV', 'cv_url');
+  $fpo = rs_supabase_col('RS_SUPABASE_COL_PORTF', 'portfolio_url');
+  $fsc = rs_supabase_col('RS_SUPABASE_COL_SCORE', 'score');
 
-  $fields = [
-    $FN => $name,
-    $FE => $email,
-    $FR => $role,
-    $FOK => false,
+  $row = [
+    $n => $name,
+    $e => $email,
+    $r => $role,
   ];
-  if ($cv !== '') $fields[$FCV] = $cv;
-  if ($portfolio !== '') $fields[$FPO] = $portfolio;
+  $appCol = rs_supabase_approved_column();
+  if ($appCol !== null) {
+    $row[$appCol] = false;
+  }
+  $includeScore = !defined('RS_SUPABASE_SUBMIT_INCLUDE_SCORE') || RS_SUPABASE_SUBMIT_INCLUDE_SCORE;
+  if ($includeScore) {
+    $row[$fsc] = defined('RS_SUPABASE_SUBMIT_SCORE_VALUE') ? (float)RS_SUPABASE_SUBMIT_SCORE_VALUE : 0.0;
+  }
+  if ($cv !== '') {
+    $row[$fcv] = $cv;
+  }
+  if ($portfolio !== '') {
+    $row[$fpo] = $portfolio;
+  }
 
-  $r = rs_airtable_request('POST', '', ['records' => [['fields' => $fields]]]);
-  if (!$r['ok']) rs_json(['error' => 'airtable', 'details' => $r['data']], 502);
+  $body = json_encode([$row], JSON_UNESCAPED_UNICODE);
+  $path = "/rest/v1/{$table}";
+  $r = rs_supabase_request('POST', $path, ['Prefer: return=minimal'], $body);
+  if (!$r['ok']) {
+    rs_json(['error' => 'supabase', 'details' => $r['data']], 502);
+  }
   rs_json(['ok' => true]);
 }
 
-rs_json(['error' => 'unknown_action'], 404);
+// --- Supabase Storage (dépôt des fichiers CV) -----------------------------
 
+function rs_supabase_storage_configured(): bool {
+  return rs_supabase_configured()
+    && defined('RS_SUPABASE_STORAGE_BUCKET')
+    && (string) RS_SUPABASE_STORAGE_BUCKET !== '';
+}
+
+/**
+ * @return string Path à l’intérieur du bucket, sans slash de tête, utilisable pour l’URL public.
+ */
+function rs_supabase_storage_object_key(string $ext): string {
+  $ext = ltrim($ext, '.');
+  $prefix = '';
+  if (defined('RS_SUPABASE_STORAGE_PREFIX') && (string) constant('RS_SUPABASE_STORAGE_PREFIX') !== '') {
+    $prefix = trim((string) constant('RS_SUPABASE_STORAGE_PREFIX'), '/') . '/';
+  }
+  return $prefix . 'cv-' . bin2hex(random_bytes(8)) . ($ext !== '' ? ('.' . $ext) : '');
+}
+
+/**
+ * @return string URL pour bucket public
+ */
+function rs_supabase_storage_public_file_url(string $objectPathInBucket): string {
+  if (defined('RS_SUPABASE_OBJECT_PUBLIC_BASE') && (string) constant('RS_SUPABASE_OBJECT_PUBLIC_BASE') !== '') {
+    $base = rtrim((string) constant('RS_SUPABASE_OBJECT_PUBLIC_BASE'), '/');
+  } else {
+    $base = rtrim((string) RS_SUPABASE_URL, '/');
+  }
+  $b = (string) RS_SUPABASE_STORAGE_BUCKET;
+  $p = trim(str_replace('\\', '/', $objectPathInBucket), '/');
+  $encPath = '';
+  if ($p !== '') {
+    $segs = explode('/', $p);
+    $encPath = implode('/', array_map('rawurlencode', $segs));
+  }
+  if ($encPath === '') {
+    $encPath = '';
+  } else {
+    $encPath = '/' . $encPath;
+  }
+  return $base . '/storage/v1/object/public/' . rawurlencode($b) . $encPath;
+}
+
+/**
+ * @return array{ok:bool,code:int,data:mixed}
+ */
+function rs_supabase_storage_put_object(string $objectPath, string $bytes, string $contentType): array {
+  if (!rs_supabase_configured() || !rs_supabase_storage_configured()) {
+    return ['ok' => false, 'code' => 500, 'data' => ['error' => 'storage_not_configured']];
+  }
+  if (!function_exists('curl_init')) {
+    return ['ok' => false, 'code' => 500, 'data' => ['error' => 'curl_required']];
+  }
+  $b = rawurlencode((string) RS_SUPABASE_STORAGE_BUCKET);
+  $p = trim(str_replace('\\', '/', $objectPath), '/');
+  $segs = $p === '' ? [] : explode('/', $p);
+  $encPath = implode('/', array_map('rawurlencode', $segs));
+  $q = '/storage/v1/object/' . $b . '/' . $encPath;
+  $url = rtrim((string) RS_SUPABASE_URL, '/') . $q;
+  $key = RS_SUPABASE_SERVICE_KEY;
+  $headers = [
+    'apikey: ' . $key,
+    'Authorization: Bearer ' . $key,
+    'Content-Type: ' . $contentType,
+    'x-upsert: true',
+  ];
+  $ch = curl_init($url);
+  curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_HEADER => false,
+    CURLOPT_TIMEOUT => 90,
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => $bytes,
+    CURLOPT_HTTPHEADER => $headers,
+  ]);
+  $raw = (string) curl_exec($ch);
+  $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+  $j = $raw !== '' ? json_decode($raw, true) : null;
+  if ($code < 200 || $code >= 300) {
+    return ['ok' => false, 'code' => $code, 'data' => is_array($j) ? $j : ['raw' => $raw]];
+  }
+  return ['ok' => true, 'code' => $code, 'data' => $j];
+}
+
+/**
+ * Valide l’upload $_FILES, envoie vers Supabase Storage, retourne l’URL publique du bucket.
+ *
+ * @return array{ok:bool,url?:string,error?:string,http?:int,data?:mixed}
+ */
+function rs_supabase_storage_upload_file(array $f): array {
+  if (!rs_supabase_storage_configured()) {
+    return ['ok' => false, 'error' => 'storage_not_configured'];
+  }
+  if ((int) ($f['error'] ?? 0) !== UPLOAD_ERR_OK) {
+    return ['ok' => false, 'error' => 'upload'];
+  }
+  $max = defined('RS_CV_MAX_BYTES') ? (int) constant('RS_CV_MAX_BYTES') : 5242880;
+  if ((int) $f['size'] > $max) {
+    return ['ok' => false, 'error' => 'file_too_large', 'data' => ['max' => $max]];
+  }
+  $ext = strtolower((string) pathinfo((string) $f['name'], PATHINFO_EXTENSION));
+  if (!in_array($ext, ['pdf', 'doc', 'docx', 'txt', 'rtf', 'odt', 'html', 'htm', 'png', 'jpg', 'jpeg', 'tiff', 'xls', 'xlsx'], true)) {
+    return ['ok' => false, 'error' => 'file_type'];
+  }
+  $tmp = (string) $f['tmp_name'];
+  if (!is_readable($tmp)) {
+    return ['ok' => false, 'error' => 'upload_read'];
+  }
+  if (function_exists('is_uploaded_file') && is_uploaded_file($tmp) === false) {
+    return ['ok' => false, 'error' => 'upload'];
+  }
+  $bytes = (string) file_get_contents($tmp);
+  if ($bytes === '' && (int) ($f['size'] ?? 0) > 0) {
+    return ['ok' => false, 'error' => 'file_empty'];
+  }
+  $mime = 'application/octet-stream';
+  if (function_exists('finfo_open')) {
+    $fi = @finfo_open(FILEINFO_MIME_TYPE);
+    if (is_object($fi) || is_resource($fi)) {
+      $g = @finfo_file($fi, $tmp);
+      if (is_string($g) && $g !== '') {
+        $mime = $g;
+      }
+      finfo_close($fi);
+    }
+  }
+  $key = rs_supabase_storage_object_key($ext);
+  $r = rs_supabase_storage_put_object($key, $bytes, $mime);
+  if (empty($r['ok'])) {
+    return [
+      'ok' => false,
+      'error' => 'upload_failed',
+      'http' => (int) ($r['code'] ?? 0),
+      'data' => $r['data'] ?? null,
+    ];
+  }
+  return [
+    'ok' => true,
+    'url' => rs_supabase_storage_public_file_url($key),
+  ];
+}
+
+// --- Affinda (extraction d’info depuis le CV) -----------------------------
+
+function rs_affinda_configured(): bool {
+  return defined('RS_AFFINDA_API_KEY') && (string) RS_AFFINDA_API_KEY !== '';
+}
+
+function rs_affinda_base(): string {
+  if (defined('RS_AFFINDA_BASE') && (string) RS_AFFINDA_BASE !== '') {
+    return rtrim((string) constant('RS_AFFINDA_BASE'), '/');
+  }
+  return 'https://api.eu1.affinda.com';
+}
+
+function rs_map_affinda_to_form(array $resume): array {
+  $d = $resume['data'] ?? $resume;
+  if (!is_array($d)) {
+    $d = [];
+  }
+  $name = '';
+  if (isset($d['name']) && is_array($d['name'])) {
+    $n = $d['name'];
+    if (!empty($n['raw']) && is_string($n['raw'])) {
+      $name = (string) $n['raw'];
+    } else {
+      $a = [trim((string) ($n['title'] ?? '')), trim((string) ($n['first'] ?? '')), trim((string) ($n['last'] ?? ''))];
+      $a = array_filter($a, static function ($x) { return (string) $x !== ''; });
+      $name = count($a) ? implode(' ', $a) : '';
+    }
+  }
+  $email = '';
+  if (!empty($d['emails']) && is_array($d['emails']) && $d['emails'] !== []) {
+    $fr = $d['emails'][0] ?? null;
+    if (is_string($fr) && $fr !== '') {
+      $email = $fr;
+    } elseif (is_array($fr) && is_string($fr[0] ?? null)) {
+      $email = (string) $fr[0];
+    } elseif (is_array($fr) && !empty($fr['address'])) {
+      $email = (string) $fr['address'];
+    }
+  }
+  $role = '';
+  if (isset($d['profession']) && is_string($d['profession']) && (string) $d['profession'] !== '') {
+    $role = (string) $d['profession'];
+  } elseif (isset($d['headline']) && is_string($d['headline'])) {
+    $role = (string) $d['headline'];
+  }
+  if ($role === '' && !empty($d['workExperience']) && is_array($d['workExperience'])) {
+    $wx0 = $d['workExperience'][0] ?? null;
+    if (is_array($wx0) && !empty($wx0['jobTitle'])) {
+      $role = (string) $wx0['jobTitle'];
+    } elseif (is_array($wx0) && is_array($wx0['occupation'] ?? null) && !empty($wx0['occupation']['jobTitle'])) {
+      $role = (string) $wx0['occupation']['jobTitle'];
+    }
+  }
+  $portfolio = '';
+  if (isset($d['linkedin']) && is_string($d['linkedin']) && (string) $d['linkedin'] !== '') {
+    $portfolio = (string) $d['linkedin'];
+  } elseif (!empty($d['websites']) && is_array($d['websites']) && $d['websites'] !== []) {
+    $w0 = (string) $d['websites'][0];
+    if (preg_match('/^https?:\/\//i', $w0) === 1) {
+      $portfolio = $w0;
+    } else {
+      $portfolio = 'https://' . ltrim($w0, '/');
+    }
+  }
+  return [
+    'name' => $name,
+    'email' => $email,
+    'role' => $role,
+    'cv' => '',
+    'portfolio' => $portfolio,
+    'source' => 'affinda',
+    'note' => 'Vérifiez et complétez les champs. Les textes proviennent d’une analyse automatique du document.',
+  ];
+}
+
+function rs_affinda_http_get_resume(string $identifier): array {
+  $u = rs_affinda_base() . '/v2/resumes/' . rawurlencode($identifier);
+  $ch = curl_init($u);
+  curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTPHEADER => [
+      'Authorization: Bearer ' . (string) constant('RS_AFFINDA_API_KEY'),
+    ],
+  ]);
+  $raw = (string) curl_exec($ch);
+  $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+  if ($code < 200 || $code >= 300) {
+    return ['ok' => false, 'http' => $code, 'raw' => $raw];
+  }
+  $j = is_string($raw) && $raw !== '' ? json_decode($raw, true) : null;
+  if (!is_array($j)) {
+    return ['ok' => false, 'http' => $code];
+  }
+  return ['ok' => true, 'body' => $j];
+}
+
+function rs_affinda_post_parse_file(string $tmp, string $origName, string $mime): array {
+  $u = rs_affinda_base() . '/v2/resumes';
+  if (!function_exists('curl_file_create')) {
+    if (!@class_exists('CURLFile', false) && (PHP_VERSION_ID < 80000)) {
+      return ['ok' => false, 'err' => 'curlfile'];
+    }
+  }
+  $cfile = function_exists('curl_file_create')
+    ? curl_file_create($tmp, $mime, $origName)
+    : new \CURLFile($tmp, $mime, $origName);
+  $ch = curl_init($u);
+  $post = [
+    'file' => $cfile,
+    'wait' => 'true',
+  ];
+  curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_TIMEOUT => 120,
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => $post,
+    CURLOPT_HTTPHEADER => [
+      'Authorization: Bearer ' . (string) constant('RS_AFFINDA_API_KEY'),
+    ],
+  ]);
+  $raw = (string) curl_exec($ch);
+  $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+  $j = is_string($raw) && $raw !== '' ? json_decode($raw, true) : null;
+  if ($code < 200 || $code >= 300) {
+    return ['ok' => false, 'err' => 'http_' . (string) $code, 'raw' => $raw, 'j' => $j];
+  }
+  if (is_array($j) && (!empty($j['data']['emails']) || !empty($j['data']['name']) || !empty($j['data']['name']['raw']))) {
+    return ['ok' => true, 'resume' => $j];
+  }
+  if (is_array($j) && !empty($j['data'])) {
+    $em = is_array($j['data']['emails'] ?? null) ? (count($j['data']['emails']) > 0) : false;
+    if ($em || (isset($j['data']['name']) && (is_string($j['data']['name']) || is_array($j['data']['name'])))) {
+      return ['ok' => true, 'resume' => $j];
+    }
+  }
+  $id = null;
+  if (is_array($j) && !empty($j['meta']['identifier'])) {
+    $id = (string) $j['meta']['identifier'];
+  } elseif (is_array($j) && !empty($j['meta']) && is_array($j['meta']) && !empty($j['identifier'])) {
+    $id = (string) $j['identifier'];
+  }
+  if (is_string($id) && $id !== '') {
+    for ($k = 0; $k < 25; $k++) {
+      $pol = rs_affinda_http_get_resume($id);
+      if (empty($pol['ok']) || !is_array($pol['body'] ?? null)) {
+        usleep(500000);
+        continue;
+      }
+      $b = $pol['body'];
+      if (!empty($b['data']) && is_array($b['data'])) {
+        if (!empty($b['data']['emails']) || (isset($b['data']['name']))) {
+          return ['ok' => true, 'resume' => $b];
+        }
+        if (isset($b['meta']['ready']) && (bool) $b['meta']['ready']) {
+          return ['ok' => true, 'resume' => $b];
+        }
+      }
+      if (!empty($b['meta']['ready']) && (bool) $b['meta']['ready']) {
+        return ['ok' => true, 'resume' => $b];
+      }
+      usleep(500000);
+    }
+  }
+  if (is_array($j) && (isset($j['data']))) {
+    return ['ok' => true, 'resume' => $j];
+  }
+  return ['ok' => false, 'err' => 'affinda_empty', 'raw' => $raw, 'j' => $j];
+}
+
+function rs_handle_parse_cv(): void {
+  if (!rs_affinda_configured()) {
+    rs_json(['error' => 'affinda_not_configured', 'info' => 'RS_AFFINDA_API_KEY dans rs-airtable-config.php'], 501);
+  }
+  if (empty($_FILES['file']) || (int) ($_FILES['file']['error'] ?? 0) !== UPLOAD_ERR_OK) {
+    rs_json(['error' => 'file_required'], 400);
+  }
+  $f = $_FILES['file'];
+  $max = defined('RS_CV_MAX_BYTES') ? (int) constant('RS_CV_MAX_BYTES') : 5242880;
+  if ((int) ($f['size'] ?? 0) > $max) {
+    rs_json(['error' => 'file_too_large', 'max' => $max], 400);
+  }
+  $ext = strtolower((string) pathinfo((string) $f['name'], PATHINFO_EXTENSION));
+  if (!in_array($ext, ['pdf', 'doc', 'docx', 'txt', 'rtf', 'odt', 'html', 'htm', 'png', 'jpg', 'jpeg', 'tiff', 'xls', 'xlsx'], true)) {
+    rs_json(['error' => 'file_type'], 400);
+  }
+  $tmp = (string) $f['tmp_name'];
+  if (!is_readable($tmp) || (function_exists('is_uploaded_file') && !@is_uploaded_file($tmp))) {
+    if (!is_readable($tmp)) {
+      rs_json(['error' => 'upload'], 400);
+    }
+  }
+  $mime = 'application/octet-stream';
+  if (function_exists('finfo_open')) {
+    $fi = @finfo_open(FILEINFO_MIME_TYPE);
+    if (is_object($fi) || is_resource($fi)) {
+      $g = @finfo_file($fi, $tmp);
+      if (is_string($g) && $g !== '') {
+        $mime = $g;
+      }
+      finfo_close($fi);
+    }
+  }
+  $r = rs_affinda_post_parse_file($tmp, (string) $f['name'], $mime);
+  if (empty($r['ok']) || !is_array($r['resume'] ?? null)) {
+    $detail = (string) ($r['err'] ?? 'affinda');
+    if (isset($r['j']) && is_array($r['j']) && isset($r['j']['error']['message'])) {
+      $detail = (string) $r['j']['error']['message'];
+    }
+    rs_json(['error' => 'affinda', 'details' => $detail], 502);
+  }
+  $out = rs_map_affinda_to_form($r['resume']);
+  rs_json($out, 200);
+}
+
+// --- CORS preflight -------------------------------------------
+rs_set_cors();
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+  http_response_code(204);
+  exit;
+}
+
+$action = (string) ($_GET['action'] ?? '');
+
+rs_rate_limit();
+
+if ($action === 'parse_cv' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+  rs_handle_parse_cv();
+}
+
+if (!rs_supabase_configured()) {
+  rs_json(['error' => 'supabase_not_configured'], 500);
+}
+
+if ($action === 'count') {
+  rs_json(['count' => rs_supabase_count()]);
+}
+
+if ($action === 'profiles') {
+  rs_json(['profiles' => rs_supabase_profiles()]);
+}
+
+if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+  $ct = (string) ($_SERVER['CONTENT_TYPE'] ?? $_SERVER['HTTP_CONTENT_TYPE'] ?? '');
+  if (preg_match('/multipart\/form-data/i', $ct) === 1) {
+    $name = trim((string) ($_POST['name'] ?? ''));
+    $email = trim((string) ($_POST['email'] ?? ''));
+    $role = trim((string) ($_POST['role'] ?? ''));
+    $cv = trim((string) ($_POST['cv'] ?? ''));
+    $portfolio = trim((string) ($_POST['portfolio'] ?? ''));
+    if (!empty($_FILES['file']) && (int) ($_FILES['file']['error'] ?? 0) === UPLOAD_ERR_OK) {
+      if (!rs_supabase_storage_configured()) {
+        rs_json([
+          'error' => 'storage_not_configured',
+          'info' => 'Définir RS_SUPABASE_STORAGE_BUCKET (Supabase Storage) — voir ionos/README.md',
+        ], 501);
+      }
+      $up = rs_supabase_storage_upload_file($_FILES['file']);
+      if (empty($up['ok']) || (string) ($up['url'] ?? '') === '') {
+        rs_json([
+          'error' => 'storage_upload',
+          'details' => (string) ($up['error'] ?? 'upload_failed'),
+          'http' => $up['http'] ?? null,
+          'data' => $up['data'] ?? null,
+        ], 502);
+      }
+      $cv = (string) $up['url'];
+    }
+    rs_supabase_submit([
+      'name' => $name,
+      'email' => $email,
+      'role' => $role,
+      'cv' => $cv,
+      'portfolio' => $portfolio,
+    ]);
+  } else {
+    $raw = (string) file_get_contents('php://input');
+    $payload = $raw !== '' ? json_decode($raw, true) : null;
+    if (!is_array($payload)) {
+      rs_json(['error' => 'invalid_json'], 400);
+    }
+    rs_supabase_submit($payload);
+  }
+}
+
+rs_json(['error' => 'unknown_action'], 404);

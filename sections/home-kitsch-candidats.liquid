@@ -1,6 +1,5 @@
 {%- comment -%}
-  Bandeau kitsch : nombre de candidats Airtable (Approuvé) — à placer sur l’accueil.
-  Renseigner le même token / base / table que la page Candidatures.
+  Bandeau kitsch : nombre de candidats (proxy IONOS → Supabase, action=count).
 {%- endcomment -%}
 <section class="rs-home-kitsch-section rs-tile-band" style="padding:{{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;{% if section.settings.tint_section %}background:{{ section.settings.bg_color }};{% else %}background:transparent;{% endif %}border-top:1px solid #888;border-bottom:1px solid #888;">
   <div class="container">
@@ -40,8 +39,8 @@
   "class": "section-home-kitsch-candidats",
   "settings": [
     { "type": "header", "content": "API (proxy IONOS)" },
-    { "type": "paragraph", "content": "URL du proxy PHP (IONOS). Exemple : https://ton-domaine.com/api/rs-airtable-proxy.php" },
-    { "type": "text", "id": "rs_api_url", "label": "URL API", "default": "https://example.com/api/rs-airtable-proxy.php" },
+    { "type": "paragraph", "content": "URL du proxy PHP (IONOS / Supabase). Exemple : https://api.recrutestagiaire.eu/rs-airtable-proxy.php" },
+    { "type": "text", "id": "rs_api_url", "label": "URL API", "default": "https://example.com/rs-airtable-proxy.php" },
     { "type": "header", "content": "Textes" },
     { "type": "text", "id": "ribbon_text", "label": "Ruban", "default": "★ CHIFFRE OFFICIEL ★" },
     { "type": "text", "id": "suffix_text", "label": "Texte après le nombre", "default": " candidat(s) actuellement recensé(e)s dans la base nationale" },
