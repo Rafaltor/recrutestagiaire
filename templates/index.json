@@ -16,6 +16,7 @@
           "type": "sponsored_rail",
           "settings": {
             "side": "left",
+            "content_type": "product",
             "product": "stagiaire",
             "kicker": "Sponsorisé",
             "show_price": true,
@@ -27,6 +28,7 @@
           "type": "sponsored_rail",
           "settings": {
             "side": "right",
+            "content_type": "product",
             "product": "alternant",
             "kicker": "Sponsorisé",
             "show_price": true,
@@ -38,6 +40,7 @@
           "type": "sponsored_rail",
           "settings": {
             "side": "right",
+            "content_type": "product",
             "product": "stagiaire",
             "kicker": "Sponsorisé",
             "show_price": true,
@@ -49,6 +52,7 @@
           "type": "sponsored_rail",
           "settings": {
             "side": "left",
+            "content_type": "product",
             "product": "alternant",
             "kicker": "Sponsorisé",
             "show_price": true,
@@ -312,7 +316,7 @@
         "cand_cv_btn_label": "CV",
         "cand_profiles_url": "",
         "rail_center_max": 720,
-        "rs_api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php",
+        "rs_api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=count",
         "text_align": "text-center",
         "strip_bg": "#ffe9a3",
         "strip_bg_dark": "#c99406",
