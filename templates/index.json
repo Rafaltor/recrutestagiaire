@@ -12,78 +12,6 @@
     "home_unified": {
       "type": "home-unified-page",
       "blocks": {
-        "rail_left_a": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "left",
-            "content_type": "product",
-            "col_span": "4",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 12,
-            "cell_border": "",
-            "product": "stagiaire",
-            "kicker": "",
-            "show_price": true,
-            "show_stars": false,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
-        "rail_left_b": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "left",
-            "content_type": "product",
-            "col_span": "4",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 12,
-            "cell_border": "",
-            "product": "alternant",
-            "kicker": "",
-            "show_price": true,
-            "show_stars": false,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
-        "rail_right_a": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "right",
-            "content_type": "product",
-            "col_span": "4",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 12,
-            "cell_border": "",
-            "product": "alternant",
-            "kicker": "",
-            "show_price": true,
-            "show_stars": false,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
-        "rail_right_b": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "right",
-            "content_type": "product",
-            "col_span": "4",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 12,
-            "cell_border": "",
-            "product": "stagiaire",
-            "kicker": "",
-            "show_price": true,
-            "show_stars": false,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
         "uni_intro": {
           "type": "hero_intro_bundle",
           "settings": {
@@ -140,19 +68,22 @@
             "product_below": ""
           }
         },
-        "uni_kitsch": {
-          "type": "kitsch_counter",
+        "sponsored_inline_2": {
+          "type": "sponsored_rail",
           "settings": {
-            "col_span": "4",
+            "side": "center",
+            "content_type": "product",
+            "col_span": "3",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
-            "cell_padding": 0,
+            "cell_padding": 12,
             "cell_border": "",
-            "tile_mode": true,
-            "ribbon_text": "★ CHIFFRE OFFICIEL ★",
-            "suffix_text": "candidat(s) actuellement recensé(e)s dans la base nationale",
-            "brand_name": "Recrute Stagiaire",
-            "sub_text": "Mise à jour en temps quasi réel — merci de votre confiance !!"
+            "product": "alternant",
+            "kicker": "",
+            "show_price": true,
+            "show_stars": false,
+            "cta_label": "Voir",
+            "product_below": ""
           }
         },
         "uni_gp_cand": {
@@ -217,28 +148,25 @@
             "border_color": "#888888"
           }
         },
-        "sponsored_inline_2": {
-          "type": "sponsored_rail",
+        "uni_kitsch": {
+          "type": "kitsch_counter",
           "settings": {
-            "side": "center",
-            "content_type": "product",
-            "col_span": "3",
+            "col_span": "6",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
-            "cell_padding": 12,
+            "cell_padding": 0,
             "cell_border": "",
-            "product": "alternant",
-            "kicker": "",
-            "show_price": true,
-            "show_stars": false,
-            "cta_label": "Voir",
-            "product_below": ""
+            "tile_mode": true,
+            "ribbon_text": "★ CHIFFRE OFFICIEL ★",
+            "suffix_text": "candidat(s) actuellement recensé(e)s dans la base nationale",
+            "brand_name": "Recrute Stagiaire",
+            "sub_text": "Mise à jour en temps quasi réel — merci de votre confiance !!"
           }
         },
         "uni_search": {
           "type": "hero_search",
           "settings": {
-            "col_span": "9",
+            "col_span": "6",
             "use_strip_bg": false,
             "cell_bg": "#0033cc",
             "cell_padding": 12,
