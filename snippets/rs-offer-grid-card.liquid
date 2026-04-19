@@ -22,18 +22,6 @@
 {%- assign status_open = s.badge_open | default: 'Offre active' -%}
 {%- assign status_closed = s.badge_closed | default: 'Pourvu' -%}
 {%- assign cta_label = s.offer_cta_label | default: "Voir l'offre" -%}
-{%- comment -%} Intervalle ms : 0 ou absent → 9 s (défaut lent). Le thème borne 4000–20000. {%- endcomment -%}
-{%- assign carousel_interval = s.offer_carousel_interval | default: 9000 -%}
-{%- assign ci = carousel_interval | plus: 0 -%}
-{%- if ci <= 0 -%}
-  {%- assign ci = 9000 -%}
-{%- endif -%}
-{%- if ci < 4000 -%}
-  {%- assign ci = 4000 -%}
-{%- endif -%}
-{%- if ci > 20000 -%}
-  {%- assign ci = 20000 -%}
-{%- endif -%}
 {%- assign location_pill = s.offer_location_pill | default: 'Paris' -%}
 {%- assign cart_label = s.offer_cart_label | default: 'Candidater' -%}
 {%- assign show_cart_btn = true -%}
@@ -93,8 +81,7 @@
         <div id="offer-carousel-{{ uid }}"
           class="carousel slide carousel-fade rs-offer-list-card__carousel h-100"
           data-bs-ride="carousel"
-          data-bs-interval="{{ ci }}"
-          data-bs-pause="hover"
+          data-bs-config='{"interval":false}'
           data-bs-wrap="true">
           <div class="carousel-indicators">
             {%- for image in product.images limit: 8 -%}

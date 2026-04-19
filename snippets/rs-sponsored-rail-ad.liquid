@@ -51,8 +51,7 @@
           id="{{ _car_id }}"
           class="carousel slide carousel-fade rs-rail-ad__carousel"
           data-bs-ride="carousel"
-          data-bs-interval="9000"
-          data-bs-pause="hover"
+          data-bs-config='{"interval":false}'
           data-bs-wrap="true">
           <div class="carousel-inner h-100">
             {%- for image in p.images limit: 8 -%}
