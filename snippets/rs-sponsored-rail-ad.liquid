@@ -49,9 +49,11 @@
       <div class="rs-rail-ad__media rs-rail-ad__media--carousel">
         <div
           id="{{ _car_id }}"
-          class="carousel slide rs-rail-ad__carousel"
+          class="carousel slide carousel-fade rs-rail-ad__carousel"
           data-bs-ride="carousel"
-          data-bs-interval="false">
+          data-bs-interval="9000"
+          data-bs-pause="hover"
+          data-bs-wrap="true">
           <div class="carousel-inner h-100">
             {%- for image in p.images limit: 8 -%}
               <div class="carousel-item h-100{% if forloop.first %} active{% endif %}">
