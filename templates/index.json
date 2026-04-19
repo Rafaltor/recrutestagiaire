@@ -320,7 +320,7 @@
         "page_padding_bottom": 0,
         "grid_gap": 8,
         "default_cell_border": "#dddddd",
-        "sidebar_ads": true,
+        "sidebar_ads": false,
         "rail_column_title": "OFFRES EN VEDETTE",
         "rail_content": "products",
         "rail_left_count": 2,

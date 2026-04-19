@@ -246,18 +246,20 @@ button[type='submit'].btn-primary {
   font-weight: 700 !important;
 }
 
-/* Bouton « Voir » jaune doré (rails) */
-.rs-rail-ad__cta {
-  background: linear-gradient(180deg, var(--rs-da-btn-gold-top) 0%, var(--rs-da-btn-gold-bot) 100%) !important;
-  border: 1px solid var(--rs-da-btn-gold-border) !important;
+/* Bouton « Voir » cartes produit (rose, texte blanc) */
+.rs-rail-ad__cta:not(.rs-rail-ad__cta--half) {
+  background: #f06b8a !important;
+  border: 1px solid #c73d62 !important;
   border-radius: var(--rs-da-radius) !important;
-  color: #222222 !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
   box-shadow: none !important;
+  filter: none !important;
+  text-shadow: none !important;
 }
-.rs-rail-ad__cta:hover {
-  filter: brightness(0.97);
-  color: #111 !important;
+.rs-rail-ad__cta:not(.rs-rail-ad__cta--half):hover {
+  background: #e55d7d !important;
+  color: #ffffff !important;
 }
 
 .rs-rail-ad__cta--half {
@@ -318,4 +320,107 @@ footer.footer {
 }
 .header-wrap {
   background: var(--rs-da-block-bg) !important;
+}
+
+/* ============================================================
+   Corrections couleurs (sans changer la structure HTML)
+   ============================================================ */
+
+/* 1. Rails latéraux masqués — contenu central pleine largeur */
+.rs-uni-rail {
+  display: none !important;
+}
+.rs-uni-page--rails .rs-uni-shell {
+  display: block !important;
+}
+.rs-uni-page--rails .rs-uni-main {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* 2. Titre boutique « RECRUTE STAGIAIRE » */
+.header-wrap .rs-nav-brand__name.logo,
+.header-wrap .nav-brand .rs-nav-brand__name {
+  color: #0a0a0a !important;
+}
+
+/* Bandeau sous le logo : fond neutre (plus de bande bleutée) */
+.header-wrap .rs-banner-nav.rs-header-pole-tabs {
+  background: #ffffff !important;
+  box-shadow: none !important;
+  border-top: 1px solid #dddddd !important;
+}
+
+/* 3. Onglets header : actif = rose + blanc ; inactifs = blanc + texte #0A0A0A + bordure #ddd */
+.header-wrap .rs-subnav__trigger {
+  background: #ffffff !important;
+  color: #0a0a0a !important;
+  border: 1px solid #dddddd !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+.header-wrap .rs-subnav__item.is-active .rs-subnav__trigger,
+.header-wrap .rs-subnav__item.is-active:hover .rs-subnav__trigger,
+.header-wrap .rs-subnav__item.is-active:focus-within .rs-subnav__trigger {
+  background: #f06b8a !important;
+  color: #ffffff !important;
+  border: 1px solid #f06b8a !important;
+  box-shadow: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+.header-wrap .rs-subnav__item:not(.is-active) .rs-subnav__trigger:hover {
+  background: #f5f5f5 !important;
+  color: #0a0a0a !important;
+}
+
+/* 4. Badge intro « COLLECTIF ARTISTIQUE — PARIS 2026 » */
+.rs-intro-bundle__badge {
+  background: #ffffff !important;
+  border: 1px solid #f06b8a !important;
+  color: #f06b8a !important;
+}
+
+/* 6. Cercles grille accueil */
+.rs-pole-panel__circle.rs-pole-panel__circle--candidat {
+  background: #f06b8a !important;
+  color: #ffffff !important;
+  border-color: #c73d62 !important;
+  box-shadow: none !important;
+}
+.rs-pole-panel__circle.rs-pole-panel__circle--offres-pale {
+  background: #0a0a0a !important;
+  color: #ffffff !important;
+  border-color: #0a0a0a !important;
+  box-shadow: none !important;
+}
+
+/* 7. Bloc « CHIFFRE OFFICIEL » */
+.rs-stat-kitsch {
+  border: 3px double #f06b8a !important;
+  box-shadow: none !important;
+}
+.rs-stat-kitsch__ribbon,
+.rs-stat-kitsch__line,
+.rs-stat-kitsch__n {
+  color: #f06b8a !important;
+  text-shadow: none !important;
+}
+.rs-stat-kitsch__suffix {
+  color: #333333 !important;
+}
+.rs-stat-kitsch__suffix strong {
+  color: #f06b8a !important;
+}
+
+/* 8. Liens (bleu → rose) — hors boutons / onglets */
+main a:not(.btn):not(.abt-btn):not(.rs-subnav__trigger):not(.rs-rail-ad__cta),
+footer.footer a:not(.btn):not(.abt-btn),
+.header-wrap .rs-subnav__dropdown a {
+  color: #f06b8a !important;
+}
+main a:not(.btn):not(.abt-btn):not(.rs-subnav__trigger):not(.rs-rail-ad__cta):hover,
+footer.footer a:not(.btn):not(.abt-btn):hover,
+.header-wrap .rs-subnav__dropdown a:hover {
+  color: #d45577 !important;
 }
