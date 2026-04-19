@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-candidatures",
+      "settings": {
+        "page_mode": "form",
+        "page_title": "Déposer mon CV",
+        "page_subtitle": "Déposez votre CV, l’analyse automatique pré-remplit les champs.",
+        "rs_api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php"
+      }
+    }
+  },
+  "order": ["main"]
+}

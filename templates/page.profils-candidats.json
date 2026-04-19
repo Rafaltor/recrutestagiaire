@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-candidatures",
+      "settings": {
+        "page_mode": "profiles",
+        "page_title": "Profils candidats",
+        "page_subtitle": "Profils publiés du collectif (données Supabase).",
+        "rs_api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php"
+      }
+    }
+  },
+  "order": ["main"]
+}
