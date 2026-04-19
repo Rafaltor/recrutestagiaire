@@ -15,7 +15,7 @@
         "uni_intro": {
           "type": "hero_intro_bundle",
           "settings": {
-            "col_span": "8",
+            "col_span": "9",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -55,7 +55,7 @@
           "settings": {
             "side": "center",
             "content_type": "product",
-            "col_span": "4",
+            "col_span": "3",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 12,
