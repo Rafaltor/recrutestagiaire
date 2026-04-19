@@ -81,7 +81,8 @@
       {%- if product.images.size > 1 and s.offer_carousel != false -%}
         <div id="offer-carousel-{{ uid }}"
           class="carousel slide rs-offer-list-card__carousel h-100"
-          {% if carousel_interval > 0 %}data-bs-ride="carousel" data-bs-interval="{{ carousel_interval }}"{% else %}data-bs-interval="false"{% endif %}>
+          data-bs-ride="carousel"
+          {% if carousel_interval > 0 %}data-bs-interval="{{ carousel_interval }}"{% else %}data-bs-interval="false"{% endif %}>
           <div class="carousel-indicators">
             {%- for image in product.images limit: 8 -%}
               <button type="button" data-bs-target="#offer-carousel-{{ uid }}" data-bs-slide-to="{{ forloop.index0 }}"

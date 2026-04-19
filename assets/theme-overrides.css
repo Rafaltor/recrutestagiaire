@@ -2802,6 +2802,16 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   height: 7px;
   border-radius: 50%;
 }
+
+/*
+ * Swipe sur carrousels produits : html.rs-viewport-desktop body a touch-action: pan-y,
+ * ce qui bloque le pan horizontal jusqu’au body. Ré-autoriser pan-x sur la zone carrousel
+ * pour que Bootstrap (touch) et le navigateur acceptent le geste.
+ */
+.rs-rail-ad__carousel.carousel.slide,
+.rs-offer-list-card__carousel.carousel.slide {
+  touch-action: pan-x pan-y pinch-zoom;
+}
 .rs-offer-list-card__bookmark {
   position: absolute;
   top: 10px;
