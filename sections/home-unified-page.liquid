@@ -50,7 +50,7 @@
   -%}
   {%- unless _rs_skip_cell -%}
     {%- assign _rs_home_render_idx = _rs_home_render_idx | plus: 1 -%}
-    {%- assign _rs_home_mob_map = '1|3|5|7|8|4|2|9|6' | split: '|' -%}
+    {%- assign _rs_home_mob_map = '1|3|4|7|8|5|2|9|6' | split: '|' -%}
     {%- assign _rs_home_mo_idx = _rs_home_render_idx | minus: 1 -%}
     {%- assign _rs_home_mo = _rs_home_mob_map[_rs_home_mo_idx] | default: _rs_home_render_idx -%}
     {%- assign pad = block.settings.cell_padding | default: 16 -%}
