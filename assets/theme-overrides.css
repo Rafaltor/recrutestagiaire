@@ -120,7 +120,7 @@ main:has(.section-home-unified-page) {
   background: #ffffff;
   padding-bottom: 0;
 }
-main:has(.section-home-unified-page) + footer.footer.skin-dark-footer {
+main:has(.section-home-unified-page) + footer.footer {
   margin-top: 0;
 }
 

@@ -1,27 +1,31 @@
-<footer class="footer skin-dark-footer">
+<footer class="footer rs-site-footer" role="contentinfo">
   <div class="container">
-    <div class="row mb-5">
+    <div class="row rs-site-footer__grid g-4">
       <div class="col-12 col-lg-4 col-md-5">
-        <div class="footer-widget pe-xl-5 mb-5 mb-md-0">
-          <div class="footerLogo mb-3">
-            <span class="text-light fw-bold fs-4">{{ shop.name | upcase }}</span>
-          </div>
-          <div class="footerText pe-xl-3">
-            <p>Collectif artistique mode & textile, Paris. Chaque vêtement est une offre. Chaque achat, une candidature.</p>
-          </div>
-          <div class="socialLinks">
-            <ul>
-              <li><a href="#" class="link"><i class="bi bi-instagram"></i></a></li>
-              <li><a href="#" class="link"><i class="bi bi-tiktok"></i></a></li>
-              <li><a href="#" class="link"><i class="bi bi-linkedin"></i></a></li>
-            </ul>
-          </div>
+        <div class="rs-site-footer__block">
+          <a href="{{ routes.root_url }}" class="rs-site-footer__brand-link text-decoration-none">
+            <span class="rs-site-footer__brand-name">{{ shop.name | upcase }}</span>
+          </a>
+          <p class="rs-site-footer__intro">
+            Collectif artistique mode & textile, Paris. Chaque vêtement est une offre. Chaque achat, une candidature.
+          </p>
+          <ul class="rs-site-footer__social" aria-label="Réseaux sociaux">
+            <li>
+              <a href="#" class="rs-site-footer__social-link" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+            </li>
+            <li>
+              <a href="#" class="rs-site-footer__social-link" aria-label="TikTok"><i class="bi bi-tiktok" aria-hidden="true"></i></a>
+            </li>
+            <li>
+              <a href="#" class="rs-site-footer__social-link" aria-label="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+            </li>
+          </ul>
         </div>
       </div>
       <div class="col-6 col-lg-2 col-md-4 offset-md-3 offset-lg-0">
-        <div class="footer-widget mb-5 mb-md-5 mb-lg-0">
-          <h4 class="widget-title">Collections</h4>
-          <ul class="footer-menu">
+        <div class="rs-site-footer__block">
+          <h2 class="rs-site-footer__title">Collections</h2>
+          <ul class="rs-site-footer__menu">
             {% for collection in collections limit: 5 %}
               <li><a href="{{ collection.url }}">{{ collection.title }}</a></li>
             {% endfor %}
@@ -29,21 +33,27 @@
         </div>
       </div>
       <div class="col-6 col-md-4 col-lg-2">
-        <div class="footer-widget mb-5 mb-md-5 mb-lg-0">
-          <h4 class="widget-title">Le collectif</h4>
-          <ul class="footer-menu">
+        <div class="rs-site-footer__block">
+          <h2 class="rs-site-footer__title">Le collectif</h2>
+          <ul class="rs-site-footer__menu">
             <li><a href="/pages/about">À propos</a></li>
-            <li><a href="{{ settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils' }}" rel="noopener noreferrer">Profils candidats</a></li>
-            <li><a href="{{ settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot' }}" rel="noopener noreferrer">Déposer une candidature</a></li>
-            <li><a href="{{ settings.rs_portail_url_vote | default: 'https://portail.recrutestagiaire.eu/vote' }}" rel="noopener noreferrer">Vote (swipe)</a></li>
+            <li>
+              <a href="{{ settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils' }}" rel="noopener noreferrer">Profils candidats</a>
+            </li>
+            <li>
+              <a href="{{ settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot' }}" rel="noopener noreferrer">Déposer une candidature</a>
+            </li>
+            <li>
+              <a href="{{ settings.rs_portail_url_vote | default: 'https://portail.recrutestagiaire.eu/vote' }}" rel="noopener noreferrer">Vote (swipe)</a>
+            </li>
             <li><a href="/pages/contact">Contact</a></li>
           </ul>
         </div>
       </div>
       <div class="col-6 col-md-4 col-lg-2">
-        <div class="footer-widget">
-          <h4 class="widget-title">Informations</h4>
-          <ul class="footer-menu">
+        <div class="rs-site-footer__block">
+          <h2 class="rs-site-footer__title">Informations</h2>
+          <ul class="rs-site-footer__menu">
             <li><a href="/policies/privacy-policy">Politique de confidentialité</a></li>
             <li><a href="/policies/terms-of-service">CGV</a></li>
             <li><a href="/policies/refund-policy">Retours</a></li>
@@ -53,11 +63,15 @@
       </div>
     </div>
   </div>
-  <div class="footer-bottom">
+  <div class="rs-site-footer__bottom">
     <div class="container">
       <div class="row align-items-center justify-content-between">
-        <div class="col-auto"><p class="mb-0">© {{ 'now' | date: '%Y' }} {{ shop.name }}. Tous droits réservés.</p></div>
-        <div class="col-auto"><p class="mb-0">Paris, France</p></div>
+        <div class="col-12 col-sm-auto text-center text-sm-start">
+          <p class="rs-site-footer__legal">© {{ 'now' | date: '%Y' }} {{ shop.name }}. Tous droits réservés.</p>
+        </div>
+        <div class="col-12 col-sm-auto text-center text-sm-end">
+          <p class="rs-site-footer__legal">Paris, France</p>
+        </div>
       </div>
     </div>
   </div>
