@@ -177,18 +177,13 @@ function rs_supabase_approved_column(): ?string {
 }
 
 /**
- * Colonne numérique votes / classement (nom en base : en général `likes`).
- * Rétrocompat : si seul RS_SUPABASE_COL_SCORE est défini (ex. ancienne table `score`), il est utilisé.
+ * Colonne numérique votes / classement (nom en base : `likes` par défaut).
+ * Ne plus utiliser RS_SUPABASE_COL_SCORE : une ancienne config avec `score` provoquait « column … score does not exist »
+ * si la table n’a que `likes`. Pour une base qui a encore une colonne `score`, définir RS_SUPABASE_COL_LIKES à `score`.
  */
 function rs_supabase_likes_column(): string {
   if (defined('RS_SUPABASE_COL_LIKES')) {
     $c = trim((string) constant('RS_SUPABASE_COL_LIKES'));
-    if ($c !== '') {
-      return $c;
-    }
-  }
-  if (defined('RS_SUPABASE_COL_SCORE')) {
-    $c = trim((string) constant('RS_SUPABASE_COL_SCORE'));
     if ($c !== '') {
       return $c;
     }
@@ -343,55 +338,93 @@ function rs_instagram_api_value(?string $raw): string {
 }
 
 /**
+ * Première valeur texte non vide parmi plusieurs noms de colonne possibles (schémas portail / Supabase variables).
+ *
+ * @param array<string,mixed> $row
+ * @param array<int,string> $keysPriorité
+ */
+function rs_row_first_non_empty_scalar(array $row, array $keysPriorité): string {
+  foreach ($keysPriorité as $k) {
+    if (!array_key_exists($k, $row)) {
+      continue;
+    }
+    $v = $row[$k];
+    if ($v === null) {
+      continue;
+    }
+    if (is_array($v)) {
+      $s = implode(', ', array_map('strval', $v));
+    } elseif (is_scalar($v)) {
+      $s = trim((string) $v);
+    } else {
+      continue;
+    }
+    if ($s !== '') {
+      return $s;
+    }
+  }
+  return '';
+}
+
+/**
+ * @param array<int,string> $extra
+ * @return array<int,string>
+ */
+function rs_merge_unique_column_candidates(string $primary, array $extra): array {
+  $out = [];
+  $p = trim($primary);
+  if ($p !== '') {
+    $out[] = $p;
+  }
+  foreach ($extra as $k) {
+    $k = trim((string) $k);
+    if ($k !== '' && !in_array($k, $out, true)) {
+      $out[] = $k;
+    }
+  }
+  return $out;
+}
+
+/**
  * @param array<string,mixed> $row
  * @return array{id:string,name:string,instagram:string,metier:string,likes:int,rank:int,token:string}
  */
 function rs_supabase_row_to_top_public(array $row): array {
   $n = rs_supabase_col('RS_SUPABASE_COL_NAME', 'full_name');
-  $igCol = rs_supabase_col('RS_SUPABASE_COL_INSTAGRAM', 'handle');
   $likesCol = rs_supabase_likes_column();
-  $tokCol = rs_supabase_col('RS_SUPABASE_COL_PUBLIC_TOKEN', 'token');
+  $tokPrimary = trim((string) rs_field('RS_SUPABASE_COL_PUBLIC_TOKEN', 'token'));
 
   $likes = 0;
   if (isset($row[$likesCol]) && is_numeric($row[$likesCol])) {
     $likes = (int) round((float) $row[$likesCol]);
   }
 
-  $metier = '';
-  $mCol = trim((string) rs_field('RS_SUPABASE_COL_METIER', 'job_title'));
-  if ($mCol !== '' && isset($row[$mCol])) {
-    $mv = $row[$mCol];
-    if (is_string($mv)) {
-      $metier = $mv;
-    } elseif (is_array($mv)) {
-      $metier = implode(', ', array_map('strval', $mv));
-    }
-  }
-  if ($metier === '') {
-    $p = rs_supabase_col('RS_SUPABASE_COL_PROF', 'professions');
-    $pv = $row[$p] ?? '';
-    if (is_array($pv)) {
-      $metier = implode(', ', array_map('strval', $pv));
-    } else {
-      $metier = (string) $pv;
-    }
-  }
+  $igCandidates = rs_merge_unique_column_candidates(
+    (string) rs_field('RS_SUPABASE_COL_INSTAGRAM', 'handle'),
+    ['handle', 'instagram', 'ig_handle', 'instagram_handle', 'social_handle', 'social_instagram']
+  );
+  $igRaw = rs_row_first_non_empty_scalar($row, $igCandidates);
 
-  $token = '';
-  if (isset($row[$tokCol])) {
-    $token = is_scalar($row[$tokCol]) ? (string) $row[$tokCol] : '';
-  }
+  $profCol = rs_supabase_col('RS_SUPABASE_COL_PROF', 'professions');
+  $metierCandidates = rs_merge_unique_column_candidates(
+    (string) rs_field('RS_SUPABASE_COL_METIER', 'job_title'),
+    ['job_title', 'metier', 'professions', 'title', 'role', $profCol]
+  );
+  $metier = rs_row_first_non_empty_scalar($row, $metierCandidates);
 
-  $igRaw = '';
-  if (array_key_exists($igCol, $row)) {
-    $igv = $row[$igCol];
-    $igRaw = is_string($igv) ? $igv : (is_scalar($igv) ? (string) $igv : '');
-  }
+  $tokCandidates = rs_merge_unique_column_candidates(
+    $tokPrimary,
+    ['token', 'public_token', 'slug', 'profile_slug', 'public_slug']
+  );
+  $token = rs_row_first_non_empty_scalar($row, $tokCandidates);
 
   $displayName = '';
   if (array_key_exists($n, $row)) {
     $nv = $row[$n];
     $displayName = is_string($nv) ? $nv : (is_scalar($nv) ? (string) $nv : '');
+  }
+  if ($displayName === '') {
+    $displayName = rs_row_first_non_empty_scalar($row, rs_merge_unique_column_candidates('', ['full_name', 'name', 'display_name']));
   }
 
   return [

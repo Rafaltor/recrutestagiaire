@@ -16,21 +16,20 @@ define('RS_SUPABASE_USE_APPROVED_FILTER', false);
 // Si true plus haut : nom exact de la colonne (ex. approved, published, is_visible)
 // define('RS_SUPABASE_COL_APPROVED', 'approved');
 
-// Votes / classement (nom de colonne en base — en général `likes`)
+// Votes / classement — nom exact de la colonne en base (souvent `likes`)
 define('RS_SUPABASE_COL_LIKES', 'likes');
-// Ancienne base avec colonne `score` : define('RS_SUPABASE_COL_SCORE', 'score'); (priorité à RS_SUPABASE_COL_LIKES si les deux sont définis)
+// Si ta table a encore une colonne `score` au lieu de `likes` : define('RS_SUPABASE_COL_LIKES', 'score');
+// Ne pas définir RS_SUPABASE_COL_SCORE (ignoré par le proxy ; source d’erreurs si la colonne n’existe pas).
 
 // Métier / Instagram (noms de colonnes en base — défauts côté proxy : job_title, handle)
 // define('RS_SUPABASE_COL_METIER', 'job_title');
 // define('RS_SUPABASE_COL_INSTAGRAM', 'handle');
 // Token lien public fiche — define('RS_SUPABASE_COL_PUBLIC_TOKEN', 'token');
 
-// Nom affiché (formulaire dépôt → même colonne qu’au submit, défaut full_name)
-// define('RS_SUPABASE_COL_NAME', 'full_name');
-
 // Compteur accueil : approved = seulement lignes avec colonne bool = true (nécessite USE_APPROVED_FILTER true) | all = toutes les lignes
 define('RS_SUPABASE_COUNT_MODE', 'all');
 
+// Nom / prénom (POST action=submit envoie `name` → colonne ci‑dessous ; aligner sur le schéma portail / Supabase)
 define('RS_SUPABASE_COL_NAME', 'full_name');
 define('RS_SUPABASE_COL_EMAIL', 'email');
 define('RS_SUPABASE_COL_ROLE', 'role');

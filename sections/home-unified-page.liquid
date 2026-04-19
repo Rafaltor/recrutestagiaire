@@ -217,7 +217,7 @@
           return r.json();
         })
         .then(function (d) {
-          /* Ionos : JSON plat { id, instagram, metier, likes, rank, token } — portail possible : { profile: { … } } */
+          /* Ionos : { id, name, instagram, metier, likes, rank, token } — portail possible : { profile: { … } } */
           var p = d && (d.profile || (d.id ? d : null));
           if (!p || !p.id) {
             mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
@@ -239,8 +239,14 @@
             (typeof p.rank === 'number' ? 'N°' + p.rank + ' — cette semaine' : 'Profil N°1 cette semaine');
           var handle = p.handle || p.instagram || '—';
           var job = p.job_title || p.metier || '—';
+          var nom = p.name && String(p.name).trim() ? String(p.name).trim() : '';
+          var headBlock =
+            nom !== ''
+              ? '<p class="mb-1"><strong>' + esc(nom) + '</strong></p>' +
+                (handle !== '—' ? '<p class="mb-1 small text-muted">' + esc(handle) + '</p>' : '')
+              : '<p class="mb-1"><strong>' + esc(handle) + '</strong></p>';
           mount.innerHTML =
-            '<p class="mb-1"><strong>' + esc(handle) + '</strong></p>' +
+            headBlock +
             '<p class="mb-1 small">' + esc(job) + '</p>' +
             '<p class="mb-2 small">Likes : <strong>' + esc(String(likes)) + '</strong></p>' +
             '<p class="mb-3 small text-muted">' + esc(rank) + '</p>' +

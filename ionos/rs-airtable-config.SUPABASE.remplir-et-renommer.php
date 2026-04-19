@@ -12,6 +12,8 @@ define('RS_SUPABASE_TABLE', 'profiles');
 define('RS_SUPABASE_USE_APPROVED_FILTER', false);
 // define('RS_SUPABASE_COL_APPROVED', 'approved');
 define('RS_SUPABASE_COL_LIKES', 'likes');
+define('RS_SUPABASE_COL_METIER', 'job_title');
+define('RS_SUPABASE_COL_INSTAGRAM', 'handle');
 define('RS_SUPABASE_COUNT_MODE', 'all');
 
 define('RS_SUPABASE_COL_NAME', 'full_name');
