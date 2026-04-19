@@ -831,6 +831,28 @@
 		  touchThreshold: 100
 		});
 		
+	/* Cartes offre — carrousel Bootstrap (auto-défilement ; réinit pour forcer l’intervalle sur iOS / bundle thème) */
+	$(function () {
+		if (typeof bootstrap === 'undefined' || !bootstrap.Carousel) return;
+		document.querySelectorAll('.rs-offer-list-card__carousel[data-bs-ride="carousel"]').forEach(function (el) {
+			var raw = el.getAttribute('data-bs-interval');
+			if (raw === 'false' || raw === null) return;
+			var ms = parseInt(raw, 10);
+			if (isNaN(ms) || ms < 1) ms = 2000;
+			try {
+				var prev = bootstrap.Carousel.getInstance(el);
+				if (prev) prev.dispose();
+				var inst = new bootstrap.Carousel(el, {
+					interval: ms,
+					wrap: true,
+					pause: false,
+					touch: true
+				});
+				if (inst && typeof inst.cycle === 'function') inst.cycle();
+			} catch (e) {}
+		});
+	});
+
 	// ------------------ End Document ------------------ //
 
 })(this.jQuery);
