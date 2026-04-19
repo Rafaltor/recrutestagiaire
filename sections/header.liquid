@@ -125,20 +125,26 @@
           </div>
 
           <div class="rs-banner-top__actions d-inline-flex align-items-center">
-            <a href="{{ routes.cart_url }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__cart d-inline-flex align-items-center gap-2 text-decoration-none">
+            <a href="{{ routes.cart_url }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__cart d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" aria-label="{{ cart_lbl | escape }}">
               {% render 'icon-folder-dossier', w: 16, h: 16 %}
-              <span class="rs-caf-btn-dossier__label">{{ cart_lbl }}</span>
+              <span class="rs-caf-btn-dossier__label">
+                <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--full">{{ cart_lbl }}</span>
+                <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--short" aria-hidden="true">Dossier</span>
+              </span>
               {% if section.settings.show_cart_count and cart.item_count > 0 %}
                 <span class="rs-cart-badge">{{ cart.item_count }}</span>
               {% endif %}
             </a>
 
-            <a href="{{ rs_p_login }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__account d-inline-flex align-items-center gap-2 text-decoration-none" rel="noopener noreferrer">
+            <a href="{{ rs_p_login }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__account d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" rel="noopener noreferrer" aria-label="Mon espace">
               <svg class="rs-icon-account" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21a8 8 0 0 0-16 0"/>
                 <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/>
               </svg>
-              <span class="rs-caf-btn-dossier__label">Mon espace</span>
+              <span class="rs-caf-btn-dossier__label">
+                <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--full">Mon espace</span>
+                <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--short" aria-hidden="true">Espace</span>
+              </span>
             </a>
           </div>
         </div>

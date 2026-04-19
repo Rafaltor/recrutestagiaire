@@ -4,9 +4,10 @@
    ============================================================ */
 
 :root {
-  --rs-da-page-bg: #f0f0f0;
+  --rs-da-page-bg: #efefef;
   --rs-da-block-bg: #ffffff;
   --rs-da-border: #dddddd;
+  --rs-da-border-w: 2px;
   --rs-da-pink: #f06b8a;
   --rs-da-pink-top: #f57a9a;
   --rs-da-pink-border: #c73d62;
@@ -18,10 +19,11 @@
   --rs-da-radius: 4px;
 }
 
-/* ---- Typographie globale (Arial uniquement, hors icônes) ---- */
+/* ---- Typographie : Arial / Helvetica stricte (icônes FA / Bootstrap exclus) ---- */
 html {
   font-size: 13px;
   -webkit-font-smoothing: auto;
+  font-family: Arial, Helvetica, sans-serif !important;
 }
 @media (max-width: 767.98px) {
   html {
@@ -71,6 +73,26 @@ select,
 small,
 .badge {
   font-family: Arial, Helvetica, sans-serif !important;
+}
+
+main,
+main *,
+.header-wrap,
+.header-wrap *,
+footer.footer,
+footer.footer * {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+.fa,
+.fas,
+.far,
+.fab,
+.fal,
+[class*='fa-'],
+i[class*='fa'],
+.bi,
+[class^='bi-']::before {
+  font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands', 'bootstrap-icons', Arial, sans-serif !important;
 }
 
 /* Texte secondaire plus compact sur mobile */
@@ -159,7 +181,7 @@ button[type='submit'].btn-primary {
 }
 
 .rs-uni-cell {
-  border: 1px solid var(--rs-da-border) !important;
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
   background: var(--rs-da-block-bg) !important;
   padding: var(--rs-da-pad) !important;
 }
@@ -168,39 +190,73 @@ button[type='submit'].btn-primary {
   padding: var(--rs-da-pad) !important;
 }
 
-/* ---- Titres de section : 14px majuscules + filet ---- */
+/* ---- Titres de section : puce 5×5 rose (années 2000) + filet ---- */
 .rs-pole-panel__title,
 .rs-uni-blue-band__title,
 .rs-fake-promo__title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
   font-size: 14px !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.04em !important;
-  border-bottom: 1px solid var(--rs-da-border) !important;
+  border-bottom: var(--rs-da-border-w) solid var(--rs-da-border) !important;
   padding-bottom: 8px !important;
   margin-bottom: 10px !important;
   color: #333 !important;
+}
+
+.rs-pole-panel__title::before,
+.rs-uni-blue-band__title::before,
+.rs-fake-promo__title::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background: #f06b8a;
+  flex-shrink: 0;
+}
+
+.rs-intro-bundle .rs-hero__title-pe {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+}
+.rs-intro-bundle .rs-hero__title-pe::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background: #f06b8a;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 0.35em;
+}
+@media (min-width: 768px) {
+  .rs-intro-bundle .rs-hero__title-pe {
+    font-size: 1.35rem !important;
+  }
 }
 
 .rs-stat-kitsch__ribbon {
   font-size: 14px !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
-  display: block !important;
-  border-bottom: 1px solid var(--rs-da-border) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  border-bottom: var(--rs-da-border-w) solid var(--rs-da-border) !important;
   padding-bottom: 8px !important;
   margin-bottom: 10px !important;
 }
-
-/* Intro hero : réduire un peu le « poster » pour coller à l’esprit 2010 */
-.rs-hero__title-pe {
-  font-size: 1.25rem !important;
-  font-weight: 700 !important;
-}
-@media (min-width: 768px) {
-  .rs-hero__title-pe {
-    font-size: 1.35rem !important;
-  }
+.rs-stat-kitsch__ribbon::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background: #f06b8a;
+  flex-shrink: 0;
 }
 
 /* ---- Rails latéraux : titre colonne ---- */
@@ -219,7 +275,7 @@ button[type='submit'].btn-primary {
 /* ---- Cartes pub rail (produits) ---- */
 .rs-rail-ad {
   background: var(--rs-da-block-bg) !important;
-  border: 1px solid var(--rs-da-border) !important;
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
   border-radius: var(--rs-da-radius) !important;
   box-shadow: none !important;
   padding: 10px !important;
@@ -299,7 +355,7 @@ button[type='submit'].btn-primary {
 
 /* ---- Blocs pole / grilles ---- */
 .rs-pole-panel {
-  border: 1px solid var(--rs-da-border) !important;
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
   background: var(--rs-da-block-bg) !important;
 }
 
@@ -319,7 +375,7 @@ footer.footer {
   border-color: var(--rs-da-border) !important;
 }
 .header-wrap {
-  background: var(--rs-da-block-bg) !important;
+  background: linear-gradient(180deg, #e8e8f0 0%, #ffffff 100%) !important;
 }
 
 /* ============================================================
@@ -397,7 +453,7 @@ footer.footer {
 
 /* 7. Bloc « CHIFFRE OFFICIEL » */
 .rs-stat-kitsch {
-  border: 3px double #f06b8a !important;
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
   box-shadow: none !important;
 }
 .rs-stat-kitsch__ribbon,
@@ -423,4 +479,69 @@ main a:not(.btn):not(.abt-btn):not(.rs-subnav__trigger):not(.rs-rail-ad__cta):ho
 footer.footer a:not(.btn):not(.abt-btn):hover,
 .header-wrap .rs-subnav__dropdown a:hover {
   color: #d45577 !important;
+}
+
+/* ---- Libellés header : long (desktop) / court (mobile) ---- */
+.rs-caf-btn-dossier__text--short {
+  display: none !important;
+}
+@media (max-width: 991.98px) {
+  .rs-caf-btn-dossier__text--full {
+    display: none !important;
+  }
+  .rs-caf-btn-dossier__text--short {
+    display: inline !important;
+  }
+}
+
+/* ---- Header mobile : logo 40px, ligne actions une seule ligne, hauteur maîtrisée ---- */
+@media (max-width: 991.98px) {
+  body:not(.rs-viewport-desktop) .header-wrap .rs-header-top-line {
+    max-height: 60px;
+    min-height: 0;
+    padding: 2px 0 !important;
+    align-items: center;
+    column-gap: 6px !important;
+  }
+  body:not(.rs-viewport-desktop) .header-wrap .rs-banner-top.rs-header-pole-brand {
+    min-height: 0 !important;
+  }
+  body:not(.rs-viewport-desktop) .header-wrap .rs-nav-brand__img {
+    max-height: 40px !important;
+    width: auto !important;
+  }
+  body:not(.rs-viewport-desktop) .header-wrap .rs-banner-top__actions {
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+    align-items: center;
+    max-width: min(58vw, 280px);
+  }
+  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
+    padding: 5px 7px !important;
+    font-size: 11px !important;
+    min-height: 0 !important;
+    line-height: 1.15 !important;
+    max-height: 44px;
+    gap: 0.25rem !important;
+  }
+  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier .rs-icon-account,
+  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier svg {
+    width: 14px !important;
+    height: 14px !important;
+    flex-shrink: 0;
+  }
+  body:not(.rs-viewport-desktop) .header-wrap .rs-nav-brand__name.logo {
+    font-size: 13px !important;
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 575.98px) {
+  body:not(.rs-viewport-desktop) .header-wrap .rs-nav-brand__img {
+    max-height: 40px !important;
+  }
+  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
+    padding: 4px 6px !important;
+    font-size: 10px !important;
+  }
 }
