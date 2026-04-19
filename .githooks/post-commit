@@ -1,0 +1,6 @@
+#!/bin/sh
+# Push automatique après chaque commit local.
+# Activer une fois : git config core.hooksPath .githooks
+# (ou lancer scripts/setup-git-hooks.ps1 / scripts/setup-git-hooks.sh)
+
+exec git push
