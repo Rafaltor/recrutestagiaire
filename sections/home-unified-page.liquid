@@ -217,17 +217,28 @@
           return r.json();
         })
         .then(function (d) {
-          var p = d && d.profile;
+          /* Ionos : JSON plat { id, instagram, metier, likes, rank, token } — portail possible : { profile: { … } } */
+          var p = d && (d.profile || (d.id ? d : null));
           if (!p || !p.id) {
             mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
             return;
           }
-          var path = p.profile_url || '/profil/' + p.id;
+          var path =
+            p.profile_url ||
+            '/profil/' + encodeURIComponent(p.token != null && String(p.token) !== '' ? String(p.token) : String(p.id));
           var href = base.replace(/\/$/, '') + path;
-          var likes = typeof p.likes === 'number' ? p.likes : d.likes || 0;
-          var rank = p.rank_label || d.rank_label || 'Profil N°1 cette semaine';
-          var handle = p.handle || '—';
-          var job = p.job_title || '—';
+          var likes =
+            typeof p.likes === 'number'
+              ? p.likes
+              : typeof d.likes === 'number'
+                ? d.likes
+                : parseFloat(p.likes) || 0;
+          var rank =
+            p.rank_label ||
+            d.rank_label ||
+            (typeof p.rank === 'number' ? 'N°' + p.rank + ' — cette semaine' : 'Profil N°1 cette semaine');
+          var handle = p.handle || p.instagram || '—';
+          var job = p.job_title || p.metier || '—';
           mount.innerHTML =
             '<p class="mb-1"><strong>' + esc(handle) + '</strong></p>' +
             '<p class="mb-1 small">' + esc(job) + '</p>' +
@@ -782,8 +793,8 @@
           "type": "text",
           "id": "api_url",
           "label": "URL API top profil",
-          "default": "https://portail.recrutestagiaire.eu/api/profils/top",
-          "info": "GET JSON — champ texte pour URL externe."
+          "default": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
+          "info": "Vide = réglage thème « API — Meilleur profil ». Le proxy est sur api.* (Ionos), pas sur portail.*"
         },
         {
           "type": "text",

@@ -231,6 +231,13 @@ function rs_supabase_row_to_profile(array $row): array {
   } else {
     $prof = (string)$prof;
   }
+  if ($prof === '') {
+    $mCol = trim((string) rs_field('RS_SUPABASE_COL_METIER', 'job_title'));
+    if ($mCol !== '' && isset($row[$mCol])) {
+      $mv = $row[$mCol];
+      $prof = is_array($mv) ? implode(', ', array_map('strval', $mv)) : (string) $mv;
+    }
+  }
 
   $likes = 0.0;
   if (isset($row[$likesCol]) && is_numeric($row[$likesCol])) {
@@ -337,10 +344,11 @@ function rs_instagram_api_value(?string $raw): string {
 
 /**
  * @param array<string,mixed> $row
- * @return array{id:string,instagram:string,metier:string,likes:int,rank:int,token:string}
+ * @return array{id:string,name:string,instagram:string,metier:string,likes:int,rank:int,token:string}
  */
 function rs_supabase_row_to_top_public(array $row): array {
-  $igCol = rs_supabase_col('RS_SUPABASE_COL_INSTAGRAM', 'instagram');
+  $n = rs_supabase_col('RS_SUPABASE_COL_NAME', 'full_name');
+  $igCol = rs_supabase_col('RS_SUPABASE_COL_INSTAGRAM', 'handle');
   $likesCol = rs_supabase_likes_column();
   $tokCol = rs_supabase_col('RS_SUPABASE_COL_PUBLIC_TOKEN', 'token');
 
@@ -350,7 +358,7 @@ function rs_supabase_row_to_top_public(array $row): array {
   }
 
   $metier = '';
-  $mCol = trim((string) rs_field('RS_SUPABASE_COL_METIER', 'metier'));
+  $mCol = trim((string) rs_field('RS_SUPABASE_COL_METIER', 'job_title'));
   if ($mCol !== '' && isset($row[$mCol])) {
     $mv = $row[$mCol];
     if (is_string($mv)) {
@@ -380,8 +388,15 @@ function rs_supabase_row_to_top_public(array $row): array {
     $igRaw = is_string($igv) ? $igv : (is_scalar($igv) ? (string) $igv : '');
   }
 
+  $displayName = '';
+  if (array_key_exists($n, $row)) {
+    $nv = $row[$n];
+    $displayName = is_string($nv) ? $nv : (is_scalar($nv) ? (string) $nv : '');
+  }
+
   return [
     'id' => (string) ($row['id'] ?? ''),
+    'name' => $displayName,
     'instagram' => rs_instagram_api_value($igRaw),
     'metier' => $metier,
     'likes' => $likes,

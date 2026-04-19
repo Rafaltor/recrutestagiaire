@@ -20,10 +20,13 @@ define('RS_SUPABASE_USE_APPROVED_FILTER', false);
 define('RS_SUPABASE_COL_LIKES', 'likes');
 // Ancienne base avec colonne `score` : define('RS_SUPABASE_COL_SCORE', 'score'); (priorité à RS_SUPABASE_COL_LIKES si les deux sont définis)
 
-// Optionnel — endpoint public top profil
-// define('RS_SUPABASE_COL_INSTAGRAM', 'instagram');
-// define('RS_SUPABASE_COL_METIER', 'metier');
-// define('RS_SUPABASE_COL_PUBLIC_TOKEN', 'token');
+// Métier / Instagram (noms de colonnes en base — défauts côté proxy : job_title, handle)
+// define('RS_SUPABASE_COL_METIER', 'job_title');
+// define('RS_SUPABASE_COL_INSTAGRAM', 'handle');
+// Token lien public fiche — define('RS_SUPABASE_COL_PUBLIC_TOKEN', 'token');
+
+// Nom affiché (formulaire dépôt → même colonne qu’au submit, défaut full_name)
+// define('RS_SUPABASE_COL_NAME', 'full_name');
 
 // Compteur accueil : approved = seulement lignes avec colonne bool = true (nécessite USE_APPROVED_FILTER true) | all = toutes les lignes
 define('RS_SUPABASE_COUNT_MODE', 'all');

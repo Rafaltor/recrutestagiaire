@@ -220,7 +220,7 @@
             "cell_bg": "#ffffff",
             "cell_padding": 0,
             "cell_border": "",
-            "api_url": "https://portail.recrutestagiaire.eu/api/profils/top",
+            "api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
             "portail_base_url": "https://portail.recrutestagiaire.eu",
             "kicker": "Portail",
             "title": "Meilleur profil du moment",

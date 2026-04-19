@@ -4,9 +4,13 @@
   class="{% if settings.rs_viewport_desktop_wrap and request.page_type == 'index' %}rs-viewport-desktop{% endif %}">
 <head>
   <meta charset="UTF-8">
-  {%- unless request.page_type == 'index' -%}
+  {%- comment -%}
+    Accueil + « Vue bureau sur mobile » : meta viewport large + script (voir bloc ci‑dessous).
+    Sinon : viewport classique width=device-width (responsive mobile normal).
+  {%- endcomment -%}
+  {%- if request.page_type != 'index' or settings.rs_viewport_desktop_wrap == false -%}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {%- endunless -%}
+  {%- endif -%}
   {%- assign rs_lw = settings.rs_viewport_fixed_width | default: 1180 | round -%}
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="canonical" href="{{ canonical_url }}">
@@ -26,11 +30,10 @@
   {{ content_for_header }}
 
   {%- comment -%}
-    Viewport « bureau sur mobile » :
-    - UNIQUEMENT sur l'accueil (index) pour l'effet "dézoom rétro"
+    Viewport « bureau sur mobile » : uniquement si l’option thème est activée (accueil).
     Après content_for_header pour écraser la meta Shopify.
   {%- endcomment -%}
-  {%- if request.page_type == 'index' -%}
+  {%- if request.page_type == 'index' and settings.rs_viewport_desktop_wrap -%}
     <meta
       id="rs-viewport-meta"
       name="viewport"

@@ -350,7 +350,7 @@
     {%- endif -%}
 
   {%- when 'top_profile_portail' -%}
-    {%- assign _api = b.api_url | default: 'https://portail.recrutestagiaire.eu/api/profils/top' -%}
+    {%- assign _api = b.api_url | default: settings.rs_api_url_top_profile | default: 'https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top' -%}
     {%- assign _base = b.portail_base_url | default: 'https://portail.recrutestagiaire.eu' | strip | rstrip: '/' -%}
     <div
       class="rs-pole-panel rs-pole-panel--encart h-100 rs-top-profile-api"

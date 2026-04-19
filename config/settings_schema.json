@@ -17,7 +17,14 @@
       { "type": "text", "id": "rs_portail_url_profils", "label": "Portail — Profils / annuaire (URL complète)", "default": "https://portail.recrutestagiaire.eu/profils", "info": "Champ texte : les réglages de type « URL » Shopify n’acceptent pas les https externes en valeur par défaut." },
       { "type": "text", "id": "rs_portail_url_depot", "label": "Portail — Déposer une candidature", "default": "https://portail.recrutestagiaire.eu/depot" },
       { "type": "text", "id": "rs_portail_url_vote", "label": "Portail — Vote / swipe", "default": "https://portail.recrutestagiaire.eu/vote" },
-      { "type": "text", "id": "rs_portail_url_connexion", "label": "Portail — Connexion (Mon espace)", "default": "https://portail.recrutestagiaire.eu/connexion" }
+      { "type": "text", "id": "rs_portail_url_connexion", "label": "Portail — Connexion (Mon espace)", "default": "https://portail.recrutestagiaire.eu/connexion" },
+      {
+        "type": "text",
+        "id": "rs_api_url_top_profile",
+        "label": "API — Meilleur profil (classement)",
+        "default": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
+        "info": "Proxy PHP sur le sous-domaine api (Ionos), pas portail. GET JSON public ; ex. …/rs-airtable-proxy.php?action=profil_top ou …/api/profils/top/ si déployé."
+      }
     ]
   },
   {
@@ -74,9 +81,9 @@
       {
         "type": "checkbox",
         "id": "rs_viewport_desktop_wrap",
-        "label": "Vue bureau sur mobile",
-        "default": true,
-        "info": "Même mise en page qu’un PC : le navigateur réduit la page entière. Désactiver pour le mode responsive habituel."
+        "label": "Vue bureau sur mobile (accueil)",
+        "default": false,
+        "info": "Désactivé par défaut : viewport classique (width=device-width), UX mobile responsive. Si activé sur l’accueil uniquement : meta viewport large + dézoom pour imiter un écran PC."
       },
       {
         "type": "range",
