@@ -191,7 +191,17 @@
 </section>
 
 <style>
-  .rs-pe-list { display: flex; flex-direction: column; gap: {{ section.settings.card_gap_pe | default: 16 }}px; }
+  /* Mobile : 1 CV par ligne ; à partir de md : 2 CV par ligne */
+  .rs-pe-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: {{ section.settings.card_gap_pe | default: 16 }}px;
+  }
+  @media (min-width: 768px) {
+    .rs-pe-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
   .rs-pe-card {
     border: 1px solid #c5d5e4;
     border-radius: {{ section.settings.card_radius }}px;

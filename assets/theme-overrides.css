@@ -57,6 +57,15 @@
 /* ---- Typographie & base ---- */
 *, *::before, *::after { box-sizing: border-box; }
 
+/*
+ * Scroll horizontal : jobhill impose overflow-x:hidden sur body, mais le débordement
+ * peut quand même créer un scroll sur l’élément racine <html> (tablettes, longues chaînes, etc.).
+ */
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 body {
   font-family: "Arial", "Helvetica Neue", Helvetica, sans-serif;
   font-size: 13px;
