@@ -1,0 +1,225 @@
+{%- liquid
+  assign rs_profils = settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils'
+  assign rs_depot = settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot'
+-%}
+
+<div class="rs-collectif-page" {{ section.shopify_attributes }}>
+  {%- comment -%} SECTION 1 — Hero {%- endcomment -%}
+  <section class="rs-collectif-hero">
+    <div class="container">
+      <div class="rs-collectif-hero__text">
+        <h1 class="rs-collectif-hero__title">{{ section.settings.hero_title | default: 'Le Collectif' }}</h1>
+        <p class="rs-collectif-hero__subtitle">
+          {{ section.settings.hero_subtitle | default: "Fondé par 11 personnes qui ont commencé stagiaires." }}
+        </p>
+      </div>
+      <div class="rs-collectif-hero__media">
+        {%- if section.settings.hero_group_photo != blank -%}
+          <img
+            src="{{ section.settings.hero_group_photo | image_url: width: 1200 }}"
+            alt="{{ section.settings.hero_photo_alt | default: 'Photo de groupe du collectif' | escape }}"
+            class="rs-collectif-hero__img"
+            loading="lazy">
+        {%- else -%}
+          <div class="rs-collectif-placeholder" role="img" aria-label="Espace photo groupe">
+            <span class="rs-collectif-placeholder__label">Photo à venir</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} SECTION 2 — Manifeste {%- endcomment -%}
+  <section class="rs-collectif-section rs-collectif-manifeste">
+    <div class="container container--narrow">
+      <h2 class="rs-collectif-section__title">{{ section.settings.manifeste_title | default: "Notre offre d'emploi" }}</h2>
+      <div class="rs-collectif-manifeste__body">
+        <p>Recrute Stagiaire est un label créatif parisien fondé en 2026 par 11 personnes issues des écoles de mode, du design, de l’architecture et de l’ingénierie.</p>
+        <p>On casse les codes — en faisant aussi bien que le luxe, aussi accessible que le streetwear, et en traitant chaque collaborateur comme un égal dès le premier jour.</p>
+        <p><strong>Le vêtement est une offre. L’appartenance est le salaire.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} SECTION 3 — Fondateurs {%- endcomment -%}
+  <section class="rs-collectif-section rs-collectif-founders">
+    <div class="container">
+      <h2 class="rs-collectif-section__title rs-collectif-section__title--center">
+        {{ section.settings.founders_title | default: "L'équipe fondatrice — 11 postes pourvus" }}
+      </h2>
+      <p class="rs-collectif-founders__kicker">
+        {{ section.settings.founders_kicker | default: "Offre non négociable. Dans la limite des stocks disponibles." }}
+      </p>
+      <div class="row g-3 rs-collectif-founders__grid">
+        {%- assign founders = 'Virgile Pages|Président — Designer textile, peintre||Gabin Cornu|DG Commercial — Architecture, impression 3D||Paul-Maxence Baraton|Directeur Opérations — Ingénieur ENS Paris-Saclay, tricot, 3D||Arthur Charton|Directeur Production — Designer textile||Joachim Soumaré|Directeur Création — Designer textile féminin||Eloïne Baraton|Présidente association — Événementiel||Gabriel Rivié|Trésorier — Gestion financière||Alexandre Martin|Communication digitale||Garance Leclerc|Secrétaire — Tricot||Lou Baume|Responsable artistique — Bijoux, accessoires||Louis De La Forge|Vice-Président — Designer textile' | split: '||' -%}
+        {%- for founder in founders -%}
+          {%- assign parts = founder | split: '|' -%}
+          {%- assign fname = parts[0] | strip -%}
+          {%- assign frole = parts[1] | strip -%}
+          <div class="col-6 col-lg-4">
+            <article class="rs-collectif-founder-card">
+              <div class="rs-collectif-founder-card__photo">
+                <span class="rs-collectif-placeholder__label rs-collectif-placeholder__label--sm">Photo à venir</span>
+              </div>
+              <span class="rs-collectif-founder-card__badge">Poste pourvu</span>
+              <h3 class="rs-collectif-founder-card__name">{{ fname }}</h3>
+              <p class="rs-collectif-founder-card__role">{{ frole }}</p>
+            </article>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} SECTION 4 — Vision {%- endcomment -%}
+  <section class="rs-collectif-section rs-collectif-vision">
+    <div class="container container--narrow">
+      <h2 class="rs-collectif-section__title">{{ section.settings.vision_title | default: 'Pourquoi ce poste existe' }}</h2>
+      <div class="rs-collectif-vision__body">
+        <p>On voulait une marque qui ressemble à ceux qui la portent. Pas une marque solo, pas une marque corporate — un collectif. 11 personnes, 11 expertises, une seule direction : vers le haut.</p>
+        <p><strong>Le vêtement comme point de départ. L’ambition comme uniforme. L’Europe comme terrain de jeu.</strong></p>
+      </div>
+      <div class="rs-collectif-vision__media">
+        {%- if section.settings.vision_photo != blank -%}
+          <img
+            src="{{ section.settings.vision_photo | image_url: width: 1200 }}"
+            alt="{{ section.settings.vision_photo_alt | default: 'Atelier ou création' | escape }}"
+            class="rs-collectif-vision__img"
+            loading="lazy">
+        {%- else -%}
+          <div class="rs-collectif-placeholder rs-collectif-placeholder--wide" role="img" aria-label="Espace photo atelier">
+            <span class="rs-collectif-placeholder__label">Photo à venir</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} SECTION 5 — CTA {%- endcomment -%}
+  <section class="rs-collectif-cta">
+    <div class="container container--narrow text-center">
+      <h2 class="rs-collectif-cta__title">{{ section.settings.cta_title | default: 'Vous voulez rejoindre le collectif ?' }}</h2>
+      <p class="rs-collectif-cta__subtitle">
+        {{ section.settings.cta_subtitle | default: 'Le recrutement est ouvert. C’est la communauté qui décide.' }}
+      </p>
+      <div class="rs-collectif-cta__actions">
+        <a href="{{ rs_depot }}" class="btn btn-primary" rel="noopener noreferrer">{{ section.settings.cta_primary_label | default: 'Déposer sa candidature' }}</a>
+        <a href="{{ rs_profils }}" class="btn btn-outline-primary rs-collectif-cta__btn-secondary" rel="noopener noreferrer">{{ section.settings.cta_secondary_label | default: 'Voir les profils' }}</a>
+      </div>
+      <p class="rs-collectif-cta__fineprint">Sans engagement. Dans la limite des stocks disponibles.</p>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Page Collectif / Histoire",
+  "tag": "section",
+  "class": "section-page-collectif-histoire",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section 1 — Hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Titre",
+      "default": "Le Collectif"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Sous-titre",
+      "default": "Fondé par 11 personnes qui ont commencé stagiaires."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_group_photo",
+      "label": "Photo de groupe (optionnel)"
+    },
+    {
+      "type": "text",
+      "id": "hero_photo_alt",
+      "label": "Texte alternatif photo groupe",
+      "default": "Photo de groupe du collectif"
+    },
+    {
+      "type": "header",
+      "content": "Section 2 — Manifeste"
+    },
+    {
+      "type": "text",
+      "id": "manifeste_title",
+      "label": "Titre",
+      "default": "Notre offre d'emploi"
+    },
+    {
+      "type": "header",
+      "content": "Section 3 — Fondateurs"
+    },
+    {
+      "type": "text",
+      "id": "founders_title",
+      "label": "Titre",
+      "default": "L'équipe fondatrice — 11 postes pourvus"
+    },
+    {
+      "type": "textarea",
+      "id": "founders_kicker",
+      "label": "Sous-titre",
+      "default": "Offre non négociable. Dans la limite des stocks disponibles."
+    },
+    {
+      "type": "header",
+      "content": "Section 4 — Vision"
+    },
+    {
+      "type": "text",
+      "id": "vision_title",
+      "label": "Titre",
+      "default": "Pourquoi ce poste existe"
+    },
+    {
+      "type": "image_picker",
+      "id": "vision_photo",
+      "label": "Photo atelier / création (optionnel)"
+    },
+    {
+      "type": "text",
+      "id": "vision_photo_alt",
+      "label": "Texte alternatif",
+      "default": "Atelier ou création"
+    },
+    {
+      "type": "header",
+      "content": "Section 5 — CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "Titre",
+      "default": "Vous voulez rejoindre le collectif ?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_subtitle",
+      "label": "Sous-titre",
+      "default": "Le recrutement est ouvert. C'est la communauté qui décide."
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_label",
+      "label": "Bouton principal",
+      "default": "Déposer sa candidature"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_label",
+      "label": "Bouton secondaire",
+      "default": "Voir les profils"
+    }
+  ],
+  "presets": [{ "name": "Page Collectif / Histoire" }]
+}
+{% endschema %}

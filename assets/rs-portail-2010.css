@@ -4,13 +4,16 @@
    ============================================================ */
 
 :root {
+  /* Charte finale recrutestagiaire.eu */
   --rs-da-page-bg: #efefef;
   --rs-da-block-bg: #ffffff;
+  --rs-da-black: #0a0a0a;
   --rs-da-border: #dddddd;
   --rs-da-border-w: 2px;
-  --rs-da-pink: #f06b8a;
-  --rs-da-pink-top: #f57a9a;
-  --rs-da-pink-border: #c73d62;
+  --rs-da-pink: #f472b6;
+  --rs-da-pink-top: #f9a8d4;
+  --rs-da-pink-hover: #db2777;
+  --rs-da-pink-border: #db2777;
   --rs-da-btn-gold-top: #f5e6a8;
   --rs-da-btn-gold-bot: #d4af37;
   --rs-da-btn-gold-border: #a88620;
@@ -120,7 +123,9 @@ button[type='submit'].btn-primary {
 }
 .btn-primary:hover,
 .rs-caf-btn-dossier.abt-btn:not(.rs-intro-cta--profils):hover {
-  filter: brightness(0.96);
+  background: linear-gradient(180deg, var(--rs-da-pink-hover) 0%, var(--rs-da-pink-hover) 100%) !important;
+  border-color: var(--rs-da-pink-hover) !important;
+  filter: none;
   color: #fff !important;
 }
 
@@ -228,7 +233,7 @@ button[type='submit'].btn-primary {
   content: '';
   width: 5px;
   height: 5px;
-  background: #f06b8a;
+  background: var(--rs-da-pink);
   flex-shrink: 0;
 }
 
@@ -243,7 +248,7 @@ button[type='submit'].btn-primary {
   content: '';
   width: 5px;
   height: 5px;
-  background: #f06b8a;
+  background: var(--rs-da-pink);
   flex-shrink: 0;
   align-self: flex-start;
   margin-top: 0.35em;
@@ -269,7 +274,7 @@ button[type='submit'].btn-primary {
   content: '';
   width: 5px;
   height: 5px;
-  background: #f06b8a;
+  background: var(--rs-da-pink);
   flex-shrink: 0;
 }
 
@@ -318,8 +323,8 @@ button[type='submit'].btn-primary {
 
 /* Bouton « Voir » cartes produit (rose, texte blanc) */
 .rs-rail-ad__cta:not(.rs-rail-ad__cta--half) {
-  background: #f06b8a !important;
-  border: 1px solid #c73d62 !important;
+  background: var(--rs-da-pink) !important;
+  border: 1px solid var(--rs-da-pink-border) !important;
   border-radius: var(--rs-da-radius) !important;
   color: #ffffff !important;
   font-weight: 700 !important;
@@ -328,7 +333,7 @@ button[type='submit'].btn-primary {
   text-shadow: none !important;
 }
 .rs-rail-ad__cta:not(.rs-rail-ad__cta--half):hover {
-  background: #e55d7d !important;
+  background: var(--rs-da-pink-hover) !important;
   color: #ffffff !important;
 }
 
@@ -506,7 +511,7 @@ button[type='submit'].btn-primary {
   padding: 2px 0;
 }
 .rs-site-footer__menu a:hover {
-  color: #d45577 !important;
+  color: var(--rs-da-pink-hover) !important;
   text-decoration: underline;
 }
 .rs-site-footer__social {
@@ -591,9 +596,9 @@ footer.footer:not(.rs-site-footer) {
 .header-wrap .rs-subnav__item.is-active .rs-subnav__trigger,
 .header-wrap .rs-subnav__item.is-active:hover .rs-subnav__trigger,
 .header-wrap .rs-subnav__item.is-active:focus-within .rs-subnav__trigger {
-  background: #f06b8a !important;
+  background: var(--rs-da-pink) !important;
   color: #ffffff !important;
-  border: 1px solid #f06b8a !important;
+  border: 1px solid var(--rs-da-pink) !important;
   box-shadow: none !important;
   filter: none !important;
   text-shadow: none !important;
@@ -606,15 +611,15 @@ footer.footer:not(.rs-site-footer) {
 /* 4. Badge intro « COLLECTIF ARTISTIQUE — PARIS 2026 » */
 .rs-intro-bundle__badge {
   background: #ffffff !important;
-  border: 1px solid #f06b8a !important;
-  color: #f06b8a !important;
+  border: 1px solid var(--rs-da-pink) !important;
+  color: var(--rs-da-pink) !important;
 }
 
 /* 6. Cercles grille accueil */
 .rs-pole-panel__circle.rs-pole-panel__circle--candidat {
-  background: #f06b8a !important;
+  background: var(--rs-da-pink) !important;
   color: #ffffff !important;
-  border-color: #c73d62 !important;
+  border-color: var(--rs-da-pink-border) !important;
   box-shadow: none !important;
 }
 .rs-pole-panel__circle.rs-pole-panel__circle--offres-pale {
@@ -632,26 +637,26 @@ footer.footer:not(.rs-site-footer) {
 .rs-stat-kitsch__ribbon,
 .rs-stat-kitsch__line,
 .rs-stat-kitsch__n {
-  color: #f06b8a !important;
+  color: var(--rs-da-pink) !important;
   text-shadow: none !important;
 }
 .rs-stat-kitsch__suffix {
   color: #333333 !important;
 }
 .rs-stat-kitsch__suffix strong {
-  color: #f06b8a !important;
+  color: var(--rs-da-pink) !important;
 }
 
 /* 8. Liens (bleu → rose) — hors boutons / onglets / icônes réseaux pied de page */
 main a:not(.btn):not(.abt-btn):not(.rs-subnav__trigger):not(.rs-rail-ad__cta),
 footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link),
 .header-wrap .rs-subnav__dropdown a {
-  color: #f06b8a !important;
+  color: var(--rs-da-pink) !important;
 }
 main a:not(.btn):not(.abt-btn):not(.rs-subnav__trigger):not(.rs-rail-ad__cta):hover,
 footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover,
 .header-wrap .rs-subnav__dropdown a:hover {
-  color: #d45577 !important;
+  color: var(--rs-da-pink-hover) !important;
 }
 
 /* ---- Libellés header : long (desktop) / court (mobile) ---- */
@@ -718,3 +723,250 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover,
     font-size: 10px !important;
   }
 }
+
+/* ============================================================
+   Page Collectif / Histoire (template page.about / page.histoire)
+   ============================================================ */
+.section-page-collectif-histoire {
+  background: var(--rs-da-page-bg) !important;
+}
+
+.rs-collectif-page {
+  color: #333;
+  padding-bottom: 32px;
+}
+
+.rs-collectif-page .container--narrow {
+  max-width: 42rem;
+}
+
+.rs-collectif-hero {
+  padding: 28px 0 20px;
+}
+
+.rs-collectif-hero__title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--rs-da-black) !important;
+  margin: 0 0 10px;
+}
+
+.rs-collectif-hero__subtitle {
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: #444 !important;
+  margin: 0 0 20px;
+  max-width: 36rem;
+}
+
+.rs-collectif-hero__media {
+  margin-top: 8px;
+}
+
+.rs-collectif-hero__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: var(--rs-da-border-w) solid var(--rs-da-border);
+  border-radius: var(--rs-da-radius);
+  background: var(--rs-da-block-bg);
+}
+
+.rs-collectif-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background: #d9d9d9;
+  border: var(--rs-da-border-w) dashed var(--rs-da-border);
+  border-radius: var(--rs-da-radius);
+  color: #666 !important;
+}
+
+.rs-collectif-placeholder--wide {
+  min-height: 220px;
+}
+
+.rs-collectif-placeholder__label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.rs-collectif-placeholder__label--sm {
+  font-size: 11px;
+}
+
+.rs-collectif-section {
+  padding: 28px 0;
+}
+
+.rs-collectif-section__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--rs-da-black) !important;
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: var(--rs-da-border-w) solid var(--rs-da-border);
+}
+
+.rs-collectif-section__title::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background: var(--rs-da-pink);
+  flex-shrink: 0;
+}
+
+.rs-collectif-section__title--center {
+  justify-content: center;
+  text-align: center;
+}
+
+.rs-collectif-section__title--center::before {
+  display: none;
+}
+
+.rs-collectif-manifeste__body p,
+.rs-collectif-vision__body p {
+  font-size: 15px;
+  line-height: 1.75;
+  margin: 0 0 14px;
+}
+
+.rs-collectif-manifeste .container--narrow,
+.rs-collectif-vision .container--narrow {
+  background: var(--rs-da-block-bg);
+  border: var(--rs-da-border-w) solid var(--rs-da-border);
+  border-radius: var(--rs-da-radius);
+  padding: 24px 20px;
+}
+
+.rs-collectif-founders__kicker {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--rs-da-pink) !important;
+  margin: 0 0 20px;
+}
+
+.rs-collectif-founder-card {
+  background: var(--rs-da-block-bg);
+  border: 2px solid var(--rs-da-pink);
+  border-radius: var(--rs-da-radius);
+  padding: 12px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.rs-collectif-founder-card__photo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  background: #d9d9d9;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+
+.rs-collectif-founder-card__badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  background: var(--rs-da-pink);
+  color: #fff !important;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+
+.rs-collectif-founder-card__name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--rs-da-black) !important;
+  margin: 0 0 6px;
+  line-height: 1.25;
+}
+
+.rs-collectif-founder-card__role {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--rs-da-pink) !important;
+  margin: 0;
+  flex: 1 1 auto;
+}
+
+.rs-collectif-vision__media {
+  margin-top: 20px;
+}
+
+.rs-collectif-vision__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: var(--rs-da-border-w) solid var(--rs-da-border);
+  border-radius: var(--rs-da-radius);
+}
+
+.rs-collectif-cta {
+  padding: 32px 0 8px;
+}
+
+.rs-collectif-cta__title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--rs-da-black) !important;
+  margin: 0 0 10px;
+}
+
+.rs-collectif-cta__subtitle {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #444 !important;
+  margin: 0 0 20px;
+}
+
+.rs-collectif-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.rs-collectif-cta .btn-primary {
+  min-width: 200px;
+}
+
+.rs-collectif-cta .rs-collectif-cta__btn-secondary.btn-outline-primary {
+  background: var(--rs-da-block-bg) !important;
+  border: 2px solid var(--rs-da-pink) !important;
+  color: var(--rs-da-pink-hover) !important;
+  border-radius: var(--rs-da-radius) !important;
+  font-weight: 700 !important;
+}
+
+.rs-collectif-cta .rs-collectif-cta__btn-secondary.btn-outline-primary:hover {
+  background: var(--rs-da-pink) !important;
+  border-color: var(--rs-da-pink) !important;
+  color: #fff !important;
+}
+
+.rs-collectif-cta__fineprint {
+  margin: 18px 0 0;
+  font-size: 11px;
+  font-style: italic;
+  color: #666 !important;
+}
+
+/* Collection & produit : boutons et liens roses déjà via variables globales ci-dessus */

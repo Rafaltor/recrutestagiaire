@@ -315,7 +315,7 @@
         "uni_top_profile"
       ],
       "settings": {
-        "page_bg": "#f0f0f0",
+        "page_bg": "#efefef",
         "page_padding_top": 0,
         "page_padding_bottom": 0,
         "grid_gap": 8,
