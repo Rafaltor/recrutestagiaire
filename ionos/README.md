@@ -12,14 +12,15 @@ Le thème Shopify appelle ce script **HTTPS** (jamais la clé Supabase dans le n
 ## Endpoints
 
 - `GET ?action=count` → `{ "count": N }`
-- `GET ?action=profiles` → `{ "profiles": [ { id, name, email, role, professions, cv, portfolio, score }, ... ] }`
+- `GET ?action=profiles` → `{ "profiles": [ { id, name, email, role, professions, cv, portfolio, likes }, ... ] }`
+- **`GET /api/profils/top/`** (fichier `api/profils/top/index.php` à la racine du site) ou **`GET ?action=profil_top`** — JSON public, sans authentification : le profil **publié** avec le plus de likes (colonne `likes` en base par défaut ; voir `RS_SUPABASE_COL_LIKES`). Réponse typique : `{ "id", "instagram", "metier", "likes", "rank": 1, "token" }`. Si aucune ligne publiée : `404` avec `{ "error": "no_published_profile" }`. CORS : ajoutez l’origine exacte dans `RS_ALLOWED_ORIGINS` (ex. `https://recrutestagiaire.eu`).
 - `POST ?action=parse_cv` — `multipart/form-data` avec le champ `file` (un CV) → appelle Affinda et retourne JSON : `name`, `email`, `role`, `portfolio`, `note`, `source: affinda`. Nécessite `RS_AFFINDA_API_KEY` dans `rs-airtable-config.php` (dossier `ionos/`, côté serveur uniquement).
 - `POST ?action=submit`  
   - **Recommandé** (thème) : `multipart/form-data` avec champs `name`, `email`, `role`, `cv` (texte optionnel) et le même `file` que l’analyse. Le script **envoie le fichier dans Supabase Storage** (`RS_SUPABASE_STORAGE_BUCKET`) et enregistre l’**URL publique** `…/storage/v1/object/public/{bucket}/…` dans la colonne CV. Aucun dépôt de fichier sur IONOS.  
   - **Alternative** : JSON `{ "name", "email", "role", "cv", "portfolio" }` (sans envoi de fichier) si vous ne faites qu’un lien texte.  
-  Insertion Supabase (`approved` = false, `score` = 0 par défaut).  
-  Si la table n’a pas de colonne `score`, définir dans `rs-airtable-config.php` :  
-  `define('RS_SUPABASE_SUBMIT_INCLUDE_SCORE', false);`
+  Insertion Supabase (`approved` = false, `likes` = 0 par défaut).  
+  Si la table n’a pas de colonne `likes`, définir dans `rs-airtable-config.php` :  
+  `define('RS_SUPABASE_SUBMIT_INCLUDE_LIKES', false);` (ou l’ancien `RS_SUPABASE_SUBMIT_INCLUDE_SCORE`)
 
 ## CORS
 

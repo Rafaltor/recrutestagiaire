@@ -333,4 +333,43 @@
   {%- when 'featured_products' -%}
     {%- comment -%}Bloc grille « en vedette » retiré — ne rien afficher (cf. boucle section).{%- endcomment -%}
 
+  {%- when 'sponsored_rail' -%}
+    {%- if b.side == 'center' -%}
+      <div class="rs-uni-inline-sponsored h-100">
+        {%- if b.content_type == 'profiles_api' -%}
+          {% render 'rs-rail-slot-inner', block: block, section: section %}
+        {%- else -%}
+          <div class="rs-uni-rail__stack{% if block.settings.product_below == blank %} rs-uni-rail__stack--single{% endif %}">
+            {%- render 'rs-sponsored-rail-ad', block: block -%}
+            {%- if block.settings.product_below != blank -%}
+              {%- render 'rs-sponsored-rail-ad', block: block, rail_product: block.settings.product_below, rail_compact: true -%}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  {%- when 'top_profile_portail' -%}
+    {%- assign _api = b.api_url | default: 'https://portail.recrutestagiaire.eu/api/profils/top' -%}
+    {%- assign _base = b.portail_base_url | default: 'https://portail.recrutestagiaire.eu' | strip | rstrip: '/' -%}
+    <div
+      class="rs-pole-panel rs-pole-panel--encart h-100 rs-top-profile-api"
+      data-rs-top-profile-api="{{ _api | escape }}"
+      data-rs-portail-base="{{ _base | escape }}"
+      data-rs-top-profile-fallback="{{ b.fallback_text | default: 'Classement en cours...' | escape }}"
+      data-rs-top-profile-btn-label="{{ b.btn_label | default: 'Voir son profil →' | escape }}"
+      style="background:{{ b.bg_color }};border-color:{{ b.border_color }};border-width:0;">
+      <div class="rs-pole-panel__encart">
+        {%- if b.kicker != blank -%}
+          <p class="rs-pole-panel__kicker">{{ b.kicker | escape }}</p>
+        {%- endif -%}
+        {%- if b.title != blank -%}
+          <h3 class="rs-pole-panel__title">{{ b.title | escape }}</h3>
+        {%- endif -%}
+        <div class="rs-top-profile-api__mount" data-rs-top-profile-mount>
+          <p class="rs-pole-panel__richtext text-muted mb-0">{{ b.fallback_text | default: 'Classement en cours...' }}</p>
+        </div>
+      </div>
+    </div>
+
 {%- endcase -%}

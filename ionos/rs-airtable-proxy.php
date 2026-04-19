@@ -176,6 +176,46 @@ function rs_supabase_approved_column(): ?string {
   return $col;
 }
 
+/**
+ * Colonne numérique votes / classement (nom en base : en général `likes`).
+ * Rétrocompat : si seul RS_SUPABASE_COL_SCORE est défini (ex. ancienne table `score`), il est utilisé.
+ */
+function rs_supabase_likes_column(): string {
+  if (defined('RS_SUPABASE_COL_LIKES')) {
+    $c = trim((string) constant('RS_SUPABASE_COL_LIKES'));
+    if ($c !== '') {
+      return $c;
+    }
+  }
+  if (defined('RS_SUPABASE_COL_SCORE')) {
+    $c = trim((string) constant('RS_SUPABASE_COL_SCORE'));
+    if ($c !== '') {
+      return $c;
+    }
+  }
+  return 'likes';
+}
+
+function rs_supabase_submit_include_likes(): bool {
+  if (defined('RS_SUPABASE_SUBMIT_INCLUDE_LIKES')) {
+    return (bool) RS_SUPABASE_SUBMIT_INCLUDE_LIKES;
+  }
+  if (defined('RS_SUPABASE_SUBMIT_INCLUDE_SCORE')) {
+    return (bool) RS_SUPABASE_SUBMIT_INCLUDE_SCORE;
+  }
+  return true;
+}
+
+function rs_supabase_submit_initial_likes(): float {
+  if (defined('RS_SUPABASE_SUBMIT_LIKES_VALUE')) {
+    return (float) RS_SUPABASE_SUBMIT_LIKES_VALUE;
+  }
+  if (defined('RS_SUPABASE_SUBMIT_SCORE_VALUE')) {
+    return (float) RS_SUPABASE_SUBMIT_SCORE_VALUE;
+  }
+  return 0.0;
+}
+
 function rs_supabase_row_to_profile(array $row): array {
   $n = rs_supabase_col('RS_SUPABASE_COL_NAME', 'full_name');
   $e = rs_supabase_col('RS_SUPABASE_COL_EMAIL', 'email');
@@ -183,7 +223,7 @@ function rs_supabase_row_to_profile(array $row): array {
   $p = rs_supabase_col('RS_SUPABASE_COL_PROF', 'professions');
   $cv = rs_supabase_col('RS_SUPABASE_COL_CV', 'cv_url');
   $po = rs_supabase_col('RS_SUPABASE_COL_PORTF', 'portfolio_url');
-  $sc = rs_supabase_col('RS_SUPABASE_COL_SCORE', 'score');
+  $likesCol = rs_supabase_likes_column();
 
   $prof = $row[$p] ?? '';
   if (is_array($prof)) {
@@ -192,9 +232,9 @@ function rs_supabase_row_to_profile(array $row): array {
     $prof = (string)$prof;
   }
 
-  $score = 0.0;
-  if (isset($row[$sc]) && is_numeric($row[$sc])) {
-    $score = (float)$row[$sc];
+  $likes = 0.0;
+  if (isset($row[$likesCol]) && is_numeric($row[$likesCol])) {
+    $likes = (float) $row[$likesCol];
   }
 
   $cvUrl = '';
@@ -213,14 +253,14 @@ function rs_supabase_row_to_profile(array $row): array {
     'professions' => $prof,
     'cv' => $cvUrl,
     'portfolio' => (string)($row[$po] ?? ''),
-    'score' => $score,
+    'likes' => $likes,
   ];
 }
 
 function rs_supabase_profiles(): array {
   $table = rawurlencode(RS_SUPABASE_TABLE);
   $appCol = rs_supabase_approved_column();
-  $sc = rawurlencode(rs_field('RS_SUPABASE_COL_SCORE', 'score'));
+  $sc = rawurlencode(rs_supabase_likes_column());
   $select = '*';
   $batch = 1000;
   $offset = 0;
@@ -253,10 +293,109 @@ function rs_supabase_profiles(): array {
   }
 
   usort($out, static function (array $a, array $b): int {
-    return ($b['score'] <=> $a['score']);
+    return ($b['likes'] <=> $a['likes']);
   });
 
   return $out;
+}
+
+/**
+ * Une ligne : profil publié avec le plus de likes (tri côté Supabase).
+ *
+ * @return array<string,mixed>|null
+ */
+function rs_supabase_top_published_by_likes(): ?array {
+  $table = rawurlencode(RS_SUPABASE_TABLE);
+  $appCol = rs_supabase_approved_column();
+  $likesEnc = rawurlencode(rs_supabase_likes_column());
+  $path = "/rest/v1/{$table}?select=*";
+  if ($appCol !== null) {
+    $path .= '&' . rawurlencode($appCol) . '=eq.true';
+  }
+  $path .= "&order={$likesEnc}.desc.nullslast&limit=1";
+  $r = rs_supabase_request('GET', $path, []);
+  if (!$r['ok']) {
+    rs_json(['error' => 'supabase', 'details' => $r['data']], 502);
+  }
+  $rows = $r['data'];
+  if (!is_array($rows) || !isset($rows[0]) || !is_array($rows[0])) {
+    return null;
+  }
+  return $rows[0];
+}
+
+function rs_instagram_api_value(?string $raw): string {
+  $s = trim((string) ($raw ?? ''));
+  if ($s === '') {
+    return '';
+  }
+  if ($s[0] !== '@') {
+    $s = '@' . ltrim($s, '@');
+  }
+  return $s;
+}
+
+/**
+ * @param array<string,mixed> $row
+ * @return array{id:string,instagram:string,metier:string,likes:int,rank:int,token:string}
+ */
+function rs_supabase_row_to_top_public(array $row): array {
+  $igCol = rs_supabase_col('RS_SUPABASE_COL_INSTAGRAM', 'instagram');
+  $likesCol = rs_supabase_likes_column();
+  $tokCol = rs_supabase_col('RS_SUPABASE_COL_PUBLIC_TOKEN', 'token');
+
+  $likes = 0;
+  if (isset($row[$likesCol]) && is_numeric($row[$likesCol])) {
+    $likes = (int) round((float) $row[$likesCol]);
+  }
+
+  $metier = '';
+  $mCol = trim((string) rs_field('RS_SUPABASE_COL_METIER', 'metier'));
+  if ($mCol !== '' && isset($row[$mCol])) {
+    $mv = $row[$mCol];
+    if (is_string($mv)) {
+      $metier = $mv;
+    } elseif (is_array($mv)) {
+      $metier = implode(', ', array_map('strval', $mv));
+    }
+  }
+  if ($metier === '') {
+    $p = rs_supabase_col('RS_SUPABASE_COL_PROF', 'professions');
+    $pv = $row[$p] ?? '';
+    if (is_array($pv)) {
+      $metier = implode(', ', array_map('strval', $pv));
+    } else {
+      $metier = (string) $pv;
+    }
+  }
+
+  $token = '';
+  if (isset($row[$tokCol])) {
+    $token = is_scalar($row[$tokCol]) ? (string) $row[$tokCol] : '';
+  }
+
+  $igRaw = '';
+  if (array_key_exists($igCol, $row)) {
+    $igv = $row[$igCol];
+    $igRaw = is_string($igv) ? $igv : (is_scalar($igv) ? (string) $igv : '');
+  }
+
+  return [
+    'id' => (string) ($row['id'] ?? ''),
+    'instagram' => rs_instagram_api_value($igRaw),
+    'metier' => $metier,
+    'likes' => $likes,
+    'rank' => 1,
+    'token' => $token,
+  ];
+}
+
+function rs_handle_profil_top(): void {
+  $row = rs_supabase_top_published_by_likes();
+  if ($row === null) {
+    rs_json(['error' => 'no_published_profile'], 404);
+  }
+  rs_json(rs_supabase_row_to_top_public($row));
 }
 
 function rs_supabase_submit(array $payload): void {
@@ -276,7 +415,7 @@ function rs_supabase_submit(array $payload): void {
   $r = rs_supabase_col('RS_SUPABASE_COL_ROLE', 'role');
   $fcv = rs_supabase_col('RS_SUPABASE_COL_CV', 'cv_url');
   $fpo = rs_supabase_col('RS_SUPABASE_COL_PORTF', 'portfolio_url');
-  $fsc = rs_supabase_col('RS_SUPABASE_COL_SCORE', 'score');
+  $fl = rs_supabase_likes_column();
 
   $row = [
     $n => $name,
@@ -287,9 +426,8 @@ function rs_supabase_submit(array $payload): void {
   if ($appCol !== null) {
     $row[$appCol] = false;
   }
-  $includeScore = !defined('RS_SUPABASE_SUBMIT_INCLUDE_SCORE') || RS_SUPABASE_SUBMIT_INCLUDE_SCORE;
-  if ($includeScore) {
-    $row[$fsc] = defined('RS_SUPABASE_SUBMIT_SCORE_VALUE') ? (float)RS_SUPABASE_SUBMIT_SCORE_VALUE : 0.0;
+  if (rs_supabase_submit_include_likes()) {
+    $row[$fl] = rs_supabase_submit_initial_likes();
   }
   if ($cv !== '') {
     $row[$fcv] = $cv;
@@ -669,6 +807,21 @@ function rs_handle_parse_cv(): void {
   rs_json($out, 200);
 }
 
+/**
+ * Paramètre action (?action=…) — certains hébergeurs ne remplissent pas $_GET ; on relit QUERY_STRING.
+ */
+function rs_request_action(): string {
+  $a = isset($_GET['action']) ? trim((string) $_GET['action']) : '';
+  if ($a !== '') {
+    return $a;
+  }
+  $qs = (string) ($_SERVER['QUERY_STRING'] ?? '');
+  if ($qs !== '' && preg_match('/(?:^|&)action=([^&]*)/', $qs, $m)) {
+    return trim(rawurldecode($m[1]));
+  }
+  return '';
+}
+
 // --- CORS preflight -------------------------------------------
 rs_set_cors();
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -676,7 +829,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
   exit;
 }
 
-$action = (string) ($_GET['action'] ?? '');
+$action = rs_request_action();
+$reqUri = (string) ($_SERVER['REQUEST_URI'] ?? '');
+$uriPath = (string) (parse_url($reqUri, PHP_URL_PATH) ?: '');
+$isProfilTop = ($action === 'profil_top' || $action === 'profil-top')
+  || preg_match('#/api/profils/top/?$#', $uriPath) === 1;
 
 rs_rate_limit();
 
@@ -694,6 +851,10 @@ if ($action === 'count') {
 
 if ($action === 'profiles') {
   rs_json(['profiles' => rs_supabase_profiles()]);
+}
+
+if ($isProfilTop && $_SERVER['REQUEST_METHOD'] === 'GET') {
+  rs_handle_profil_top();
 }
 
 if ($action === 'submit' && $_SERVER['REQUEST_METHOD'] === 'POST') {

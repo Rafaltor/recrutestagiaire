@@ -309,7 +309,7 @@
         }
         // Format API (proxy) -> format attendu par render()
         allRecords = recs.map(function(p) {
-          var sc = p.score;
+          var sc = (typeof p.likes === 'number' ? p.likes : p.score);
           var num = typeof sc === 'number' && !isNaN(sc) ? sc : parseFloat(sc);
           if (isNaN(num)) num = 0;
           return {

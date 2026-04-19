@@ -16,7 +16,14 @@ define('RS_SUPABASE_USE_APPROVED_FILTER', false);
 // Si true plus haut : nom exact de la colonne (ex. approved, published, is_visible)
 // define('RS_SUPABASE_COL_APPROVED', 'approved');
 
-define('RS_SUPABASE_COL_SCORE', 'score');
+// Votes / classement (nom de colonne en base — en général `likes`)
+define('RS_SUPABASE_COL_LIKES', 'likes');
+// Ancienne base avec colonne `score` : define('RS_SUPABASE_COL_SCORE', 'score'); (priorité à RS_SUPABASE_COL_LIKES si les deux sont définis)
+
+// Optionnel — endpoint public top profil
+// define('RS_SUPABASE_COL_INSTAGRAM', 'instagram');
+// define('RS_SUPABASE_COL_METIER', 'metier');
+// define('RS_SUPABASE_COL_PUBLIC_TOKEN', 'token');
 
 // Compteur accueil : approved = seulement lignes avec colonne bool = true (nécessite USE_APPROVED_FILTER true) | all = toutes les lignes
 define('RS_SUPABASE_COUNT_MODE', 'all');
@@ -39,6 +46,8 @@ define('RS_SUPABASE_STORAGE_BUCKET', 'cvs');
 // --- CORS : origines exactes autorisées (schéma + hôte, sans chemin) ----------
 define('RS_ALLOWED_ORIGINS', [
   'https://recrute-stagiaire.myshopify.com',
+  'https://recrutestagiaire.eu',
+  'https://www.recrutestagiaire.eu',
   'https://www.votredomaine.fr',
 ]);
 
@@ -58,5 +67,7 @@ define('RS_AFFINDA_API_KEY', 'VOTRE_CLE_AFFINDA');
 // Taille max upload (octets) pour CV, parse et enregistrement
 // define('RS_CV_MAX_BYTES', 5242880);
 
-// Optionnel : si la table n’a pas de colonne score au INSERT (action=submit)
-// define('RS_SUPABASE_SUBMIT_INCLUDE_SCORE', false);
+// Optionnel : si la table n’a pas de colonne likes au INSERT (action=submit)
+// define('RS_SUPABASE_SUBMIT_INCLUDE_LIKES', false);
+// Ancien nom : RS_SUPABASE_SUBMIT_INCLUDE_SCORE
+// Valeur initiale (défaut 0) : RS_SUPABASE_SUBMIT_LIKES_VALUE ou RS_SUPABASE_SUBMIT_SCORE_VALUE

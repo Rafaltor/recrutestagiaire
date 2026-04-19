@@ -4278,6 +4278,13 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   border: none !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
 }
+/* Pubs produit (grille centrale) : un seul cadre — la carte .rs-rail-ad, pas la cellule grille */
+.rs-uni-cell.rs-uni-cell--ad-flush {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
 .rs-uni-blue-band__title {
   margin: 0;
   font-size: calc(1.1rem * var(--rs-uni-text-pct, 100) / 100);

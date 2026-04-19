@@ -33,11 +33,18 @@
   {%- liquid
     assign _rs_skip_cell = false
     if block.type == 'sponsored_rail'
-      assign _rs_skip_cell = true
+      if block.settings.side == 'left' or block.settings.side == 'right'
+        assign _rs_skip_cell = true
+      endif
     endif
     assign _rs_bt = block.type | default: '' | strip | downcase
     if _rs_bt contains 'featured_products'
       assign _rs_skip_cell = true
+    endif
+    assign _rs_cell_ad_flush = false
+    assign _rs_sponsored_ct = block.settings.content_type | default: 'product'
+    if block.type == 'sponsored_rail' and block.settings.side == 'center' and _rs_sponsored_ct == 'product'
+      assign _rs_cell_ad_flush = true
     endif
   -%}
   {%- unless _rs_skip_cell -%}
@@ -50,9 +57,9 @@
       {%- assign pad = 0 -%}
     {%- endif -%}
     <div
-      class="rs-uni-cell{% if block.settings.use_strip_bg %} rs-uni-cell--strip{% endif %}{% if block.type == 'blue_band' %} rs-uni-cell--blue-band{% endif %}"
+      class="rs-uni-cell{% if block.settings.use_strip_bg %} rs-uni-cell--strip{% endif %}{% if block.type == 'blue_band' %} rs-uni-cell--blue-band{% endif %}{% if _rs_cell_ad_flush %} rs-uni-cell--ad-flush{% endif %}"
       data-span="{{ span_n }}"
-      style="{% if block.settings.use_strip_bg %}padding: {{ pad }}px {{ pad }}px {{ pad | plus: section.settings.strip_padding_bottom }}px {{ pad }}px;{% else %}padding: {{ pad }}px;{% endif %}{% if block.settings.use_strip_bg == false and block.settings.cell_bg != blank %}background: {{ block.settings.cell_bg }};{% endif %}border-color: {% if block.settings.cell_border != blank %}{{ block.settings.cell_border }}{% else %}{{ section.settings.default_cell_border }}{% endif %};"
+      style="{% if _rs_cell_ad_flush %}padding:0;border:none;background:transparent;{% else %}{% if block.settings.use_strip_bg %}padding: {{ pad }}px {{ pad }}px {{ pad | plus: section.settings.strip_padding_bottom }}px {{ pad }}px;{% else %}padding: {{ pad }}px;{% endif %}{% if block.settings.use_strip_bg == false and block.settings.cell_bg != blank %}background: {{ block.settings.cell_bg }};{% endif %}border-color: {% if block.settings.cell_border != blank %}{{ block.settings.cell_border }}{% else %}{{ section.settings.default_cell_border }}{% endif %};{% endif %}"
       {{ block.shopify_attributes }}>
       {%- render 'rs-unified-block',
         block: block,
@@ -187,6 +194,59 @@
   }
   window.addEventListener('load', runAll);
   setTimeout(runAll, 600);
+})();
+
+(function () {
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] || c;
+    });
+  }
+  function runTopProfiles() {
+    document.querySelectorAll('.rs-top-profile-api').forEach(function (wrap) {
+      var url = wrap.getAttribute('data-rs-top-profile-api');
+      var base = wrap.getAttribute('data-rs-portail-base') || 'https://portail.recrutestagiaire.eu';
+      var fb = wrap.getAttribute('data-rs-top-profile-fallback') || 'Classement en cours...';
+      var btnLabel = wrap.getAttribute('data-rs-top-profile-btn-label') || 'Voir son profil →';
+      var mount = wrap.querySelector('[data-rs-top-profile-mount]');
+      if (!url || !mount) return;
+      mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
+      fetch(url, { credentials: 'omit', mode: 'cors' })
+        .then(function (r) {
+          if (!r.ok) throw new Error('http');
+          return r.json();
+        })
+        .then(function (d) {
+          var p = d && d.profile;
+          if (!p || !p.id) {
+            mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
+            return;
+          }
+          var path = p.profile_url || '/profil/' + p.id;
+          var href = base.replace(/\/$/, '') + path;
+          var likes = typeof p.likes === 'number' ? p.likes : d.likes || 0;
+          var rank = p.rank_label || d.rank_label || 'Profil N°1 cette semaine';
+          var handle = p.handle || '—';
+          var job = p.job_title || '—';
+          mount.innerHTML =
+            '<p class="mb-1"><strong>' + esc(handle) + '</strong></p>' +
+            '<p class="mb-1 small">' + esc(job) + '</p>' +
+            '<p class="mb-2 small">Likes : <strong>' + esc(String(likes)) + '</strong></p>' +
+            '<p class="mb-3 small text-muted">' + esc(rank) + '</p>' +
+            '<a class="rs-pole-panel__footer-link" href="' + esc(href) + '" rel="noopener noreferrer">' + esc(btnLabel) + '</a>';
+        })
+        .catch(function () {
+          mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
+        });
+    });
+  }
+  runTopProfiles();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runTopProfiles);
+  }
+  window.addEventListener('load', runTopProfiles);
+  setTimeout(runTopProfiles, 500);
+  document.addEventListener('shopify:section:load', runTopProfiles);
 })();
 </script>
 
@@ -648,11 +708,12 @@
         {
           "type": "select",
           "id": "side",
-          "label": "Côté",
+          "label": "Emplacement",
           "default": "left",
           "options": [
-            { "value": "left", "label": "Gauche" },
-            { "value": "right", "label": "Droite" }
+            { "value": "left", "label": "Rail gauche" },
+            { "value": "right", "label": "Rail droit" },
+            { "value": "center", "label": "Grille centrale (flux)" }
           ]
         },
         {
@@ -665,6 +726,24 @@
             { "value": "profiles_api", "label": "Profil candidat (API)" }
           ]
         },
+        { "type": "header", "content": "Grille (emplacement central uniquement)" },
+        {
+          "type": "select",
+          "id": "col_span",
+          "label": "Largeur colonnes",
+          "default": "4",
+          "options": [
+            { "value": "12", "label": "12" },
+            { "value": "6", "label": "6" },
+            { "value": "4", "label": "4" },
+            { "value": "3", "label": "3" }
+          ]
+        },
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule", "default": "#ffffff" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Padding cellule", "default": 8 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "header", "content": "Contenu pub" },
         { "type": "product", "id": "product", "label": "Produit" },
         { "type": "text", "id": "kicker", "label": "Mention", "default": "Sponsorisé" },
         { "type": "checkbox", "id": "show_price", "label": "Afficher le prix", "default": true },
@@ -676,6 +755,54 @@
           "label": "2e offre sous la pub",
           "info": "Laissez vide pour n’afficher qu’une carte par slot (recommandé pour 3 encarts de même taille). Renseignez pour une 2e carte compacte en dessous."
         }
+      ]
+    },
+    {
+      "type": "top_profile_portail",
+      "name": "Top profil (API portail)",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "col_span",
+          "label": "Largeur colonnes",
+          "default": "4",
+          "options": [
+            { "value": "12", "label": "12" },
+            { "value": "8", "label": "8" },
+            { "value": "6", "label": "6" },
+            { "value": "4", "label": "4" }
+          ]
+        },
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule", "default": "#ffffff" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Padding cellule", "default": 0 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        {
+          "type": "text",
+          "id": "api_url",
+          "label": "URL API top profil",
+          "default": "https://portail.recrutestagiaire.eu/api/profils/top",
+          "info": "GET JSON — champ texte pour URL externe."
+        },
+        {
+          "type": "text",
+          "id": "portail_base_url",
+          "label": "Origine portail (liens)",
+          "default": "https://portail.recrutestagiaire.eu",
+          "info": "Préfixe du lien fiche profil (/profil/[id])."
+        },
+        { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Portail" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Meilleur profil du moment" },
+        { "type": "text", "id": "btn_label", "label": "Libellé du bouton", "default": "Voir son profil →" },
+        {
+          "type": "text",
+          "id": "fallback_text",
+          "label": "Texte si indisponible",
+          "default": "Classement en cours..."
+        },
+        { "type": "color", "id": "bg_color", "label": "Fond bloc", "default": "#ffffff" },
+        { "type": "color", "id": "border_color", "label": "Bordure bloc", "default": "#888888" }
       ]
     }
   ],
