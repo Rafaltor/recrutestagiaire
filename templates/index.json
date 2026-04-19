@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "home_unified": {
@@ -41,24 +50,6 @@
             "btn_radius": 6
           }
         },
-        "uni_search": {
-          "type": "hero_search",
-          "settings": {
-            "col_span": "4",
-            "use_strip_bg": false,
-            "cell_bg": "#0033cc",
-            "cell_padding": 12,
-            "cell_border": "",
-            "layout_variant": "panel",
-            "strip_kicker": "Offre ou collection recherchée",
-            "placeholder": "Nom du poste, collection...",
-            "btn_label": "Voir toutes les offres",
-            "secondary_label": "",
-            "secondary_url": "",
-            "height": 46,
-            "font_size": 14
-          }
-        },
         "sponsored_inline_1": {
           "type": "sponsored_rail",
           "settings": {
@@ -77,100 +68,28 @@
             "product_below": ""
           }
         },
-        "sponsored_inline_2": {
-          "type": "sponsored_rail",
+        "uni_search": {
+          "type": "hero_search",
           "settings": {
-            "side": "center",
-            "content_type": "product",
             "col_span": "4",
             "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 8,
+            "cell_bg": "#0033cc",
+            "cell_padding": 12,
             "cell_border": "",
-            "product": "alternant",
-            "kicker": "Sponsorisé",
-            "show_price": true,
-            "show_stars": true,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
-        "sponsored_inline_3": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "center",
-            "content_type": "product",
-            "col_span": "4",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 8,
-            "cell_border": "",
-            "product": "stagiaire",
-            "kicker": "Sponsorisé",
-            "show_price": true,
-            "show_stars": true,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
-        "sponsored_inline_4": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "center",
-            "content_type": "product",
-            "col_span": "4",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 8,
-            "cell_border": "",
-            "product": "alternant",
-            "kicker": "Sponsorisé",
-            "show_price": true,
-            "show_stars": true,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
-        "sponsored_inline_5": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "center",
-            "content_type": "product",
-            "col_span": "4",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 8,
-            "cell_border": "",
-            "product": "stagiaire",
-            "kicker": "Sponsorisé",
-            "show_price": true,
-            "show_stars": true,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
-        "sponsored_inline_6": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "center",
-            "content_type": "product",
-            "col_span": "4",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 8,
-            "cell_border": "",
-            "product": "alternant",
-            "kicker": "Sponsorisé",
-            "show_price": true,
-            "show_stars": true,
-            "cta_label": "Voir",
-            "product_below": ""
+            "layout_variant": "panel",
+            "strip_kicker": "Offre ou collection recherchée",
+            "placeholder": "Nom du poste, collection...",
+            "btn_label": "Voir toutes les offres",
+            "secondary_label": "",
+            "secondary_url": "",
+            "height": 46,
+            "font_size": 14
           }
         },
         "uni_gp_cand": {
           "type": "grid_panel",
           "settings": {
-            "col_span": "6",
+            "col_span": "4",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -198,25 +117,10 @@
             "border_color": "#888888"
           }
         },
-        "uni_kitsch": {
-          "type": "kitsch_counter",
-          "settings": {
-            "col_span": "6",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 0,
-            "cell_border": "",
-            "tile_mode": true,
-            "ribbon_text": "★ CHIFFRE OFFICIEL ★",
-            "suffix_text": "candidat(s) actuellement recensé(e)s dans la base nationale",
-            "brand_name": "Recrute Stagiaire",
-            "sub_text": "Mise à jour en temps quasi réel — merci de votre confiance !!"
-          }
-        },
         "uni_gp_offres": {
           "type": "grid_panel",
           "settings": {
-            "col_span": "6",
+            "col_span": "4",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -242,6 +146,39 @@
             "footer_link_url": "shopify://collections/all",
             "bg_color": "#ffffff",
             "border_color": "#888888"
+          }
+        },
+        "sponsored_inline_2": {
+          "type": "sponsored_rail",
+          "settings": {
+            "side": "center",
+            "content_type": "product",
+            "col_span": "3",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 8,
+            "cell_border": "",
+            "product": "alternant",
+            "kicker": "Sponsorisé",
+            "show_price": true,
+            "show_stars": true,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
+        },
+        "uni_kitsch": {
+          "type": "kitsch_counter",
+          "settings": {
+            "col_span": "9",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 0,
+            "cell_border": "",
+            "tile_mode": true,
+            "ribbon_text": "★ CHIFFRE OFFICIEL ★",
+            "suffix_text": "candidat(s) actuellement recensé(e)s dans la base nationale",
+            "brand_name": "Recrute Stagiaire",
+            "sub_text": "Mise à jour en temps quasi réel — merci de votre confiance !!"
           }
         },
         "uni_gp_actus": {
@@ -278,7 +215,7 @@
         "uni_top_profile": {
           "type": "top_profile_portail",
           "settings": {
-            "col_span": "4",
+            "col_span": "6",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -292,54 +229,18 @@
             "bg_color": "#ffffff",
             "border_color": "#888888"
           }
-        },
-        "uni_gp_part": {
-          "type": "grid_panel",
-          "settings": {
-            "col_span": "8",
-            "use_strip_bg": false,
-            "cell_bg": "#f8fafc",
-            "cell_padding": 0,
-            "cell_border": "",
-            "layout_style": "encart",
-            "circle_label": "Candidat",
-            "circle_bg": "#ffcc00",
-            "circle_text": "#0033cc",
-            "kicker": "PARTENAIRES",
-            "title": "Le collectif",
-            "text": "<p>Blocs modulables : largeur et ordre dans l’éditeur de thème.</p>",
-            "link_1_label": "Histoire du projet",
-            "link_1_url": "shopify://pages/about",
-            "link_2_label": "",
-            "link_2_url": "",
-            "link_3_label": "",
-            "link_3_url": "",
-            "link_4_label": "",
-            "link_4_url": "",
-            "link_5_label": "",
-            "link_5_url": "",
-            "footer_link_label": "En savoir plus →",
-            "footer_link_url": "shopify://pages/about",
-            "bg_color": "#f8fafc",
-            "border_color": "#888888"
-          }
         }
       },
       "block_order": [
         "uni_intro",
-        "uni_search",
         "sponsored_inline_1",
-        "sponsored_inline_2",
-        "sponsored_inline_3",
-        "sponsored_inline_4",
-        "sponsored_inline_5",
-        "sponsored_inline_6",
+        "uni_search",
         "uni_gp_cand",
-        "uni_kitsch",
         "uni_gp_offres",
+        "sponsored_inline_2",
+        "uni_kitsch",
         "uni_gp_actus",
-        "uni_top_profile",
-        "uni_gp_part"
+        "uni_top_profile"
       ],
       "settings": {
         "page_bg": "#ffffff",
@@ -357,6 +258,11 @@
         "cand_profiles_url": "",
         "center_column_pct": 60,
         "rail_center_max": 900,
+        "rail_profiles_under_product": "",
+        "rail_profiles_under_kicker": "Offre",
+        "rail_profiles_under_show_price": true,
+        "rail_profiles_under_show_stars": false,
+        "rail_profiles_under_cta": "Voir",
         "rs_api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php",
         "text_align": "text-center",
         "strip_bg": "#ffe9a3",
