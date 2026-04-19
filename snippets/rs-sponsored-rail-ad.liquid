@@ -2,7 +2,6 @@
   Mini pub produit façon Amazon ~2012 — rail latéral (bloc sponsored_rail).
   Optionnel : rail_product, rail_compact (bool),
   inline_product + inline_kicker, inline_show_price, inline_show_stars, inline_cta (sous profil API).
-  Plusieurs images : carrousel Bootstrap (swipe tactile comme sur la fiche produit).
 {%- endcomment -%}
 {%- liquid
   assign rail_c = false
@@ -23,20 +22,6 @@
     assign ad_show_price = b.show_price
     assign ad_cta = b.cta_label | default: 'Voir'
   endif
-
-  assign _car_id = 'railp' | append: p.id
-  if carousel_uid != blank
-    assign _car_id = _car_id | append: '-' | append: carousel_uid | handleize
-  elsif block != blank and block.id != blank
-    assign _parts = block.id | split: '/'
-    assign _last = _parts | last | default: 'b'
-    assign _car_id = _car_id | append: 'b' | append: _last
-  else
-    assign _car_id = _car_id | append: 'i'
-  endif
-  if rail_c
-    assign _car_id = _car_id | append: 'c'
-  endif
 -%}
 {%- if p == blank -%}
   <div class="rs-rail-ad rs-rail-ad--placeholder{% if rail_c %} rs-rail-ad--compact{% endif %}">
@@ -45,82 +30,29 @@
 {%- else -%}
   {%- assign v = p.selected_or_first_available_variant -%}
   <article class="rs-rail-ad{% if rail_c %} rs-rail-ad--compact{% endif %}">
-    {%- if p.images.size > 1 -%}
-      <div class="rs-rail-ad__media rs-rail-ad__media--carousel">
-        <div
-          id="{{ _car_id }}"
-          class="carousel slide carousel-fade rs-rail-ad__carousel"
-          data-bs-ride="carousel"
-          data-bs-config='{"interval":false}'
-          data-bs-wrap="true">
-          <div class="carousel-inner h-100">
-            {%- for image in p.images limit: 8 -%}
-              <div class="carousel-item h-100{% if forloop.first %} active{% endif %}">
-                <a href="{{ p.url }}" class="rs-rail-ad__media-link d-flex align-items-center justify-content-center h-100">
-                  {%- if rail_c -%}
-                    <img
-                      src="{{ image | image_url: width: 240 }}"
-                      alt="{{ p.title | escape }}"
-                      width="120"
-                      height="120"
-                      loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                      class="rs-rail-ad__img">
-                  {%- else -%}
-                    <img
-                      src="{{ image | image_url: width: 600 }}"
-                      alt="{{ p.title | escape }}"
-                      width="200"
-                      height="200"
-                      loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                      class="rs-rail-ad__img">
-                  {%- endif -%}
-                </a>
-              </div>
-            {%- endfor -%}
-          </div>
-          <button
-            class="carousel-control-prev rs-rail-ad__carousel-btn"
-            type="button"
-            data-bs-target="#{{ _car_id }}"
-            data-bs-slide="prev"
-            aria-label="Image précédente">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          </button>
-          <button
-            class="carousel-control-next rs-rail-ad__carousel-btn"
-            type="button"
-            data-bs-target="#{{ _car_id }}"
-            data-bs-slide="next"
-            aria-label="Image suivante">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          </button>
-        </div>
-      </div>
-    {%- else -%}
-      <a href="{{ p.url }}" class="rs-rail-ad__media">
-        {%- if p.featured_image != blank -%}
-          {%- if rail_c -%}
-            <img
-              src="{{ p.featured_image | image_url: width: 240 }}"
-              alt=""
-              width="120"
-              height="120"
-              loading="lazy"
-              class="rs-rail-ad__img">
-          {%- else -%}
-            <img
-              src="{{ p.featured_image | image_url: width: 600 }}"
-              alt=""
-              width="200"
-              height="200"
-              loading="lazy"
-              class="rs-rail-ad__img">
-          {%- endif -%}
+    <a href="{{ p.url }}" class="rs-rail-ad__media">
+      {%- if p.featured_image != blank -%}
+        {%- if rail_c -%}
+          <img
+            src="{{ p.featured_image | image_url: width: 240 }}"
+            alt=""
+            width="120"
+            height="120"
+            loading="lazy"
+            class="rs-rail-ad__img">
         {%- else -%}
-          <div class="rs-rail-ad__img-fallback">IMG</div>
+          <img
+            src="{{ p.featured_image | image_url: width: 600 }}"
+            alt=""
+            width="200"
+            height="200"
+            loading="lazy"
+            class="rs-rail-ad__img">
         {%- endif -%}
-      </a>
-    {%- endif -%}
+      {%- else -%}
+        <div class="rs-rail-ad__img-fallback">IMG</div>
+      {%- endif -%}
+    </a>
     <a href="{{ p.url }}" class="rs-rail-ad__title">{{ p.title | escape }}</a>
     {%- if ad_show_price -%}
       <div class="rs-rail-ad__price">

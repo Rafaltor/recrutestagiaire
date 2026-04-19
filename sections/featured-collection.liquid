@@ -338,8 +338,17 @@
           "type": "checkbox",
           "id": "offer_carousel",
           "label": "Carrousel si plusieurs photos",
-          "default": true,
-          "info": "Swipe ou flèches uniquement — pas de défilement automatique."
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "offer_carousel_interval",
+          "min": 0,
+          "max": 8000,
+          "step": 500,
+          "unit": "ms",
+          "label": "Défilement auto (0 = manuel uniquement)",
+          "default": 2000
         },
         {
           "type": "color",

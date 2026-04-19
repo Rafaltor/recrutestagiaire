@@ -350,70 +350,33 @@ button[type='submit'].btn-primary {
   color: #222 !important;
 }
 
-/* Image produit petite dans les rails */
+/* Image produit dans les rails : pas de cadre, image entière visible */
 .rs-uni-rail .rs-rail-ad__media {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   max-width: 88px !important;
   margin-left: auto !important;
   margin-right: auto !important;
   aspect-ratio: 1 / 1 !important;
-  border: 1px solid var(--rs-da-border) !important;
-  background: #fff !important;
-  padding: 4px !important;
-  border-radius: var(--rs-da-radius) !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 .rs-uni-rail .rs-rail-ad__img {
-  width: 100% !important;
+  width: auto !important;
+  max-width: 100% !important;
   height: auto !important;
-  max-height: 80px !important;
-  object-fit: cover !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
 }
 
 .rs-rail-ad--compact .rs-rail-ad__media {
   max-width: 72px !important;
-}
-
-/* Carrousel images mini-pubs (swipe tactile Bootstrap) */
-.rs-rail-ad__media--carousel {
-  overflow: hidden !important;
-  padding: 3px !important;
-}
-.rs-rail-ad__carousel {
-  height: 100%;
-  min-height: 0;
-}
-.rs-rail-ad__carousel .carousel-inner {
-  height: 100%;
-}
-.rs-rail-ad__carousel .carousel-item {
-  height: 100%;
-}
-.rs-rail-ad__carousel .rs-rail-ad__media-link {
-  min-height: 0;
-  line-height: 0;
-}
-.rs-rail-ad__carousel .rs-rail-ad__img {
-  max-height: none !important;
-  height: auto !important;
-  width: 100% !important;
-  object-fit: cover !important;
-  aspect-ratio: 1 / 1;
-}
-.rs-rail-ad__carousel .carousel-control-prev,
-.rs-rail-ad__carousel .carousel-control-next {
-  width: 28%;
-  min-width: 1.25rem;
-  opacity: 0.4;
-}
-.rs-rail-ad__carousel .carousel-control-prev:hover,
-.rs-rail-ad__carousel .carousel-control-next:hover {
-  opacity: 0.75;
-}
-.rs-rail-ad__carousel .carousel-control-prev-icon,
-.rs-rail-ad__carousel .carousel-control-next-icon {
-  width: 0.65rem;
-  height: 0.65rem;
-  background-size: 0.65rem 0.65rem;
 }
 
 /* Cartes centre (inline) : titre rose aussi */

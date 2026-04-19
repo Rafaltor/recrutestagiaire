@@ -22,6 +22,7 @@
 {%- assign status_open = s.badge_open | default: 'Offre active' -%}
 {%- assign status_closed = s.badge_closed | default: 'Pourvu' -%}
 {%- assign cta_label = s.offer_cta_label | default: "Voir l'offre" -%}
+{%- assign carousel_interval = s.offer_carousel_interval | default: 2000 -%}
 {%- assign location_pill = s.offer_location_pill | default: 'Paris' -%}
 {%- assign cart_label = s.offer_cart_label | default: 'Candidater' -%}
 {%- assign show_cart_btn = true -%}
@@ -79,10 +80,8 @@
     <div class="rs-offer-list-card__media">
       {%- if product.images.size > 1 and s.offer_carousel != false -%}
         <div id="offer-carousel-{{ uid }}"
-          class="carousel slide carousel-fade rs-offer-list-card__carousel h-100"
-          data-bs-ride="carousel"
-          data-bs-config='{"interval":false}'
-          data-bs-wrap="true">
+          class="carousel slide rs-offer-list-card__carousel h-100"
+          {% if carousel_interval > 0 %}data-bs-ride="carousel" data-bs-interval="{{ carousel_interval }}"{% else %}data-bs-interval="false"{% endif %}>
           <div class="carousel-indicators">
             {%- for image in product.images limit: 8 -%}
               <button type="button" data-bs-target="#offer-carousel-{{ uid }}" data-bs-slide-to="{{ forloop.index0 }}"

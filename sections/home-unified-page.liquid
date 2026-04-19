@@ -107,8 +107,7 @@
                     inline_show_price: section.settings.rail_profiles_under_show_price,
                     inline_show_stars: section.settings.rail_profiles_under_show_stars,
                     inline_cta: section.settings.rail_profiles_under_cta,
-                    rail_compact: true,
-                    carousel_uid: 'L' | append: i
+                    rail_compact: true
                   -%}
                 {%- endif -%}
               </div>
@@ -147,8 +146,7 @@
                     inline_show_price: section.settings.rail_profiles_under_show_price,
                     inline_show_stars: section.settings.rail_profiles_under_show_stars,
                     inline_cta: section.settings.rail_profiles_under_cta,
-                    rail_compact: true,
-                    carousel_uid: 'R' | append: i
+                    rail_compact: true
                   -%}
                 {%- endif -%}
               </div>
@@ -724,6 +722,16 @@
         { "type": "range", "id": "card_radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Arrondi carte", "default": 12 },
         { "type": "range", "id": "card_padding", "min": 8, "max": 28, "step": 2, "unit": "px", "label": "Padding carte", "default": 16 },
         { "type": "checkbox", "id": "offer_carousel", "label": "Carrousel photos", "default": true },
+        {
+          "type": "range",
+          "id": "offer_carousel_interval",
+          "min": 0,
+          "max": 8000,
+          "step": 500,
+          "unit": "ms",
+          "label": "Défilement auto (0 = manuel)",
+          "default": 2000
+        },
         { "type": "text", "id": "badge_open", "label": "Badge ouvert", "default": "Offre active" },
         { "type": "text", "id": "badge_closed", "label": "Badge pourvu", "default": "Pourvu" },
         { "type": "text", "id": "offer_cta_label", "label": "Bouton", "default": "Voir l'offre" },
