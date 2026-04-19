@@ -68,22 +68,19 @@
             "product_below": ""
           }
         },
-        "uni_search": {
-          "type": "hero_search",
+        "uni_kitsch": {
+          "type": "kitsch_counter",
           "settings": {
             "col_span": "4",
             "use_strip_bg": false,
-            "cell_bg": "#0033cc",
-            "cell_padding": 12,
+            "cell_bg": "#ffffff",
+            "cell_padding": 0,
             "cell_border": "",
-            "layout_variant": "panel",
-            "strip_kicker": "Offre ou collection recherchée",
-            "placeholder": "Nom du poste, collection...",
-            "btn_label": "Voir toutes les offres",
-            "secondary_label": "",
-            "secondary_url": "",
-            "height": 46,
-            "font_size": 14
+            "tile_mode": true,
+            "ribbon_text": "★ CHIFFRE OFFICIEL ★",
+            "suffix_text": "candidat(s) actuellement recensé(e)s dans la base nationale",
+            "brand_name": "Recrute Stagiaire",
+            "sub_text": "Mise à jour en temps quasi réel — merci de votre confiance !!"
           }
         },
         "uni_gp_cand": {
@@ -166,19 +163,22 @@
             "product_below": ""
           }
         },
-        "uni_kitsch": {
-          "type": "kitsch_counter",
+        "uni_search": {
+          "type": "hero_search",
           "settings": {
             "col_span": "9",
             "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 0,
+            "cell_bg": "#0033cc",
+            "cell_padding": 12,
             "cell_border": "",
-            "tile_mode": true,
-            "ribbon_text": "★ CHIFFRE OFFICIEL ★",
-            "suffix_text": "candidat(s) actuellement recensé(e)s dans la base nationale",
-            "brand_name": "Recrute Stagiaire",
-            "sub_text": "Mise à jour en temps quasi réel — merci de votre confiance !!"
+            "layout_variant": "panel",
+            "strip_kicker": "Offre ou collection recherchée",
+            "placeholder": "Nom du poste, collection...",
+            "btn_label": "Voir toutes les offres",
+            "secondary_label": "",
+            "secondary_url": "",
+            "height": 46,
+            "font_size": 14
           }
         },
         "uni_gp_actus": {
@@ -234,11 +234,11 @@
       "block_order": [
         "uni_intro",
         "sponsored_inline_1",
-        "uni_search",
+        "uni_kitsch",
         "uni_gp_cand",
         "uni_gp_offres",
         "sponsored_inline_2",
-        "uni_kitsch",
+        "uni_search",
         "uni_gp_actus",
         "uni_top_profile"
       ],
