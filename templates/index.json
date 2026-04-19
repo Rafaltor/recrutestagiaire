@@ -12,10 +12,82 @@
     "home_unified": {
       "type": "home-unified-page",
       "blocks": {
+        "rail_left_a": {
+          "type": "sponsored_rail",
+          "settings": {
+            "side": "left",
+            "content_type": "product",
+            "col_span": "4",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 12,
+            "cell_border": "",
+            "product": "stagiaire",
+            "kicker": "",
+            "show_price": true,
+            "show_stars": false,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
+        },
+        "rail_left_b": {
+          "type": "sponsored_rail",
+          "settings": {
+            "side": "left",
+            "content_type": "product",
+            "col_span": "4",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 12,
+            "cell_border": "",
+            "product": "alternant",
+            "kicker": "",
+            "show_price": true,
+            "show_stars": false,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
+        },
+        "rail_right_a": {
+          "type": "sponsored_rail",
+          "settings": {
+            "side": "right",
+            "content_type": "product",
+            "col_span": "4",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 12,
+            "cell_border": "",
+            "product": "alternant",
+            "kicker": "",
+            "show_price": true,
+            "show_stars": false,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
+        },
+        "rail_right_b": {
+          "type": "sponsored_rail",
+          "settings": {
+            "side": "right",
+            "content_type": "product",
+            "col_span": "4",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 12,
+            "cell_border": "",
+            "product": "stagiaire",
+            "kicker": "",
+            "show_price": true,
+            "show_stars": false,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
+        },
         "uni_intro": {
           "type": "hero_intro_bundle",
           "settings": {
-            "col_span": "12",
+            "col_span": "8",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -50,30 +122,12 @@
             "btn_radius": 6
           }
         },
-        "uni_search": {
-          "type": "hero_search",
-          "settings": {
-            "col_span": "12",
-            "use_strip_bg": false,
-            "cell_bg": "#0033cc",
-            "cell_padding": 12,
-            "cell_border": "",
-            "layout_variant": "panel",
-            "strip_kicker": "Offre ou collection recherchée",
-            "placeholder": "Nom du poste, collection...",
-            "btn_label": "Voir toutes les offres",
-            "secondary_label": "",
-            "secondary_url": "",
-            "height": 46,
-            "font_size": 14
-          }
-        },
         "sponsored_inline_1": {
           "type": "sponsored_rail",
           "settings": {
             "side": "center",
             "content_type": "product",
-            "col_span": "6",
+            "col_span": "4",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 12,
@@ -86,61 +140,25 @@
             "product_below": ""
           }
         },
-        "sponsored_inline_2": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "center",
-            "content_type": "product",
-            "col_span": "6",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 12,
-            "cell_border": "",
-            "product": "alternant",
-            "kicker": "",
-            "show_price": true,
-            "show_stars": false,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
         "uni_kitsch": {
           "type": "kitsch_counter",
           "settings": {
-            "col_span": "6",
+            "col_span": "4",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
             "cell_border": "",
             "tile_mode": true,
             "ribbon_text": "★ CHIFFRE OFFICIEL ★",
-            "suffix_text": "candidat(s) actuellement recensé(s) dans la base nationale",
+            "suffix_text": "candidat(s) actuellement recensé(e)s dans la base nationale",
             "brand_name": "Recrute Stagiaire",
             "sub_text": "Mise à jour en temps quasi réel — merci de votre confiance !!"
-          }
-        },
-        "uni_top_profile": {
-          "type": "top_profile_portail",
-          "settings": {
-            "col_span": "6",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 0,
-            "cell_border": "",
-            "api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
-            "portail_base_url": "https://portail.recrutestagiaire.eu",
-            "kicker": "Portail",
-            "title": "Meilleur profil du moment",
-            "btn_label": "Voir son profil →",
-            "fallback_text": "Classement en cours...",
-            "bg_color": "#ffffff",
-            "border_color": "#888888"
           }
         },
         "uni_gp_cand": {
           "type": "grid_panel",
           "settings": {
-            "col_span": "6",
+            "col_span": "4",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -171,7 +189,7 @@
         "uni_gp_offres": {
           "type": "grid_panel",
           "settings": {
-            "col_span": "6",
+            "col_span": "4",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -199,10 +217,46 @@
             "border_color": "#888888"
           }
         },
+        "sponsored_inline_2": {
+          "type": "sponsored_rail",
+          "settings": {
+            "side": "center",
+            "content_type": "product",
+            "col_span": "3",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 12,
+            "cell_border": "",
+            "product": "alternant",
+            "kicker": "",
+            "show_price": true,
+            "show_stars": false,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
+        },
+        "uni_search": {
+          "type": "hero_search",
+          "settings": {
+            "col_span": "9",
+            "use_strip_bg": false,
+            "cell_bg": "#0033cc",
+            "cell_padding": 12,
+            "cell_border": "",
+            "layout_variant": "panel",
+            "strip_kicker": "Offre ou collection recherchée",
+            "placeholder": "Nom du poste, collection...",
+            "btn_label": "Voir toutes les offres",
+            "secondary_label": "",
+            "secondary_url": "",
+            "height": 46,
+            "font_size": 14
+          }
+        },
         "uni_gp_actus": {
           "type": "grid_panel",
           "settings": {
-            "col_span": "12",
+            "col_span": "6",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -229,21 +283,39 @@
             "bg_color": "#ffffff",
             "border_color": "#888888"
           }
+        },
+        "uni_top_profile": {
+          "type": "top_profile_portail",
+          "settings": {
+            "col_span": "6",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 0,
+            "cell_border": "",
+            "api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
+            "portail_base_url": "https://portail.recrutestagiaire.eu",
+            "kicker": "Portail",
+            "title": "Meilleur profil du moment",
+            "btn_label": "Voir son profil →",
+            "fallback_text": "Classement en cours...",
+            "bg_color": "#ffffff",
+            "border_color": "#888888"
+          }
         }
       },
       "block_order": [
         "uni_intro",
-        "uni_search",
         "sponsored_inline_1",
-        "sponsored_inline_2",
         "uni_kitsch",
-        "uni_top_profile",
         "uni_gp_cand",
         "uni_gp_offres",
-        "uni_gp_actus"
+        "sponsored_inline_2",
+        "uni_search",
+        "uni_gp_actus",
+        "uni_top_profile"
       ],
       "settings": {
-        "page_bg": "#efefef",
+        "page_bg": "#f0f0f0",
         "page_padding_top": 0,
         "page_padding_bottom": 0,
         "grid_gap": 8,

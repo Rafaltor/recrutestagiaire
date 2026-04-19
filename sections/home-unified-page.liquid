@@ -29,6 +29,7 @@
   endif
 -%}
 {%- capture rs_uni_grid_inner -%}
+{%- assign _rs_home_render_idx = 0 -%}
 {%- for block in section.blocks -%}
   {%- liquid
     assign _rs_skip_cell = false
@@ -48,6 +49,10 @@
     endif
   -%}
   {%- unless _rs_skip_cell -%}
+    {%- assign _rs_home_render_idx = _rs_home_render_idx | plus: 1 -%}
+    {%- assign _rs_home_mob_map = '1|3|5|7|8|4|2|9|6' | split: '|' -%}
+    {%- assign _rs_home_mo_idx = _rs_home_render_idx | minus: 1 -%}
+    {%- assign _rs_home_mo = _rs_home_mob_map[_rs_home_mo_idx] | default: _rs_home_render_idx -%}
     {%- assign pad = block.settings.cell_padding | default: 16 -%}
     {%- assign span_n = block.settings.col_span | default: 12 | plus: 0 -%}
     {%- if span_n < 1 or span_n > 12 -%}
@@ -59,7 +64,7 @@
     <div
       class="rs-uni-cell{% if block.settings.use_strip_bg %} rs-uni-cell--strip{% endif %}{% if block.type == 'blue_band' %} rs-uni-cell--blue-band{% endif %}{% if _rs_cell_ad_flush %} rs-uni-cell--ad-flush{% endif %}"
       data-span="{{ span_n }}"
-      style="{% if _rs_cell_ad_flush %}padding:0;border:none;background:transparent;{% else %}{% if block.settings.use_strip_bg %}padding: {{ pad }}px {{ pad }}px {{ pad | plus: section.settings.strip_padding_bottom }}px {{ pad }}px;{% else %}padding: {{ pad }}px;{% endif %}{% if block.settings.use_strip_bg == false and block.settings.cell_bg != blank %}background: {{ block.settings.cell_bg }};{% endif %}border-color: {% if block.settings.cell_border != blank %}{{ block.settings.cell_border }}{% else %}{{ section.settings.default_cell_border }}{% endif %};{% endif %}"
+      style="--rs-mo: {{ _rs_home_mo }};{% if _rs_cell_ad_flush %}padding:0;border:none;background:transparent;{% else %}{% if block.settings.use_strip_bg %}padding: {{ pad }}px {{ pad }}px {{ pad | plus: section.settings.strip_padding_bottom }}px {{ pad }}px;{% else %}padding: {{ pad }}px;{% endif %}{% if block.settings.use_strip_bg == false and block.settings.cell_bg != blank %}background: {{ block.settings.cell_bg }};{% endif %}border-color: {% if block.settings.cell_border != blank %}{{ block.settings.cell_border }}{% else %}{{ section.settings.default_cell_border }}{% endif %};{% endif %}"
       {{ block.shopify_attributes }}>
       {%- render 'rs-unified-block',
         block: block,
