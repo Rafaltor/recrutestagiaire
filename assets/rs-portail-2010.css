@@ -44,6 +44,8 @@ body {
 
 main {
   background: var(--rs-da-page-bg) !important;
+  /* Même unité d’air qu’entre les blocs grille accueil (--rs-da-gap) */
+  padding-top: var(--rs-da-gap) !important;
 }
 
 body[data-rs-page='product'] main {
@@ -386,24 +388,42 @@ button[type='submit'].btn-primary {
   outline-offset: 1px;
 }
 
-/* ---- En-tête : même gris page + filet 2px (sans relief doré Jobhill) ---- */
+/* ---- En-tête : vibe portail ~2010 (panneau gris-bleu + filet rose léger) ---- */
 .header-wrap {
-  background: linear-gradient(180deg, #f2f2f2 0%, #ffffff 72%) !important;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.35) 0,
+      rgba(255, 255, 255, 0.35) 1px,
+      transparent 1px,
+      transparent 8px
+    ),
+    linear-gradient(185deg, #d5dce8 0%, #e8ecf4 22%, #f7f8fb 55%, #ffffff 100%) !important;
   border-bottom: var(--rs-da-border-w) solid var(--rs-da-border) !important;
-  box-shadow: none !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(244, 114, 182, 0.22),
+    0 2px 8px rgba(15, 35, 60, 0.06) !important;
 }
 .header-wrap::after {
-  display: none !important;
+  display: block !important;
+  opacity: 0.04 !important;
+  background: repeating-linear-gradient(
+    0deg,
+    #000 0,
+    #000 1px,
+    transparent 1px,
+    transparent 3px
+  ) !important;
 }
 .header-wrap.rs-header--banner {
-  background-color: var(--rs-da-page-bg) !important;
+  background-color: #e8edf5 !important;
 }
 .header-wrap.rs-header--banner::before {
   background: linear-gradient(
     180deg,
-    rgba(239, 239, 239, 0.93) 0%,
-    rgba(255, 255, 255, 0.96) 55%,
-    rgba(255, 255, 255, 0.98) 100%
+    rgba(232, 237, 245, 0.92) 0%,
+    rgba(255, 255, 255, 0.94) 100%
   ) !important;
 }
 
@@ -414,33 +434,59 @@ button[type='submit'].btn-primary {
   border-bottom: none !important;
 }
 
-/* Bandeau texte défilant : bande or « annonces » comme les strips accueil */
+/* Bandeau défilant kitsch (animations définies dans theme-overrides + couleurs charte) */
 .rs-header-kitsch-pop {
-  border-bottom: var(--rs-da-border-w) solid var(--rs-da-border) !important;
-  box-shadow: none !important;
+  border-bottom: 3px double color-mix(in srgb, var(--rs-da-pink) 55%, #c99406) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.55),
+    0 2px 10px rgba(180, 60, 120, 0.12) !important;
+}
+@supports not (color: color-mix(in srgb, red, blue)) {
+  .rs-header-kitsch-pop {
+    border-bottom: 3px double #e8a0c8 !important;
+  }
 }
 .rs-header-kitsch-pop--brand {
-  padding: 7px 40px !important;
-  background: linear-gradient(180deg, #fffef6 0%, #ffe9a3 42%, #fff4cc 100%) !important;
-  background-size: 100% 100% !important;
-  animation: none !important;
+  padding: 8px 44px !important;
+  background: linear-gradient(
+    118deg,
+    #fff8e6 0%,
+    #ffd6e8 18%,
+    #ffffff 32%,
+    #c8d8ff 48%,
+    #ffffff 64%,
+    #ffe9a3 82%,
+    #fbcfe8 100%
+  ) !important;
+  background-size: 380% 100% !important;
+  animation: rs-kitsch-brand-bg 11s ease-in-out infinite !important;
 }
 .rs-header-kitsch-pop--brand::before {
-  display: none !important;
+  display: block !important;
+  opacity: 0.55 !important;
 }
 .rs-header-kitsch-pop__deco {
   color: var(--rs-da-pink) !important;
-  text-shadow: none !important;
-  animation: none !important;
-  opacity: 0.85 !important;
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.9),
+    0 0 12px rgba(244, 114, 182, 0.65),
+    1px 1px 0 #fff !important;
+  animation: rs-kitsch-brand-twinkle 1.4s ease-in-out infinite !important;
+  opacity: 1 !important;
+}
+.rs-header-kitsch-pop__deco--b {
+  animation-delay: 0.65s !important;
 }
 .rs-header-kitsch-pop__track {
   font-family: Arial, Helvetica, sans-serif !important;
-  font-weight: 700 !important;
-  font-size: 0.72rem !important;
-  letter-spacing: 0.06em !important;
+  font-weight: 800 !important;
+  font-size: 0.76rem !important;
+  letter-spacing: 0.08em !important;
   color: #001a66 !important;
-  text-shadow: none !important;
+  text-shadow:
+    1px 1px 0 #fff,
+    0 0 12px rgba(244, 114, 182, 0.35) !important;
+  animation: rs-kitsch-pop-marquee 22s linear infinite !important;
 }
 
 /* ---- Pied de page : fond page + blocs type grille accueil ---- */
@@ -970,3 +1016,85 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover,
 }
 
 /* Collection & produit : boutons et liens roses déjà via variables globales ci-dessus */
+
+/* ============================================================
+   Pages collection / recherche / grilles : en-tête + cartes offre (charte)
+   ============================================================ */
+.rs-collection-head {
+  background: var(--rs-da-block-bg) !important;
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
+  border-radius: var(--rs-da-radius) !important;
+  box-shadow: none !important;
+}
+.rs-collection-head__title {
+  color: var(--rs-da-black) !important;
+  text-shadow: none !important;
+}
+.rs-collection-head__crumb .breadcrumb-item a,
+.rs-collection-head__crumb .breadcrumb-item + .breadcrumb-item::before {
+  color: var(--rs-da-pink) !important;
+}
+.rs-collection-head__crumb .breadcrumb-item.active {
+  color: #666 !important;
+}
+
+.jobgrid.JobhillShdaow {
+  background: var(--rs-da-block-bg) !important;
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
+  border-radius: var(--rs-da-radius) !important;
+  box-shadow: none !important;
+}
+.jobgrid.JobhillShdaow:hover {
+  border-color: var(--rs-da-pink) !important;
+  box-shadow: none !important;
+}
+.jobtitle a,
+.jobtitle a:link {
+  color: var(--rs-da-pink) !important;
+}
+.jobtitle a:hover {
+  color: var(--rs-da-pink-hover) !important;
+}
+
+.rs-offer-list-card {
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
+  background: var(--rs-da-block-bg) !important;
+  border-radius: var(--rs-da-radius) !important;
+  box-shadow: none !important;
+}
+.rs-offer-list-card:hover {
+  border-color: var(--rs-da-pink) !important;
+  box-shadow: none !important;
+}
+.rs-offer-list-card__head.rs-pe-card__head {
+  background: linear-gradient(180deg, var(--rs-da-pink-top) 0%, var(--rs-da-pink) 100%) !important;
+  color: #fff !important;
+  border-bottom: 1px solid var(--rs-da-pink-border) !important;
+}
+.rs-offer-list-card__dl dd strong {
+  color: var(--rs-da-pink) !important;
+}
+.rs-offer-list-card__title.rs-pe-card__title {
+  color: var(--rs-da-black) !important;
+}
+.rs-offer-list-card__media {
+  background: #ececec !important;
+}
+.rs-offer-list-card__band-nook {
+  color: var(--rs-da-pink-hover) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+.rs-card-proposals-v2__cell {
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
+  border-radius: var(--rs-da-radius) !important;
+  background: var(--rs-da-block-bg) !important;
+}
+.rs-card-proposals-v2__cell--5 .rs-pe-card__head {
+  background: linear-gradient(180deg, #4d79ff 0%, #0033cc 100%) !important;
+}
+
+/* Variantes comparaison produit : bandeau titre */
+.rs-pe-card__head {
+  border-radius: var(--rs-da-radius) var(--rs-da-radius) 0 0 !important;
+}
