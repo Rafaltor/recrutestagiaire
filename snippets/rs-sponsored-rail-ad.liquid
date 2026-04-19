@@ -11,37 +11,25 @@
 
   if inline_product != blank
     assign p = inline_product
-    assign ad_kicker = inline_kicker | default: 'Offre'
     assign ad_show_price = true
     if inline_show_price == false
       assign ad_show_price = false
-    endif
-    assign ad_show_stars = false
-    if inline_show_stars == true
-      assign ad_show_stars = true
     endif
     assign ad_cta = inline_cta | default: 'Voir'
   else
     assign b = block.settings
     assign p = rail_product | default: b.product
-    assign ad_kicker = b.kicker | default: 'Sponsorisé'
     assign ad_show_price = b.show_price
-    assign ad_show_stars = b.show_stars
     assign ad_cta = b.cta_label | default: 'Voir'
   endif
 -%}
 {%- if p == blank -%}
   <div class="rs-rail-ad rs-rail-ad--placeholder{% if rail_c %} rs-rail-ad--compact{% endif %}">
-    <span class="rs-rail-ad__sponsored">Sponsorisé</span>
     <p class="rs-rail-ad__placeholder-text mb-0">Choisissez un produit.</p>
   </div>
 {%- else -%}
   {%- assign v = p.selected_or_first_available_variant -%}
   <article class="rs-rail-ad{% if rail_c %} rs-rail-ad--compact{% endif %}">
-    <span class="rs-rail-ad__sponsored">{{ ad_kicker | escape }}</span>
-    {%- if ad_show_stars -%}
-      <div class="rs-rail-ad__stars" aria-hidden="true">★★★★☆</div>
-    {%- endif -%}
     <a href="{{ p.url }}" class="rs-rail-ad__media">
       {%- if p.featured_image != blank -%}
         {%- if rail_c -%}

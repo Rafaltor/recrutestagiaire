@@ -1,0 +1,321 @@
+/* ============================================================
+   DA portail emploi années 2010 — recrutestagiaire.eu
+   Chargé après theme-overrides.css
+   ============================================================ */
+
+:root {
+  --rs-da-page-bg: #f0f0f0;
+  --rs-da-block-bg: #ffffff;
+  --rs-da-border: #dddddd;
+  --rs-da-pink: #f06b8a;
+  --rs-da-pink-top: #f57a9a;
+  --rs-da-pink-border: #c73d62;
+  --rs-da-btn-gold-top: #f5e6a8;
+  --rs-da-btn-gold-bot: #d4af37;
+  --rs-da-btn-gold-border: #a88620;
+  --rs-da-gap: 8px;
+  --rs-da-pad: 12px;
+  --rs-da-radius: 4px;
+}
+
+/* ---- Typographie globale (Arial uniquement, hors icônes) ---- */
+html {
+  font-size: 13px;
+  -webkit-font-smoothing: auto;
+}
+@media (max-width: 767.98px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 1rem !important;
+  line-height: 1.45 !important;
+  color: #333 !important;
+  background: var(--rs-da-page-bg) !important;
+}
+
+main {
+  background: var(--rs-da-page-bg) !important;
+}
+
+body[data-rs-page='product'] main {
+  background: var(--rs-da-block-bg) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+p,
+li,
+td,
+th,
+label,
+.btn,
+.form-control,
+input,
+textarea,
+select,
+.nav-link,
+small,
+.badge {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+/* Texte secondaire plus compact sur mobile */
+@media (max-width: 767.98px) {
+  .rs-pole-panel__richtext,
+  .rs-pole-panel__link,
+  .rs-pole-panel__footer-link,
+  .text-muted,
+  .small,
+  small {
+    font-size: 12px !important;
+  }
+}
+
+/* ---- Boutons principaux (gradient rose) ---- */
+.btn-primary,
+.rs-caf-btn-dossier.abt-btn:not(.rs-intro-cta--profils):not(.btn-outline-primary),
+button[type='submit'].btn-primary {
+  background: linear-gradient(180deg, var(--rs-da-pink-top) 0%, var(--rs-da-pink) 100%) !important;
+  border: 1px solid var(--rs-da-pink-border) !important;
+  border-radius: var(--rs-da-radius) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+}
+.btn-primary:hover,
+.rs-caf-btn-dossier.abt-btn:not(.rs-intro-cta--profils):hover {
+  filter: brightness(0.96);
+  color: #fff !important;
+}
+
+/* Boutons secondaires (blanc / gris) */
+.btn-secondary,
+.btn-outline-secondary,
+.rs-caf-btn-dossier.abt-btn.rs-intro-cta--profils {
+  background: #ffffff !important;
+  border: 1px solid #cccccc !important;
+  color: #333333 !important;
+  border-radius: var(--rs-da-radius) !important;
+  box-shadow: none !important;
+}
+.btn-secondary:hover,
+.btn-outline-secondary:hover,
+.rs-caf-btn-dossier.abt-btn.rs-intro-cta--profils:hover {
+  background: #f5f5f5 !important;
+  border-color: #cccccc !important;
+  color: #333333 !important;
+}
+
+/* ---- Suppression ombres « modernes » (cartes / blocs) ---- */
+.rs-uni-cell,
+.rs-rail-ad,
+.rs-pole-panel,
+.rs-offer-list-card,
+.rs-stat-kitsch,
+.card,
+.jobgrid,
+.rs-uni-inline-sponsored,
+.rs-top-profile-api,
+.rs-fake-promo,
+.rs-intro-bundle,
+.rs-hero__search,
+.shopify-section .card {
+  box-shadow: none !important;
+}
+
+/* Rayon max 4px */
+.rs-uni-cell,
+.rs-rail-ad,
+.rs-pole-panel,
+.rs-offer-list-card img,
+.rs-offer-list-card,
+.btn,
+.form-control,
+.rs-uni-inline-sponsored {
+  border-radius: var(--rs-da-radius) !important;
+}
+
+/* ---- Page & grille unifiée ---- */
+.section-home-unified-page .rs-uni-page {
+  background: var(--rs-da-page-bg) !important;
+}
+
+.rs-uni-grid {
+  gap: var(--rs-da-gap) !important;
+}
+
+.rs-uni-cell {
+  border: 1px solid var(--rs-da-border) !important;
+  background: var(--rs-da-block-bg) !important;
+  padding: var(--rs-da-pad) !important;
+}
+
+.rs-uni-cell.rs-uni-cell--ad-flush {
+  padding: var(--rs-da-pad) !important;
+}
+
+/* ---- Titres de section : 14px majuscules + filet ---- */
+.rs-pole-panel__title,
+.rs-uni-blue-band__title,
+.rs-fake-promo__title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  border-bottom: 1px solid var(--rs-da-border) !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 10px !important;
+  color: #333 !important;
+}
+
+.rs-stat-kitsch__ribbon {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  display: block !important;
+  border-bottom: 1px solid var(--rs-da-border) !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 10px !important;
+}
+
+/* Intro hero : réduire un peu le « poster » pour coller à l’esprit 2010 */
+.rs-hero__title-pe {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+}
+@media (min-width: 768px) {
+  .rs-hero__title-pe {
+    font-size: 1.35rem !important;
+  }
+}
+
+/* ---- Rails latéraux : titre colonne ---- */
+.rs-uni-rail__col-title {
+  margin: 0 0 10px;
+  padding: 0 0 6px;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em;
+  color: #333;
+  border-bottom: 1px solid var(--rs-da-border);
+  text-align: center;
+}
+
+/* ---- Cartes pub rail (produits) ---- */
+.rs-rail-ad {
+  background: var(--rs-da-block-bg) !important;
+  border: 1px solid var(--rs-da-border) !important;
+  border-radius: var(--rs-da-radius) !important;
+  box-shadow: none !important;
+  padding: 10px !important;
+}
+
+.rs-rail-ad__sponsored,
+.rs-rail-ad__stars {
+  display: none !important;
+}
+
+.rs-uni-rail .rs-rail-ad__title {
+  color: var(--rs-da-pink) !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+}
+
+.rs-rail-ad__price {
+  color: #000000 !important;
+  font-size: 13px !important;
+}
+
+.rs-rail-ad__price strong {
+  font-weight: 700 !important;
+}
+
+/* Bouton « Voir » jaune doré (rails) */
+.rs-rail-ad__cta {
+  background: linear-gradient(180deg, var(--rs-da-btn-gold-top) 0%, var(--rs-da-btn-gold-bot) 100%) !important;
+  border: 1px solid var(--rs-da-btn-gold-border) !important;
+  border-radius: var(--rs-da-radius) !important;
+  color: #222222 !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+}
+.rs-rail-ad__cta:hover {
+  filter: brightness(0.97);
+  color: #111 !important;
+}
+
+.rs-rail-ad__cta--half {
+  background: linear-gradient(180deg, var(--rs-da-btn-gold-top) 0%, var(--rs-da-btn-gold-bot) 100%) !important;
+  border: 1px solid var(--rs-da-btn-gold-border) !important;
+  color: #222 !important;
+}
+
+/* Image produit petite dans les rails */
+.rs-uni-rail .rs-rail-ad__media {
+  max-width: 88px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  border: 1px solid var(--rs-da-border) !important;
+  background: #fff !important;
+  padding: 4px !important;
+  border-radius: var(--rs-da-radius) !important;
+}
+
+.rs-uni-rail .rs-rail-ad__img {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 80px !important;
+  object-fit: cover !important;
+}
+
+.rs-rail-ad--compact .rs-rail-ad__media {
+  max-width: 72px !important;
+}
+
+/* Cartes centre (inline) : titre rose aussi */
+.rs-uni-inline-sponsored .rs-rail-ad__title {
+  color: var(--rs-da-pink) !important;
+  font-weight: 700 !important;
+}
+
+/* ---- Blocs pole / grilles ---- */
+.rs-pole-panel {
+  border: 1px solid var(--rs-da-border) !important;
+  background: var(--rs-da-block-bg) !important;
+}
+
+/* ---- Focus formulaires : pas d’ombre portée type Material ---- */
+.form-control:focus,
+.btn:focus-visible {
+  box-shadow: none !important;
+  outline: 2px solid var(--rs-da-pink-border) !important;
+  outline-offset: 1px;
+}
+
+/* ---- En-tête / pied : fond blanc, filet #ddd ---- */
+.header-wrap,
+.site-header,
+.skin-dark-footer,
+footer.footer {
+  border-color: var(--rs-da-border) !important;
+}
+.header-wrap {
+  background: var(--rs-da-block-bg) !important;
+}

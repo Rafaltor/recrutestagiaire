@@ -86,7 +86,8 @@
         data-cand-label-email="{{ section.settings.cand_email_btn_label | default: 'E-mail' | escape }}"
         data-cand-label-cv="{{ section.settings.cand_cv_btn_label | default: 'CV' | escape }}"
       {% endif %}>
-      <aside class="rs-uni-rail rs-uni-rail--left" aria-label="Publicités">
+      <aside class="rs-uni-rail rs-uni-rail--left" aria-label="{{ section.settings.rail_column_title | default: 'Offres en vedette' | escape }}">
+        <p class="rs-uni-rail__col-title">{{ section.settings.rail_column_title | default: 'OFFRES EN VEDETTE' | escape }}</p>
         {%- if rail_profiles -%}
           {%- assign ln = section.settings.rail_left_count | default: 2 | plus: 0 -%}
           {%- if ln < 0 -%}{%- assign ln = 0 -%}{%- endif -%}
@@ -124,7 +125,8 @@
           </div>
         </div>
       </div>
-      <aside class="rs-uni-rail rs-uni-rail--right" aria-label="Publicités">
+      <aside class="rs-uni-rail rs-uni-rail--right" aria-label="{{ section.settings.rail_column_title | default: 'Offres en vedette' | escape }}">
+        <p class="rs-uni-rail__col-title">{{ section.settings.rail_column_title | default: 'OFFRES EN VEDETTE' | escape }}</p>
         {%- if rail_profiles -%}
           {%- assign rn = section.settings.rail_right_count | default: 2 | plus: 0 -%}
           {%- if rn < 0 -%}{%- assign rn = 0 -%}{%- endif -%}
@@ -282,11 +284,11 @@
       "content": "Dès 768 px de largeur d’écran, chaque bloc utilise sa valeur « Largeur colonnes » (sur 12). Ex. trois blocs en 4 + 4 + 4 tiennent sur une ligne. Vérifiez ce réglage dans chaque bloc."
     },
     { "type": "header", "content": "Page" },
-    { "type": "color", "id": "page_bg", "label": "Fond autour cellules", "default": "#ffffff" },
+    { "type": "color", "id": "page_bg", "label": "Fond autour cellules", "default": "#f0f0f0" },
     { "type": "range", "id": "page_padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Marge haute page", "default": 0 },
     { "type": "range", "id": "page_padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "label": "Marge basse page", "default": 0 },
-    { "type": "range", "id": "grid_gap", "min": 0, "max": 24, "step": 1, "unit": "px", "label": "Espacement des cellules", "default": 0 },
-    { "type": "color", "id": "default_cell_border", "label": "Bordure cellules défaut", "default": "#888888" },
+    { "type": "range", "id": "grid_gap", "min": 0, "max": 24, "step": 1, "unit": "px", "label": "Espacement des cellules", "default": 8 },
+    { "type": "color", "id": "default_cell_border", "label": "Bordure cellules défaut", "default": "#dddddd" },
     { "type": "header", "content": "Rails pubs latéraux" },
     {
       "type": "checkbox",
@@ -294,6 +296,12 @@
       "label": "Activer rails sponsorisés",
       "default": true,
       "info": "Mode « Offres Shopify » : blocs « Pub rail latéral », contenu réglable par bloc (offre ou API). Mode « Profils candidats » : nombre de pubs ci‑dessous."
+    },
+    {
+      "type": "text",
+      "id": "rail_column_title",
+      "label": "Titre des colonnes latérales (desktop)",
+      "default": "OFFRES EN VEDETTE"
     },
     {
       "type": "select",
@@ -764,7 +772,7 @@
         { "type": "product", "id": "product", "label": "Produit" },
         { "type": "text", "id": "kicker", "label": "Mention", "default": "Sponsorisé" },
         { "type": "checkbox", "id": "show_price", "label": "Afficher le prix", "default": true },
-        { "type": "checkbox", "id": "show_stars", "label": "Étoiles décoratives", "default": true },
+        { "type": "checkbox", "id": "show_stars", "label": "Étoiles décoratives", "default": false },
         { "type": "text", "id": "cta_label", "label": "Bouton", "default": "Voir" },
         {
           "type": "product",
@@ -829,8 +837,8 @@
       "settings": {
         "text_align": "text-center",
         "strip_padding_bottom": 28,
-        "grid_gap": 0,
-        "page_bg": "#ffffff",
+        "grid_gap": 8,
+        "page_bg": "#f0f0f0",
         "sidebar_ads": true,
         "center_column_pct": 60,
         "rail_center_max": 900

@@ -12,6 +12,78 @@
     "home_unified": {
       "type": "home-unified-page",
       "blocks": {
+        "rail_left_a": {
+          "type": "sponsored_rail",
+          "settings": {
+            "side": "left",
+            "content_type": "product",
+            "col_span": "4",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 12,
+            "cell_border": "",
+            "product": "stagiaire",
+            "kicker": "",
+            "show_price": true,
+            "show_stars": false,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
+        },
+        "rail_left_b": {
+          "type": "sponsored_rail",
+          "settings": {
+            "side": "left",
+            "content_type": "product",
+            "col_span": "4",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 12,
+            "cell_border": "",
+            "product": "alternant",
+            "kicker": "",
+            "show_price": true,
+            "show_stars": false,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
+        },
+        "rail_right_a": {
+          "type": "sponsored_rail",
+          "settings": {
+            "side": "right",
+            "content_type": "product",
+            "col_span": "4",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 12,
+            "cell_border": "",
+            "product": "alternant",
+            "kicker": "",
+            "show_price": true,
+            "show_stars": false,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
+        },
+        "rail_right_b": {
+          "type": "sponsored_rail",
+          "settings": {
+            "side": "right",
+            "content_type": "product",
+            "col_span": "4",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 12,
+            "cell_border": "",
+            "product": "stagiaire",
+            "kicker": "",
+            "show_price": true,
+            "show_stars": false,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
+        },
         "uni_intro": {
           "type": "hero_intro_bundle",
           "settings": {
@@ -58,12 +130,12 @@
             "col_span": "4",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
-            "cell_padding": 8,
+            "cell_padding": 12,
             "cell_border": "",
             "product": "stagiaire",
-            "kicker": "Sponsorisé",
+            "kicker": "",
             "show_price": true,
-            "show_stars": true,
+            "show_stars": false,
             "cta_label": "Voir",
             "product_below": ""
           }
@@ -153,12 +225,12 @@
             "col_span": "3",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
-            "cell_padding": 8,
+            "cell_padding": 12,
             "cell_border": "",
             "product": "alternant",
-            "kicker": "Sponsorisé",
+            "kicker": "",
             "show_price": true,
-            "show_stars": true,
+            "show_stars": false,
             "cta_label": "Voir",
             "product_below": ""
           }
@@ -243,12 +315,13 @@
         "uni_top_profile"
       ],
       "settings": {
-        "page_bg": "#ffffff",
+        "page_bg": "#f0f0f0",
         "page_padding_top": 0,
         "page_padding_bottom": 0,
-        "grid_gap": 0,
-        "default_cell_border": "#888888",
-        "sidebar_ads": false,
+        "grid_gap": 8,
+        "default_cell_border": "#dddddd",
+        "sidebar_ads": true,
+        "rail_column_title": "OFFRES EN VEDETTE",
         "rail_content": "products",
         "rail_left_count": 2,
         "rail_right_count": 2,

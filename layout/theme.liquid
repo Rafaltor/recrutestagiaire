@@ -175,7 +175,7 @@
       --rs-footer-text:     {{ settings.footer_text | default: '#6c757d' }};
       --rs-footer-border:   {{ settings.footer_border | default: '#e2e8f0' }};
       --rs-page-width:      {{ settings.page_width | default: 1140 }}px;
-      --rs-font-size:       {{ settings.font_size_base | default: 14 }}px;
+      --rs-font-size:       {{ settings.font_size_base | default: 13 }}px;
     }
 
     /* Appliquer les variables globales aux composants Jobhill */
@@ -220,6 +220,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   {{ 'jobhill-style.css' | asset_url | stylesheet_tag }}
   {{ 'theme-overrides.css' | asset_url | stylesheet_tag }}
+  {{ 'rs-portail-2010.css' | asset_url | stylesheet_tag }}
 
   {% if settings.custom_head_code != blank %}
     {{ settings.custom_head_code }}
