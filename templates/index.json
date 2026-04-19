@@ -120,7 +120,7 @@
         "uni_gp_offres": {
           "type": "grid_panel",
           "settings": {
-            "col_span": "4",
+            "col_span": "5",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -151,7 +151,7 @@
         "uni_kitsch": {
           "type": "kitsch_counter",
           "settings": {
-            "col_span": "6",
+            "col_span": "5",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -166,7 +166,7 @@
         "uni_search": {
           "type": "hero_search",
           "settings": {
-            "col_span": "6",
+            "col_span": "7",
             "use_strip_bg": false,
             "cell_bg": "#0033cc",
             "cell_padding": 12,
