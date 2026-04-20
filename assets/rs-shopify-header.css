@@ -365,7 +365,7 @@
   }
 
   .header-wrap .rs-nav-brand__name.logo {
-    font-size: 18px !important;
+    font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
   }
 
   .header-wrap .rs-subnav.rs-subnav--buttons {
@@ -396,7 +396,7 @@
 
 .rs-nav-brand__name.logo {
   color: var(--rs-pole-blue) !important;
-  font-size: 18px !important;
+  font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
   font-weight: bold !important;
   letter-spacing: 0.02em;
   text-shadow: none;
@@ -586,7 +586,7 @@
   }
 
   html[data-rs-route="inner"] .rs-nav-brand__name.logo {
-    font-size: 16px !important;
+    font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
   }
 
   html[data-rs-route="inner"] .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
@@ -1357,7 +1357,7 @@ html[data-rs-swipe="1"] main.mx-auto {
   }
 
   .rs-header-mobile-bar__title {
-    font-size: 18px;
+    font-size: clamp(1.12rem, 2.5vw, 1.5rem);
     font-weight: 700;
     letter-spacing: 0.04em;
     line-height: 1.15;
