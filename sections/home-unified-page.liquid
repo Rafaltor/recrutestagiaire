@@ -275,19 +275,17 @@
                 '" alt="CV" loading="lazy" decoding="async">' +
                 '</a></div>';
             } else if (isPdf) {
-              var gview =
-                'https://docs.google.com/viewer?url=' +
-                encodeURIComponent(cvRaw) +
-                '&embedded=true';
-              var gviewAttr = gview.replace(/"/g, '');
+              /* PDF natif dans l’iframe (pas Google Viewer = pas d’UI « éditeur »). #toolbar=0 réduit la barre Chrome. */
+              var pdfSrc = cvRaw.indexOf('#') === -1 ? cvRaw + '#toolbar=0' : cvRaw;
+              var pdfSrcEsc = esc(pdfSrc);
               cvCol =
                 '<div class="rs-top-profile-api__cv">' +
                 '<iframe class="rs-top-profile-api__cv-frame" title="CV PDF" src="' +
-                gviewAttr +
+                pdfSrcEsc +
                 '" loading="lazy"></iframe>' +
                 '<a class="rs-top-profile-api__cv-open small" href="' +
                 cvEsc +
-                '" target="_blank" rel="noopener noreferrer">Ouvrir le PDF</a>' +
+                '" target="_blank" rel="noopener noreferrer">Ouvrir le PDF dans un nouvel onglet</a>' +
                 '</div>';
             } else {
               cvCol =

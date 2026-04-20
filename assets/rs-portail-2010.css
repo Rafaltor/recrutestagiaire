@@ -1067,7 +1067,7 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
   border-color: #ec4899 !important;
 }
 
-/* Meilleur profil : moitié CV / moitié infos */
+/* Meilleur profil : CV (PDF / image) à gauche, colonne infos à droite ≥768px ; empilé sur mobile */
 .rs-top-profile-api__layout {
   display: flex;
   flex-direction: column;
@@ -1093,7 +1093,7 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
   border-radius: var(--rs-da-radius);
   background: #fafafa;
   overflow: hidden;
-  min-height: 200px;
+  min-height: 220px;
 }
 .rs-top-profile-api__cv--empty {
   align-items: center;
@@ -1103,9 +1103,14 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
 .rs-top-profile-api__cv-frame {
   width: 100%;
   flex: 1 1 auto;
-  min-height: 280px;
+  min-height: 300px;
   border: 0;
   background: #fff;
+}
+@media (max-width: 767.98px) {
+  .rs-top-profile-api__cv-frame {
+    min-height: 340px;
+  }
 }
 .rs-top-profile-api__cv-open {
   display: block;
