@@ -21,6 +21,8 @@ define('RS_SUPABASE_COL_EMAIL', 'email');
 define('RS_SUPABASE_COL_ROLE', 'role');
 define('RS_SUPABASE_COL_PROF', 'professions');
 define('RS_SUPABASE_COL_CV', 'cv_url');
+/** Bucket Supabase des CV (portail = `cvs`). Utilisé pour signer `cv_path` dans `?action=profil_top`. */
+// define('RS_SUPABASE_CV_BUCKET', 'cvs');
 define('RS_SUPABASE_COL_PORTF', 'portfolio_url');
 
 define('RS_ALLOWED_ORIGINS', [

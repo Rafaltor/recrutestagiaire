@@ -1485,3 +1485,129 @@ body[data-rs-page='product'] .rs-pro-mock__similar-title {
   color: #0a0a0a !important;
   border-bottom: 2px solid #f472b6 !important;
 }
+
+/* ============================================================
+   Bannière cookies & préférences (Customer Privacy API Shopify)
+   Aligné charte portail : Arial, #fff, bordures #ddd, CTA rose / secondaire neutre
+   ============================================================ */
+
+.shopify-pc__banner {
+  z-index: 2147483646 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.shopify-pc__banner__dialog {
+  max-width: min(640px, calc(100vw - 16px)) !important;
+  margin: 12px auto !important;
+  padding: 14px 16px 16px !important;
+  border-radius: var(--rs-da-radius) !important;
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
+  background: var(--rs-da-block-bg) !important;
+  box-shadow: none !important;
+  color: #333 !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+
+.shopify-pc__banner__dialog p,
+.shopify-pc__banner__dialog span {
+  color: #333 !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+
+.shopify-pc__banner__dialog a,
+.shopify-pc__banner__dialog button.shopify-pc__banner__link {
+  color: var(--rs-da-pink) !important;
+  font-weight: 700 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.shopify-pc__banner__dialog a:hover,
+.shopify-pc__banner__dialog button.shopify-pc__banner__link:hover {
+  color: var(--rs-da-pink-hover) !important;
+}
+
+.shopify-pc__banner__dialog button.shopify-pc__banner__link {
+  padding: 0 !important;
+  font-size: 13px !important;
+}
+
+.shopify-pc__banner__btns {
+  gap: var(--rs-da-gap) !important;
+  margin-top: 12px !important;
+  flex-wrap: wrap !important;
+}
+
+.shopify-pc__banner__dialog button:not(.shopify-pc__banner__link) {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  border-radius: var(--rs-da-radius) !important;
+  clip-path: none !important;
+  padding: 9px 16px !important;
+  cursor: pointer !important;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease !important;
+}
+
+button.shopify-pc__banner__btn-accept {
+  background: linear-gradient(180deg, var(--rs-da-pink-top) 0%, var(--rs-da-pink) 100%) !important;
+  border: 1px solid var(--rs-da-pink-border) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+button.shopify-pc__banner__btn-accept:hover {
+  background: linear-gradient(180deg, var(--rs-da-pink-hover) 0%, var(--rs-da-pink-hover) 100%) !important;
+  border-color: var(--rs-da-pink-hover) !important;
+  color: #fff !important;
+}
+
+button.shopify-pc__banner__btn-decline,
+button.shopify-pc__banner__btn-manage-prefs {
+  background: #ffffff !important;
+  border: 1px solid #cccccc !important;
+  color: #333333 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+button.shopify-pc__banner__btn-decline:hover,
+button.shopify-pc__banner__btn-manage-prefs:hover {
+  background: #f5f5f5 !important;
+  border-color: #cccccc !important;
+  color: #333333 !important;
+}
+
+.shopify-pc__prefs__dialog {
+  font-family: Arial, Helvetica, sans-serif !important;
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
+  border-radius: var(--rs-da-radius) !important;
+  background: var(--rs-da-block-bg) !important;
+  box-shadow: none !important;
+  color: #333 !important;
+}
+
+.shopify-pc__prefs__dialog a {
+  color: var(--rs-da-pink) !important;
+  font-weight: 700 !important;
+}
+
+.shopify-pc__prefs__dialog a:hover {
+  color: var(--rs-da-pink-hover) !important;
+}
+
+.shopify-pc__prefs__dialog button {
+  font-family: Arial, Helvetica, sans-serif !important;
+  border-radius: var(--rs-da-radius) !important;
+  clip-path: none !important;
+  box-shadow: none !important;
+}

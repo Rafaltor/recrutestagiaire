@@ -433,6 +433,16 @@ function rs_supabase_row_to_top_public(array $row): array {
     $cvv = $row[$fcv];
     $cvUrl = is_string($cvv) ? trim($cvv) : (is_scalar($cvv) ? trim((string) $cvv) : '');
   }
+  /* Portail : colonne `cv_path` + bucket privé `cvs` — signer côté serveur (clé service). */
+  if ($cvUrl === '') {
+    $cvPathRaw = rs_row_first_non_empty_scalar($row, ['cv_path', 'cvPath']);
+    if ($cvPathRaw !== '') {
+      $cvBucket = (defined('RS_SUPABASE_CV_BUCKET') && trim((string) constant('RS_SUPABASE_CV_BUCKET')) !== '')
+        ? trim((string) constant('RS_SUPABASE_CV_BUCKET'))
+        : 'cvs';
+      $cvUrl = rs_supabase_storage_signed_url($cvBucket, $cvPathRaw, 900);
+    }
+  }
 
   return [
     'id' => (string) ($row['id'] ?? ''),
@@ -443,6 +453,7 @@ function rs_supabase_row_to_top_public(array $row): array {
     'rank' => 1,
     'token' => $token,
     'cv' => $cvUrl,
+    'cv_url' => $cvUrl,
   ];
 }
 
@@ -543,6 +554,58 @@ function rs_supabase_storage_public_file_url(string $objectPathInBucket): string
     $encPath = '/' . $encPath;
   }
   return $base . '/storage/v1/object/public/' . rawurlencode($b) . $encPath;
+}
+
+/**
+ * Clé d’objet dans le bucket CV (même logique que le portail Next : sans préfixe `cvs/`).
+ */
+function rs_normalize_cv_object_key(string $raw): string {
+  $p = trim(str_replace('\\', '/', $raw));
+  $p = ltrim($p, '/');
+  if (stripos($p, 'cvs/') === 0) {
+    $p = substr($p, 4);
+  }
+  return ltrim($p, '/');
+}
+
+/**
+ * URL signée (GET) pour un objet dans un bucket privé Supabase Storage.
+ */
+function rs_supabase_storage_signed_url(string $bucket, string $objectPathInBucket, int $expiresIn = 900): string {
+  if (!rs_supabase_configured()) {
+    return '';
+  }
+  $b = trim(str_replace('\\', '/', $bucket), '/');
+  $p = rs_normalize_cv_object_key($objectPathInBucket);
+  if ($b === '' || $p === '') {
+    return '';
+  }
+  $segs = explode('/', $p);
+  $encPath = implode('/', array_map('rawurlencode', $segs));
+  $pathQuery = '/storage/v1/object/sign/' . rawurlencode($b) . '/' . $encPath;
+  $body = json_encode(['expiresIn' => $expiresIn]);
+  if ($body === false) {
+    return '';
+  }
+  $r = rs_supabase_request('POST', $pathQuery, [], $body);
+  if (!$r['ok'] || !is_array($r['data'])) {
+    return '';
+  }
+  $d = $r['data'];
+  $rel = '';
+  if (isset($d['signedURL']) && is_string($d['signedURL'])) {
+    $rel = $d['signedURL'];
+  } elseif (isset($d['signedUrl']) && is_string($d['signedUrl'])) {
+    $rel = $d['signedUrl'];
+  }
+  if ($rel === '') {
+    return '';
+  }
+  if (preg_match('#\Ahttps?://#i', $rel) === 1) {
+    return $rel;
+  }
+  $base = rtrim((string) RS_SUPABASE_URL, '/') . '/storage/v1';
+  return $base . ((isset($rel[0]) && $rel[0] === '/') ? '' : '/') . $rel;
 }
 
 /**

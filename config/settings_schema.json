@@ -23,7 +23,7 @@
         "id": "rs_api_url_top_profile",
         "label": "API — Meilleur profil (classement)",
         "default": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
-        "info": "Proxy PHP sur le sous-domaine api (Ionos), pas portail. GET JSON public ; ex. …/rs-airtable-proxy.php?action=profil_top ou …/api/profils/top/ si déployé."
+        "info": "Ionos : …/rs-airtable-proxy.php?action=profil_top (ou …/api/profils/top/). Portail Next : https://portail.recrutestagiaire.eu/api/profils/top — renvoie profile.cv (PDF signé) pour le bloc d’accueil."
       }
     ]
   },
