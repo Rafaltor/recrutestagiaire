@@ -58,6 +58,7 @@
 {%- endif -%}
 {%- assign show_contract_line = true -%}
 {%- if s.show_contract_line == false -%}{%- assign show_contract_line = false -%}{%- endif -%}
+{%- capture rs_offer_media_h -%}calc({{ media_h }}px * var(--rs-uni-text-pct, 100) / 100){%- endcapture -%}
 
 <article class="rs-offer-list-card rs-offer-list-card--responsive rs-pe-card position-relative h-100" style="border-radius:{{ s.card_radius }}px;">
   <div class="rs-pe-card__head rs-offer-list-card__head rs-offer-list-card__head--mobile-title d-md-none"
@@ -77,10 +78,10 @@
   </div>
 
   <div class="rs-offer-list-card__split">
-    <div class="rs-offer-list-card__media">
+    <div class="rs-offer-list-card__media" style="height: {{ rs_offer_media_h }};">
       {%- if product.images.size > 1 and s.offer_carousel != false -%}
         <div id="offer-carousel-{{ uid }}"
-          class="carousel slide rs-offer-list-card__carousel h-100"
+          class="carousel slide rs-offer-list-card__carousel h-100 w-100"
           {% if carousel_interval > 0 %}data-bs-ride="carousel" data-bs-interval="{{ carousel_interval }}" data-bs-pause="false" data-bs-wrap="true"{% else %}data-bs-interval="false"{% endif %}>
           <div class="carousel-indicators">
             {%- for image in product.images limit: 8 -%}
@@ -92,10 +93,10 @@
           <div class="carousel-inner h-100">
             {%- for image in product.images limit: 8 -%}
               <div class="carousel-item h-100{% if forloop.first %} active{% endif %}">
-                <a href="{{ product.url }}" class="d-block h-100">
-                  <img src="{{ image | img_url: '900x680', crop: 'center' }}"
-                    class="d-block w-100 rs-offer-list-card__img"
-                    style="height:calc({{ media_h }}px * var(--rs-uni-text-pct, 100) / 100);object-fit:cover;"
+                <a href="{{ product.url }}" class="d-flex h-100 w-100 align-items-center justify-content-center text-decoration-none">
+                  <img src="{{ image | image_url: width: 1000 }}"
+                    class="rs-offer-list-card__img"
+                    style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:center center;"
                     alt="{{ image.alt | default: product.title | escape }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
                 </a>
               </div>
@@ -111,15 +112,15 @@
           </button>
         </div>
       {%- elsif product.featured_image -%}
-        <a href="{{ product.url }}" class="d-block h-100">
-          <img src="{{ product.featured_image | img_url: '900x680', crop: 'center' }}"
-            class="w-100 rs-offer-list-card__img"
-            style="height:calc({{ media_h }}px * var(--rs-uni-text-pct, 100) / 100);object-fit:cover;"
+        <a href="{{ product.url }}" class="d-flex h-100 w-100 align-items-center justify-content-center text-decoration-none">
+          <img src="{{ product.featured_image | image_url: width: 1000 }}"
+            class="rs-offer-list-card__img"
+            style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;object-position:center center;"
             alt="{{ product.title | escape }}" loading="lazy">
         </a>
       {%- else -%}
-        <div class="rs-offer-list-card__placeholder d-flex align-items-center justify-content-center fw-bold text-muted h-100"
-          style="height:calc({{ media_h }}px * var(--rs-uni-text-pct, 100) / 100);background:linear-gradient(180deg,#e8eef4,#d4dee8);">
+        <div class="rs-offer-list-card__placeholder d-flex align-items-center justify-content-center fw-bold text-muted h-100 w-100"
+          style="background:linear-gradient(180deg,#e8eef4,#d4dee8);">
           RS
         </div>
       {%- endif -%}

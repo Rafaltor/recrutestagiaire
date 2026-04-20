@@ -2693,17 +2693,25 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 }
 
 /* ============================================================
-   COLLECTION — carte “offre d’emploi” (image carrée, prix plus visible)
+   COLLECTION — carte “offre d’emploi” (prix plus visible)
    ============================================================ */
 
-/* Carte “offre d’emploi” : image carrée + prix plus présent */
-.rs-offer-list-card__media,
+/* Zone photo : hauteur inline (snippet) ; carrousel remplit la zone ; image contain + centrée */
 .rs-offer-list-card__carousel,
-.rs-offer-list-card__img {
-  aspect-ratio: 1 / 1;
+.rs-offer-list-card__carousel .carousel-inner {
+  height: 100%;
+}
+/* jobhill-style.css (≥1200px) impose .carousel-inner .carousel-item { height:100vh; min-height:650px; padding:6rem }
+   sur tout le site — casse le carrousel des cartes offre (image en bas du cadre). On neutralise ici. */
+.rs-offer-list-card__carousel .carousel-inner .carousel-item {
+  height: 100% !important;
+  min-height: 0 !important;
+  padding: 0 !important;
 }
 .rs-offer-list-card__img {
   height: auto !important;
+  object-fit: contain !important;
+  object-position: center center !important;
 }
 .rs-offer-list-card__dl dd strong {
   font-size: 1.18em;
@@ -2782,6 +2790,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   position: relative;
   z-index: 2;
   background: #e8eef4;
+  overflow: hidden;
 }
 .rs-offer-list-card__carousel .carousel-control-prev,
 .rs-offer-list-card__carousel .carousel-control-next {

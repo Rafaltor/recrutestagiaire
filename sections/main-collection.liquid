@@ -57,8 +57,10 @@
       <div class="col-12 col-md-12">
 
         <!-- Produits -->
-        {% assign col_class = 'col-12 col-md-6 col-lg-6 col-xl-6' %}
+        {%- comment -%} Desktop : 4 colonnes par défaut (lg/xl). Tablette md : 2 par ligne. {%- endcomment -%}
+        {% assign col_class = 'col-12 col-md-6 col-lg-3 col-xl-3' %}
         {% if section.settings.grid_cols == '1' %}{% assign col_class = 'col-12' %}{% endif %}
+        {% if section.settings.grid_cols == '2' %}{% assign col_class = 'col-12 col-md-6 col-lg-6 col-xl-6' %}{% endif %}
         {% if section.settings.grid_cols == '3' %}{% assign col_class = 'col-12 col-md-6 col-lg-4 col-xl-4' %}{% endif %}
 
         {% paginate collection.products by section.settings.products_per_page %}
@@ -196,12 +198,13 @@
     {
       "type": "select",
       "id": "grid_cols",
-      "label": "Colonnes",
-      "default": "2",
+      "label": "Colonnes (ordinateur large)",
+      "default": "4",
       "options": [
         { "value": "1", "label": "1 colonne" },
         { "value": "2", "label": "2 colonnes" },
-        { "value": "3", "label": "3 colonnes" }
+        { "value": "3", "label": "3 colonnes" },
+        { "value": "4", "label": "4 colonnes" }
       ]
     },
     {

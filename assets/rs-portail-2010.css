@@ -985,30 +985,32 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
     min-width: 0 !important;
   }
   .section-home-unified-page .rs-uni-cell--ad-flush .rs-rail-ad {
-    padding: 6px 6px 8px !important;
+    padding: 10px 8px 12px !important;
+    min-height: 0;
   }
+  /* Avant : ~64×64 px — trop petit côte à côte ; zone photo plus haute (carré 1:1 du thème) */
   .section-home-unified-page .rs-uni-cell--ad-flush .rs-rail-ad__media {
-    max-width: min(64px, 36vw) !important;
-    margin-bottom: 4px !important;
+    max-width: min(140px, 48vw) !important;
+    margin-bottom: 8px !important;
   }
   .section-home-unified-page .rs-uni-cell--ad-flush .rs-rail-ad__img {
-    max-height: 64px !important;
+    max-height: min(132px, 44vw) !important;
   }
   .section-home-unified-page .rs-uni-cell--ad-flush .rs-rail-ad__title {
-    font-size: 10px !important;
-    line-height: 1.2 !important;
-    -webkit-line-clamp: 2 !important;
+    font-size: 11px !important;
+    line-height: 1.25 !important;
+    -webkit-line-clamp: 3 !important;
     -webkit-box-orient: vertical !important;
     display: -webkit-box !important;
     overflow: hidden !important;
   }
   .section-home-unified-page .rs-uni-cell--ad-flush .rs-rail-ad__price {
-    font-size: 10px !important;
-    margin-bottom: 3px !important;
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
   }
   .section-home-unified-page .rs-uni-cell--ad-flush .rs-rail-ad__cta {
-    font-size: 9px !important;
-    padding: 4px 5px !important;
+    font-size: 10px !important;
+    padding: 6px 8px !important;
   }
 }
 
