@@ -742,7 +742,7 @@ body.rs-nav-open {
   --rs-kitsch-pop-b: #e8e8f0;
   --rs-kitsch-pop-fg: #f472b6;
 
-  padding: 3px 0;
+  padding: 5.5px 0;
   background: linear-gradient(
     118deg,
     #fff8e6 0%,

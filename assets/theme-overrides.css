@@ -4362,7 +4362,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 }
 
 .rs-header-kitsch-pop--brand {
-  padding: 3px 40px;
+  padding: 5.5px 0;
   background: linear-gradient(
     118deg,
     var(--rs-gold-soft) 0%,
