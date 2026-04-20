@@ -50,6 +50,33 @@
   background: repeating-linear-gradient(90deg, #fff 0, #fff 1px, transparent 1px, transparent 5px);
 }
 
+/* Rangée sous le kitsch : logo RS hors du .container (retrait + safe area) + bloc centré (titre + boutons + onglets) */
+.header-wrap .rs-header-body {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+}
+.header-wrap .rs-header-body:has(> .rs-header-logo-tile) {
+  display: grid;
+  /* 1re colonne = largeur réelle du logo (plus de « vide » violet à droite du <a>) */
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0;
+}
+.header-wrap .rs-header-body > .container {
+  min-width: 0;
+}
+.header-wrap .rs-header-body:has(> .rs-header-logo-tile) > .container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 980px;
+  /* Moins d’air entre le logo RS et le titre / onglets (surcharge padding du .container) */
+  padding-left: 6px !important;
+}
+
 .header-wrap .container {
   max-width: 980px;
   margin: 0 auto;
@@ -124,7 +151,7 @@
   min-width: 0;
 }
 
-/* Titre seul au-dessus des onglets (logo RS = fixe en haut à gauche, hors flux) */
+/* Titre seul au-dessus des onglets (logo RS = hors .container, voir .rs-header-body) */
 .rs-banner-top.rs-header-pole-title {
   min-height: 0 !important;
   padding: 4px 0 4px !important;
@@ -140,7 +167,7 @@
   line-height: 1.15 !important;
 }
 
-/* Ligne onglets pleine largeur + logo RS hors flux, fixe en haut à gauche, sans fond */
+/* Ligne onglets : le logo RS est hors du .container (voir .rs-header-body) */
 .header-wrap .rs-header-tabstrip {
   display: flex;
   flex-direction: row;
@@ -156,29 +183,43 @@
   padding-left: 0;
   padding-right: 0;
 }
-/* Logo : hors flux du tabstrip, centré verticalement sur tout le bloc .rs-header-two-tier */
-.header-wrap .rs-header-logo-tile {
-  position: absolute;
+/* Logo RS : boîte serrée sur l’image (pas width:100% sur une colonne trop large → pas d’espace fantôme) */
+.header-wrap .rs-header-body > .rs-header-logo-tile {
+  position: relative;
   z-index: 6;
-  left: max(10px, env(safe-area-inset-left, 0px));
-  top: 50%;
-  transform: translateY(-50%);
+  box-sizing: border-box;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  width: max-content;
+  min-width: 0;
+  min-height: var(--rs-header-logo-col, 124px);
+  height: var(--rs-header-logo-col, 124px);
+  padding: 0 0 0 max(var(--rs-header-logo-inset, 14px), env(safe-area-inset-left, 0px));
+  margin: 0;
   border: none !important;
   background: transparent !important;
   box-shadow: none !important;
-  padding: 0;
-  width: auto;
-  min-width: 0;
   text-decoration: none !important;
   pointer-events: auto;
+  align-self: center;
+  justify-self: start;
 }
 .header-wrap .rs-header-logo-tile:hover {
   background: transparent !important;
   border: none !important;
   opacity: 0.92;
+}
+.header-wrap .rs-header-logo-tile .rs-nav-brand__img,
+.header-wrap .rs-header-logo-tile__img {
+  display: block;
+  object-fit: contain;
+  object-position: left center;
+  max-width: var(--rs-header-logo-col, 124px) !important;
+  max-height: var(--rs-header-logo-col, 124px) !important;
+  width: auto;
+  height: auto;
+  flex-shrink: 0;
 }
 .header-wrap .rs-header-tabstrip .rs-banner-nav.rs-header-pole-tabs {
   flex: 1 1 auto;
@@ -188,34 +229,6 @@
   margin-left: 0;
   margin-right: 0;
   align-self: stretch;
-}
-/* Avec logo : onglets ~15 % moins larges (centrés), logo plus grand */
-.header-wrap:has(.rs-header-logo-tile) .rs-banner-nav.rs-header-pole-tabs {
-  width: 86%;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
-/* Éviter que le titre / boutons passent sous le logo fixe */
-.header-wrap:has(.rs-header-logo-tile) .rs-header-top-line {
-  padding-left: clamp(72px, 17vw, 168px);
-}
-@media (max-width: 991.98px) {
-  .header-wrap:has(.rs-header-logo-tile) .rs-header-top-line {
-    padding-left: clamp(52px, 20vw, 100px);
-  }
-  .header-wrap:has(.rs-header-logo-tile) .rs-banner-nav.rs-header-pole-tabs {
-    width: 88%;
-    max-width: none;
-  }
-  .header-wrap:has(.rs-header-kitsch-pop) .rs-header-logo-tile {
-    top: max(36px, env(safe-area-inset-top, 0px));
-  }
-  .header-wrap .rs-header-logo-tile .rs-nav-brand__img,
-  .header-wrap .rs-header-logo-tile__img {
-    max-height: 72px !important;
-    max-width: 72px !important;
-  }
 }
 
 @media (min-width: 992px) {
@@ -259,13 +272,6 @@
     border-radius: 0;
     box-sizing: border-box;
   }
-  .header-wrap:has(.rs-header-logo-tile) .rs-header-main-row .rs-banner-nav.rs-header-pole-tabs {
-    width: 86%;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   .header-wrap .rs-header-main-row .rs-subnav.rs-subnav--buttons {
     width: 100%;
     max-width: none;
@@ -279,17 +285,6 @@
 
   .header-wrap .rs-header-main-row .rs-subnav__item {
     min-width: 0;
-  }
-
-  .header-wrap:has(.rs-header-kitsch-pop) .rs-header-logo-tile {
-    top: max(44px, env(safe-area-inset-top, 0px));
-  }
-  .header-wrap .rs-header-logo-tile .rs-nav-brand__img,
-  .header-wrap .rs-header-logo-tile__img {
-    max-height: 168px;
-    max-width: 168px;
-    width: auto;
-    height: auto;
   }
 }
 
@@ -338,12 +333,6 @@
     padding: 0;
     box-sizing: border-box;
   }
-  .header-wrap:has(.rs-header-logo-tile) .rs-header-main-row .rs-banner-nav.rs-header-pole-tabs {
-    width: 88%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   .header-wrap .rs-header-main-row .rs-banner-nav.rs-header-pole-tabs .rs-subnav.rs-subnav--buttons {
     width: 100%;
     max-width: none;
