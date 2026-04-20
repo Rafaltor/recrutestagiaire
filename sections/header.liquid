@@ -58,7 +58,7 @@
   assign l_o2 = section.settings.menu_offres_2_label | default: 'Les stagiaires de base'
   assign l_c1 = section.settings.menu_cand_1_label | default: 'Profils candidats'
   assign l_c2 = section.settings.menu_cand_2_label | default: 'Déposer sa candidature'
-  assign l_c3 = section.settings.menu_cand_3_label | default: 'Vote (swipe)'
+  assign l_c3 = section.settings.menu_cand_3_label | default: 'Voter (Swipe)'
   assign l_k1 = section.settings.menu_coll_1_label | default: 'Histoire'
   assign l_k2 = section.settings.menu_coll_2_label | default: 'Contact'
 
@@ -122,7 +122,40 @@
     {%- endif -%}
     <div class="container">
       <header class="rs-header-two-tier" aria-label="En-tête du site">
-        <div class="rs-header-main-row">
+        {%- comment -%} Barre & menu mobile uniquement (<768px), sans impacter le desktop {%- endcomment -%}
+        <div class="rs-header-mobile-bar" data-rs-header-mobile-bar>
+          <a class="rs-header-mobile-bar__brand" href="{{ routes.root_url }}">
+            {%- if brand_image != blank -%}
+              <img
+                class="rs-header-mobile-bar__logo"
+                src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 200 }}{% endif %}"
+                alt=""
+                width="36"
+                height="36"
+                loading="eager"
+                decoding="async">
+            {%- endif -%}
+            <span class="rs-header-mobile-bar__title">
+              {%- if section.settings.site_title != blank -%}
+                {{ section.settings.site_title | upcase }}
+              {%- else -%}
+                {{ shop.name | upcase }}
+              {%- endif -%}
+            </span>
+          </a>
+          <button
+            type="button"
+            class="rs-header-mobile-bar__menu-btn"
+            id="rs-header-mobile-menu-btn"
+            aria-expanded="false"
+            aria-controls="rs-header-drawer-panel"
+            data-rs-header-drawer-open>
+            <span class="visually-hidden">Ouvrir le menu</span>
+            <span class="rs-header-mobile-bar__burger" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <div class="rs-header-main-row rs-header-main-row--desktop">
           <div class="rs-header-top-line">
             <div class="rs-banner-top rs-header-pole-brand rs-header-pole-title">
               <a class="nav-brand rs-nav-brand rs-nav-brand--title-row" href="{{ routes.root_url }}">
@@ -193,8 +226,51 @@
           </ul>
         </nav>
         </div>
-      </div>
     </header>
+    </div>
+  </div>
+
+  <div class="rs-header-drawer" id="rs-header-drawer" data-rs-header-drawer hidden>
+    <div class="rs-header-drawer__overlay" data-rs-header-drawer-close tabindex="-1" aria-hidden="true"></div>
+    <div
+      class="rs-header-drawer__panel"
+      id="rs-header-drawer-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="rs-header-drawer-title">
+      <div class="rs-header-drawer__head">
+        <span class="visually-hidden" id="rs-header-drawer-title">Menu</span>
+        <button type="button" class="rs-header-drawer__close" data-rs-header-drawer-close aria-label="Fermer le menu">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <nav class="rs-header-drawer__nav" aria-label="Navigation principale">
+        <details class="rs-header-drawer__section">
+          <summary class="rs-header-drawer__summary">{{ lbl_offres }}</summary>
+          <div class="rs-header-drawer__sublinks">
+            <a href="{{ o1 }}">{{ l_o1 }}</a>
+            <a href="{{ o2 }}">{{ l_o2 }}</a>
+          </div>
+        </details>
+        <details class="rs-header-drawer__section">
+          <summary class="rs-header-drawer__summary">{{ lbl_cand }}</summary>
+          <div class="rs-header-drawer__sublinks">
+            <a href="{{ c1 }}" rel="noopener noreferrer">{{ l_c1 }}</a>
+            <a href="{{ c2 }}" rel="noopener noreferrer">{{ l_c2 }}</a>
+            <a href="{{ c3 }}" rel="noopener noreferrer">{{ l_c3 }}</a>
+          </div>
+        </details>
+        <details class="rs-header-drawer__section">
+          <summary class="rs-header-drawer__summary">{{ lbl_coll }}</summary>
+          <div class="rs-header-drawer__sublinks">
+            <a href="{{ k1 }}">{{ l_k1 }}</a>
+            <a href="{{ k2 }}">{{ l_k2 }}</a>
+          </div>
+        </details>
+        <hr class="rs-header-drawer__sep" />
+        <a class="rs-header-drawer__flat" href="{{ routes.cart_url }}">Dossier</a>
+        <a class="rs-header-drawer__flat" href="{{ rs_p_login }}" rel="noopener noreferrer">Mon espace</a>
+      </nav>
     </div>
   </div>
 </div>
@@ -297,6 +373,113 @@
   })();
 </script>
 
+<script>
+  (function () {
+    var wrap = document.querySelector('.header-wrap');
+    if (!wrap) return;
+    var drawer = wrap.querySelector('[data-rs-header-drawer]');
+    var openBtn = wrap.querySelector('[data-rs-header-drawer-open]');
+    if (!drawer || !openBtn) return;
+
+    var panel = drawer.querySelector('.rs-header-drawer__panel');
+    var closes = drawer.querySelectorAll('[data-rs-header-drawer-close]');
+    var scrollY = 0;
+
+    function isMobileDrawer() {
+      try {
+        return window.matchMedia('(max-width: 767.98px)').matches;
+      } catch (e) {
+        return (window.innerWidth || 0) <= 767;
+      }
+    }
+
+    function lockScroll() {
+      scrollY = window.scrollY || window.pageYOffset || 0;
+      document.documentElement.classList.add('rs-header-drawer-open');
+      document.body.style.position = 'fixed';
+      document.body.style.top = -scrollY + 'px';
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
+    }
+
+    function unlockScroll() {
+      document.documentElement.classList.remove('rs-header-drawer-open');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      window.scrollTo(0, scrollY);
+    }
+
+    function openDrawer() {
+      if (!isMobileDrawer()) return;
+      drawer.removeAttribute('hidden');
+      drawer.classList.add('rs-header-drawer--open');
+      openBtn.setAttribute('aria-expanded', 'true');
+      lockScroll();
+      var c = drawer.querySelector('.rs-header-drawer__close');
+      if (c) c.focus();
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('rs-header-drawer--open');
+      openBtn.setAttribute('aria-expanded', 'false');
+      unlockScroll();
+      window.setTimeout(function () {
+        if (!drawer.classList.contains('rs-header-drawer--open')) {
+          drawer.setAttribute('hidden', '');
+        }
+      }, 260);
+    }
+
+    openBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (drawer.classList.contains('rs-header-drawer--open')) {
+        closeDrawer();
+      } else {
+        openDrawer();
+      }
+    });
+
+    closes.forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        closeDrawer();
+      });
+    });
+
+    drawer.querySelectorAll('.rs-header-drawer__flat').forEach(function (a) {
+      a.addEventListener('click', function () {
+        closeDrawer();
+      });
+    });
+    drawer.querySelectorAll('.rs-header-drawer__sublinks a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        closeDrawer();
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && drawer.classList.contains('rs-header-drawer--open')) {
+        closeDrawer();
+        openBtn.focus();
+      }
+    });
+
+    window.addEventListener(
+      'resize',
+      function () {
+        if (!isMobileDrawer() && drawer.classList.contains('rs-header-drawer--open')) {
+          closeDrawer();
+        }
+      },
+      { passive: true }
+    );
+  })();
+</script>
+
 {% schema %}
 {
   "name": "En-tête du site",
@@ -305,10 +488,10 @@
   "settings": [
     { "type": "header", "content": "Bandeau kitsch (au-dessus du header)" },
     { "type": "checkbox", "id": "show_kitsch_pop", "label": "Afficher la bande animée", "default": true },
-    { "type": "text", "id": "kitsch_pop_text", "label": "Texte défilant", "default": "★ Portail du collectif ★ Nouvelles pièces — candidatures ouvertes ★ Mode, textile & rencontres ★" },
-    { "type": "color", "id": "kitsch_pop_bg_a", "label": "Accent animation (jaune logo)", "default": "#ffd230" },
-    { "type": "color", "id": "kitsch_pop_bg_b", "label": "Accent animation (bleu clair logo)", "default": "#4d79ff" },
-    { "type": "color", "id": "kitsch_pop_fg", "label": "Couleur du texte", "default": "#0015a3" },
+    { "type": "text", "id": "kitsch_pop_text", "label": "Texte défilant", "default": "★ OFFRE FLASH ★ -30% SUR VOTRE 2E CANDIDATURE — AGISSEZ VITE !!! ★" },
+    { "type": "color", "id": "kitsch_pop_bg_a", "label": "Fond bandeau (côté A)", "default": "#ffe8f0" },
+    { "type": "color", "id": "kitsch_pop_bg_b", "label": "Fond bandeau (côté B)", "default": "#ffd6e8" },
+    { "type": "color", "id": "kitsch_pop_fg", "label": "Couleur du texte", "default": "#be185d" },
     { "type": "header", "content": "Images" },
     { "type": "image_picker", "id": "brand_image", "label": "Logo RS (carré à gauche des onglets)", "info": "Vide = masque le carré logo. Sinon logo Identité du thème ou image ; affiché en grand dans le carré à côté des onglets (le titre reste au-dessus)." },
     { "type": "range", "id": "brand_max_height", "min": 48, "max": 200, "step": 2, "unit": "px", "label": "Hauteur max logo (colonne gauche)", "default": 124 },
