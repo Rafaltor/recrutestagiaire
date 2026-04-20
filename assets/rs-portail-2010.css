@@ -1067,23 +1067,26 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
   border-color: #ec4899 !important;
 }
 
-/* Meilleur profil : CV (PDF / image) à gauche, colonne infos à droite ≥768px ; empilé sur mobile */
+/* Meilleur profil : infos à gauche, CV (image / PDF) à droite ≥768px ; empilé sur mobile (infos puis CV) */
 .rs-top-profile-api__layout {
   display: flex;
   flex-direction: column;
   gap: 14px;
   margin-top: 6px;
+  align-items: stretch;
 }
 @media (min-width: 768px) {
   .rs-top-profile-api__layout {
     flex-direction: row;
     align-items: stretch;
+    min-height: min(70vh, 640px);
   }
   .rs-top-profile-api__cv,
   .rs-top-profile-api__info {
     flex: 1 1 50%;
     min-width: 0;
     max-width: 50%;
+    align-self: stretch;
   }
 }
 .rs-top-profile-api__cv {
@@ -1094,6 +1097,41 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
   background: #fafafa;
   overflow: hidden;
   min-height: 220px;
+}
+.rs-top-profile-api__cv--pdf {
+  min-height: 280px;
+}
+@media (min-width: 768px) {
+  .rs-top-profile-api__cv--pdf {
+    min-height: 0;
+    height: auto;
+  }
+}
+.rs-top-profile-api__pdf-canvas-host {
+  flex: 1 1 auto;
+  min-height: 200px;
+  overflow: auto;
+  background: #fff;
+  -webkit-overflow-scrolling: touch;
+}
+.rs-top-profile-api__cv--pdf .rs-top-profile-api__pdf-canvas-host {
+  min-height: 0;
+}
+.rs-top-profile-api__cv--pdf .rs-top-profile-api__cv-open {
+  flex-shrink: 0;
+}
+.rs-top-profile-api__pdf-canvas-inner {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+.rs-top-profile-api__pdf-canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  vertical-align: top;
 }
 .rs-top-profile-api__cv--empty {
   align-items: center;
@@ -1106,6 +1144,16 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
   min-height: 300px;
   border: 0;
   background: #fff;
+}
+.rs-top-profile-api__cv-frame--fallback {
+  min-height: 0;
+  flex: 1 1 auto;
+}
+@media (min-width: 768px) {
+  .rs-top-profile-api__cv--pdf .rs-top-profile-api__cv-frame--fallback {
+    min-height: 0;
+    height: 100%;
+  }
 }
 @media (max-width: 767.98px) {
   .rs-top-profile-api__cv-frame {
