@@ -59,6 +59,7 @@
   assign l_c1 = section.settings.menu_cand_1_label | default: 'Profils candidats'
   assign l_c2 = section.settings.menu_cand_2_label | default: 'Déposer sa candidature'
   assign l_c3 = section.settings.menu_cand_3_label | default: 'Voter (Swipe)'
+  assign rs_drawer_connexion_url = '/connexion'
   assign l_k1 = section.settings.menu_coll_1_label | default: 'Histoire'
   assign l_k2 = section.settings.menu_coll_2_label | default: 'Contact'
 
@@ -226,6 +227,7 @@
           </ul>
         </nav>
         </div>
+        </div>
     </header>
     </div>
   </div>
@@ -269,7 +271,7 @@
         </details>
         <hr class="rs-header-drawer__sep" />
         <a class="rs-header-drawer__flat" href="{{ routes.cart_url }}">Dossier</a>
-        <a class="rs-header-drawer__flat" href="{{ rs_p_login }}" rel="noopener noreferrer">Mon espace</a>
+        <a class="rs-header-drawer__flat" href="{{ rs_drawer_connexion_url }}">Mon espace</a>
       </nav>
     </div>
   </div>
