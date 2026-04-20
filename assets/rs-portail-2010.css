@@ -635,11 +635,13 @@ footer.footer:not(.rs-site-footer) {
   color: #0a0a0a !important;
 }
 
-/* Bandeau sous le logo : fond neutre (plus de bande bleutée) */
-.header-wrap .rs-banner-nav.rs-header-pole-tabs {
-  background: #ffffff !important;
-  box-shadow: none !important;
-  border-top: 1px solid #dddddd !important;
+/* Bandeau sous le logo : fond neutre (mobile / tablette <992px seulement) */
+@media (max-width: 991.98px) {
+  .header-wrap .rs-banner-nav.rs-header-pole-tabs {
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border-top: 1px solid #dddddd !important;
+  }
 }
 
 /* 3. Onglets header : actif = rose + blanc ; inactifs = blanc + texte #0A0A0A + bordure #ddd */
@@ -1166,33 +1168,6 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover,
   color: #ffffff !important;
 }
 
-/* 2 — Header : dégradé + onglet actif (page d’accueil / index uniquement) */
-body[data-rs-page='index'] .header-wrap:not(.rs-header--banner) {
-  background: linear-gradient(180deg, #e8e8f0 0%, #ffffff 100%) !important;
-  border-bottom-color: rgba(10, 10, 10, 0.12) !important;
-}
-body[data-rs-page='index'] .header-wrap:not(.rs-header--banner)::after {
-  opacity: 0.03 !important;
-}
-body[data-rs-page='index'] .header-wrap:not(.rs-header--banner) .rs-subnav__item.is-active .rs-subnav__trigger,
-body[data-rs-page='index'] .header-wrap:not(.rs-header--banner) .rs-subnav__item.is-active:hover .rs-subnav__trigger,
-body[data-rs-page='index'] .header-wrap:not(.rs-header--banner) .rs-subnav__item.is-active:focus-within .rs-subnav__trigger {
-  background: #f8f8fc !important;
-  color: #0a0a0a !important;
-  border: 1px solid rgba(10, 10, 10, 0.12) !important;
-  border-bottom: 3px solid #f472b6 !important;
-  border-radius: 8px 8px 0 0 !important;
-  margin-bottom: -3px !important;
-  padding-bottom: 11px !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    0 2px 0 #ffffff !important;
-  text-shadow: none !important;
-}
-body[data-rs-page='index'] .header-wrap:not(.rs-header--banner) .rs-subnav__item.is-active:hover .rs-subnav__trigger {
-  background: #fafaff !important;
-}
-
 /* 3 — Deux pubs produit centrées : 2 colonnes sur mobile + images plus compactes */
 @media (max-width: 767.98px) {
   .section-home-unified-page .container > .rs-uni-grid,
@@ -1292,4 +1267,164 @@ body[data-rs-page='index'] .header-wrap:not(.rs-header--banner) .rs-subnav__item
   background: #ec4899 !important;
   color: #ffffff !important;
   border-color: #ec4899 !important;
+}
+
+/* ============================================================
+   Header desktop ≥992px : une seule barre
+   [ Logo + nom | Offres · Candidatures · Collectif | Dossier · Espace ]
+   Mobile (<992px) : inchangé (deux lignes).
+   ============================================================ */
+@media (min-width: 992px) {
+  .header-wrap:not(.rs-header--banner) {
+    background: linear-gradient(180deg, #e8e8f0 0%, #ffffff 100%) !important;
+    border-bottom: 1px solid #ddd !important;
+    box-shadow: none !important;
+  }
+  .header-wrap:not(.rs-header--banner)::after {
+    opacity: 0.02 !important;
+  }
+  .header-wrap:not(.rs-header--banner) .container {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-header-two-tier {
+    padding: 0 !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-header-main-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, auto) 1fr minmax(0, auto) !important;
+    align-items: stretch !important;
+    flex-direction: unset !important;
+    max-height: 52px !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    gap: 0 10px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+  html.rs-viewport-desktop .header-wrap:not(.rs-header--banner) .rs-header-main-row,
+  body.rs-viewport-desktop .header-wrap:not(.rs-header--banner) .rs-header-main-row {
+    display: grid !important;
+    flex-direction: unset !important;
+    grid-template-columns: minmax(0, auto) 1fr minmax(0, auto) !important;
+    max-height: 52px !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-header-top-line {
+    display: contents !important;
+  }
+  html.rs-viewport-desktop .header-wrap:not(.rs-header--banner) .rs-header-top-line,
+  body.rs-viewport-desktop .header-wrap:not(.rs-header--banner) .rs-header-top-line {
+    display: contents !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-header-top-line .rs-banner-top.rs-header-pole-brand {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 0 4px 0 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    max-height: 52px !important;
+    min-width: 0 !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-banner-nav.rs-header-pole-tabs {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: min(720px, 100%) !important;
+    margin: 0 auto !important;
+    padding: 0 8px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    touch-action: manipulation;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-header-top-line .rs-banner-top__actions {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    padding: 0 0 0 4px !important;
+    margin: 0 !important;
+    border: none !important;
+    flex-shrink: 0 !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-header-main-row .rs-subnav.rs-subnav--buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-subnav__item {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: 220px !important;
+    height: 100% !important;
+    border-left: 1px solid rgba(0, 0, 0, 0.08) !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-subnav__item:first-child {
+    border-left: none !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-subnav__trigger {
+    min-height: 0 !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 4px 10px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    box-shadow: none !important;
+    background: rgba(255, 255, 255, 0.55) !important;
+    color: #0a0a0a !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-subnav__item.is-active .rs-subnav__trigger,
+  .header-wrap:not(.rs-header--banner) .rs-subnav__item.is-active:hover .rs-subnav__trigger,
+  .header-wrap:not(.rs-header--banner) .rs-subnav__item.is-active:focus-within .rs-subnav__trigger {
+    background: #f472b6 !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+    text-shadow: none !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-subnav__item:not(.is-active) .rs-subnav__trigger:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #0a0a0a !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-nav-brand__img {
+    max-height: 34px !important;
+    width: auto !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-nav-brand__name.logo {
+    font-size: 13px !important;
+    line-height: 1.05 !important;
+    letter-spacing: 0.02em !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-banner-top__actions .rs-caf-btn-dossier {
+    padding: 4px 10px !important;
+    font-size: 11px !important;
+    min-height: 0 !important;
+    line-height: 1.2 !important;
+    max-height: 36px !important;
+  }
+  .header-wrap:not(.rs-header--banner) .rs-banner-top__actions .rs-caf-btn-dossier .rs-icon-account,
+  .header-wrap:not(.rs-header--banner) .rs-banner-top__actions .rs-caf-btn-dossier svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
 }

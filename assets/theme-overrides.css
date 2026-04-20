@@ -433,69 +433,71 @@ body[data-rs-page="index"] .header-wrap .rs-banner-nav.rs-header-pole-tabs {
 }
 
 /*
- * Accueil « viewport bureau sur mobile » : la largeur CSS peut rester < 992px
- * alors que le layout doit rester type bureau — même grille que ci-dessus.
+ * Accueil « viewport bureau sur mobile » : uniquement <992px pour ne pas
+ * écraser la barre header fusionnée sur desktop.
  */
-html.rs-viewport-desktop .header-wrap .rs-header-main-row,
-body.rs-viewport-desktop .header-wrap .rs-header-main-row {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: stretch !important;
-  width: 100% !important;
-  padding: 6px 0 0 !important;
-  border-bottom: none !important;
-  box-sizing: border-box;
-}
+@media (max-width: 991.98px) {
+  html.rs-viewport-desktop .header-wrap .rs-header-main-row,
+  body.rs-viewport-desktop .header-wrap .rs-header-main-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    padding: 6px 0 0 !important;
+    border-bottom: none !important;
+    box-sizing: border-box;
+  }
 
-html.rs-viewport-desktop .header-wrap .rs-header-top-line,
-body.rs-viewport-desktop .header-wrap .rs-header-top-line {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: 100% !important;
-  column-gap: 16px !important;
-  padding: 4px 0 8px !important;
-  border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.12) !important;
-  box-sizing: border-box;
-}
+  html.rs-viewport-desktop .header-wrap .rs-header-top-line,
+  body.rs-viewport-desktop .header-wrap .rs-header-top-line {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    column-gap: 16px !important;
+    padding: 4px 0 8px !important;
+    border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.12) !important;
+    box-sizing: border-box;
+  }
 
-html.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand,
-body.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand {
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-  width: auto !important;
-  max-width: 100% !important;
-  border-bottom: none;
-  padding: 0 !important;
-}
+  html.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand,
+  body.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: 100% !important;
+    border-bottom: none;
+    padding: 0 !important;
+  }
 
-html.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top__actions,
-body.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top__actions {
-  flex-shrink: 0 !important;
-  width: auto !important;
-  border-bottom: none;
-  padding: 0 !important;
-}
+  html.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top__actions,
+  body.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top__actions {
+    flex-shrink: 0 !important;
+    width: auto !important;
+    border-bottom: none;
+    padding: 0 !important;
+  }
 
-html.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs,
-body.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs {
-  width: 100% !important;
-  max-width: none !important;
-  padding: 0 !important;
-  border-radius: 0;
-  box-sizing: border-box;
-}
+  html.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs,
+  body.rs-viewport-desktop .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    border-radius: 0;
+    box-sizing: border-box;
+  }
 
-html.rs-viewport-desktop .header-wrap .rs-header-main-row .rs-subnav.rs-subnav--buttons,
-body.rs-viewport-desktop .header-wrap .rs-header-main-row .rs-subnav.rs-subnav--buttons {
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-  gap: 0 !important;
-  padding: 0 !important;
-  box-sizing: border-box;
+  html.rs-viewport-desktop .header-wrap .rs-header-main-row .rs-subnav.rs-subnav--buttons,
+  body.rs-viewport-desktop .header-wrap .rs-header-main-row .rs-subnav.rs-subnav--buttons {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box;
+  }
 }
 
 /* Trois onglets : grille 3 colonnes égales (portail + boutique, tous viewports). */
