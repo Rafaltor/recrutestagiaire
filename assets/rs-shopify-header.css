@@ -1248,8 +1248,16 @@ html[data-rs-swipe="1"] main.mx-auto {
     --rs-mobile-header-offset: 148px;
   }
 
+  /*
+   * Header fixe : ne pas réserver tout <main> (évite double bande) ;
+   * décaler uniquement le premier bloc pour que le haut du hero soit visible.
+   */
   body > main {
-    padding-top: var(--rs-mobile-header-offset);
+    padding-top: 0 !important;
+  }
+
+  body > main > .shopify-section:first-child {
+    padding-top: var(--rs-mobile-header-offset) !important;
   }
 
   .header-wrap.rs-header,
@@ -1589,7 +1597,7 @@ html[data-rs-swipe="1"] main.mx-auto {
     width: 100%;
   }
 
-  .rs-header-drawer__footer .rs-header-drawer__caf-btn {
+  .rs-header-drawer__footer .rs-banner-top__actions .rs-header-drawer__caf-btn {
     width: 100%;
     max-width: 100%;
     min-height: 46px;
@@ -1602,9 +1610,9 @@ html.rs-header-drawer-open body {
   overflow: hidden !important;
 }
 
-/* Mon dossier / Mon espace — header bureau + mêmes boutons dans le drawer mobile */
+/* Mon dossier / Mon espace — header bureau + drawer (même .rs-banner-top__actions → mêmes règles) */
 .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier.abt-btn,
-.header-wrap .rs-header-drawer__footer .rs-header-drawer__caf-btn.rs-caf-btn-dossier.abt-btn {
+.header-wrap .rs-header-drawer__footer .rs-banner-top__actions .rs-caf-btn-dossier.abt-btn {
   clip-path: none !important;
   padding: 7px 16px !important;
   font-size: 12px !important;
@@ -1623,8 +1631,8 @@ html.rs-header-drawer-open body {
 
 .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier.abt-btn:hover,
 .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier.abt-btn:focus-visible,
-.header-wrap .rs-header-drawer__footer .rs-header-drawer__caf-btn.rs-caf-btn-dossier.abt-btn:hover,
-.header-wrap .rs-header-drawer__footer .rs-header-drawer__caf-btn.rs-caf-btn-dossier.abt-btn:focus-visible {
+.header-wrap .rs-header-drawer__footer .rs-banner-top__actions .rs-caf-btn-dossier.abt-btn:hover,
+.header-wrap .rs-header-drawer__footer .rs-banner-top__actions .rs-caf-btn-dossier.abt-btn:focus-visible {
   clip-path: none !important;
   background: linear-gradient(
     180deg,
@@ -1640,7 +1648,7 @@ html.rs-header-drawer-open body {
 }
 
 .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier__label,
-.header-wrap .rs-header-drawer__footer .rs-caf-btn-dossier__label {
+.header-wrap .rs-header-drawer__footer .rs-banner-top__actions .rs-caf-btn-dossier__label {
   text-shadow: none !important;
 }
 

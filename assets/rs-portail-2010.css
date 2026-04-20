@@ -192,7 +192,19 @@ button[type='submit'].btn-primary {
   gap: var(--rs-da-gap) !important;
 }
 
-/* Accueil mobile : grille 12 col (voir bloc suivant) — même ordre de blocs qu’en bureau (ordre DOM). */
+/* Accueil : même ordre DOM qu’en bureau ; sur mobile, réordonnancement (hero → recherche → pubs → …) */
+@media (max-width: 767.98px) {
+  .section-home-unified-page .rs-uni-grid {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .section-home-unified-page .rs-uni-grid > .rs-uni-cell {
+    order: var(--rs-mo, 0);
+    width: 100% !important;
+    max-width: 100% !important;
+    grid-column: unset !important;
+  }
+}
 
 .rs-uni-cell {
   border: var(--rs-da-border-w) solid var(--rs-da-border) !important;

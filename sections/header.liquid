@@ -274,7 +274,8 @@
         </details>
       </nav>
       <div class="rs-header-drawer__footer">
-        <div class="rs-header-drawer__footer-actions d-flex flex-column align-items-stretch gap-2">
+        {%- comment -%} Même conteneur classe que le header bureau pour hériter des mêmes règles CSS {%- endcomment -%}
+        <div class="rs-banner-top__actions rs-header-drawer__footer-actions d-inline-flex flex-column align-items-stretch gap-2 w-100">
           <a
             href="{{ routes.cart_url }}"
             class="abt-btn rs-caf-btn-dossier rs-banner-top__cart rs-header-drawer__caf-btn d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none text-nowrap"

@@ -312,8 +312,9 @@ html.rs-viewport-desktop body {
   margin-left: 0;
 }
 
-/* Header top actions (Mon dossier + Mon espace) */
-.header-wrap .rs-banner-top__actions {
+/* Header top actions (Mon dossier + Mon espace) — même base pour le drawer mobile */
+.header-wrap .rs-banner-top__actions,
+.header-wrap .rs-header-drawer__footer .rs-banner-top__actions {
   flex-shrink: 0;
   margin-left: 0;
   display: inline-flex;
@@ -322,7 +323,8 @@ html.rs-viewport-desktop body {
   white-space: nowrap;
 }
 
-.header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
+.header-wrap .rs-banner-top__actions .rs-caf-btn-dossier,
+.header-wrap .rs-header-drawer__footer .rs-banner-top__actions .rs-caf-btn-dossier {
   display: inline-flex;
   align-items: center;
   gap: 8px; /* lock spacing to match portal */
@@ -663,13 +665,15 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
     min-height: 56px;
   }
 
-  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
+  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier,
+  .header-wrap .rs-header-drawer__footer .rs-banner-top__actions .rs-caf-btn-dossier {
     padding: 10px 18px !important;
     font-size: 14px !important;
     min-height: 46px;
   }
 
-  .header-wrap .rs-banner-top__actions svg {
+  .header-wrap .rs-banner-top__actions svg,
+  .header-wrap .rs-header-drawer__footer .rs-banner-top__actions svg {
     width: 20px;
     height: 20px;
     flex-shrink: 0;
@@ -725,7 +729,8 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
     padding: 0;
   }
 
-  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
+  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier,
+  .header-wrap .rs-header-drawer__footer .rs-banner-top__actions .rs-caf-btn-dossier {
     padding: 11px 20px !important;
     font-size: 15px !important;
     min-height: 48px;
