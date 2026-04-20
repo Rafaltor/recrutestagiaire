@@ -131,8 +131,8 @@
                 class="rs-header-mobile-bar__logo"
                 src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 200 }}{% endif %}"
                 alt=""
-                width="52"
-                height="52"
+                width="64"
+                height="64"
                 loading="eager"
                 decoding="async">
             {%- endif -%}
@@ -488,6 +488,53 @@
       },
       { passive: true }
     );
+  })();
+</script>
+
+<script>
+  (function () {
+    var wrap = document.querySelector('.header-wrap.rs-header');
+    var main = document.querySelector('body > main');
+    if (!wrap || !main) return;
+
+    function isMobileHeader() {
+      try {
+        return window.matchMedia('(max-width: 767.98px)').matches;
+      } catch (e) {
+        return (window.innerWidth || 0) <= 767;
+      }
+    }
+
+    function updateMobileHeaderOffset() {
+      if (!isMobileHeader()) {
+        document.documentElement.style.removeProperty('--rs-mobile-header-offset');
+        wrap.classList.remove('rs-header-mobile-fixed--scrolled');
+        return;
+      }
+      document.documentElement.style.setProperty('--rs-mobile-header-offset', wrap.offsetHeight + 'px');
+    }
+
+    function onWindowScroll() {
+      if (!isMobileHeader()) return;
+      var y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+      wrap.classList.toggle('rs-header-mobile-fixed--scrolled', y > 2);
+    }
+
+    updateMobileHeaderOffset();
+    onWindowScroll();
+
+    window.addEventListener('resize', updateMobileHeaderOffset, { passive: true });
+    window.addEventListener('scroll', onWindowScroll, { passive: true });
+
+    wrap.querySelectorAll('img').forEach(function (img) {
+      if (!img.complete) {
+        img.addEventListener('load', updateMobileHeaderOffset, { passive: true });
+      }
+    });
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(updateMobileHeaderOffset).catch(function () {});
+    }
   })();
 </script>
 
