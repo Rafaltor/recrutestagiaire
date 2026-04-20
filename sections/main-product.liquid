@@ -1,5 +1,5 @@
 <!-- Breadcrumb (retour + fil type mockup) -->
-<div class="gray py-3 border-bottom">
+<div class="rs-product-top-band py-3 border-bottom" {{ section.shopify_attributes }}>
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
       <a href="{{ collection.url | default: routes.all_products_collection_url }}" class="btn btn-sm btn-light-primary rounded-pill fw-medium px-4">
@@ -18,7 +18,7 @@
   </div>
 </div>
 
-<section class="rs-uni-page pt-4 pb-5">
+<section class="rs-uni-page rs-product-pole pt-4 pb-5">
   <div class="container">
     {% render 'rs-product-page-mockup', product: product, section: section, collection: collection %}
   </div>
@@ -86,6 +86,8 @@
 {% schema %}
 {
   "name": "Fiche produit",
+  "tag": "section",
+  "class": "section-main-product",
   "settings": [
     { "type": "text", "id": "breadcrumb_ref_prefix", "label": "Préfixe fil d’Ariane (réf.)", "default": "Poste n°" },
     { "type": "text", "id": "price_label", "label": "Libellé prix", "default": "Rémunération du poste" },

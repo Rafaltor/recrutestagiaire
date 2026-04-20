@@ -4,10 +4,10 @@
       "type": "main-collection",
       "settings": {
         "products_per_page": 12,
-        "collection_page_bg": "#ffffff",
+        "collection_page_bg": "#efefef",
         "collection_strip_top": "#ffe9a3",
         "collection_strip_bot": "#c99406",
-        "collection_cell_border": "#888888",
+        "collection_cell_border": "#dddddd",
         "center_column_pct": 60,
         "rs_api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php",
         "cand_email_btn_label": "E-mail",

@@ -54,7 +54,7 @@ main {
 }
 
 body[data-rs-page='product'] main {
-  background: var(--rs-da-block-bg) !important;
+  background: var(--rs-da-page-bg) !important;
 }
 
 h1,
@@ -1158,4 +1158,149 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
 .rs-top-profile-api__info .rs-pole-panel__footer-link {
   margin-top: auto;
   padding-top: 8px;
+}
+
+/* ============================================================
+   Pages collection + produit — même esprit graphique que l’accueil unifié
+   (fond #efefef, bandeau or, bords 2px #ddd, titres bleu profond, accents rose)
+   ============================================================ */
+
+/* Liste collection : bandeau titre = bande or comme les strips accueil */
+.section-main-collection .rs-collection-head {
+  background: linear-gradient(180deg, #ffe9a3 0%, #c99406 100%) !important;
+  border: none !important;
+  border-bottom: 2px solid #8a6f12 !important;
+  border-radius: 0 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+.section-main-collection .rs-collection-head__title {
+  color: #001a57 !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+.section-main-collection .rs-collection-head__crumb .breadcrumb-item a,
+.section-main-collection .rs-collection-head__crumb .breadcrumb-item + .breadcrumb-item::before {
+  color: #0033ab !important;
+}
+.section-main-collection .rs-collection-head__crumb .breadcrumb-item a:hover {
+  color: var(--rs-da-pink-hover) !important;
+}
+.section-main-collection .rs-collection-head__crumb .breadcrumb-item.active {
+  color: #333 !important;
+}
+
+/* Zone liste : fond page (le inline section peut rester ; on harmonise si blanc pur) */
+.section-main-collection.rs-uni-page.rs-collection-pole {
+  background: var(--rs-da-page-bg) !important;
+}
+
+.section-main-collection .pagination .page-link {
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
+  border-radius: var(--rs-da-radius) !important;
+  color: var(--rs-logo-blue, #0033ab) !important;
+  background: var(--rs-da-block-bg) !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+}
+.section-main-collection .pagination .page-item.active .page-link {
+  background: linear-gradient(180deg, var(--rs-da-pink-top) 0%, var(--rs-da-pink) 100%) !important;
+  border-color: var(--rs-da-pink-border) !important;
+  color: #fff !important;
+}
+.section-main-collection .pagination .page-link:hover {
+  border-color: var(--rs-da-pink) !important;
+  color: var(--rs-da-pink-hover) !important;
+}
+
+/* Fiche produit : bandeau retour / fil d’Ariane (remplace le gris Bootstrap) */
+body[data-rs-page='product'] .rs-product-top-band {
+  background: linear-gradient(180deg, #ffe9a3 0%, #c99406 100%) !important;
+  border-bottom: 2px solid #8a6f12 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+}
+body[data-rs-page='product'] .rs-product-top-band .text-muted,
+body[data-rs-page='product'] .rs-product-top-band .rs-pro-mock__breadcrumb-top {
+  color: #333 !important;
+}
+body[data-rs-page='product'] .rs-product-top-band a:not(.btn) {
+  color: #0033ab !important;
+}
+body[data-rs-page='product'] .rs-product-top-band a:not(.btn):hover {
+  color: var(--rs-da-pink-hover) !important;
+}
+body[data-rs-page='product'] .rs-product-top-band .btn-light-primary,
+body[data-rs-page='product'] .rs-product-top-band .btn.btn-light-primary {
+  background: #fff !important;
+  border: 1px solid #cccccc !important;
+  color: #001a57 !important;
+  border-radius: var(--rs-da-radius) !important;
+  box-shadow: none !important;
+}
+body[data-rs-page='product'] .rs-product-top-band .btn-light-primary:hover {
+  background: #f5f5f5 !important;
+  border-color: var(--rs-da-pink) !important;
+  color: var(--rs-da-pink-hover) !important;
+}
+
+/* Conteneur fiche : air comme l’accueil */
+body[data-rs-page='product'] .rs-uni-page.pt-4.pb-5 {
+  padding-top: var(--rs-da-gap) !important;
+  padding-bottom: calc(var(--rs-da-gap) * 3) !important;
+  background: transparent !important;
+}
+
+/* Blocs mockup : cartes blanches, filets DA, titres de section type portail */
+body[data-rs-page='product'] .rs-pro-mock__section {
+  background: var(--rs-da-block-bg) !important;
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
+  border-radius: var(--rs-da-radius) !important;
+  box-shadow: none !important;
+}
+body[data-rs-page='product'] .rs-pro-mock__section-title {
+  border-bottom: var(--rs-da-border-w) solid var(--rs-da-border) !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 10px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  font-size: 14px !important;
+  color: #333 !important;
+}
+body[data-rs-page='product'] .rs-pro-mock__section-title::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 8px;
+  background: var(--rs-da-pink);
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+body[data-rs-page='product'] .rs-pro-mock__apply-card,
+body[data-rs-page='product'] .rs-pro-mock__price-block {
+  border: var(--rs-da-border-w) solid var(--rs-da-border) !important;
+  border-radius: var(--rs-da-radius) !important;
+  box-shadow: none !important;
+  background: var(--rs-da-block-bg) !important;
+}
+body[data-rs-page='product'] .rs-pro-mock__similar-bar,
+body[data-rs-page='product'] .rs-pro-mock__similar-title {
+  border-color: var(--rs-da-border) !important;
+}
+body[data-rs-page='product'] .rs-pro-mock__similar-title {
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  font-size: 13px !important;
+  color: #333 !important;
+  border-bottom: var(--rs-da-border-w) solid var(--rs-da-border) !important;
+}
+body[data-rs-page='product'] .rs-pro-mock__meta-item {
+  border: 1px solid var(--rs-da-border) !important;
+  box-shadow: none !important;
+}
+body[data-rs-page='product'] .rs-pro-mock__meta-label {
+  color: var(--rs-da-pink) !important;
+  font-weight: 700 !important;
 }
