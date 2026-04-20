@@ -399,106 +399,7 @@ button[type='submit'].btn-primary {
   outline-offset: 1px;
 }
 
-/* ---- En-tête : vibe portail ~2010 (panneau gris-bleu + filet rose léger) ---- */
-.header-wrap {
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.35) 0,
-      rgba(255, 255, 255, 0.35) 1px,
-      transparent 1px,
-      transparent 8px
-    ),
-    linear-gradient(185deg, #d5dce8 0%, #e8ecf4 22%, #f7f8fb 55%, #ffffff 100%) !important;
-  border-bottom: var(--rs-da-border-w) solid var(--rs-da-border) !important;
-  box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.65),
-    inset 0 -1px 0 rgba(244, 114, 182, 0.22),
-    0 2px 8px rgba(15, 35, 60, 0.06) !important;
-}
-.header-wrap::after {
-  display: block !important;
-  opacity: 0.04 !important;
-  background: repeating-linear-gradient(
-    0deg,
-    #000 0,
-    #000 1px,
-    transparent 1px,
-    transparent 3px
-  ) !important;
-}
-.header-wrap.rs-header--banner {
-  background-color: #e8edf5 !important;
-}
-.header-wrap.rs-header--banner::before {
-  background: linear-gradient(
-    180deg,
-    rgba(232, 237, 245, 0.92) 0%,
-    rgba(255, 255, 255, 0.94) 100%
-  ) !important;
-}
-
-.header-wrap .rs-header-top-line {
-  border-bottom: 1px solid var(--rs-da-border) !important;
-}
-.header-wrap .rs-banner-top.rs-header-pole-brand {
-  border-bottom: none !important;
-}
-
-/* Bandeau défilant kitsch (animations définies dans theme-overrides + couleurs charte) */
-.rs-header-kitsch-pop {
-  border-bottom: 3px double color-mix(in srgb, var(--rs-da-pink) 55%, #c99406) !important;
-  box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.55),
-    0 2px 10px rgba(180, 60, 120, 0.12) !important;
-}
-@supports not (color: color-mix(in srgb, red, blue)) {
-  .rs-header-kitsch-pop {
-    border-bottom: 3px double #e8a0c8 !important;
-  }
-}
-.rs-header-kitsch-pop--brand {
-  padding: 8px 44px !important;
-  background: linear-gradient(
-    118deg,
-    #fff8e6 0%,
-    #ffd6e8 18%,
-    #ffffff 32%,
-    #c8d8ff 48%,
-    #ffffff 64%,
-    #ffe9a3 82%,
-    #fbcfe8 100%
-  ) !important;
-  background-size: 380% 100% !important;
-  animation: rs-kitsch-brand-bg 11s ease-in-out infinite !important;
-}
-.rs-header-kitsch-pop--brand::before {
-  display: block !important;
-  opacity: 0.55 !important;
-}
-.rs-header-kitsch-pop__deco {
-  color: var(--rs-da-pink) !important;
-  text-shadow:
-    0 0 8px rgba(255, 255, 255, 0.9),
-    0 0 12px rgba(244, 114, 182, 0.65),
-    1px 1px 0 #fff !important;
-  animation: rs-kitsch-brand-twinkle 1.4s ease-in-out infinite !important;
-  opacity: 1 !important;
-}
-.rs-header-kitsch-pop__deco--b {
-  animation-delay: 0.65s !important;
-}
-.rs-header-kitsch-pop__track {
-  font-family: Arial, Helvetica, sans-serif !important;
-  font-weight: 800 !important;
-  font-size: 0.76rem !important;
-  letter-spacing: 0.08em !important;
-  color: #001a66 !important;
-  text-shadow:
-    1px 1px 0 #fff,
-    0 0 12px rgba(244, 114, 182, 0.35) !important;
-  animation: rs-kitsch-pop-marquee 22s linear infinite !important;
-}
+/* En-tête : styles communs portail / boutique → rs-shopify-header.css (chargé avant ce fichier). */
 
 /* ---- Pied de page : fond page + blocs type grille accueil ---- */
 .rs-site-footer {
@@ -629,45 +530,7 @@ footer.footer:not(.rs-site-footer) {
   max-width: none !important;
 }
 
-/* 2. Titre boutique « RECRUTE STAGIAIRE » */
-.header-wrap .rs-nav-brand__name.logo,
-.header-wrap .nav-brand .rs-nav-brand__name {
-  color: #0a0a0a !important;
-}
-
-/* Bandeau sous le logo : fond neutre (mobile / tablette <992px seulement) */
-@media (max-width: 991.98px) {
-  .header-wrap .rs-banner-nav.rs-header-pole-tabs {
-    background: #ffffff !important;
-    box-shadow: none !important;
-    border-top: 1px solid #dddddd !important;
-  }
-}
-
-/* 3. Onglets header : actif = rose + blanc ; inactifs = blanc + texte #0A0A0A + bordure #ddd */
-.header-wrap .rs-subnav__trigger {
-  background: #ffffff !important;
-  color: #0a0a0a !important;
-  border: 1px solid #dddddd !important;
-  border-radius: 4px !important;
-  box-shadow: none !important;
-}
-.header-wrap .rs-subnav__item.is-active .rs-subnav__trigger,
-.header-wrap .rs-subnav__item.is-active:hover .rs-subnav__trigger,
-.header-wrap .rs-subnav__item.is-active:focus-within .rs-subnav__trigger {
-  background: var(--rs-da-pink) !important;
-  color: #ffffff !important;
-  border: 1px solid var(--rs-da-pink) !important;
-  box-shadow: none !important;
-  filter: none !important;
-  text-shadow: none !important;
-}
-.header-wrap .rs-subnav__item:not(.is-active) .rs-subnav__trigger:hover {
-  background: #f5f5f5 !important;
-  color: #0a0a0a !important;
-}
-
-/* 4. Badge intro « COLLECTIF ARTISTIQUE — PARIS 2026 » */
+/* 2. Badge intro « COLLECTIF ARTISTIQUE — PARIS 2026 » */
 .rs-intro-bundle__badge {
   background: #ffffff !important;
   border: 1px solid var(--rs-da-pink) !important;
@@ -706,81 +569,14 @@ footer.footer:not(.rs-site-footer) {
   color: var(--rs-da-pink) !important;
 }
 
-/* 8. Liens (bleu → rose) — hors boutons / onglets / icônes réseaux pied de page */
+/* 8. Liens (bleu → rose) — hors boutons / onglets / icônes réseaux pied de page (header menus → rs-shopify-header.css) */
 main a:not(.btn):not(.abt-btn):not(.rs-subnav__trigger):not(.rs-rail-ad__cta),
-footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link),
-.header-wrap .rs-subnav__dropdown a {
+footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link) {
   color: var(--rs-da-pink) !important;
 }
 main a:not(.btn):not(.abt-btn):not(.rs-subnav__trigger):not(.rs-rail-ad__cta):hover,
-footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover,
-.header-wrap .rs-subnav__dropdown a:hover {
+footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover {
   color: var(--rs-da-pink-hover) !important;
-}
-
-/* ---- Libellés header : long (desktop) / court (mobile) ---- */
-.rs-caf-btn-dossier__text--short {
-  display: none !important;
-}
-@media (max-width: 991.98px) {
-  .rs-caf-btn-dossier__text--full {
-    display: none !important;
-  }
-  .rs-caf-btn-dossier__text--short {
-    display: inline !important;
-  }
-}
-
-/* ---- Header mobile : logo 40px, ligne actions une seule ligne, hauteur maîtrisée ---- */
-@media (max-width: 991.98px) {
-  body:not(.rs-viewport-desktop) .header-wrap .rs-header-top-line {
-    max-height: 60px;
-    min-height: 0;
-    padding: 2px 0 !important;
-    align-items: center;
-    column-gap: 6px !important;
-  }
-  body:not(.rs-viewport-desktop) .header-wrap .rs-banner-top.rs-header-pole-brand {
-    min-height: 0 !important;
-  }
-  body:not(.rs-viewport-desktop) .header-wrap .rs-nav-brand__img {
-    max-height: 40px !important;
-    width: auto !important;
-  }
-  body:not(.rs-viewport-desktop) .header-wrap .rs-banner-top__actions {
-    flex-wrap: nowrap !important;
-    gap: 4px !important;
-    align-items: center;
-    max-width: min(58vw, 280px);
-  }
-  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
-    padding: 5px 7px !important;
-    font-size: 11px !important;
-    min-height: 0 !important;
-    line-height: 1.15 !important;
-    max-height: 44px;
-    gap: 0.25rem !important;
-  }
-  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier .rs-icon-account,
-  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier svg {
-    width: 14px !important;
-    height: 14px !important;
-    flex-shrink: 0;
-  }
-  body:not(.rs-viewport-desktop) .header-wrap .rs-nav-brand__name.logo {
-    font-size: 13px !important;
-    line-height: 1.1;
-  }
-}
-
-@media (max-width: 575.98px) {
-  body:not(.rs-viewport-desktop) .header-wrap .rs-nav-brand__img {
-    max-height: 40px !important;
-  }
-  .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
-    padding: 4px 6px !important;
-    font-size: 10px !important;
-  }
 }
 
 /* ============================================================
@@ -1269,162 +1065,97 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover,
   border-color: #ec4899 !important;
 }
 
-/* ============================================================
-   Header desktop ≥992px : une seule barre
-   [ Logo + nom | Offres · Candidatures · Collectif | Dossier · Espace ]
-   Mobile (<992px) : inchangé (deux lignes).
-   ============================================================ */
-@media (min-width: 992px) {
-  .header-wrap:not(.rs-header--banner) {
-    background: linear-gradient(180deg, #e8e8f0 0%, #ffffff 100%) !important;
-    border-bottom: 1px solid #ddd !important;
-    box-shadow: none !important;
+/* Meilleur profil : moitié CV / moitié infos */
+.rs-top-profile-api__layout {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 6px;
+}
+@media (min-width: 768px) {
+  .rs-top-profile-api__layout {
+    flex-direction: row;
+    align-items: stretch;
   }
-  .header-wrap:not(.rs-header--banner)::after {
-    opacity: 0.02 !important;
+  .rs-top-profile-api__cv,
+  .rs-top-profile-api__info {
+    flex: 1 1 50%;
+    min-width: 0;
+    max-width: 50%;
   }
-  .header-wrap:not(.rs-header--banner) .container {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-header-two-tier {
-    padding: 0 !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-header-main-row {
-    display: grid !important;
-    grid-template-columns: minmax(0, auto) 1fr minmax(0, auto) !important;
-    align-items: stretch !important;
-    flex-direction: unset !important;
-    max-height: 52px !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    gap: 0 10px !important;
-    box-sizing: border-box !important;
-    overflow: visible !important;
-  }
-  html.rs-viewport-desktop .header-wrap:not(.rs-header--banner) .rs-header-main-row,
-  body.rs-viewport-desktop .header-wrap:not(.rs-header--banner) .rs-header-main-row {
-    display: grid !important;
-    flex-direction: unset !important;
-    grid-template-columns: minmax(0, auto) 1fr minmax(0, auto) !important;
-    max-height: 52px !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-header-top-line {
-    display: contents !important;
-  }
-  html.rs-viewport-desktop .header-wrap:not(.rs-header--banner) .rs-header-top-line,
-  body.rs-viewport-desktop .header-wrap:not(.rs-header--banner) .rs-header-top-line {
-    display: contents !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-header-top-line .rs-banner-top.rs-header-pole-brand {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    padding: 0 4px 0 0 !important;
-    margin: 0 !important;
-    border: none !important;
-    max-height: 52px !important;
-    min-width: 0 !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-banner-nav.rs-header-pole-tabs {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-    display: flex !important;
-    align-items: stretch !important;
-    justify-content: center !important;
-    width: 100% !important;
-    max-width: min(720px, 100%) !important;
-    margin: 0 auto !important;
-    padding: 0 8px !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    touch-action: manipulation;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-header-top-line .rs-banner-top__actions {
-    grid-column: 3 !important;
-    grid-row: 1 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 8px !important;
-    padding: 0 0 0 4px !important;
-    margin: 0 !important;
-    border: none !important;
-    flex-shrink: 0 !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-header-main-row .rs-subnav.rs-subnav--buttons {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: stretch !important;
-    justify-content: center !important;
-    gap: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-subnav__item {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-    max-width: 220px !important;
-    height: 100% !important;
-    border-left: 1px solid rgba(0, 0, 0, 0.08) !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-subnav__item:first-child {
-    border-left: none !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-subnav__trigger {
-    min-height: 0 !important;
-    height: 100% !important;
-    min-width: 0 !important;
-    border-radius: 0 !important;
-    border: none !important;
-    margin: 0 !important;
-    padding: 4px 10px !important;
-    font-size: 12px !important;
-    font-weight: 700 !important;
-    box-shadow: none !important;
-    background: rgba(255, 255, 255, 0.55) !important;
-    color: #0a0a0a !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-subnav__item.is-active .rs-subnav__trigger,
-  .header-wrap:not(.rs-header--banner) .rs-subnav__item.is-active:hover .rs-subnav__trigger,
-  .header-wrap:not(.rs-header--banner) .rs-subnav__item.is-active:focus-within .rs-subnav__trigger {
-    background: #f472b6 !important;
-    color: #ffffff !important;
-    border: none !important;
-    box-shadow: none !important;
-    filter: none !important;
-    text-shadow: none !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-subnav__item:not(.is-active) .rs-subnav__trigger:hover {
-    background: rgba(255, 255, 255, 0.9) !important;
-    color: #0a0a0a !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-nav-brand__img {
-    max-height: 34px !important;
-    width: auto !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-nav-brand__name.logo {
-    font-size: 13px !important;
-    line-height: 1.05 !important;
-    letter-spacing: 0.02em !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-banner-top__actions .rs-caf-btn-dossier {
-    padding: 4px 10px !important;
-    font-size: 11px !important;
-    min-height: 0 !important;
-    line-height: 1.2 !important;
-    max-height: 36px !important;
-  }
-  .header-wrap:not(.rs-header--banner) .rs-banner-top__actions .rs-caf-btn-dossier .rs-icon-account,
-  .header-wrap:not(.rs-header--banner) .rs-banner-top__actions .rs-caf-btn-dossier svg {
-    width: 14px !important;
-    height: 14px !important;
-  }
+}
+.rs-top-profile-api__cv {
+  display: flex;
+  flex-direction: column;
+  border: var(--rs-da-border-w) solid var(--rs-da-border);
+  border-radius: var(--rs-da-radius);
+  background: #fafafa;
+  overflow: hidden;
+  min-height: 200px;
+}
+.rs-top-profile-api__cv--empty {
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+}
+.rs-top-profile-api__cv-frame {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 280px;
+  border: 0;
+  background: #fff;
+}
+.rs-top-profile-api__cv-open {
+  display: block;
+  text-align: center;
+  padding: 8px 10px;
+  border-top: 1px solid var(--rs-da-border);
+  color: var(--rs-da-pink) !important;
+  font-weight: 700;
+  text-decoration: none !important;
+}
+.rs-top-profile-api__cv-open:hover {
+  color: var(--rs-da-pink-hover) !important;
+  background: #fff5fa;
+}
+.rs-top-profile-api__cv-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-height: 180px;
+  padding: 20px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--rs-da-pink) !important;
+  text-decoration: none !important;
+}
+.rs-top-profile-api__cv-link:hover {
+  background: #fff5fa;
+  color: var(--rs-da-pink-hover) !important;
+}
+.rs-top-profile-api__cv-img-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-height: 160px;
+  padding: 8px;
+  background: #fff;
+}
+.rs-top-profile-api__cv-img {
+  max-width: 100%;
+  max-height: 320px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+.rs-top-profile-api__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.rs-top-profile-api__info .rs-pole-panel__footer-link {
+  margin-top: auto;
+  padding-top: 8px;
 }

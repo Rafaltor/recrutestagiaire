@@ -387,12 +387,13 @@ function rs_merge_unique_column_candidates(string $primary, array $extra): array
 
 /**
  * @param array<string,mixed> $row
- * @return array{id:string,name:string,instagram:string,metier:string,likes:int,rank:int,token:string}
+ * @return array{id:string,name:string,instagram:string,metier:string,likes:int,rank:int,token:string,cv:string}
  */
 function rs_supabase_row_to_top_public(array $row): array {
   $n = rs_supabase_col('RS_SUPABASE_COL_NAME', 'full_name');
   $likesCol = rs_supabase_likes_column();
   $tokPrimary = trim((string) rs_field('RS_SUPABASE_COL_PUBLIC_TOKEN', 'token'));
+  $fcv = rs_supabase_col('RS_SUPABASE_COL_CV', 'cv_url');
 
   $likes = 0;
   if (isset($row[$likesCol]) && is_numeric($row[$likesCol])) {
@@ -427,6 +428,12 @@ function rs_supabase_row_to_top_public(array $row): array {
     $displayName = rs_row_first_non_empty_scalar($row, rs_merge_unique_column_candidates('', ['full_name', 'name', 'display_name']));
   }
 
+  $cvUrl = '';
+  if ($fcv !== '' && array_key_exists($fcv, $row)) {
+    $cvv = $row[$fcv];
+    $cvUrl = is_string($cvv) ? trim($cvv) : (is_scalar($cvv) ? trim((string) $cvv) : '');
+  }
+
   return [
     'id' => (string) ($row['id'] ?? ''),
     'name' => $displayName,
@@ -435,6 +442,7 @@ function rs_supabase_row_to_top_public(array $row): array {
     'likes' => $likes,
     'rank' => 1,
     'token' => $token,
+    'cv' => $cvUrl,
   ];
 }
 

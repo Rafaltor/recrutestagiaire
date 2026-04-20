@@ -108,7 +108,7 @@
                   class="rs-nav-brand__img"
                   src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 320 }}{% endif %}"
                   alt="{{ shop.name | escape }}"
-                  style="max-height: {{ section.settings.brand_max_height | default: 40 }}px; width: auto;"
+                  style="max-height: {{ section.settings.brand_max_height | default: 52 }}px; width: auto;"
                   loading="eager"
                   decoding="async">
               {%- endif -%}
@@ -292,7 +292,7 @@
     { "type": "color", "id": "kitsch_pop_fg", "label": "Couleur du texte", "default": "#0015a3" },
     { "type": "header", "content": "Images" },
     { "type": "image_picker", "id": "brand_image", "label": "Image à côté du nom", "info": "Vide = logo assets/rs-logo-eu.png (favicon idem si non défini), sinon logo Identité du thème." },
-    { "type": "range", "id": "brand_max_height", "min": 28, "max": 56, "step": 2, "unit": "px", "label": "Hauteur max image marque", "default": 40 },
+    { "type": "range", "id": "brand_max_height", "min": 32, "max": 72, "step": 2, "unit": "px", "label": "Hauteur max image marque", "default": 52 },
     { "type": "image_picker", "id": "banner_image", "label": "Image de fond de la bannière haute" },
     { "type": "header", "content": "Titre" },
     { "type": "checkbox", "id": "show_site_name", "label": "Afficher le nom du site", "default": true },

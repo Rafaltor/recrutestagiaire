@@ -247,17 +247,82 @@
           var handle = p.handle || p.instagram || '—';
           var job = p.job_title || p.metier || '—';
           var nom = p.name && String(p.name).trim() ? String(p.name).trim() : '';
+          var cvRaw = p.cv != null && String(p.cv).trim() !== '' ? String(p.cv).trim() : '';
+          if (cvRaw === '' && p.cv_url != null && String(p.cv_url).trim() !== '') {
+            cvRaw = String(p.cv_url).trim();
+          }
+          var cvEsc = esc(cvRaw);
+          var cvLower = cvRaw.toLowerCase();
+          var isPdf = cvRaw !== '' && /\.pdf(\?|#|$)/i.test(cvRaw);
+          var isImg =
+            cvRaw !== '' &&
+            (/\.(png|jpe?g|webp|gif)(\?|$)/i.test(cvRaw) ||
+              cvLower.indexOf('image/') !== -1);
+          var cvCol = '';
+          if (cvRaw !== '') {
+            if (isImg) {
+              cvCol =
+                '<div class="rs-top-profile-api__cv">' +
+                '<a class="rs-top-profile-api__cv-img-wrap" href="' +
+                cvEsc +
+                '" target="_blank" rel="noopener noreferrer">' +
+                '<img class="rs-top-profile-api__cv-img" src="' +
+                cvEsc +
+                '" alt="CV" loading="lazy" decoding="async">' +
+                '</a></div>';
+            } else if (isPdf) {
+              var gview =
+                'https://docs.google.com/viewer?url=' +
+                encodeURIComponent(cvRaw) +
+                '&embedded=true';
+              var gviewAttr = gview.replace(/"/g, '');
+              cvCol =
+                '<div class="rs-top-profile-api__cv">' +
+                '<iframe class="rs-top-profile-api__cv-frame" title="CV PDF" src="' +
+                gviewAttr +
+                '" loading="lazy"></iframe>' +
+                '<a class="rs-top-profile-api__cv-open small" href="' +
+                cvEsc +
+                '" target="_blank" rel="noopener noreferrer">Ouvrir le PDF</a>' +
+                '</div>';
+            } else {
+              cvCol =
+                '<div class="rs-top-profile-api__cv">' +
+                '<a class="rs-top-profile-api__cv-link" href="' +
+                cvEsc +
+                '" target="_blank" rel="noopener noreferrer">Voir le CV</a>' +
+                '</div>';
+            }
+          } else {
+            cvCol =
+              '<div class="rs-top-profile-api__cv rs-top-profile-api__cv--empty">' +
+              '<span class="text-muted small">CV non joint</span>' +
+              '</div>';
+          }
           var headBlock =
             nom !== ''
               ? '<p class="mb-1"><strong>' + esc(nom) + '</strong></p>' +
                 (handle !== '—' ? '<p class="mb-1 small text-muted">' + esc(handle) + '</p>' : '')
               : '<p class="mb-1"><strong>' + esc(handle) + '</strong></p>';
-          mount.innerHTML =
+          var infoCol =
+            '<div class="rs-top-profile-api__info">' +
             headBlock +
-            '<p class="mb-1 small">' + esc(job) + '</p>' +
-            '<p class="mb-2 small">Likes : <strong>' + esc(String(likes)) + '</strong></p>' +
-            '<p class="mb-3 small text-muted">' + esc(rank) + '</p>' +
-            '<a class="rs-pole-panel__footer-link" href="' + esc(href) + '" rel="noopener noreferrer">' + esc(btnLabel) + '</a>';
+            '<p class="mb-1 small">' +
+            esc(job) +
+            '</p>' +
+            '<p class="mb-2 small">Likes : <strong>' +
+            esc(String(likes)) +
+            '</strong></p>' +
+            '<p class="mb-2 small text-muted">' +
+            esc(rank) +
+            '</p>' +
+            '<a class="rs-pole-panel__footer-link" href="' +
+            esc(href) +
+            '" rel="noopener noreferrer">' +
+            esc(btnLabel) +
+            '</a></div>';
+          mount.innerHTML =
+            '<div class="rs-top-profile-api__layout">' + cvCol + infoCol + '</div>';
         })
         .catch(function () {
           mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
