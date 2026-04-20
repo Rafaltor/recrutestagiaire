@@ -131,8 +131,8 @@
                 class="rs-header-mobile-bar__logo"
                 src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 200 }}{% endif %}"
                 alt=""
-                width="36"
-                height="36"
+                width="52"
+                height="52"
                 loading="eager"
                 decoding="async">
             {%- endif -%}
@@ -152,7 +152,11 @@
             aria-controls="rs-header-drawer-panel"
             data-rs-header-drawer-open>
             <span class="visually-hidden">Ouvrir le menu</span>
-            <span class="rs-header-mobile-bar__burger" aria-hidden="true"></span>
+            <span class="rs-header-mobile-bar__burger" aria-hidden="true">
+              <span class="rs-header-mobile-bar__burger-line"></span>
+              <span class="rs-header-mobile-bar__burger-line"></span>
+              <span class="rs-header-mobile-bar__burger-line"></span>
+            </span>
           </button>
         </div>
 
@@ -241,7 +245,7 @@
       aria-modal="true"
       aria-labelledby="rs-header-drawer-title">
       <div class="rs-header-drawer__head">
-        <span class="visually-hidden" id="rs-header-drawer-title">Menu</span>
+        <span class="rs-header-drawer__menu-label" id="rs-header-drawer-title">MENU</span>
         <button type="button" class="rs-header-drawer__close" data-rs-header-drawer-close aria-label="Fermer le menu">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -269,10 +273,11 @@
             <a href="{{ k2 }}">{{ l_k2 }}</a>
           </div>
         </details>
-        <hr class="rs-header-drawer__sep" />
-        <a class="rs-header-drawer__flat" href="{{ routes.cart_url }}">Dossier</a>
-        <a class="rs-header-drawer__flat" href="{{ rs_drawer_connexion_url }}">Mon espace</a>
       </nav>
+      <div class="rs-header-drawer__footer">
+        <a class="rs-header-drawer__btn" href="{{ routes.cart_url }}">Dossier</a>
+        <a class="rs-header-drawer__btn" href="{{ rs_drawer_connexion_url }}">Mon espace</a>
+      </div>
     </div>
   </div>
 </div>
@@ -418,11 +423,15 @@
     function openDrawer() {
       if (!isMobileDrawer()) return;
       drawer.removeAttribute('hidden');
-      drawer.classList.add('rs-header-drawer--open');
       openBtn.setAttribute('aria-expanded', 'true');
       lockScroll();
-      var c = drawer.querySelector('.rs-header-drawer__close');
-      if (c) c.focus();
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          drawer.classList.add('rs-header-drawer--open');
+          var c = drawer.querySelector('.rs-header-drawer__close');
+          if (c) c.focus();
+        });
+      });
     }
 
     function closeDrawer() {
@@ -433,7 +442,7 @@
         if (!drawer.classList.contains('rs-header-drawer--open')) {
           drawer.setAttribute('hidden', '');
         }
-      }, 260);
+      }, 320);
     }
 
     openBtn.addEventListener('click', function (e) {
@@ -452,7 +461,7 @@
       });
     });
 
-    drawer.querySelectorAll('.rs-header-drawer__flat').forEach(function (a) {
+    drawer.querySelectorAll('.rs-header-drawer__btn').forEach(function (a) {
       a.addEventListener('click', function () {
         closeDrawer();
       });
