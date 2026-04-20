@@ -531,6 +531,17 @@
       }
     }
 
+    function updateMobileMainOffset() {
+      if (!isMobileHeader()) {
+        document.documentElement.style.removeProperty('--rs-mobile-header-offset');
+        return;
+      }
+      var h = wrap.offsetHeight || 0;
+      if (h > 0) {
+        document.documentElement.style.setProperty('--rs-mobile-header-offset', h + 'px');
+      }
+    }
+
     function onWindowScroll() {
       if (!isMobileHeader()) {
         wrap.classList.remove('rs-header-mobile-fixed--scrolled');
@@ -540,9 +551,31 @@
       wrap.classList.toggle('rs-header-mobile-fixed--scrolled', y > 2);
     }
 
-    onWindowScroll();
-    window.addEventListener('resize', onWindowScroll, { passive: true });
+    function sync() {
+      updateMobileMainOffset();
+      onWindowScroll();
+    }
+
+    sync();
+    window.addEventListener('resize', sync, { passive: true });
     window.addEventListener('scroll', onWindowScroll, { passive: true });
+
+    wrap.querySelectorAll('img').forEach(function (img) {
+      if (!img.complete) {
+        img.addEventListener('load', updateMobileMainOffset, { passive: true });
+      }
+    });
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(updateMobileMainOffset).catch(function () {});
+    }
+
+    if (typeof ResizeObserver !== 'undefined') {
+      try {
+        var ro = new ResizeObserver(updateMobileMainOffset);
+        ro.observe(wrap);
+      } catch (e) {}
+    }
   })();
 </script>
 

@@ -335,16 +335,8 @@ body:not([data-rs-page="index"]) .header-wrap .rs-header-top-line {
   padding: 6px 0 10px;
 }
 
-body:not([data-rs-page="index"]) .header-wrap .rs-banner-nav.rs-header-pole-tabs {
-  padding: 6px 6px 0;
-}
-
 body[data-rs-page="index"] .header-wrap .rs-header-top-line {
   padding: 6px 0 10px;
-}
-
-body[data-rs-page="index"] .header-wrap .rs-banner-nav.rs-header-pole-tabs {
-  padding: 6px 6px 0;
 }
 
 /* Rangée onglets — fond gris-bleu type Pôle emploi */
@@ -4370,7 +4362,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 }
 
 .rs-header-kitsch-pop--brand {
-  padding: 5.5px 40px;
+  padding: 3px 40px;
   background: linear-gradient(
     118deg,
     var(--rs-gold-soft) 0%,
@@ -4484,8 +4476,11 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   text-transform: uppercase;
   white-space: nowrap;
   will-change: transform;
-  color: var(--rs-logo-blue) !important;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.95);
+  color: var(--rs-kitsch-pop-fg, #f472b6) !important;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.98),
+    0 0 1px rgba(255, 255, 255, 0.9),
+    0 0 12px rgba(244, 114, 182, 0.45);
   transform: translate3d(0, 0, 0);
   animation: rs-kitsch-pop-marquee 22s linear infinite;
 }

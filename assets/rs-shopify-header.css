@@ -742,7 +742,7 @@ body.rs-nav-open {
   --rs-kitsch-pop-b: #e8e8f0;
   --rs-kitsch-pop-fg: #f472b6;
 
-  padding: 7px 0;
+  padding: 3px 0;
   background: linear-gradient(
     118deg,
     #fff8e6 0%,
@@ -1253,6 +1253,18 @@ html[data-rs-swipe="1"] main.mx-auto {
   /* Motif « papier millimétré » : sous mobile il peut ressembler à une ligne pointillée — masqué */
   .header-wrap::after {
     display: none !important;
+  }
+
+  /*
+   * Header en position fixed : réserver la hauteur réelle du bandeau (voir header.liquid).
+   * Valeur de secours avant exécution du script / chargement des polices.
+   */
+  html {
+    --rs-mobile-header-offset: 140px;
+  }
+
+  body > main {
+    padding-top: var(--rs-mobile-header-offset) !important;
   }
 
   .header-wrap.rs-header,
