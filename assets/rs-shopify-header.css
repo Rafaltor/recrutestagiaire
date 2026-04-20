@@ -71,9 +71,6 @@
   width: 100%;
   max-width: 980px;
   box-sizing: border-box;
-  /* Réserve à gauche pour ne pas passer sous le logo ; le bloc reste centré sur la viewport */
-  padding-left: calc(max(var(--rs-header-logo-inset, 14px), env(safe-area-inset-left, 0px)) + var(--rs-header-logo-col, 124px) + 8px) !important;
-  padding-right: 12px !important;
 }
 
 .header-wrap .container {
