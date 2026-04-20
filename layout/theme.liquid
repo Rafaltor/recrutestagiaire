@@ -232,24 +232,6 @@
   data-rs-page="{{ request.page_type }}"
   {% if settings.rs_viewport_desktop_wrap and request.page_type == 'index' %}class="rs-viewport-desktop"{% endif %}
 >
-  <script>
-    (function () {
-      function rsSetSiteTitleFluidFromViewport() {
-        try {
-          var vv = window.visualViewport;
-          var w = (vv && vv.width) ? vv.width : window.innerWidth || document.documentElement.clientWidth || 0;
-          if (w <= 0) return;
-          var px = Math.round(w * 0.025 * 1000) / 1000;
-          document.documentElement.style.setProperty('--rs-site-title-fluid', px + 'px');
-        } catch (e) {}
-      }
-      rsSetSiteTitleFluidFromViewport();
-      window.addEventListener('resize', rsSetSiteTitleFluidFromViewport, { passive: true });
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', rsSetSiteTitleFluidFromViewport, { passive: true });
-      }
-    })();
-  </script>
   {% section 'header' %}
   <main>{{ content_for_layout }}</main>
   {%- render 'footer' -%}
