@@ -132,6 +132,7 @@
 {%- else -%}
   {%- assign rs_dept_meta = '—' -%}
 {%- endif -%}
+{%- assign rs_dept_meta = rs_dept_meta | replace: 'OpenSpace', 'Communication' | replace: 'openspace', 'Communication' -%}
 {%- assign rs_avail_meta = rs_avail_label -%}
 {%- if rs_avail_meta == blank -%}
   {%- if cv.available -%}
@@ -296,7 +297,13 @@
       <div class="rs-pro-mock__section">
         <div class="rs-pro-mock__section-title">{{ section.settings.profil_title | default: 'Profil recherché' }}</div>
         {%- if product.metafields.custom.profil_recherche != blank -%}
-          <div class="rs-pro-mock__mf-body">{{ product.metafields.custom.profil_recherche | metafield_tag }}</div>
+          {%- capture _rs_profil_html -%}{{ product.metafields.custom.profil_recherche | metafield_tag }}{%- endcapture -%}
+          <div class="rs-pro-mock__mf-body">
+            {{ _rs_profil_html
+              | replace: 'mettre les dimensions', 'Taille XS à XL'
+              | replace: 'Mettre les dimensions', 'Taille XS à XL'
+              | replace: 'Mettre les Dimensions', 'Taille XS à XL' }}
+          </div>
         {%- endif -%}
       </div>
       {%- if product.metafields.custom.avantages != blank -%}
