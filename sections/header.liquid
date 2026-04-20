@@ -89,7 +89,7 @@
   {%- if section.settings.show_kitsch_pop -%}
     <div
       class="rs-header-kitsch-pop rs-header-kitsch-pop--brand"
-      style="--rs-kitsch-pop-a: {{ section.settings.kitsch_pop_bg_a }}; --rs-kitsch-pop-b: {{ section.settings.kitsch_pop_bg_b }}; --rs-kitsch-pop-fg: {{ section.settings.kitsch_pop_fg }};"
+      style="--rs-kitsch-pop-a: {{ section.settings.kitsch_pop_bg_a }}; --rs-kitsch-pop-b: {{ section.settings.kitsch_pop_bg_b }}; --rs-kitsch-pop-fg: {{ section.settings.kitsch_pop_fg | default: '#f472b6' }};"
       aria-hidden="true">
       <span class="rs-header-kitsch-pop__deco rs-header-kitsch-pop__deco--a" aria-hidden="true">✦</span>
       <span class="rs-header-kitsch-pop__deco rs-header-kitsch-pop__deco--b" aria-hidden="true">✦</span>
@@ -521,8 +521,7 @@
 <script>
   (function () {
     var wrap = document.querySelector('.header-wrap.rs-header');
-    var main = document.querySelector('body > main');
-    if (!wrap || !main) return;
+    if (!wrap) return;
 
     function isMobileHeader() {
       try {
@@ -532,36 +531,18 @@
       }
     }
 
-    function updateMobileHeaderOffset() {
+    function onWindowScroll() {
       if (!isMobileHeader()) {
-        document.documentElement.style.removeProperty('--rs-mobile-header-offset');
         wrap.classList.remove('rs-header-mobile-fixed--scrolled');
         return;
       }
-      document.documentElement.style.setProperty('--rs-mobile-header-offset', wrap.offsetHeight + 'px');
-    }
-
-    function onWindowScroll() {
-      if (!isMobileHeader()) return;
       var y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
       wrap.classList.toggle('rs-header-mobile-fixed--scrolled', y > 2);
     }
 
-    updateMobileHeaderOffset();
     onWindowScroll();
-
-    window.addEventListener('resize', updateMobileHeaderOffset, { passive: true });
+    window.addEventListener('resize', onWindowScroll, { passive: true });
     window.addEventListener('scroll', onWindowScroll, { passive: true });
-
-    wrap.querySelectorAll('img').forEach(function (img) {
-      if (!img.complete) {
-        img.addEventListener('load', updateMobileHeaderOffset, { passive: true });
-      }
-    });
-
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(updateMobileHeaderOffset).catch(function () {});
-    }
   })();
 </script>
 
@@ -576,7 +557,7 @@
     { "type": "text", "id": "kitsch_pop_text", "label": "Texte défilant", "default": "★ OFFRE FLASH ★ -30% SUR VOTRE 2E CANDIDATURE — AGISSEZ VITE !!! ★" },
     { "type": "color", "id": "kitsch_pop_bg_a", "label": "Fond bandeau (côté A)", "default": "#f472b6" },
     { "type": "color", "id": "kitsch_pop_bg_b", "label": "Fond bandeau (côté B)", "default": "#e8e8f0" },
-    { "type": "color", "id": "kitsch_pop_fg", "label": "Couleur du texte", "default": "#0a0a0a" },
+    { "type": "color", "id": "kitsch_pop_fg", "label": "Couleur du texte", "default": "#f472b6" },
     { "type": "header", "content": "Images" },
     { "type": "image_picker", "id": "brand_image", "label": "Logo RS (carré à gauche des onglets)", "info": "Vide = masque le carré logo. Sinon logo Identité du thème ou image ; affiché en grand dans le carré à côté des onglets (le titre reste au-dessus)." },
     { "type": "range", "id": "brand_max_height", "min": 48, "max": 200, "step": 2, "unit": "px", "label": "Hauteur max logo (colonne gauche)", "default": 124 },
