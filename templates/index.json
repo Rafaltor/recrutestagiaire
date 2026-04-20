@@ -173,7 +173,7 @@
             "cell_border": "",
             "layout_variant": "panel",
             "strip_kicker": "Offre ou collection recherchée",
-            "placeholder": "Nom du poste, collection...",
+            "placeholder": "Rechercher un poste, une collection...",
             "btn_label": "Voir toutes les offres",
             "secondary_label": "",
             "secondary_url": "",

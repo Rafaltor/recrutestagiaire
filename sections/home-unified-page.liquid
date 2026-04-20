@@ -618,7 +618,7 @@
           ]
         },
         { "type": "text", "id": "strip_kicker", "label": "Texte au-dessus champ", "default": "Offre ou collection recherchée" },
-        { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "Nom du poste, collection..." },
+        { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "Rechercher un poste, une collection..." },
         { "type": "text", "id": "btn_label", "label": "Texte bouton principal", "default": "Voir toutes les offres" },
         { "type": "text", "id": "secondary_label", "label": "2e bouton", "default": "Profils" },
         { "type": "url", "id": "secondary_url", "label": "2e bouton — URL" },
@@ -721,7 +721,8 @@
         { "type": "range", "id": "offer_media_height", "min": 140, "max": 400, "step": 10, "unit": "px", "label": "Hauteur photo", "default": 220 },
         { "type": "range", "id": "card_radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Arrondi carte", "default": 12 },
         { "type": "range", "id": "card_padding", "min": 8, "max": 28, "step": 2, "unit": "px", "label": "Padding carte", "default": 16 },
-        { "type": "checkbox", "id": "offer_carousel", "label": "Carrousel photos", "default": true },
+        { "type": "header", "content": "Carrousel des photos (plusieurs images)" },
+        { "type": "checkbox", "id": "offer_carousel", "label": "Activer le carrousel si plusieurs photos", "default": true },
         {
           "type": "range",
           "id": "offer_carousel_interval",
@@ -729,7 +730,8 @@
           "max": 8000,
           "step": 500,
           "unit": "ms",
-          "label": "Défilement auto (0 = manuel)",
+          "label": "Temps entre chaque photo (défilement auto)",
+          "info": "0 = pas d’auto. 2000 = 2 s. Emplacement : accueil → section « Page accueil unifiée » → bloc « Offre (1 produit) » → ici.",
           "default": 2000
         },
         { "type": "text", "id": "badge_open", "label": "Badge ouvert", "default": "Offre active" },

@@ -335,9 +335,13 @@
           "default": 220
         },
         {
+          "type": "header",
+          "content": "Carrousel des photos (plusieurs images)"
+        },
+        {
           "type": "checkbox",
           "id": "offer_carousel",
-          "label": "Carrousel si plusieurs photos",
+          "label": "Activer le carrousel si plusieurs photos",
           "default": true
         },
         {
@@ -347,7 +351,8 @@
           "max": 8000,
           "step": 500,
           "unit": "ms",
-          "label": "Défilement auto (0 = manuel uniquement)",
+          "label": "Temps entre chaque photo (défilement auto)",
+          "info": "0 = pas d’auto. 2000 = 2 s. Emplacement : section avec grille mise en avant → chaque bloc « Collection mise en avant » → rubrique ci-dessous.",
           "default": 2000
         },
         {
