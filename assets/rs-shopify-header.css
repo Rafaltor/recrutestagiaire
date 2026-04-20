@@ -157,7 +157,7 @@
   gap: 0;
 }
 .header-wrap .rs-nav-brand__name.logo.rs-nav-brand__name--headline {
-  font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
+  font-size: clamp(1.12rem, var(--rs-site-title-fluid, 2.5vw), 1.5rem) !important;
   font-weight: 800 !important;
   letter-spacing: 0.045em !important;
   line-height: 1.15 !important;
@@ -365,7 +365,7 @@
   }
 
   .header-wrap .rs-nav-brand__name.logo {
-    font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
+    font-size: clamp(1.12rem, var(--rs-site-title-fluid, 2.5vw), 1.5rem) !important;
   }
 
   .header-wrap .rs-subnav.rs-subnav--buttons {
@@ -396,7 +396,7 @@
 
 .rs-nav-brand__name.logo {
   color: var(--rs-pole-blue) !important;
-  font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
+  font-size: clamp(1.12rem, var(--rs-site-title-fluid, 2.5vw), 1.5rem) !important;
   font-weight: bold !important;
   letter-spacing: 0.02em;
   text-shadow: none;
@@ -586,7 +586,7 @@
   }
 
   html[data-rs-route="inner"] .rs-nav-brand__name.logo {
-    font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
+    font-size: clamp(1.12rem, var(--rs-site-title-fluid, 2.5vw), 1.5rem) !important;
   }
 
   html[data-rs-route="inner"] .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier {
@@ -1357,14 +1357,14 @@ html[data-rs-swipe="1"] main.mx-auto {
   }
 
   .rs-header-mobile-bar__title {
-    font-size: clamp(1.12rem, 2.5vw, 1.5rem);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    line-height: 1.15;
+    font-size: clamp(1.12rem, var(--rs-site-title-fluid, 2.5vw), 1.5rem) !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.045em !important;
+    line-height: 1.15 !important;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #0a0a0a;
+    color: #0a2a6e !important;
     text-transform: uppercase;
   }
 

@@ -52,6 +52,13 @@
   /* Bootstrap / composants */
   --bs-primary: var(--rs-logo-blue);
   --bs-primary-rgb: 0, 51, 171;
+
+  /*
+   * Titre site (RECRUTE STAGIAIRE) : même idée que Next (2.5vw sur width=device-width).
+   * Sur l’accueil « vue bureau », le meta viewport peut valoir ~1180px → 2.5vw serait trop grand ;
+   * theme.liquid met à jour cette variable avec 2.5% de innerWidth (ou visualViewport).
+   */
+  --rs-site-title-fluid: 2.5vw;
 }
 
 /* ---- Typographie & base ---- */
@@ -672,7 +679,7 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
   }
 
   .header-wrap .rs-nav-brand__name.logo {
-    font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
+    font-size: clamp(1.12rem, var(--rs-site-title-fluid, 2.5vw), 1.5rem) !important;
   }
 
   .header-wrap .rs-subnav.rs-subnav--buttons {
@@ -729,7 +736,7 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
   }
 
   .header-wrap .rs-nav-brand__name.logo {
-    font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
+    font-size: clamp(1.12rem, var(--rs-site-title-fluid, 2.5vw), 1.5rem) !important;
   }
 
   .header-wrap .rs-banner-nav.rs-header-pole-tabs {
@@ -891,7 +898,7 @@ body.rs-nav-open .header-wrap .rs-subnav.rs-subnav--buttons {
 .header-wrap .nav-brand .rs-nav-brand__name,
 .header-wrap .rs-nav-brand__name.logo {
   color: var(--rs-pole-blue) !important;
-  font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
+  font-size: clamp(1.12rem, var(--rs-site-title-fluid, 2.5vw), 1.5rem) !important;
   font-weight: bold !important;
   letter-spacing: 0.02em;
   text-shadow: none;
@@ -901,7 +908,7 @@ body.rs-nav-open .header-wrap .rs-subnav.rs-subnav--buttons {
 
 @media (max-width: 991.98px) {
   .rs-nav-brand__name.logo {
-    font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
+    font-size: clamp(1.12rem, var(--rs-site-title-fluid, 2.5vw), 1.5rem) !important;
   }
 }
 
