@@ -9,9 +9,14 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/rs-poleemploi.png",
+    "rs_portail_url_profils": "https://portail.recrutestagiaire.eu/profils",
+    "rs_portail_url_depot": "https://portail.recrutestagiaire.eu/depot",
+    "rs_portail_url_vote": "https://portail.recrutestagiaire.eu/vote",
+    "rs_portail_url_connexion": "https://portail.recrutestagiaire.eu/connexion",
+    "rs_api_url_top_profile": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
+    "logo": "shopify://shop_images/rs-logo-eu.png",
     "logo_width": 140,
-    "favicon": "shopify://shop_images/rs-poleemploi.png",
+    "favicon": "shopify://shop_images/rs-logo-eu.png",
     "color_primary": "#0033cc",
     "color_primary_hover": "#0015a3",
     "color_secondary": "#6c757d",
@@ -49,11 +54,6 @@
     "btn_font_size": 14,
     "input_border_radius": 6,
     "input_font_size": 13,
-    "rs_portail_url_profils": "https://portail.recrutestagiaire.eu/profils",
-    "rs_portail_url_depot": "https://portail.recrutestagiaire.eu/depot",
-    "rs_portail_url_vote": "https://portail.recrutestagiaire.eu/vote",
-    "rs_portail_url_connexion": "https://portail.recrutestagiaire.eu/connexion",
-    "rs_api_url_top_profile": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
     "sections": {
       "header": {
         "type": "header",
@@ -63,7 +63,7 @@
           "kitsch_pop_bg_a": "#ffffff",
           "kitsch_pop_bg_b": "#ffee00",
           "kitsch_pop_fg": "#315c0a",
-          "brand_image": "shopify://shop_images/rs-poleemploi.png",
+          "brand_image": "shopify://shop_images/rs-logo-eu.png",
           "brand_max_height": 56,
           "banner_image": "shopify://shop_images/geometric-glass-city-architecture.jpg",
           "show_site_name": true,

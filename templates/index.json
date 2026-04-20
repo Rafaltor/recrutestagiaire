@@ -15,7 +15,7 @@
         "uni_intro": {
           "type": "hero_intro_bundle",
           "settings": {
-            "col_span": "9",
+            "col_span": "8",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -50,6 +50,21 @@
             "btn_radius": 6
           }
         },
+        "uni_kitsch": {
+          "type": "kitsch_counter",
+          "settings": {
+            "col_span": "4",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 0,
+            "cell_border": "",
+            "tile_mode": true,
+            "ribbon_text": "★ CHIFFRE OFFICIEL ★",
+            "suffix_text": "candidat(s) actuellement recensé(e)s dans la base nationale",
+            "brand_name": "Recrute Stagiaire",
+            "sub_text": "Mise à jour en temps quasi réel — merci de votre confiance !!"
+          }
+        },
         "sponsored_inline_1": {
           "type": "sponsored_rail",
           "settings": {
@@ -66,6 +81,24 @@
             "show_stars": false,
             "cta_label": "Voir",
             "product_below": ""
+          }
+        },
+        "uni_top_profile": {
+          "type": "top_profile_portail",
+          "settings": {
+            "col_span": "6",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 0,
+            "cell_border": "",
+            "api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
+            "portail_base_url": "https://portail.recrutestagiaire.eu",
+            "kicker": "Portail",
+            "title": "Meilleur profil du moment",
+            "btn_label": "Voir son profil →",
+            "fallback_text": "Classement en cours...",
+            "bg_color": "#ffffff",
+            "border_color": "#888888"
           }
         },
         "sponsored_inline_2": {
@@ -86,87 +119,10 @@
             "product_below": ""
           }
         },
-        "uni_gp_cand": {
-          "type": "grid_panel",
-          "settings": {
-            "col_span": "4",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 0,
-            "cell_border": "",
-            "layout_style": "service",
-            "circle_label": "Candidat",
-            "circle_bg": "#0033cc",
-            "circle_text": "#ffffff",
-            "kicker": "",
-            "title": "Espace candidat",
-            "text": "",
-            "link_1_label": "Profils candidats",
-            "link_1_url": "https://portail.recrutestagiaire.eu/profils",
-            "link_2_label": "Déposer une candidature",
-            "link_2_url": "https://portail.recrutestagiaire.eu/depot",
-            "link_3_label": "",
-            "link_3_url": "",
-            "link_4_label": "",
-            "link_4_url": "",
-            "link_5_label": "",
-            "link_5_url": "",
-            "footer_link_label": "Tout le parcours →",
-            "footer_link_url": "https://portail.recrutestagiaire.eu/profils",
-            "bg_color": "#ffffff",
-            "border_color": "#888888"
-          }
-        },
-        "uni_gp_offres": {
-          "type": "grid_panel",
-          "settings": {
-            "col_span": "5",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 0,
-            "cell_border": "",
-            "layout_style": "service",
-            "circle_label": "Offres",
-            "circle_bg": "#ffcc00",
-            "circle_text": "#0033cc",
-            "kicker": "",
-            "title": "Collections & catalogue",
-            "text": "",
-            "link_1_label": "Toutes les offres (boutique)",
-            "link_1_url": "shopify://collections/all",
-            "link_2_label": "Collection ABCDRS",
-            "link_2_url": "shopify://collections/abcdrs",
-            "link_3_label": "Les stagiaires de base",
-            "link_3_url": "shopify://collections/les-stagiaires-de-base",
-            "link_4_label": "",
-            "link_4_url": "",
-            "link_5_label": "",
-            "link_5_url": "",
-            "footer_link_label": "Voir le catalogue →",
-            "footer_link_url": "shopify://collections/all",
-            "bg_color": "#ffffff",
-            "border_color": "#888888"
-          }
-        },
-        "uni_kitsch": {
-          "type": "kitsch_counter",
-          "settings": {
-            "col_span": "5",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 0,
-            "cell_border": "",
-            "tile_mode": true,
-            "ribbon_text": "★ CHIFFRE OFFICIEL ★",
-            "suffix_text": "candidat(s) actuellement recensé(e)s dans la base nationale",
-            "brand_name": "Recrute Stagiaire",
-            "sub_text": "Mise à jour en temps quasi réel — merci de votre confiance !!"
-          }
-        },
         "uni_search": {
           "type": "hero_search",
           "settings": {
-            "col_span": "7",
+            "col_span": "6",
             "use_strip_bg": false,
             "cell_bg": "#0033cc",
             "cell_padding": 12,
@@ -212,20 +168,64 @@
             "border_color": "#888888"
           }
         },
-        "uni_top_profile": {
-          "type": "top_profile_portail",
+        "uni_gp_cand": {
+          "type": "grid_panel",
           "settings": {
-            "col_span": "6",
+            "col_span": "5",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
             "cell_border": "",
-            "api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
-            "portail_base_url": "https://portail.recrutestagiaire.eu",
-            "kicker": "Portail",
-            "title": "Meilleur profil du moment",
-            "btn_label": "Voir son profil →",
-            "fallback_text": "Classement en cours...",
+            "layout_style": "service",
+            "circle_label": "Candidat",
+            "circle_bg": "#0033cc",
+            "circle_text": "#ffffff",
+            "kicker": "",
+            "title": "Espace candidat",
+            "text": "",
+            "link_1_label": "Profils candidats",
+            "link_1_url": "https://portail.recrutestagiaire.eu/profils",
+            "link_2_label": "Déposer une candidature",
+            "link_2_url": "https://portail.recrutestagiaire.eu/depot",
+            "link_3_label": "",
+            "link_3_url": "",
+            "link_4_label": "",
+            "link_4_url": "",
+            "link_5_label": "",
+            "link_5_url": "",
+            "footer_link_label": "Tout le parcours →",
+            "footer_link_url": "https://portail.recrutestagiaire.eu/profils",
+            "bg_color": "#ffffff",
+            "border_color": "#888888"
+          }
+        },
+        "uni_gp_offres": {
+          "type": "grid_panel",
+          "settings": {
+            "col_span": "7",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 0,
+            "cell_border": "",
+            "layout_style": "service",
+            "circle_label": "Offres",
+            "circle_bg": "#ffcc00",
+            "circle_text": "#0033cc",
+            "kicker": "",
+            "title": "Collections & catalogue",
+            "text": "",
+            "link_1_label": "Toutes les offres (boutique)",
+            "link_1_url": "shopify://collections/all",
+            "link_2_label": "Collection ABCDRS",
+            "link_2_url": "shopify://collections/abcdrs",
+            "link_3_label": "Les stagiaires de base",
+            "link_3_url": "shopify://collections/les-stagiaires-de-base",
+            "link_4_label": "",
+            "link_4_url": "",
+            "link_5_label": "",
+            "link_5_url": "",
+            "footer_link_label": "Voir le catalogue →",
+            "footer_link_url": "shopify://collections/all",
             "bg_color": "#ffffff",
             "border_color": "#888888"
           }
@@ -233,14 +233,14 @@
       },
       "block_order": [
         "uni_intro",
-        "sponsored_inline_1",
-        "sponsored_inline_2",
-        "uni_gp_cand",
-        "uni_gp_offres",
         "uni_kitsch",
+        "sponsored_inline_1",
+        "uni_top_profile",
+        "sponsored_inline_2",
         "uni_search",
         "uni_gp_actus",
-        "uni_top_profile"
+        "uni_gp_cand",
+        "uni_gp_offres"
       ],
       "settings": {
         "page_bg": "#efefef",
