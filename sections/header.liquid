@@ -101,25 +101,18 @@
     <header class="rs-header-two-tier" aria-label="En-tête du site">
       <div class="rs-header-main-row">
         <div class="rs-header-top-line">
-          <div class="rs-banner-top rs-header-pole-brand">
-            <a class="nav-brand rs-nav-brand" href="{{ routes.root_url }}">
-              {%- if brand_image != blank -%}
-                <img
-                  class="rs-nav-brand__img"
-                  src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 320 }}{% endif %}"
-                  alt="{{ shop.name | escape }}"
-                  style="max-height: {{ section.settings.brand_max_height | default: 52 }}px; width: auto;"
-                  loading="eager"
-                  decoding="async">
-              {%- endif -%}
+          <div class="rs-banner-top rs-header-pole-brand rs-header-pole-title">
+            <a class="nav-brand rs-nav-brand rs-nav-brand--title-row" href="{{ routes.root_url }}">
               {%- if section.settings.show_site_name -%}
-                <span class="rs-nav-brand__name logo">
+                <span class="rs-nav-brand__name logo rs-nav-brand__name--headline">
                   {%- if section.settings.site_title != blank -%}
                     {{ section.settings.site_title | upcase }}
                   {%- else -%}
                     {{ shop.name | upcase }}
                   {%- endif -%}
                 </span>
+              {%- else -%}
+                <span class="visually-hidden">{{ shop.name | escape }}</span>
               {%- endif -%}
             </a>
           </div>
@@ -149,7 +142,24 @@
           </div>
         </div>
 
-        <nav class="rs-banner-nav rs-header-pole-tabs" aria-label="Navigation principale">
+        <div class="rs-header-tabstrip">
+          {%- if brand_image != blank -%}
+            <a
+              class="rs-header-logo-tile nav-brand rs-nav-brand"
+              href="{{ routes.root_url }}"
+              aria-label="{{ shop.name | escape }}">
+              <img
+                class="rs-nav-brand__img rs-header-logo-tile__img"
+                src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 400 }}{% endif %}"
+                alt=""
+                width="160"
+                height="160"
+                style="max-height: {{ section.settings.brand_max_height | default: 96 }}px; width: auto;"
+                loading="eager"
+                decoding="async">
+            </a>
+          {%- endif -%}
+          <nav class="rs-banner-nav rs-header-pole-tabs" aria-label="Navigation principale">
           <ul class="rs-subnav rs-subnav--buttons" role="menubar">
             <li class="rs-subnav__item{% if rs_nav_active == 'offres' %} is-active{% endif %}">
               <button type="button" class="rs-subnav__trigger">{{ lbl_offres }}</button>
@@ -175,6 +185,7 @@
             </li>
           </ul>
         </nav>
+        </div>
       </div>
     </header>
   </div>
@@ -291,8 +302,8 @@
     { "type": "color", "id": "kitsch_pop_bg_b", "label": "Accent animation (bleu clair logo)", "default": "#4d79ff" },
     { "type": "color", "id": "kitsch_pop_fg", "label": "Couleur du texte", "default": "#0015a3" },
     { "type": "header", "content": "Images" },
-    { "type": "image_picker", "id": "brand_image", "label": "Image à côté du nom", "info": "Vide = logo assets/rs-logo-eu.png (favicon idem si non défini), sinon logo Identité du thème." },
-    { "type": "range", "id": "brand_max_height", "min": 32, "max": 72, "step": 2, "unit": "px", "label": "Hauteur max image marque", "default": 52 },
+    { "type": "image_picker", "id": "brand_image", "label": "Logo RS (carré à gauche des onglets)", "info": "Vide = masque le carré logo. Sinon logo Identité du thème ou image ; affiché en grand dans le carré à côté des onglets (le titre reste au-dessus)." },
+    { "type": "range", "id": "brand_max_height", "min": 48, "max": 180, "step": 2, "unit": "px", "label": "Hauteur max logo (fixe)", "default": 96 },
     { "type": "image_picker", "id": "banner_image", "label": "Image de fond de la bannière haute" },
     { "type": "header", "content": "Titre" },
     { "type": "checkbox", "id": "show_site_name", "label": "Afficher le nom du site", "default": true },

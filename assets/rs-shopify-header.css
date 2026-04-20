@@ -84,7 +84,8 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: 10px;
+  gap: 4px;
+  column-gap: 6px;
   box-sizing: border-box;
   border-bottom: 1px solid #e0e0e0;
 }
@@ -123,6 +124,100 @@
   min-width: 0;
 }
 
+/* Titre seul au-dessus des onglets (logo RS = fixe en haut à gauche, hors flux) */
+.rs-banner-top.rs-header-pole-title {
+  min-height: 0 !important;
+  padding: 4px 0 4px !important;
+  border-bottom: none !important;
+}
+.header-wrap .rs-nav-brand--title-row {
+  gap: 0;
+}
+.header-wrap .rs-nav-brand__name.logo.rs-nav-brand__name--headline {
+  font-size: clamp(1.12rem, 2.5vw, 1.5rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.045em !important;
+  line-height: 1.15 !important;
+}
+
+/* Ligne onglets pleine largeur + logo RS hors flux, fixe en haut à gauche, sans fond */
+.header-wrap .rs-header-tabstrip {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  position: static;
+  left: auto;
+  transform: none;
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+/* Logo : hors flux du tabstrip, centré verticalement sur tout le bloc .rs-header-two-tier */
+.header-wrap .rs-header-logo-tile {
+  position: absolute;
+  z-index: 6;
+  left: max(10px, env(safe-area-inset-left, 0px));
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0;
+  width: auto;
+  min-width: 0;
+  text-decoration: none !important;
+  pointer-events: auto;
+}
+.header-wrap .rs-header-logo-tile:hover {
+  background: transparent !important;
+  border: none !important;
+  opacity: 0.92;
+}
+.header-wrap .rs-header-tabstrip .rs-banner-nav.rs-header-pole-tabs {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin-left: 0;
+  margin-right: 0;
+  align-self: stretch;
+}
+/* Avec logo : onglets ~15 % moins larges (centrés), logo plus grand */
+.header-wrap:has(.rs-header-logo-tile) .rs-banner-nav.rs-header-pole-tabs {
+  width: 86%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Éviter que le titre / boutons passent sous le logo fixe */
+.header-wrap:has(.rs-header-logo-tile) .rs-header-top-line {
+  padding-left: clamp(72px, 17vw, 168px);
+}
+@media (max-width: 991.98px) {
+  .header-wrap:has(.rs-header-logo-tile) .rs-header-top-line {
+    padding-left: clamp(52px, 20vw, 100px);
+  }
+  .header-wrap:has(.rs-header-logo-tile) .rs-banner-nav.rs-header-pole-tabs {
+    width: 88%;
+    max-width: none;
+  }
+  .header-wrap:has(.rs-header-kitsch-pop) .rs-header-logo-tile {
+    top: max(36px, env(safe-area-inset-top, 0px));
+  }
+  .header-wrap .rs-header-logo-tile .rs-nav-brand__img,
+  .header-wrap .rs-header-logo-tile__img {
+    max-height: 72px !important;
+    max-width: 72px !important;
+  }
+}
+
 @media (min-width: 992px) {
   .header-wrap .rs-header-main-row {
     display: flex;
@@ -154,7 +249,7 @@
     flex-wrap: nowrap;
   }
 
-  .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs {
+  .header-wrap .rs-header-main-row .rs-banner-nav.rs-header-pole-tabs {
     width: 100%;
     max-width: none;
     margin-top: 0;
@@ -164,11 +259,19 @@
     border-radius: 0;
     box-sizing: border-box;
   }
+  .header-wrap:has(.rs-header-logo-tile) .rs-header-main-row .rs-banner-nav.rs-header-pole-tabs {
+    width: 86%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
   .header-wrap .rs-header-main-row .rs-subnav.rs-subnav--buttons {
     width: 100%;
     max-width: none;
     min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
     gap: 0;
     padding: 0;
     box-sizing: border-box;
@@ -178,9 +281,15 @@
     min-width: 0;
   }
 
-  .header-wrap .rs-nav-brand__img {
-    max-height: 56px !important;
+  .header-wrap:has(.rs-header-kitsch-pop) .rs-header-logo-tile {
+    top: max(44px, env(safe-area-inset-top, 0px));
+  }
+  .header-wrap .rs-header-logo-tile .rs-nav-brand__img,
+  .header-wrap .rs-header-logo-tile__img {
+    max-height: 168px;
+    max-width: 168px;
     width: auto;
+    height: auto;
   }
 }
 
@@ -219,7 +328,7 @@
     border-bottom: none;
   }
 
-  .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs {
+  .header-wrap .rs-header-main-row .rs-banner-nav.rs-header-pole-tabs {
     width: 100%;
     align-self: stretch;
     display: flex;
@@ -229,8 +338,13 @@
     padding: 0;
     box-sizing: border-box;
   }
+  .header-wrap:has(.rs-header-logo-tile) .rs-header-main-row .rs-banner-nav.rs-header-pole-tabs {
+    width: 88%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-  .header-wrap .rs-header-main-row > .rs-banner-nav.rs-header-pole-tabs .rs-subnav.rs-subnav--buttons {
+  .header-wrap .rs-header-main-row .rs-banner-nav.rs-header-pole-tabs .rs-subnav.rs-subnav--buttons {
     width: 100%;
     max-width: none;
     margin-left: 0;
@@ -240,7 +354,7 @@
     box-sizing: border-box;
   }
 
-  .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand {
+  .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand:not(.rs-header-pole-title) {
     min-height: 56px;
   }
 
@@ -260,14 +374,12 @@
     font-size: 18px !important;
   }
 
-  .header-wrap .rs-nav-brand__img {
-    max-height: 56px !important;
-    width: auto !important;
-    height: auto !important;
+  .header-wrap .rs-nav-brand__name.logo.rs-nav-brand__name--headline {
+    font-size: clamp(1.05rem, 4.2vw, 1.28rem) !important;
   }
 
   .header-wrap .rs-subnav.rs-subnav--buttons {
-    gap: 6px;
+    gap: 0;
   }
 
   .header-wrap .rs-banner-nav.rs-header-pole-tabs {
@@ -359,6 +471,8 @@
   margin: 0;
   padding: 0 2px;
   width: 100%;
+  max-width: none;
+  min-width: 0;
   flex: 0 0 auto;
   min-height: 0;
   box-sizing: border-box;
