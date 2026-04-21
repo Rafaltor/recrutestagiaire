@@ -1,3 +1,7 @@
+{%- liquid
+  assign rs_footer_swipe = settings.rs_portail_url_vote | default: 'https://portail.recrutestagiaire.eu/swipe'
+  assign rs_footer_all = routes.all_products_collection_url
+-%}
 <footer class="footer rs-site-footer" role="contentinfo">
   <div class="container">
     <div class="row rs-site-footer__grid g-4">
@@ -26,9 +30,10 @@
         <div class="rs-site-footer__block">
           <h2 class="rs-site-footer__title">Collections</h2>
           <ul class="rs-site-footer__menu">
-            {% for collection in collections limit: 5 %}
-              <li><a href="{{ collection.url }}">{{ collection.title }}</a></li>
-            {% endfor %}
+            <li><a href="{{ rs_footer_all }}">Toutes les offres</a></li>
+            <li><a href="/collections/abcdrs">Collection ABCDRS</a></li>
+            <li><a href="/collections/les-stagiaires-de-base">Les stagiaires de base</a></li>
+            <li><a href="{{ routes.collections_url }}">Index des collections</a></li>
           </ul>
         </div>
       </div>
@@ -37,14 +42,10 @@
           <h2 class="rs-site-footer__title">Le collectif</h2>
           <ul class="rs-site-footer__menu">
             <li><a href="/pages/about">À propos</a></li>
+            <li><a href="/pages/profils-candidats">Profils candidats</a></li>
+            <li><a href="/pages/deposer-candidature">Déposer une candidature</a></li>
             <li>
-              <a href="{{ settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils' }}" rel="noopener noreferrer">Profils candidats</a>
-            </li>
-            <li>
-              <a href="{{ settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot' }}" rel="noopener noreferrer">Déposer une candidature</a>
-            </li>
-            <li>
-              <a href="{{ settings.rs_portail_url_vote | default: 'https://portail.recrutestagiaire.eu/swipe' }}" rel="noopener noreferrer">Vote (swipe)</a>
+              <a href="{{ rs_footer_swipe }}" rel="noopener noreferrer">Voter (swipe)</a>
             </li>
             <li><a href="/pages/contact">Contact</a></li>
           </ul>

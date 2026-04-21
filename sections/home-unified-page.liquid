@@ -367,30 +367,16 @@
               ? '<p class="mb-2 rs-top-profile-api__name"><strong>' + esc(nom) + '</strong></p>' +
                 (handle !== '—' ? '<p class="mb-2 rs-top-profile-api__handle text-muted">' + esc(handle) + '</p>' : '')
               : '<p class="mb-2 rs-top-profile-api__name"><strong>' + esc(handle) + '</strong></p>';
-          var pdfOpen =
+          var cvInner =
             isPdf && cvRaw !== ''
-              ? '<a class="rs-top-profile-api__cv-open" href="' +
-                cvEsc +
-                '" target="_blank" rel="noopener noreferrer">Ouvrir le PDF dans un nouvel onglet</a>'
-              : '';
-          var pdfSlot =
-            '<div class="rs-top-profile-api__pdf-row">' +
-            (isPdf && cvRaw !== ''
               ? '<div class="rs-top-profile-api__cv rs-top-profile-api__cv--pdf">' +
                 '<div class="rs-top-profile-api__pdf-canvas-host" data-rs-pdf-url="' +
                 esc(cvRaw) +
                 '"><div class="rs-top-profile-api__pdf-canvas-inner"></div></div>' +
-                pdfOpen +
                 '</div>'
-              : cvCol !== ''
-                ? cvCol
-                : '<div class="rs-top-profile-api__cv rs-top-profile-api__cv--empty"><span class="text-muted">CV non joint</span></div>') +
-            '</div>';
-          var bottomRow =
-            '<div class="rs-top-profile-api__bottom">' +
-            '<div class="rs-top-profile-api__bottom-gap" aria-hidden="true"></div>' +
-            '<div class="rs-top-profile-api__right-stack">' +
-            '<div class="rs-top-profile-api__info">' +
+              : cvCol;
+          var textCol =
+            '<div class="rs-top-profile-api__text-col">' +
             titleBlock +
             headBlock +
             '<p class="mb-2 rs-top-profile-api__body-line">' +
@@ -406,12 +392,13 @@
             esc(href) +
             '" rel="noopener noreferrer">' +
             esc(btnLabel) +
-            '</a></div></div></div>';
+            '</a></div>';
           mount.innerHTML =
-            '<div class="rs-top-profile-api__layout rs-top-profile-api__layout--stacked">' +
-            pdfSlot +
-            bottomRow +
-            '</div>';
+            '<div class="rs-top-profile-api__layout rs-top-profile-api__layout--split">' +
+            textCol +
+            '<div class="rs-top-profile-api__cv-col">' +
+            cvInner +
+            '</div></div>';
           if (isPdf && cvRaw !== '') {
             var pdfHost = mount.querySelector('.rs-top-profile-api__pdf-canvas-host');
             if (pdfHost) {
