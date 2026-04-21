@@ -3909,16 +3909,40 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 }
 .rs-rail-ad__cta-row {
   display: flex;
-  gap: 6px;
-  margin-top: 6px;
+  flex-direction: row;
+  gap: 8px;
+  margin-top: 8px;
   align-items: stretch;
 }
+/* Les demi-boutons ne doivent pas hériter de width:100% du .rs-rail-ad__cta (sinon débordement / aspect « parsemé ») */
+.rs-rail-ad__cta-row .rs-rail-ad__cta--half {
+  width: auto;
+  flex: 1 1 0;
+  min-width: 0;
+  box-sizing: border-box;
+}
 .rs-rail-ad__cta--half {
-  flex: 1;
+  flex: 1 1 0;
   min-width: 0;
   font-size: 10px;
   padding: 6px 4px;
   line-height: 1.2;
+}
+@media (max-width: 767.98px) {
+  /* Carte candidat mobile : actions empilées, pleine largeur, groupe compact */
+  .rs-rail-ad__cta-row {
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .rs-rail-ad__cta-row .rs-rail-ad__cta--half {
+    flex: none !important;
+    width: 100% !important;
+    max-width: 100%;
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
 }
 .rs-rail-ad__cta--disabled {
   opacity: 0.42;

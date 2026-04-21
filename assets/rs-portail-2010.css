@@ -1123,6 +1123,7 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
   .rs-top-profile-api__layout--split {
     flex-direction: column;
     min-height: 0;
+    gap: 14px;
   }
   .rs-top-profile-api__cv-col {
     order: 2;
@@ -1133,9 +1134,48 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
   }
   .rs-top-profile-api__text-col {
     order: 1;
+    gap: 6px !important;
+  }
+  .rs-top-profile-api__text-col > p,
+  .rs-top-profile-api__text-col > h3 {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .rs-top-profile-api__text-col > h3.rs-top-profile-api__block-title {
+    margin-bottom: 2px !important;
+    padding-bottom: 6px !important;
+  }
+  .rs-top-profile-api__profil-link.rs-pole-panel__footer-link {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 12px !important;
+    margin-bottom: 0;
+    padding: 12px 14px !important;
+    text-align: center;
+    border-radius: var(--rs-da-radius);
+    box-sizing: border-box;
+    background: linear-gradient(180deg, var(--rs-da-btn-gold-top) 0%, var(--rs-da-btn-gold-bot) 100%) !important;
+    border: 1px solid var(--rs-da-btn-gold-border) !important;
+    color: #111 !important;
+    text-decoration: none !important;
+  }
+  .rs-top-profile-api__profil-link.rs-pole-panel__footer-link:hover {
+    filter: brightness(0.96);
+    color: #111 !important;
   }
   .rs-top-profile-api__cv-col .rs-top-profile-api__cv--pdf {
-    min-height: min(48vh, 440px);
+    min-height: min(42vh, 380px);
+  }
+  .rs-top-profile-api__cv-col .rs-top-profile-api__cv-img-wrap {
+    min-height: 160px;
+  }
+  .rs-top-profile-api__cv-col .rs-top-profile-api__cv-link {
+    min-height: 120px;
+    padding: 16px;
+  }
+  .rs-top-profile-api__cv-col .rs-top-profile-api__cv--empty {
+    min-height: 120px;
   }
 }
 .rs-top-profile-api__block-kicker {
@@ -1398,6 +1438,17 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
   color: #777;
   margin: 0 0 10px;
   text-align: left;
+}
+@media (max-width: 767.98px) {
+  .rs-rail-ad__cand-line {
+    margin: 2px 0 4px;
+  }
+  .rs-rail-ad__cand-line--muted {
+    margin: 0 0 4px;
+  }
+  .rs-rail-ad__cand-ref {
+    margin: 0 0 8px;
+  }
 }
 
 /* Page collection : zone image fond blanc (sans contrainte de taille — réglage « Hauteur zone photo » du thème) */
