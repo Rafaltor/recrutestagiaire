@@ -1,14 +1,5 @@
 {%- comment -%}
-  Mini pub "profil candidat" — rail latéral, rempli en JS via proxy (?action=profiles).
+  Emplacement réservé pour un profil candidat (API). Aucun texte factice : le contenu
+  est injecté par rs-candidate-rails-script.liquid après chargement des profils.
 {%- endcomment -%}
-<article class="rs-rail-ad" data-rs-cand-ad="1">
-  <a href="#" class="rs-rail-ad__title" data-rs-cand-name>Nom du candidat</a>
-  <div style="font-size:11px;color:#555;margin:4px 0 6px;text-align:left;" data-rs-cand-role>Poste recherché</div>
-  <div style="font-size:11px;color:#444;margin:0 0 8px;text-align:left;" data-rs-cand-prof>Compétences</div>
-  <div style="font-size:10px;color:#777;margin:0 0 10px;text-align:left;" data-rs-cand-ref>Réf. CND-000</div>
-  <div class="rs-rail-ad__cta-row">
-    <a href="#" class="rs-rail-ad__cta rs-rail-ad__cta--half" data-rs-cand-email>E-mail</a>
-    <a href="#" class="rs-rail-ad__cta rs-rail-ad__cta--half" data-rs-cand-cv target="_blank" rel="noopener noreferrer">CV</a>
-  </div>
-</article>
-
+<article class="rs-rail-ad rs-rail-ad--cand-api" data-rs-cand-ad="1" hidden aria-hidden="true"></article>

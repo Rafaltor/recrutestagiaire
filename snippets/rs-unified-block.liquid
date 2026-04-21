@@ -358,14 +358,10 @@
       data-rs-portail-base="{{ _base | escape }}"
       data-rs-top-profile-fallback="{{ b.fallback_text | default: 'Classement en cours...' | escape }}"
       data-rs-top-profile-btn-label="{{ b.btn_label | default: 'Voir son profil →' | escape }}"
+      data-rs-top-kicker="{{ b.kicker | default: '' | strip | escape }}"
+      data-rs-top-title="{{ b.title | default: '' | strip | escape }}"
       style="background:{{ b.bg_color }};border-color:{{ b.border_color }};border-width:0;">
-      <div class="rs-pole-panel__encart">
-        {%- if b.kicker != blank -%}
-          <p class="rs-pole-panel__kicker">{{ b.kicker | escape }}</p>
-        {%- endif -%}
-        {%- if b.title != blank -%}
-          <h3 class="rs-pole-panel__title">{{ b.title | escape }}</h3>
-        {%- endif -%}
+      <div class="rs-pole-panel__encart rs-top-profile-api__encart">
         <div class="rs-top-profile-api__mount" data-rs-top-profile-mount>
           <p class="rs-pole-panel__richtext text-muted mb-0">{{ b.fallback_text | default: 'Classement en cours...' }}</p>
         </div>

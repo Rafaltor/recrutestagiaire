@@ -4,6 +4,12 @@
 {%- endcomment -%}
 <script>
 (function () {
+  function escHtml(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  }
+  function escAttr(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
   function normalizeApi(u) {
     return String(u || '').replace(/\?+$/, '');
   }
@@ -25,6 +31,68 @@
     }
     if (typeof cv === 'object' && cv !== null && cv.url) return String(cv.url);
     return '';
+  }
+
+  function buildCandidateCard(p, kicker, labelEmail, labelCv, listUrl) {
+    var name = escHtml(p.name || 'Candidat');
+    var role = p.role ? escHtml(String(p.role)) : '';
+    var prof = p.professions ? escHtml(String(p.professions)) : '';
+    var ref = (p.id || '').slice(-6).toUpperCase();
+    var email = (p.email && String(p.email).trim()) || '';
+    var cv = cvUrl(p.cv);
+    var mailCls = 'rs-rail-ad__cta rs-rail-ad__cta--half' + (email ? '' : ' rs-rail-ad__cta--disabled');
+    var mailHref = email ? 'mailto:' + escAttr(email) : '#';
+    var mailAria = email ? '' : ' aria-disabled="true"';
+    var cvCls = 'rs-rail-ad__cta rs-rail-ad__cta--half' + (cv ? '' : ' rs-rail-ad__cta--disabled');
+    var cvHref = cv ? escAttr(cv) : '#';
+    var cvAria = cv ? '' : ' aria-disabled="true"';
+    var refText = ref ? 'Réf. CND-' + escHtml(ref) : '';
+    var kickerHtml =
+      kicker && String(kicker).trim() !== ''
+        ? '<span class="rs-rail-ad__sponsored" data-rs-cand-kicker>' + escHtml(String(kicker)) + '</span>'
+        : '';
+    return (
+      kickerHtml +
+      '<a href="' +
+      escAttr(listUrl) +
+      '" class="rs-rail-ad__title" data-rs-cand-name>' +
+      name +
+      '</a>' +
+      '<div class="rs-rail-ad__cand-line" data-rs-cand-role' +
+      (role ? '' : ' hidden') +
+      '>' +
+      role +
+      '</div>' +
+      '<div class="rs-rail-ad__cand-line rs-rail-ad__cand-line--muted" data-rs-cand-prof' +
+      (prof ? '' : ' hidden') +
+      '>' +
+      prof +
+      '</div>' +
+      '<div class="rs-rail-ad__cand-ref" data-rs-cand-ref' +
+      (refText ? '' : ' hidden') +
+      '>' +
+      refText +
+      '</div>' +
+      '<div class="rs-rail-ad__cta-row">' +
+      '<a href="' +
+      mailHref +
+      '" class="' +
+      mailCls +
+      '"' +
+      mailAria +
+      ' data-rs-cand-email>' +
+      escHtml(labelEmail) +
+      '</a>' +
+      '<a href="' +
+      cvHref +
+      '" class="' +
+      cvCls +
+      '"' +
+      cvAria +
+      ' data-rs-cand-cv target="_blank" rel="noopener noreferrer">' +
+      escHtml(labelCv) +
+      '</a></div>'
+    );
   }
 
   function fillRoot(root) {
@@ -52,65 +120,9 @@
 
         slots.forEach(function (slot, idx) {
           var p = profiles[idx % profiles.length];
-          var name = p.name || 'Candidat';
-          var role = p.role || '';
-          var prof = p.professions || '';
-          var ref = (p.id || '').slice(-6).toUpperCase();
-          var email = (p.email && String(p.email).trim()) || '';
-          var cv = cvUrl(p.cv);
-
-          var elK = slot.querySelector('[data-rs-cand-kicker]');
-          if (elK) elK.textContent = kicker;
-
-          var elName = slot.querySelector('[data-rs-cand-name]');
-          if (elName) elName.textContent = String(name);
-
-          var elRole = slot.querySelector('[data-rs-cand-role]');
-          if (elRole) elRole.textContent = role ? String(role) : 'Poste recherché';
-
-          var elProf = slot.querySelector('[data-rs-cand-prof]');
-          if (elProf) {
-            elProf.textContent = prof ? String(prof) : '';
-            elProf.style.display = prof ? '' : 'none';
-          }
-
-          var elRef = slot.querySelector('[data-rs-cand-ref]');
-          if (elRef) {
-            elRef.textContent = ref ? ('Réf. CND-' + ref) : '';
-            elRef.style.display = ref ? '' : 'none';
-          }
-
-          var elMail = slot.querySelector('[data-rs-cand-email]');
-          if (elMail) {
-            elMail.textContent = labelEmail;
-            if (email) {
-              elMail.setAttribute('href', 'mailto:' + email);
-              elMail.classList.remove('rs-rail-ad__cta--disabled');
-              elMail.removeAttribute('aria-disabled');
-            } else {
-              elMail.setAttribute('href', '#');
-              elMail.classList.add('rs-rail-ad__cta--disabled');
-              elMail.setAttribute('aria-disabled', 'true');
-            }
-          }
-
-          var elCv = slot.querySelector('[data-rs-cand-cv]');
-          if (elCv) {
-            elCv.textContent = labelCv;
-            if (cv) {
-              elCv.setAttribute('href', cv);
-              elCv.classList.remove('rs-rail-ad__cta--disabled');
-              elCv.removeAttribute('aria-disabled');
-            } else {
-              elCv.setAttribute('href', '#');
-              elCv.classList.add('rs-rail-ad__cta--disabled');
-              elCv.setAttribute('aria-disabled', 'true');
-            }
-          }
-
-          slot.querySelectorAll('[data-rs-cand-name]').forEach(function (a) {
-            a.setAttribute('href', url);
-          });
+          slot.innerHTML = buildCandidateCard(p, kicker, labelEmail, labelCv, url);
+          slot.removeAttribute('hidden');
+          slot.removeAttribute('aria-hidden');
         });
       })
       .catch(function (err) {

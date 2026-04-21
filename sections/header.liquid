@@ -2,7 +2,7 @@
 {% liquid
   assign rs_p_prof = settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils'
   assign rs_p_dep = settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot'
-  assign rs_p_vote = settings.rs_portail_url_vote | default: 'https://portail.recrutestagiaire.eu/vote'
+  assign rs_p_vote = settings.rs_portail_url_vote | default: 'https://portail.recrutestagiaire.eu/swipe'
   assign rs_p_login = settings.rs_portail_url_connexion | default: 'https://portail.recrutestagiaire.eu/connexion'
 
   assign rs_default_logo = 'rs-logo-eu.png'
@@ -611,7 +611,7 @@
     { "type": "text", "id": "menu_cand_2_label", "label": "Sous-lien 2 — libellé", "default": "Déposer sa candidature" },
     { "type": "url", "id": "menu_cand_2_link", "label": "Sous-lien 2 — URL (vide = portail dépôt)" },
     { "type": "text", "id": "menu_cand_3_label", "label": "Sous-lien 3 — libellé (vote / swipe)", "default": "Vote (swipe)" },
-    { "type": "url", "id": "menu_cand_3_link", "label": "Sous-lien 3 — URL (vide = portail vote)" },
+    { "type": "url", "id": "menu_cand_3_link", "label": "Sous-lien 3 — URL (vide = portail swipe)" },
     { "type": "header", "content": "Menu — Le collectif" },
     { "type": "text", "id": "nav_collectif_label", "label": "Libellé du bouton", "default": "Le collectif" },
     { "type": "text", "id": "menu_coll_1_label", "label": "Sous-lien 1 — libellé", "default": "Histoire" },

@@ -1,22 +1,47 @@
 {%- assign rs_profiles_url = section.settings.cand_profiles_url | default: settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils' -%}
 {%- assign rs_strip_top = section.settings.collection_strip_top | default: '#f3f6ff' -%}
 {%- assign rs_strip_bot = section.settings.collection_strip_bot | default: '#ffffff' -%}
+{%- assign _is_all_collection = false -%}
+{%- if collection.handle == 'all' -%}
+  {%- assign _is_all_collection = true -%}
+{%- endif -%}
 
-<div class="rs-collection-head border-bottom" style="background: linear-gradient(180deg, {{ rs_strip_top }} 0%, {{ rs_strip_bot }} 100%);">
-  <div class="container py-2 py-md-3">
-    <h1 class="rs-collection-head__title mb-1 mb-md-2" style="font-size:{{ section.settings.title_size }}px;font-weight:{{ section.settings.title_weight }};">
-      {{ collection.title }}
-    </h1>
-    {% if section.settings.show_breadcrumb %}
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb rs-collection-head__crumb mb-0 small">
-          <li class="breadcrumb-item"><a href="{{ routes.root_url }}">Accueil</a></li>
-          <li class="breadcrumb-item active" aria-current="page">{{ collection.title }}</li>
-        </ol>
-      </nav>
-    {% endif %}
+{%- if _is_all_collection -%}
+  <div class="rs-collection-head rs-collection-head--all border-bottom">
+    <div class="container py-3 py-md-4">
+      <h1 class="rs-collection-head--all__title mb-2 mb-md-3">
+        {{ section.settings.collection_all_title | default: 'Offres en cours' | escape }}
+      </h1>
+      <p class="rs-collection-head--all__subtitle mb-2 mb-md-3">
+        {{ section.settings.collection_all_subtitle | default: "Mes Basiques d'Amour · Collection SS26" | escape }}
+      </p>
+      {% if section.settings.show_breadcrumb %}
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb rs-collection-head--all__crumb mb-0 small">
+            <li class="breadcrumb-item"><a href="{{ routes.root_url }}">Accueil</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ collection.title }}</li>
+          </ol>
+        </nav>
+      {% endif %}
+    </div>
   </div>
-</div>
+{%- else -%}
+  <div class="rs-collection-head border-bottom" style="background: linear-gradient(180deg, {{ rs_strip_top }} 0%, {{ rs_strip_bot }} 100%);">
+    <div class="container py-2 py-md-3">
+      <h1 class="rs-collection-head__title mb-1 mb-md-2" style="font-size:{{ section.settings.title_size }}px;font-weight:{{ section.settings.title_weight }};">
+        {{ collection.title }}
+      </h1>
+      {% if section.settings.show_breadcrumb %}
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb rs-collection-head__crumb mb-0 small">
+            <li class="breadcrumb-item"><a href="{{ routes.root_url }}">Accueil</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ collection.title }}</li>
+          </ol>
+        </nav>
+      {% endif %}
+    </div>
+  </div>
+{%- endif -%}
 
 {%- assign rs_needs_api = false -%}
 {%- for b in section.blocks -%}
@@ -181,6 +206,22 @@
       "id": "show_breadcrumb",
       "label": "Afficher le fil d'ariane",
       "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "En-tête spécifique /collections/all : bandeau foncé (titres ci-dessous). Les autres collections gardent le bandeau dégradé classique."
+    },
+    {
+      "type": "text",
+      "id": "collection_all_title",
+      "label": "Titre — « Toutes les offres » (handle all)",
+      "default": "Offres en cours"
+    },
+    {
+      "type": "text",
+      "id": "collection_all_subtitle",
+      "label": "Sous-titre — « Toutes les offres »",
+      "default": "Mes Basiques d'Amour · Collection SS26"
     },
     {
       "type": "header",

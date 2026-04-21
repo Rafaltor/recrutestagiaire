@@ -16,7 +16,7 @@
       },
       { "type": "text", "id": "rs_portail_url_profils", "label": "Portail — Profils / annuaire (URL complète)", "default": "https://portail.recrutestagiaire.eu/profils", "info": "Champ texte : les réglages de type « URL » Shopify n’acceptent pas les https externes en valeur par défaut." },
       { "type": "text", "id": "rs_portail_url_depot", "label": "Portail — Déposer une candidature", "default": "https://portail.recrutestagiaire.eu/depot" },
-      { "type": "text", "id": "rs_portail_url_vote", "label": "Portail — Vote / swipe", "default": "https://portail.recrutestagiaire.eu/vote" },
+      { "type": "text", "id": "rs_portail_url_vote", "label": "Portail — Vote / swipe", "default": "https://portail.recrutestagiaire.eu/swipe" },
       { "type": "text", "id": "rs_portail_url_connexion", "label": "Portail — Connexion (Mon espace)", "default": "https://portail.recrutestagiaire.eu/connexion" },
       {
         "type": "text",

@@ -258,14 +258,17 @@
         var canvas = document.createElement('canvas');
         canvas.className = 'rs-top-profile-api__pdf-canvas';
         inner.appendChild(canvas);
-        var w = hostEl.clientWidth || hostEl.offsetWidth || 320;
-        if (w < 80) w = 320;
+        var cssW = hostEl.clientWidth || hostEl.offsetWidth || 320;
+        if (cssW < 80) cssW = 320;
+        var dpr = Math.min(window.devicePixelRatio || 1, 2.5);
         var vp1 = page.getViewport({ scale: 1 });
-        var scale = w / vp1.width;
+        var scale = (cssW / vp1.width) * dpr;
         var viewport = page.getViewport({ scale: scale });
         var ctx = canvas.getContext('2d', { alpha: false });
-        canvas.height = Math.floor(viewport.height);
         canvas.width = Math.floor(viewport.width);
+        canvas.height = Math.floor(viewport.height);
+        canvas.style.width = Math.floor(cssW) + 'px';
+        canvas.style.height = Math.floor(viewport.height / dpr) + 'px';
         return page.render({ canvasContext: ctx, viewport: viewport }).promise;
       })
       .catch(function () {
@@ -334,16 +337,8 @@
                 '" alt="CV" loading="lazy" decoding="async">' +
                 '</a></div>';
             } else if (isPdf) {
-              /* Aperçu 1re page via PDF.js (canvas) : pas de barre d’outils Adobe/Chromium dans le bloc */
-              cvCol =
-                '<div class="rs-top-profile-api__cv rs-top-profile-api__cv--pdf">' +
-                '<div class="rs-top-profile-api__pdf-canvas-host" data-rs-pdf-url="' +
-                esc(cvRaw) +
-                '"><div class="rs-top-profile-api__pdf-canvas-inner"></div></div>' +
-                '<a class="rs-top-profile-api__cv-open small" href="' +
-                cvEsc +
-                '" target="_blank" rel="noopener noreferrer">Ouvrir le PDF dans un nouvel onglet</a>' +
-                '</div>';
+              /* Rendu PDF dans pdfSlot (plus bas), pas dans cvCol */
+              cvCol = '';
             } else {
               cvCol =
                 '<div class="rs-top-profile-api__cv">' +
@@ -358,30 +353,65 @@
               '<span class="text-muted small">CV non joint</span>' +
               '</div>';
           }
+          var kickerAttr = wrap.getAttribute('data-rs-top-kicker') || '';
+          var titleAttr = wrap.getAttribute('data-rs-top-title') || '';
+          var titleBlock = '';
+          if (kickerAttr !== '') {
+            titleBlock += '<p class="rs-top-profile-api__block-kicker">' + esc(kickerAttr) + '</p>';
+          }
+          if (titleAttr !== '') {
+            titleBlock += '<h3 class="rs-top-profile-api__block-title">' + esc(titleAttr) + '</h3>';
+          }
           var headBlock =
             nom !== ''
-              ? '<p class="mb-1"><strong>' + esc(nom) + '</strong></p>' +
-                (handle !== '—' ? '<p class="mb-1 small text-muted">' + esc(handle) + '</p>' : '')
-              : '<p class="mb-1"><strong>' + esc(handle) + '</strong></p>';
-          var infoCol =
+              ? '<p class="mb-2 rs-top-profile-api__name"><strong>' + esc(nom) + '</strong></p>' +
+                (handle !== '—' ? '<p class="mb-2 rs-top-profile-api__handle text-muted">' + esc(handle) + '</p>' : '')
+              : '<p class="mb-2 rs-top-profile-api__name"><strong>' + esc(handle) + '</strong></p>';
+          var pdfOpen =
+            isPdf && cvRaw !== ''
+              ? '<a class="rs-top-profile-api__cv-open" href="' +
+                cvEsc +
+                '" target="_blank" rel="noopener noreferrer">Ouvrir le PDF dans un nouvel onglet</a>'
+              : '';
+          var pdfSlot =
+            '<div class="rs-top-profile-api__pdf-row">' +
+            (isPdf && cvRaw !== ''
+              ? '<div class="rs-top-profile-api__cv rs-top-profile-api__cv--pdf">' +
+                '<div class="rs-top-profile-api__pdf-canvas-host" data-rs-pdf-url="' +
+                esc(cvRaw) +
+                '"><div class="rs-top-profile-api__pdf-canvas-inner"></div></div>' +
+                pdfOpen +
+                '</div>'
+              : cvCol !== ''
+                ? cvCol
+                : '<div class="rs-top-profile-api__cv rs-top-profile-api__cv--empty"><span class="text-muted">CV non joint</span></div>') +
+            '</div>';
+          var bottomRow =
+            '<div class="rs-top-profile-api__bottom">' +
+            '<div class="rs-top-profile-api__bottom-gap" aria-hidden="true"></div>' +
+            '<div class="rs-top-profile-api__right-stack">' +
             '<div class="rs-top-profile-api__info">' +
+            titleBlock +
             headBlock +
-            '<p class="mb-1 small">' +
+            '<p class="mb-2 rs-top-profile-api__body-line">' +
             esc(job) +
             '</p>' +
-            '<p class="mb-2 small">Likes : <strong>' +
+            '<p class="mb-2 rs-top-profile-api__body-line">Likes : <strong>' +
             esc(String(likes)) +
             '</strong></p>' +
-            '<p class="mb-2 small text-muted">' +
+            '<p class="mb-3 rs-top-profile-api__body-line rs-top-profile-api__rank text-muted">' +
             esc(rank) +
             '</p>' +
-            '<a class="rs-pole-panel__footer-link" href="' +
+            '<a class="rs-pole-panel__footer-link rs-top-profile-api__profil-link" href="' +
             esc(href) +
             '" rel="noopener noreferrer">' +
             esc(btnLabel) +
-            '</a></div>';
+            '</a></div></div></div>';
           mount.innerHTML =
-            '<div class="rs-top-profile-api__layout">' + infoCol + cvCol + '</div>';
+            '<div class="rs-top-profile-api__layout rs-top-profile-api__layout--stacked">' +
+            pdfSlot +
+            bottomRow +
+            '</div>';
           if (isPdf && cvRaw !== '') {
             var pdfHost = mount.querySelector('.rs-top-profile-api__pdf-canvas-host');
             if (pdfHost) {

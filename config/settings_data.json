@@ -11,7 +11,7 @@
   "current": {
     "rs_portail_url_profils": "https://portail.recrutestagiaire.eu/profils",
     "rs_portail_url_depot": "https://portail.recrutestagiaire.eu/depot",
-    "rs_portail_url_vote": "https://portail.recrutestagiaire.eu/vote",
+    "rs_portail_url_vote": "https://portail.recrutestagiaire.eu/swipe",
     "rs_portail_url_connexion": "https://portail.recrutestagiaire.eu/connexion",
     "rs_api_url_top_profile": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
     "logo": "shopify://shop_images/rs-logo-eu.png",
