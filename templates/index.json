@@ -22,7 +22,7 @@
         "btn_secondary_label": "Profils candidats",
         "btn_secondary_url": "shopify://pages/profils-candidats",
         "min_height_desktop": 72,
-        "min_height_mobile": 44,
+        "min_height_mobile": 58,
         "overlay_strength": 55
       }
     },

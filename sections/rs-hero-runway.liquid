@@ -1,18 +1,12 @@
-{%- liquid
-  assign vm = section.settings.video_mobile
-  if vm == blank
-    assign vm = section.settings.video_d1
-  endif
-  assign scrim_a = section.settings.overlay_strength | times: 0.01
--%}
+{%- assign scrim_a = section.settings.overlay_strength | times: 0.01 -%}
 <section
   class="rs-hero-runway shopify-section"
-  style="--rs-hr-min-h-desk: {{ section.settings.min_height_desktop }}vh;--rs-hr-min-h-mob: {{ section.settings.min_height_mobile }}vh;--rs-hr-scrim-a: {{ scrim_a }};"
+  style="--rs-hr-min-h-desk: {{ section.settings.min_height_desktop }}vh;--rs-hr-cell-mob-min: {{ section.settings.min_height_mobile }}vh;--rs-hr-scrim-a: {{ scrim_a }};"
   {{ section.shopify_attributes }}>
   <div class="rs-hero-runway__shell">
     <div class="rs-hero-runway__media" aria-hidden="true">
-      {%- comment -%} Bureau : grille 2×2 — quatre extraits runway {%- endcomment -%}
-      <div class="rs-hero-runway__grid rs-hero-runway__grid--desktop">
+      {%- comment -%} Bureau : 2×2 · Mobile : 4 bandeaux pleine largeur, portrait (9:16), style éditorial {%- endcomment -%}
+      <div class="rs-hero-runway__grid">
         {%- assign v1 = section.settings.video_d1 -%}
         <div class="rs-hero-runway__cell">
           {%- if v1 != blank -%}
@@ -99,28 +93,6 @@
         </div>
       </div>
 
-      {%- comment -%} Mobile : un seul plan paysage (défilé) {%- endcomment -%}
-      <div class="rs-hero-runway__landscape rs-hero-runway__landscape--mobile">
-        {%- if vm != blank -%}
-          <div class="rs-hero-runway__video-wrap">
-            {{
-              vm
-              | video_tag:
-                autoplay: true,
-                loop: true,
-                muted: true,
-                controls: false,
-                playsinline: true,
-                image_size: '1600x'
-            }}
-          </div>
-        {%- else -%}
-          <div class="rs-hero-runway__placeholder rs-hero-runway__placeholder--wide">
-            <span>{{ section.settings.placeholder_label }}</span>
-          </div>
-        {%- endif -%}
-      </div>
-
       <div class="rs-hero-runway__scrim"></div>
     </div>
 
@@ -165,15 +137,13 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Bureau : assemblez 4 vidéos (grille 2×2). Mobile : une vidéo paysage (extrait défilé). Si la vidéo mobile est vide, la vidéo 1 est utilisée. Les vidéos sont muettes et en boucle (autoplay navigateur)."
+      "content": "Les 4 mêmes extraits : bureau en grille 2×2, mobile en colonne pleine largeur format portrait (9:16), façon lookbook éditorial. Vidéos muettes, boucle, autoplay (navigateur)."
     },
-    { "type": "header", "content": "Médias — bureau (2×2)" },
+    { "type": "header", "content": "Médias — 4 extraits runway" },
     { "type": "video", "id": "video_d1", "label": "Vidéo 1" },
     { "type": "video", "id": "video_d2", "label": "Vidéo 2" },
     { "type": "video", "id": "video_d3", "label": "Vidéo 3" },
     { "type": "video", "id": "video_d4", "label": "Vidéo 4" },
-    { "type": "header", "content": "Médias — mobile" },
-    { "type": "video", "id": "video_mobile", "label": "Vidéo mobile (paysage / défilé)" },
     { "type": "text", "id": "placeholder_label", "label": "Texte emplacement vide", "default": "Vidéo à ajouter" },
     { "type": "header", "content": "Texte" },
     { "type": "text", "id": "kicker", "label": "Surtitre", "default": "Collectif — Paris" },
@@ -209,12 +179,13 @@
     {
       "type": "range",
       "id": "min_height_mobile",
-      "min": 36,
-      "max": 72,
-      "step": 2,
+      "min": 40,
+      "max": 95,
+      "step": 1,
       "unit": "vh",
-      "label": "Hauteur min. zone vidéo (mobile)",
-      "default": 44
+      "label": "Mobile : hauteur min. par bandeau vertical",
+      "default": 58,
+      "info": "Chaque vidéo occupe toute la largeur ; le format est portrait (9:16). Ce réglage impose une hauteur minimum si vous voulez des plans plus « plein écran »."
     },
     {
       "type": "range",
