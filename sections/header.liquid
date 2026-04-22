@@ -1,4 +1,4 @@
-{% comment %} En-tête : navigation par pôles ; style « portail emploi » optionnel (rs-header-jobboard.css). {% endcomment %}
+{% comment %} En-tête aligné sur portail-recrutestagiaire (ParisTicker + nav plate + drawer). {% endcomment %}
 {% liquid
   assign rs_p_prof = settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils'
   assign rs_p_dep = settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot'
@@ -17,23 +17,11 @@
     assign brand_image_is_asset = true
   endif
 
-  assign o1 = section.settings.menu_offres_1_link
-  if o1 == blank
-    assign o1 = '/collections/abcdrs'
-  endif
-  assign o2 = section.settings.menu_offres_2_link
-  if o2 == blank
-    assign o2 = '/collections/les-stagiaires-de-base'
-  endif
-
   assign c1 = section.settings.menu_cand_1_link | default: '' | strip
   if c1 == blank or c1 contains '/pages/candidatures' or c1 contains 'pages/candidatures'
     assign c1 = rs_p_prof
   endif
-  assign c2 = section.settings.menu_cand_2_link | default: '' | strip
-  if c2 == blank
-    assign c2 = rs_p_dep
-  endif
+
   assign c3 = section.settings.menu_cand_3_link | default: '' | strip
   if c3 == blank
     assign c3 = rs_p_vote
@@ -50,78 +38,45 @@
 
   assign cart_lbl = section.settings.cart_label | default: 'Mon dossier'
 
-  assign lbl_offres = section.settings.nav_offres_label | default: 'Profils candidats'
-  assign lbl_cand = section.settings.nav_candidatures_label | default: 'Voter (swipe)'
-  assign lbl_coll = section.settings.nav_collectif_label | default: 'Le collectif'
-
-  assign l_o1 = section.settings.menu_offres_1_label | default: 'Collection ABCDRS'
-  assign l_o2 = section.settings.menu_offres_2_label | default: 'Les stagiaires de base'
-  assign l_c1 = section.settings.menu_cand_1_label | default: 'Profils candidats'
-  assign l_c2 = section.settings.menu_cand_2_label | default: 'Déposer mon CV'
-  assign l_c3 = section.settings.menu_cand_3_label | default: 'Swipe les profils'
-  assign l_k1 = section.settings.menu_coll_1_label | default: 'Histoire'
-  assign l_k2 = section.settings.menu_coll_2_label | default: 'Contact'
-
-  assign rs_nav_active = 'offres'
-  if template.name == 'collection' or template.name == 'product' or template.name == 'list-collections' or template.name == 'index'
-    assign rs_nav_active = 'offres'
-  elsif template.name == 'page'
-    if page.handle == 'candidatures'
-      assign rs_nav_active = 'offres'
-    elsif page.handle == 'swipe' or page.handle == 'vote'
-      assign rs_nav_active = 'cand'
-    elsif page.handle == 'about' or page.handle == 'contact'
-      assign rs_nav_active = 'coll'
-    endif
-  elsif template.name == 'cart' or template.name == 'search'
-    assign rs_nav_active = 'offres'
-  endif
-
   assign brand_logo_max = section.settings.brand_max_height | default: 124
   if brand_logo_max > 140
     assign brand_logo_max = 140
   endif
-  assign brand_logo_inset = 14
 %}
-<div class="header-wrap rs-header{% if settings.rs_header_jobboard %} rs-header--jobboard{% endif %}{% if request.page_type == 'index' %} rs-header--over-hero{% endif %}{% if section.settings.banner_image != blank %} rs-header--banner{% endif %}"
+<div
+  class="header-wrap rs-header{% if section.settings.banner_image != blank %} rs-header--banner{% endif %}"
   {% if section.settings.banner_image != blank %}
     style="--rs-header-bg-img: url('{{ section.settings.banner_image | image_url: width: 2400 }}');"
   {% endif %}
   {{ section.shopify_attributes }}>
-  <div class="rs-startup-ticker" aria-hidden="true">
-    <div class="rs-startup-ticker__viewport">
-      <div class="rs-startup-ticker__track">
-        <div class="rs-startup-ticker__group">
-          <span>POSTE DISPONIBLE</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span class="rs-startup-ticker__accent">T</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span>CANDIDATURE OUVERTE</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span>DÉPOSE TON CV</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span>SWIPE LES PROFILS</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span>REJOINS LE COLLECTIF</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span>LES MEILLEURS FINISSENT SUR LE PACKAGING</span>
-          <span>&nbsp;·&nbsp;</span>
+  <div class="rs-ticker" aria-hidden="true">
+    <div class="rs-ticker__viewport">
+      <div class="rs-ticker__track">
+        <div class="rs-ticker__group">
+          <span>POSTE DISPONIBLE · </span>
+          <span class="rs-ticker__accent">TEE EN STOCK</span>
+          <span> · CANDIDATURE OUVERTE · DÉPOSE TON CV · </span>
+          <span class="rs-ticker__accent">SWIPE LES PROFILS</span>
+          <span> · </span>
+          <span class="rs-ticker__accent">REJOINS LE COLLECTIF</span>
+          <span> · CDD · CDI · </span>
+          <span class="rs-ticker__accent">TEE-SHIRT</span>
+          <span> · À TOI DE CHOISIR · </span>
+          <span class="rs-ticker__accent">LES MEILLEURS FINISSENT SUR LE PACKAGING</span>
+          <span> · </span>
         </div>
-        <div class="rs-startup-ticker__group" aria-hidden="true">
-          <span>POSTE DISPONIBLE</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span class="rs-startup-ticker__accent">T</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span>CANDIDATURE OUVERTE</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span>DÉPOSE TON CV</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span>SWIPE LES PROFILS</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span>REJOINS LE COLLECTIF</span>
-          <span>&nbsp;·&nbsp;</span>
-          <span>LES MEILLEURS FINISSENT SUR LE PACKAGING</span>
-          <span>&nbsp;·&nbsp;</span>
+        <div class="rs-ticker__group" aria-hidden="true">
+          <span>POSTE DISPONIBLE · </span>
+          <span class="rs-ticker__accent">TEE EN STOCK</span>
+          <span> · CANDIDATURE OUVERTE · DÉPOSE TON CV · </span>
+          <span class="rs-ticker__accent">SWIPE LES PROFILS</span>
+          <span> · </span>
+          <span class="rs-ticker__accent">REJOINS LE COLLECTIF</span>
+          <span> · CDD · CDI · </span>
+          <span class="rs-ticker__accent">TEE-SHIRT</span>
+          <span> · À TOI DE CHOISIR · </span>
+          <span class="rs-ticker__accent">LES MEILLEURS FINISSENT SUR LE PACKAGING</span>
+          <span> · </span>
         </div>
       </div>
     </div>
@@ -143,28 +98,11 @@
       </div>
     </div>
   {%- endif -%}
-  <div class="rs-header-body"{% if brand_image != blank %} style="--rs-header-logo-col: {{ brand_logo_max }}px; --rs-header-logo-inset: {{ brand_logo_inset }}px;"{% endif %}>
-    {%- if brand_image != blank -%}
-      <a
-        class="rs-header-logo-tile nav-brand rs-nav-brand"
-        href="{{ routes.root_url }}"
-        aria-label="{{ shop.name | escape }}">
-        <img
-          class="rs-nav-brand__img rs-header-logo-tile__img"
-          src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 400 }}{% endif %}"
-          alt=""
-          width="{{ brand_logo_max }}"
-          height="{{ brand_logo_max }}"
-          style="max-height: {{ brand_logo_max }}px; width: auto;"
-          loading="eager"
-          decoding="async">
-      </a>
-    {%- endif -%}
+  <div class="rs-header-body">
     <div class="container">
       <header class="rs-header-two-tier" aria-label="En-tête du site">
-        {%- comment -%} Barre & menu mobile uniquement (&lt;900px) {%- endcomment -%}
         <div class="rs-header-mobile-bar" data-rs-header-mobile-bar>
-          <a class="rs-header-mobile-bar__brand" href="{{ routes.root_url }}">
+          <a class="rs-header-mobile-bar__brand rs-ph-mbrand" href="{{ routes.root_url }}">
             {%- if brand_image != blank -%}
               <img
                 class="rs-header-mobile-bar__logo"
@@ -175,7 +113,6 @@
                 loading="eager"
                 decoding="async">
             {%- endif -%}
-            <span class="rs-startup-logo-dot" aria-hidden="true"></span>
             <span class="rs-header-mobile-bar__title">
               {%- if section.settings.site_title != blank -%}
                 {{ section.settings.site_title | upcase }}
@@ -203,85 +140,70 @@
         <div class="rs-header-main-row rs-header-main-row--desktop">
           <div class="rs-header-top-line">
             <div class="rs-banner-top rs-header-pole-brand rs-header-pole-title">
-              <a class="nav-brand rs-nav-brand rs-nav-brand--title-row" href="{{ routes.root_url }}">
-              <span class="rs-startup-logo-dot" aria-hidden="true"></span>
-              {%- if section.settings.show_site_name -%}
-                <span class="rs-nav-brand__name logo rs-nav-brand__name--headline">
-                  {%- if section.settings.site_title != blank -%}
-                    {{ section.settings.site_title | upcase }}
-                  {%- else -%}
-                    {{ shop.name | upcase }}
-                  {%- endif -%}
+              <a
+                class="nav-brand rs-nav-brand rs-nav-brand--title-row rs-ph-brandlink"
+                href="{{ routes.root_url }}">
+                {%- if brand_image != blank -%}
+                  <img
+                    class="rs-ph-brandlink-logo"
+                    src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 400 }}{% endif %}"
+                    alt=""
+                    width="{{ brand_logo_max }}"
+                    height="{{ brand_logo_max }}"
+                    style="max-height: {{ brand_logo_max }}px; width: auto;"
+                    loading="eager"
+                    decoding="async">
+                {%- endif -%}
+                {%- if section.settings.show_site_name -%}
+                  <span class="rs-nav-brand__name logo rs-nav-brand__name--headline rs-ph-brandlink-title">
+                    {%- if section.settings.site_title != blank -%}
+                      {{ section.settings.site_title | upcase }}
+                    {%- else -%}
+                      {{ shop.name | upcase }}
+                    {%- endif -%}
+                  </span>
+                {%- else -%}
+                  <span class="visually-hidden">{{ shop.name | escape }}</span>
+                {%- endif -%}
+              </a>
+            </div>
+
+            <nav class="rs-ph-navdesk" aria-label="Navigation principale">
+              <a href="{{ routes.root_url }}">Boutique</a>
+              <a href="{{ c1 }}" rel="noopener noreferrer">Profils candidats</a>
+              <a href="{{ c3 }}" rel="noopener noreferrer">Voter (swipe)</a>
+              <a href="{{ k1 }}">Le collectif</a>
+            </nav>
+
+            <div class="rs-banner-top__actions d-inline-flex align-items-center">
+              <a href="{{ rs_p_dep }}" rel="noopener noreferrer" class="rs-ph-cta text-decoration-none">
+                Déposer mon CV
+              </a>
+              <a href="{{ routes.cart_url }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__cart d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" aria-label="{{ cart_lbl | escape }}">
+                {% render 'icon-folder-dossier', w: 16, h: 16 %}
+                <span class="rs-caf-btn-dossier__label">
+                  <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--full">{{ cart_lbl }}</span>
+                  <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--short" aria-hidden="true">Dossier</span>
                 </span>
-              {%- else -%}
-                <span class="visually-hidden">{{ shop.name | escape }}</span>
-              {%- endif -%}
-            </a>
-          </div>
+                {% if section.settings.show_cart_count and cart.item_count > 0 %}
+                  <span class="rs-cart-badge">{{ cart.item_count }}</span>
+                {% endif %}
+              </a>
 
-          <a
-            href="{{ rs_p_dep }}"
-            rel="noopener noreferrer"
-            class="rs-startup-header-cta"
-          >
-            Déposer mon CV
-          </a>
-
-          <div class="rs-banner-top__actions d-inline-flex align-items-center">
-            <a href="{{ routes.cart_url }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__cart d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" aria-label="{{ cart_lbl | escape }}">
-              {% render 'icon-folder-dossier', w: 16, h: 16 %}
-              <span class="rs-caf-btn-dossier__label">
-                <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--full">{{ cart_lbl }}</span>
-                <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--short" aria-hidden="true">Dossier</span>
-              </span>
-              {% if section.settings.show_cart_count and cart.item_count > 0 %}
-                <span class="rs-cart-badge">{{ cart.item_count }}</span>
-              {% endif %}
-            </a>
-
-            <a href="{{ rs_p_login }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__account d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" rel="noopener noreferrer" aria-label="Mon espace">
-              <svg class="rs-icon-account" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21a8 8 0 0 0-16 0"/>
-                <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/>
-              </svg>
-              <span class="rs-caf-btn-dossier__label">
-                <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--full">Mon espace</span>
-                <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--short" aria-hidden="true">Espace</span>
-              </span>
-            </a>
+              <a href="{{ rs_p_login }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__account d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" rel="noopener noreferrer" aria-label="Mon espace">
+                <svg class="rs-icon-account" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21a8 8 0 0 0-16 0"/>
+                  <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/>
+                </svg>
+                <span class="rs-caf-btn-dossier__label">
+                  <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--full">Mon espace</span>
+                  <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--short" aria-hidden="true">Espace</span>
+                </span>
+              </a>
+            </div>
           </div>
         </div>
-
-        <div class="rs-header-tabstrip">
-          <nav class="rs-banner-nav rs-header-pole-tabs" aria-label="Navigation principale">
-          <ul class="rs-subnav rs-subnav--buttons" role="menubar">
-            <li class="rs-subnav__item{% if rs_nav_active == 'offres' %} is-active{% endif %}">
-              <button type="button" class="rs-subnav__trigger">{{ lbl_offres }}</button>
-              <ul class="rs-subnav__dropdown">
-                <li><a href="{{ c1 }}" rel="noopener noreferrer">{{ l_c1 }}</a></li>
-                <li><a href="{{ c2 }}" rel="noopener noreferrer">{{ l_c2 }}</a></li>
-                <li><a href="{{ o1 }}">{{ l_o1 }}</a></li>
-                <li><a href="{{ o2 }}">{{ l_o2 }}</a></li>
-              </ul>
-            </li>
-            <li class="rs-subnav__item{% if rs_nav_active == 'cand' %} is-active{% endif %}">
-              <button type="button" class="rs-subnav__trigger">{{ lbl_cand }}</button>
-              <ul class="rs-subnav__dropdown">
-                <li><a href="{{ c3 }}" rel="noopener noreferrer">{{ l_c3 }}</a></li>
-              </ul>
-            </li>
-            <li class="rs-subnav__item{% if rs_nav_active == 'coll' %} is-active{% endif %}">
-              <button type="button" class="rs-subnav__trigger">{{ lbl_coll }}</button>
-              <ul class="rs-subnav__dropdown">
-                <li><a href="{{ k1 }}">{{ l_k1 }}</a></li>
-                <li><a href="{{ k2 }}">{{ l_k2 }}</a></li>
-              </ul>
-            </li>
-          </ul>
-        </nav>
-        </div>
-        </div>
-    </header>
+      </header>
     </div>
   </div>
 
@@ -294,39 +216,27 @@
       aria-modal="true"
       aria-labelledby="rs-header-drawer-title">
       <div class="rs-header-drawer__head">
-        <span class="rs-header-drawer__menu-label" id="rs-header-drawer-title">MENU</span>
+        <span class="visually-hidden" id="rs-header-drawer-title">Menu</span>
         <button type="button" class="rs-header-drawer__close" data-rs-header-drawer-close aria-label="Fermer le menu">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">✕</span>
         </button>
       </div>
       <nav class="rs-header-drawer__nav" aria-label="Navigation principale">
-        <details class="rs-header-drawer__section">
-          <summary class="rs-header-drawer__summary">{{ lbl_offres }}</summary>
+        <div class="rs-header-drawer__section">
           <div class="rs-header-drawer__sublinks">
-            <a href="{{ c1 }}" rel="noopener noreferrer">{{ l_c1 }}</a>
-            <a href="{{ c2 }}" rel="noopener noreferrer">{{ l_c2 }}</a>
-            <a href="{{ o1 }}">{{ l_o1 }}</a>
-            <a href="{{ o2 }}">{{ l_o2 }}</a>
+            <a href="{{ routes.root_url }}">Boutique</a>
+            <a href="{{ c1 }}" rel="noopener noreferrer">Profils candidats</a>
+            <a href="{{ c3 }}" rel="noopener noreferrer">Voter (swipe)</a>
+            <a href="{{ k1 }}">Le collectif</a>
+            <a href="{{ k2 }}">Contact</a>
           </div>
-        </details>
-        <details class="rs-header-drawer__section">
-          <summary class="rs-header-drawer__summary">{{ lbl_cand }}</summary>
-          <div class="rs-header-drawer__sublinks">
-            <a href="{{ c3 }}" rel="noopener noreferrer">{{ l_c3 }}</a>
-          </div>
-        </details>
-        <details class="rs-header-drawer__section">
-          <summary class="rs-header-drawer__summary">{{ lbl_coll }}</summary>
-          <div class="rs-header-drawer__sublinks">
-            <a href="{{ k1 }}">{{ l_k1 }}</a>
-            <a href="{{ k2 }}">{{ l_k2 }}</a>
-          </div>
-        </details>
+        </div>
       </nav>
       <div class="rs-header-drawer__footer">
-        <a href="{{ rs_p_dep }}" rel="noopener noreferrer" class="rs-startup-drawer-cta">Déposer mon CV</a>
-        {%- comment -%} Même conteneur classe que le header bureau pour hériter des mêmes règles CSS {%- endcomment -%}
         <div class="rs-banner-top__actions rs-header-drawer__footer-actions d-inline-flex flex-column align-items-stretch gap-2 w-100">
+          <a href="{{ rs_p_dep }}" rel="noopener noreferrer" class="rs-ph-drawer-cta rs-header-drawer__caf-btn text-center text-decoration-none">
+            Déposer mon CV
+          </a>
           <a
             href="{{ routes.cart_url }}"
             class="abt-btn rs-caf-btn-dossier rs-banner-top__cart rs-header-drawer__caf-btn d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none text-nowrap"
@@ -362,111 +272,12 @@
 
 <script>
   (function () {
-    var header = document.querySelector('.header-wrap');
-    if (!header) return;
-
-    var list = header.querySelector('.rs-subnav.rs-subnav--buttons');
-    if (!list) return;
-
-    /** Tap / tactile : pas de hover fiable (téléphone, tablette, accueil « viewport bureau »). */
-    function prefersTapForSubnav() {
-      try {
-        if (window.matchMedia('(hover: none)').matches) return true;
-        if (window.matchMedia('(pointer: coarse)').matches) return true;
-      } catch (e) {}
-      var w = window.innerWidth || document.documentElement.clientWidth || 0;
-      if (w > 0 && w <= 899.98) return true;
-      var isIndex = document.body && document.body.getAttribute('data-rs-page') === 'index';
-      if (isIndex && (navigator.maxTouchPoints || 0) > 0) return true;
-      return false;
-    }
-
-    var _rsNavLockedY = 0;
-
-    function lockNavScroll() {
-      if (document.documentElement.getAttribute('data-rs-nav-scroll-lock') === '1') return;
-      document.documentElement.setAttribute('data-rs-nav-scroll-lock', '1');
-      _rsNavLockedY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
-      document.documentElement.classList.add('rs-nav-open');
-      document.body.classList.add('rs-nav-open');
-      document.body.style.position = 'fixed';
-      document.body.style.top = -_rsNavLockedY + 'px';
-      document.body.style.left = '0';
-      document.body.style.right = '0';
-      document.body.style.width = '100%';
-    }
-
-    function unlockNavScroll() {
-      if (document.documentElement.getAttribute('data-rs-nav-scroll-lock') !== '1') return;
-      document.documentElement.removeAttribute('data-rs-nav-scroll-lock');
-      document.documentElement.classList.remove('rs-nav-open');
-      document.body.classList.remove('rs-nav-open');
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.width = '';
-      window.scrollTo(0, _rsNavLockedY);
-    }
-
-    function closeAll() {
-      list.querySelectorAll('.rs-subnav__item.is-open').forEach(function (li) {
-        li.classList.remove('is-open');
-        var b = li.querySelector('.rs-subnav__trigger');
-        if (b) b.setAttribute('aria-expanded', 'false');
-      });
-      unlockNavScroll();
-    }
-
-    list.querySelectorAll('.rs-subnav__item').forEach(function (li) {
-      var btn = li.querySelector('.rs-subnav__trigger');
-      if (!btn) return;
-      btn.setAttribute('aria-expanded', 'false');
-      btn.setAttribute('type', 'button');
-
-      btn.addEventListener('click', function (e) {
-        if (!prefersTapForSubnav()) return;
-        e.preventDefault();
-        e.stopPropagation();
-        var wasOpen = li.classList.contains('is-open');
-        closeAll();
-        if (!wasOpen) {
-          li.classList.add('is-open');
-          btn.setAttribute('aria-expanded', 'true');
-          lockNavScroll();
-        }
-      });
-    });
-
-    document.addEventListener(
-      'click',
-      function (e) {
-        if (!prefersTapForSubnav()) return;
-        if (!header.contains(e.target)) closeAll();
-      },
-      false
-    );
-
-    document.addEventListener('keydown', function (e) {
-      if (!prefersTapForSubnav()) return;
-      if (e.key === 'Escape') closeAll();
-    });
-
-    window.addEventListener('resize', function () {
-      if (!prefersTapForSubnav()) closeAll();
-    });
-  })();
-</script>
-
-<script>
-  (function () {
     var wrap = document.querySelector('.header-wrap');
     if (!wrap) return;
     var drawer = wrap.querySelector('[data-rs-header-drawer]');
     var openBtn = wrap.querySelector('[data-rs-header-drawer-open]');
     if (!drawer || !openBtn) return;
 
-    var panel = drawer.querySelector('.rs-header-drawer__panel');
     var closes = drawer.querySelectorAll('[data-rs-header-drawer-close]');
     var scrollY = 0;
 
@@ -583,17 +394,25 @@
     }
 
     function updateMobileMainOffset() {
-      if (!isMobileHeader()) {
-        document.documentElement.style.removeProperty('--rs-mobile-header-offset');
-        return;
-      }
       var h = wrap.offsetHeight || 0;
       if (h > 0) {
+        document.documentElement.style.setProperty('--rs-portal-header-h', h + 'px');
         document.documentElement.style.setProperty('--rs-mobile-header-offset', h + 'px');
       }
     }
 
+    function updateIndexHeaderSolid() {
+      if (document.body.getAttribute('data-rs-page') !== 'index') {
+        wrap.classList.remove('rs-header--scroll-solid');
+        return;
+      }
+      var y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+      var threshold = 72;
+      wrap.classList.toggle('rs-header--scroll-solid', y > threshold);
+    }
+
     function onWindowScroll() {
+      updateIndexHeaderSolid();
       if (!isMobileHeader()) {
         wrap.classList.remove('rs-header-mobile-fixed--scrolled');
         return;
@@ -643,32 +462,21 @@
     { "type": "color", "id": "kitsch_pop_bg_b", "label": "Fond bandeau (côté B)", "default": "#e8e8f0" },
     { "type": "color", "id": "kitsch_pop_fg", "label": "Couleur du texte", "default": "#f472b6" },
     { "type": "header", "content": "Images" },
-    { "type": "image_picker", "id": "brand_image", "label": "Logo RS (carré à gauche des onglets)", "info": "Vide = masque le carré logo. Sinon logo Identité du thème ou image ; affiché en grand dans le carré à côté des onglets (le titre reste au-dessus)." },
-    { "type": "range", "id": "brand_max_height", "min": 48, "max": 200, "step": 2, "unit": "px", "label": "Hauteur max logo (colonne gauche)", "default": 124 },
-    { "type": "image_picker", "id": "banner_image", "label": "Image de fond de la bannière haute" },
+    { "type": "image_picker", "id": "brand_image", "label": "Logo (barre mobile + marque bureau)", "info": "Vide = logo thème ou image par défaut." },
+    { "type": "range", "id": "brand_max_height", "min": 48, "max": 200, "step": 2, "unit": "px", "label": "Hauteur max logo (bureau)", "default": 124 },
+    { "type": "image_picker", "id": "banner_image", "label": "Image de fond de la bannière haute (optionnel)" },
     { "type": "header", "content": "Titre" },
     { "type": "checkbox", "id": "show_site_name", "label": "Afficher le nom du site", "default": true },
     { "type": "text", "id": "site_title", "label": "Titre personnalisé (optionnel)" },
-    { "type": "header", "content": "Menu — Profils (libellé principal + sous-liens)" },
-    { "type": "text", "id": "nav_offres_label", "label": "Libellé du bouton", "default": "Profils candidats" },
-    { "type": "text", "id": "menu_offres_1_label", "label": "Sous-lien 1 — libellé", "default": "Collection ABCDRS" },
-    { "type": "url", "id": "menu_offres_1_link", "label": "Sous-lien 1 — URL (vide = /collections/abcdrs)" },
-    { "type": "text", "id": "menu_offres_2_label", "label": "Sous-lien 2 — libellé", "default": "Les stagiaires de base" },
-    { "type": "url", "id": "menu_offres_2_link", "label": "Sous-lien 2 — URL (vide = /collections/les-stagiaires-de-base)" },
-    { "type": "header", "content": "Menu — Vote / swipe" },
-    { "type": "text", "id": "nav_candidatures_label", "label": "Libellé du bouton", "default": "Voter (swipe)" },
-    { "type": "text", "id": "menu_cand_1_label", "label": "Sous-lien 1 — libellé", "default": "Profils candidats" },
-    { "type": "url", "id": "menu_cand_1_link", "label": "Sous-lien 1 — URL" },
-    { "type": "text", "id": "menu_cand_2_label", "label": "Sous-lien 2 — libellé", "default": "Déposer mon CV" },
-    { "type": "url", "id": "menu_cand_2_link", "label": "Sous-lien 2 — URL (vide = portail dépôt)" },
-    { "type": "text", "id": "menu_cand_3_label", "label": "Sous-lien (lien swipe)", "default": "Swipe les profils" },
-    { "type": "url", "id": "menu_cand_3_link", "label": "Sous-lien 3 — URL (vide = portail swipe)" },
-    { "type": "header", "content": "Menu — Le collectif" },
-    { "type": "text", "id": "nav_collectif_label", "label": "Libellé du bouton", "default": "Le collectif" },
-    { "type": "text", "id": "menu_coll_1_label", "label": "Sous-lien 1 — libellé", "default": "Histoire" },
-    { "type": "url", "id": "menu_coll_1_link", "label": "Sous-lien 1 — URL (vide = /pages/about)" },
-    { "type": "text", "id": "menu_coll_2_label", "label": "Sous-lien 2 — libellé", "default": "Contact" },
-    { "type": "url", "id": "menu_coll_2_link", "label": "Sous-lien 2 — URL (vide = /pages/contact)" },
+    { "type": "header", "content": "Liens navigation (portail / pages)" },
+    { "type": "text", "id": "menu_cand_1_label", "label": "Profils — libellé (réservé)", "default": "Profils candidats" },
+    { "type": "url", "id": "menu_cand_1_link", "label": "Profils candidats — URL (vide = portail profils)" },
+    { "type": "text", "id": "menu_cand_3_label", "label": "Swipe — libellé (réservé)", "default": "Swipe les profils" },
+    { "type": "url", "id": "menu_cand_3_link", "label": "Voter (swipe) — URL (vide = portail swipe)" },
+    { "type": "text", "id": "menu_coll_1_label", "label": "Collectif — libellé (réservé)", "default": "Histoire" },
+    { "type": "url", "id": "menu_coll_1_link", "label": "Le collectif — URL (vide = /pages/about)" },
+    { "type": "text", "id": "menu_coll_2_label", "label": "Contact — libellé (réservé)", "default": "Contact" },
+    { "type": "url", "id": "menu_coll_2_link", "label": "Contact — URL (vide = /pages/contact)" },
     { "type": "header", "content": "Panier / dossier" },
     { "type": "text", "id": "cart_label", "label": "Texte du bouton", "default": "Mon dossier" },
     { "type": "checkbox", "id": "show_cart_count", "label": "Afficher le nombre d’articles", "default": true }

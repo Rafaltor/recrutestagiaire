@@ -153,11 +153,26 @@
 {{ 'rs-hero-runway.css' | asset_url | stylesheet_tag }}
 <script>
   (function () {
+    var rsHeaderResizeObs = null;
+
     function rsHomeHeaderUnderHero() {
       if (document.body.getAttribute('data-rs-page') !== 'index') return;
       var h = document.querySelector('.header-wrap');
       if (!h) return;
-      document.documentElement.style.setProperty('--rs-home-header-h', h.offsetHeight + 'px');
+      var px = Math.ceil(h.getBoundingClientRect().height);
+      if (px < 1) px = h.offsetHeight || 168;
+      document.documentElement.style.setProperty('--rs-home-header-h', px + 'px');
+    }
+
+    function rsWireHeaderHeightObserver() {
+      var h = document.querySelector('.header-wrap');
+      if (!h || rsHeaderResizeObs || typeof ResizeObserver === 'undefined') return;
+      try {
+        rsHeaderResizeObs = new ResizeObserver(function () {
+          rsHomeHeaderUnderHero();
+        });
+        rsHeaderResizeObs.observe(h);
+      } catch (e) {}
     }
 
     function rsHeroRunwayPlay() {
@@ -181,10 +196,18 @@
     function boot() {
       rsHomeHeaderUnderHero();
       rsHeroRunwayPlay();
+      requestAnimationFrame(function () {
+        rsHomeHeaderUnderHero();
+        requestAnimationFrame(rsHomeHeaderUnderHero);
+      });
     }
 
     boot();
-    document.addEventListener('DOMContentLoaded', boot);
+    rsWireHeaderHeightObserver();
+    document.addEventListener('DOMContentLoaded', function () {
+      boot();
+      rsWireHeaderHeightObserver();
+    });
     window.addEventListener('load', boot);
     window.addEventListener('resize', function () {
       rsHomeHeaderUnderHero();
@@ -217,7 +240,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Sur l’accueil, le hero remonte sous l’en-tête transparent : les vidéos passent derrière le header. Texte centré au milieu de la grille 2×2. Autoplay renforcé (y compris après un toucher sur mobile)."
+      "content": "Sur l’accueil, le hero suit l’en-tête (barre type portail). Texte centré au milieu de la grille 2×2. Autoplay renforcé (y compris après un toucher sur mobile)."
     },
     { "type": "header", "content": "Médias — 4 extraits runway" },
     { "type": "video", "id": "video_d1", "label": "Vidéo 1" },

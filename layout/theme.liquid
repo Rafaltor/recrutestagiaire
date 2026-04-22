@@ -256,6 +256,7 @@
     {{ 'rs-home-indeed-blocks.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
   {{ 'rs-paris-startup.css' | asset_url | stylesheet_tag }}
+  {{ 'rs-portal-header.css' | asset_url | stylesheet_tag }}
   {%- if request.page_type == 'index'
     or request.page_type == 'collection'
     or request.page_type == 'product'
@@ -270,7 +271,7 @@
 
 <body
   data-rs-page="{{ request.page_type }}"
-  class="rs-paris-startup{% if settings.rs_viewport_desktop_wrap and request.page_type == 'index' %} rs-viewport-desktop{% endif %}"
+  class="rs-paris-startup rs-portal-header{% if settings.rs_viewport_desktop_wrap and request.page_type == 'index' %} rs-viewport-desktop{% endif %}"
 >
   {% section 'header' %}
   <main>{{ content_for_layout }}</main>
