@@ -456,3 +456,53 @@ body.rs-paris-startup .rs-site-footer {
     padding: 0 4px;
   }
 }
+
+/* Accueil + hero vidéo : annule le header « verre » Paris pour laisser passer les médias */
+body.rs-paris-startup[data-rs-page='index'] .header-wrap.rs-header--over-hero {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border-bottom-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+body.rs-paris-startup[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-header-body {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+body.rs-paris-startup[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-startup-header-cta {
+  background: rgba(250, 250, 248, 0.95) !important;
+  color: var(--black) !important;
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 10px 36px rgba(0, 0, 0, 0.28) !important;
+  font-weight: 700 !important;
+}
+
+body.rs-paris-startup[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-startup-header-cta:hover {
+  background: var(--accent) !important;
+  color: var(--white) !important;
+  border-color: transparent !important;
+  box-shadow: 0 14px 44px rgba(244, 114, 182, 0.45) !important;
+}
+
+body.rs-paris-startup[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-header-mobile-bar {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border-bottom-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+body.rs-paris-startup[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-header-mobile-bar__title {
+  color: #fafaf8 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 899.98px) {
+  body.rs-paris-startup[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-header-mobile-bar__burger-line {
+    background: #fafaf8 !important;
+  }
+}

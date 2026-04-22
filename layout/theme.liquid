@@ -256,6 +256,12 @@
     {{ 'rs-home-indeed-blocks.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
   {{ 'rs-paris-startup.css' | asset_url | stylesheet_tag }}
+  {%- if request.page_type == 'index'
+    or request.page_type == 'collection'
+    or request.page_type == 'product'
+  -%}
+    {{ 'rs-paris-unified-pages.css' | asset_url | stylesheet_tag }}
+  {%- endif -%}
 
   {% if settings.custom_head_code != blank %}
     {{ settings.custom_head_code }}
