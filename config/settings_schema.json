@@ -118,7 +118,14 @@
       { "type": "range", "id": "nav_gap", "min": 8, "max": 48, "step": 2, "unit": "px", "label": "Espacement liens nav", "default": 24 },
       { "type": "header", "content": "Panier" },
       { "type": "text", "id": "cart_label", "label": "Texte lien panier", "default": "Mon dossier" },
-      { "type": "checkbox", "id": "show_cart_count", "label": "Afficher le nombre d'articles", "default": true }
+      { "type": "checkbox", "id": "show_cart_count", "label": "Afficher le nombre d'articles", "default": true },
+      {
+        "type": "checkbox",
+        "id": "rs_header_jobboard",
+        "label": "Header type « portail emploi » (Indeed, épuré)",
+        "default": true,
+        "info": "Fond blanc plat, titre en casse normale, onglets soulignés bleu #2557a7, boutons dossier / espace discrets. Désactiver pour retrouver le rendu précédent (rose / grille)."
+      }
     ]
   },
   {

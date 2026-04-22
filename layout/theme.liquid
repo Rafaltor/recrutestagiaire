@@ -221,6 +221,9 @@
   {{ 'jobhill-style.css' | asset_url | stylesheet_tag }}
   {{ 'theme-overrides.css' | asset_url | stylesheet_tag }}
   {{ 'rs-shopify-header.css' | asset_url | stylesheet_tag }}
+  {%- if settings.rs_header_jobboard -%}
+    {{ 'rs-header-jobboard.css' | asset_url | stylesheet_tag }}
+  {%- endif -%}
   {{ 'rs-portail-2010.css' | asset_url | stylesheet_tag }}
   {%- if settings.rs_trust_modern_ui -%}
     {%- comment -%}

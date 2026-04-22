@@ -1,4 +1,4 @@
-{% comment %} En-tête type portail : bandeau kitsch, marque + panier, onglets (Offres / Candidatures / Collectif), menus au survol. {% endcomment %}
+{% comment %} En-tête : navigation par pôles ; style « portail emploi » optionnel (rs-header-jobboard.css). {% endcomment %}
 {% liquid
   assign rs_p_prof = settings.rs_portail_url_profils | default: 'https://portail.recrutestagiaire.eu/profils'
   assign rs_p_dep = settings.rs_portail_url_depot | default: 'https://portail.recrutestagiaire.eu/depot'
@@ -81,7 +81,7 @@
   endif
   assign brand_logo_inset = 14
 %}
-<div class="header-wrap rs-header{% if section.settings.banner_image != blank %} rs-header--banner{% endif %}"
+<div class="header-wrap rs-header{% if settings.rs_header_jobboard %} rs-header--jobboard{% endif %}{% if section.settings.banner_image != blank %} rs-header--banner{% endif %}"
   {% if section.settings.banner_image != blank %}
     style="--rs-header-bg-img: url('{{ section.settings.banner_image | image_url: width: 2400 }}');"
   {% endif %}

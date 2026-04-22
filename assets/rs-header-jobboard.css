@@ -1,0 +1,221 @@
+/*
+ * Header « portail emploi » — inspiration Indeed, version moderne.
+ * Activé quand le réglage thème « Header type portail emploi » est coché
+ * (classe .rs-header--jobboard sur .header-wrap).
+ * Chargé après rs-shopify-header.css
+ */
+
+.header-wrap.rs-header--jobboard {
+  --rs-job-accent: #2557a7;
+  --rs-job-accent-hover: #163d75;
+  --rs-job-text: #2d2d2d;
+  --rs-job-muted: #595959;
+  --rs-job-border: #e4e4e4;
+  --rs-job-surface: #f3f2f1;
+}
+
+.header-wrap.rs-header--jobboard {
+  background: #ffffff !important;
+  border-bottom: 1px solid var(--rs-job-border) !important;
+  box-shadow: none !important;
+}
+
+.header-wrap.rs-header--jobboard::after {
+  display: none !important;
+}
+
+.header-wrap.rs-header--jobboard.rs-header--banner::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(255, 255, 255, 0.96) 100%
+  ) !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-body > .container,
+.header-wrap.rs-header--jobboard .container,
+.header-wrap.rs-header--jobboard .rs-header-body:has(> .rs-header-logo-tile) > .container {
+  max-width: 1200px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-two-tier {
+  padding-top: 4px !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-top-line {
+  border-bottom: 1px solid var(--rs-job-border) !important;
+  padding: 8px 0 10px !important;
+  column-gap: 16px !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-banner-top.rs-header-pole-brand {
+  border-bottom: none !important;
+  min-height: 0 !important;
+  padding-top: 0 !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-nav-brand__name.logo.rs-nav-brand__name--headline {
+  font-size: clamp(1.125rem, 2.4vw, 1.375rem) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--rs-job-text) !important;
+  text-transform: none !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-banner-top__actions {
+  gap: 10px !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-banner-top__actions .abt-btn.rs-caf-btn-dossier {
+  background: #fff !important;
+  color: var(--rs-job-text) !important;
+  border: 1px solid #d4d2d0 !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  padding: 8px 14px !important;
+  min-height: 40px !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-banner-top__actions .abt-btn.rs-caf-btn-dossier:hover {
+  border-color: var(--rs-job-accent) !important;
+  color: var(--rs-job-accent) !important;
+  background: #fafbff !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-cart-badge {
+  background: var(--rs-job-accent) !important;
+  border: none !important;
+  font-weight: 600 !important;
+}
+
+/* Onglets : grille → alignement type barre d’emploi */
+.header-wrap.rs-header--jobboard .rs-subnav.rs-subnav--buttons {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+  padding: 0 !important;
+  border-bottom: 1px solid var(--rs-job-border) !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-subnav__item {
+  flex: 0 1 auto !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-subnav__trigger {
+  font-family: inherit !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  color: var(--rs-job-text) !important;
+  padding: 14px 18px !important;
+  min-height: 48px !important;
+  border-radius: 0 !important;
+  justify-content: center !important;
+  border-bottom: 2px solid transparent !important;
+  margin-bottom: -1px !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-subnav__item:hover .rs-subnav__trigger,
+.header-wrap.rs-header--jobboard .rs-subnav__item:focus-within .rs-subnav__trigger {
+  background: var(--rs-job-surface) !important;
+  color: var(--rs-job-accent) !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-subnav__item.is-active .rs-subnav__trigger,
+.header-wrap.rs-header--jobboard .rs-subnav__item.is-active:hover .rs-subnav__trigger,
+.header-wrap.rs-header--jobboard .rs-subnav__item.is-active:focus-within .rs-subnav__trigger {
+  background: transparent !important;
+  color: var(--rs-job-accent) !important;
+  border-bottom-color: var(--rs-job-accent) !important;
+  box-shadow: none !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-subnav__dropdown {
+  border: 1px solid var(--rs-job-border) !important;
+  border-top: 2px solid var(--rs-job-accent) !important;
+  border-radius: 0 0 8px 8px !important;
+  box-shadow: 0 8px 24px rgba(45, 45, 45, 0.08) !important;
+  padding: 6px 0 !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-subnav__dropdown a {
+  color: var(--rs-job-text) !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  padding: 12px 18px !important;
+  border-bottom-color: #f0f0f0 !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-subnav__dropdown a:hover {
+  background: var(--rs-job-surface) !important;
+  color: var(--rs-job-accent-hover) !important;
+}
+
+/* Barre mobile */
+.header-wrap.rs-header--jobboard .rs-header-mobile-bar {
+  background: #fff !important;
+  border-bottom: 1px solid var(--rs-job-border) !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-mobile-bar__title {
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--rs-job-text) !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-mobile-bar__menu-btn {
+  border: 1px solid var(--rs-job-border) !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-mobile-bar__burger-line {
+  background: var(--rs-job-text) !important;
+}
+
+/* Drawer */
+.header-wrap.rs-header--jobboard .rs-header-drawer__panel {
+  background: #fff !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-drawer__head {
+  border-bottom: 1px solid var(--rs-job-border) !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-drawer__menu-label {
+  color: var(--rs-job-muted) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-drawer__summary {
+  color: var(--rs-job-text) !important;
+  font-weight: 600 !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-drawer__sublinks a {
+  color: var(--rs-job-accent) !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-drawer__sublinks a:hover {
+  color: var(--rs-job-accent-hover) !important;
+}
+
+.header-wrap.rs-header--jobboard .rs-header-drawer__footer .rs-caf-btn-dossier.abt-btn {
+  border-radius: 6px !important;
+  border: 1px solid #d4d2d0 !important;
+  background: #fff !important;
+  color: var(--rs-job-text) !important;
+}
+
+@media (max-width: 991.98px) {
+  .header-wrap.rs-header--jobboard .rs-subnav__trigger {
+    font-size: 14px !important;
+    padding: 12px 10px !important;
+  }
+}
