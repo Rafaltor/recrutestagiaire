@@ -349,10 +349,37 @@ body.rs-portal-header .header-wrap .rs-header-tabstrip {
     min-height: 56px !important;
     height: auto !important;
     max-height: none !important;
-    padding: 0 var(--rs-pad-x) !important;
+    padding: 0 max(10px, var(--rs-pad-x, 16px)) !important;
     background: transparent !important;
     border-bottom: none !important;
     align-items: center !important;
+    /* Plus d’air entre le bloc marque (logo + texte) et le menu */
+    gap: clamp(14px, 4.5vw, 22px) !important;
+    justify-content: space-between !important;
+  }
+
+  body.rs-portal-header .rs-header-mobile-bar__brand.rs-ph-mbrand {
+    flex: 1 1 auto !important;
+    gap: 10px !important;
+    padding-right: 2px !important;
+  }
+
+  body.rs-portal-header .header-wrap .rs-header-mobile-bar__logo {
+    max-height: 36px !important;
+    max-width: 36px !important;
+  }
+
+  /* Titre marque lisible en entier : plus petit + retour à la ligne (plus de …) */
+  body.rs-portal-header .rs-header-mobile-bar .rs-header-mobile-bar__title {
+    font-size: clamp(10px, 2.85vw, 11px) !important;
+    letter-spacing: 0.02em !important;
+    line-height: 1.2 !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    word-break: break-word !important;
+    hyphens: auto;
+    max-width: 100% !important;
   }
 
   /* Bouton menu : pastille moderne + icône 2 traits */
@@ -360,8 +387,9 @@ body.rs-portal-header .header-wrap .rs-header-tabstrip {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 46px !important;
-    height: 46px !important;
+    flex-shrink: 0 !important;
+    width: 42px !important;
+    height: 42px !important;
     padding: 0 !important;
     border: none !important;
     border-radius: 14px !important;
