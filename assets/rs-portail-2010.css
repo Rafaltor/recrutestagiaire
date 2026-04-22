@@ -964,6 +964,23 @@ footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover 
   color: #ffffff !important;
 }
 
+/* Même CTA « profils » hors bundle intro (bloc hero_buttons) + :visited / survol = blanc lisible sur fond sombre */
+body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-hero__actions a.rs-caf-btn-dossier.rs-intro-cta--profils,
+body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-hero__actions a.rs-caf-btn-dossier.rs-intro-cta--profils:visited {
+  background: transparent !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-hero__actions a.rs-caf-btn-dossier.rs-intro-cta--profils:hover,
+body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-hero__actions a.rs-caf-btn-dossier.rs-intro-cta--profils:focus-visible {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
 /* 3 — Deux pubs produit centrées : 2 colonnes sur mobile + images plus compactes */
 @media (max-width: 767.98px) {
   .section-home-unified-page .container > .rs-uni-grid,

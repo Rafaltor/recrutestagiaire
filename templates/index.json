@@ -25,8 +25,8 @@
         "trust_line": "Paiements sécurisés · Livraison suivie · Portail candidats",
         "btn_primary_label": "Voir les offres",
         "btn_primary_url": "shopify://collections/all",
-        "btn_secondary_label": "Profils candidats",
-        "btn_secondary_url": "shopify://pages/profils-candidats",
+        "btn_secondary_label": "Portail candidats",
+        "btn_secondary_url": "https://portail.recrutestagiaire.eu",
         "min_height_desktop": 86,
         "overlay_strength": 55
       }

@@ -147,7 +147,8 @@ body.rs-paris-startup main .rs-panel:hover::before {
 }
 
 /* --- Layout : le hero reste pleine largeur ; le reste respire en bandes --- */
-body.rs-paris-startup .container {
+/* Uniquement le contenu <main> : évite de plafonner le .container du header */
+body.rs-paris-startup main .container {
   max-width: var(--rs-content-max) !important;
 }
 

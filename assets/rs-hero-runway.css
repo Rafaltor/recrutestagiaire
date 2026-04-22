@@ -140,91 +140,47 @@ body[data-rs-page='index'] .rs-hero-runway__scrim {
   text-align: center;
 }
 
-/* Accueil : panneau central vitré (vidéos visibles) + typographie claire sur fond variable */
-/* Ratio PNG rs-hero-shield-embleme.png (1580×1851) — .copy = écusson ; .copy-inner = zone texte un peu plus petite */
+/* Accueil : texte en overlay sur les vidéos — sans écusson ni panneau vitré (fond transparent) */
 body[data-rs-page='index'] .rs-hero-runway__copy {
-  --rs-hr-shield-ar: 1580 / 1851;
-  background: rgba(10, 10, 10, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.32);
-  border-radius: 0;
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.1) inset,
-    0 24px 56px rgba(0, 0, 0, 0.38);
-  max-width: none;
-  width: min(calc(100vw - 1.75rem), 21rem);
-  aspect-ratio: var(--rs-hr-shield-ar);
+  background: transparent;
+  border: none;
+  border-radius: 0 !important;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  max-width: min(42rem, calc(100vw - 2.5rem));
+  width: 100%;
   box-sizing: border-box;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  /* Contenu calé vers le haut de l’écusson ; 10px sous le bord supérieur du masque */
-  padding-top: 10px;
-  padding-bottom: 0;
-  padding-inline: clamp(0.45rem, 1.6vw, 0.65rem);
+  padding-block: clamp(0.5rem, 2vw, 1rem);
+  padding-inline: clamp(1rem, 4vw, 1.5rem);
   overflow: visible;
-  -webkit-mask-image: var(--rs-hr-copy-mask-url, none);
-  mask-image: var(--rs-hr-copy-mask-url, none);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  mask-mode: alpha;
 }
 
 body[data-rs-page='index'] .rs-hero-runway__copy-inner {
-  width: 86%;
+  width: 100%;
   max-width: 100%;
-  max-height: 90%;
-  min-height: 0;
-  justify-content: flex-start;
+  max-height: none;
+  justify-content: center;
   flex: 0 1 auto;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0;
 }
 
-/* Accueil : moins d’air vertical entre les lignes (complément au padding-block: 0 du bloc écusson) */
 body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__kicker {
-  margin-bottom: 0.4rem !important;
-}
-
-body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__title {
-  margin-bottom: 0.5rem !important;
-}
-
-body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__subtitle {
-  margin-bottom: 0.65rem !important;
-}
-
-body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__actions {
   margin-bottom: 0.45rem !important;
 }
 
-@media (min-width: 600px) and (max-width: 899.98px) {
-  body[data-rs-page='index'] .rs-hero-runway__copy {
-    width: min(calc(100vw - 2.25rem), 28rem);
-  }
-
-  body[data-rs-page='index'] .rs-hero-runway__copy-inner {
-    width: 87%;
-    max-height: 89%;
-  }
+body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__title {
+  margin-bottom: 0.6rem !important;
 }
 
-@media (min-width: 900px) {
-  body[data-rs-page='index'] .rs-hero-runway__copy {
-    width: min(36rem, min(82vw, 600px));
-    padding-top: 10px;
-    padding-bottom: 0;
-    padding-inline: clamp(0.5rem, 1.2vw, 0.75rem);
-  }
+body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__subtitle {
+  margin-bottom: 0.75rem !important;
+}
 
-  body[data-rs-page='index'] .rs-hero-runway__copy-inner {
-    width: 85%;
-    max-height: 88%;
-  }
+body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__actions {
+  margin-bottom: 0.5rem !important;
 }
 
 body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__kicker,
@@ -255,48 +211,51 @@ body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__accent {
 
 body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__badge {
   margin-bottom: 0.5rem !important;
-  background: rgba(253, 242, 248, 0.9);
-  border-color: rgba(252, 231, 243, 0.95);
+  background: rgba(10, 10, 10, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fafaf8;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-/* CTA hero : fort contraste sur le bloc vitré */
+/* CTA principal hero : fond rose, texte blanc */
 body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__btn--primary {
-  background: #fafaf8 !important;
-  color: #0a0a0a !important;
-  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  background: #f472b6 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
   font-weight: 700 !important;
   font-size: 15px !important;
   padding: 15px 30px !important;
   letter-spacing: 0.02em;
   box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.05),
-    0 12px 40px rgba(0, 0, 0, 0.38) !important;
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 12px 40px rgba(244, 114, 182, 0.45) !important;
 }
 
 body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__btn--primary:hover {
-  background: #f472b6 !important;
-  border-color: #f472b6 !important;
-  color: #fafaf8 !important;
+  background: #db2777 !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 16px 48px rgba(244, 114, 182, 0.5) !important;
+  box-shadow: 0 16px 48px rgba(219, 39, 119, 0.5) !important;
 }
 
-body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__btn--ghost {
-  background: rgba(10, 10, 10, 0.35) !important;
-  color: #fafaf8 !important;
+body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__btn--ghost,
+body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__btn--ghost:visited {
+  background: transparent !important;
+  color: #ffffff !important;
   border: 2px solid rgba(255, 255, 255, 0.78) !important;
   font-weight: 600 !important;
   font-size: 15px !important;
   padding: 14px 28px !important;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
 }
 
 body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__btn--ghost:hover {
   background: rgba(255, 255, 255, 0.16) !important;
   border-color: #fff !important;
-  color: #fff !important;
+  color: #ffffff !important;
 }
 
 .rs-hero-runway__badge {
@@ -511,4 +470,6 @@ body[data-rs-page='index'] .rs-hero-runway__grid {
 
 body[data-rs-page='index'] .rs-hero-runway__content {
   min-height: max(var(--rs-hr-min-h, 86vh), 100svh);
+  max-width: none !important;
+  width: 100%;
 }

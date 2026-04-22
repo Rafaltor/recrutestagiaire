@@ -1,7 +1,7 @@
 {%- assign scrim_a = section.settings.overlay_strength | times: 0.01 -%}
 <section
   class="rs-hero-runway shopify-section"
-  style="--rs-hr-min-h: {{ section.settings.min_height_desktop }}vh;--rs-hr-scrim-a: {{ scrim_a }};{% if template.name == 'index' %}--rs-hr-copy-mask-url: url({{ 'rs-hero-shield-embleme.png' | asset_url }});{% endif %}"
+  style="--rs-hr-min-h: {{ section.settings.min_height_desktop }}vh;--rs-hr-scrim-a: {{ scrim_a }};"
   {{ section.shopify_attributes }}>
   <div class="rs-hero-runway__shell">
     <div class="rs-hero-runway__media" aria-hidden="true">
@@ -137,9 +137,13 @@
               </a>
             {%- endif -%}
             {%- if section.settings.btn_secondary_label != blank -%}
-              <a
-                class="rs-hero-runway__btn rs-hero-runway__btn--ghost"
-                href="{% if section.settings.btn_secondary_url != blank %}{{ section.settings.btn_secondary_url }}{% else %}/pages/profils-candidats{% endif %}">
+              {%- liquid
+                assign sec2 = section.settings.btn_secondary_url | default: '' | strip
+                if sec2 == blank
+                  assign sec2 = 'https://portail.recrutestagiaire.eu'
+                endif
+              -%}
+              <a class="rs-hero-runway__btn rs-hero-runway__btn--ghost" href="{{ sec2 }}">
                 {{- section.settings.btn_secondary_label | escape -}}
               </a>
             {%- endif -%}
@@ -282,8 +286,13 @@
     { "type": "header", "content": "Boutons" },
     { "type": "text", "id": "btn_primary_label", "label": "Bouton principal — libellé", "default": "Voir les offres" },
     { "type": "url", "id": "btn_primary_url", "label": "Bouton principal — lien" },
-    { "type": "text", "id": "btn_secondary_label", "label": "Bouton secondaire — libellé", "default": "Profils candidats" },
-    { "type": "url", "id": "btn_secondary_url", "label": "Bouton secondaire — lien" },
+    { "type": "text", "id": "btn_secondary_label", "label": "Bouton secondaire — libellé", "default": "Portail candidats" },
+    {
+      "type": "url",
+      "id": "btn_secondary_url",
+      "label": "Bouton secondaire — lien",
+      "info": "Vide = https://portail.recrutestagiaire.eu"
+    },
     { "type": "header", "content": "Mise en forme" },
     {
       "type": "range",

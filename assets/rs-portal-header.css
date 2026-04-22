@@ -58,7 +58,7 @@ body.rs-portal-header .header-wrap.rs-header {
   left: 0;
   right: 0;
   width: 100%;
-  max-width: 100%;
+  max-width: 100vw;
   z-index: 100 !important;
   padding: 0 !important;
   background: transparent !important;
@@ -88,7 +88,7 @@ body.rs-portal-header .header-wrap .rs-header-body {
 body.rs-portal-header .header-wrap .rs-header-two-tier {
   position: relative;
   z-index: 1;
-  padding: 0 !important;
+  padding: 0 max(12px, env(safe-area-inset-right, 0px)) 0 max(12px, env(safe-area-inset-left, 0px)) !important;
   background: rgba(250, 250, 248, 0.92);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
@@ -104,17 +104,18 @@ body.rs-portal-header .header-wrap .container {
   max-width: none !important;
   width: 100% !important;
   margin: 0 !important;
-  padding-left: var(--rs-pad-x) !important;
-  padding-right: var(--rs-pad-x) !important;
+  /* Pleine largeur : seule la safe-area iPhone / encoche */
+  padding-left: max(0px, env(safe-area-inset-left, 0px)) !important;
+  padding-right: max(0px, env(safe-area-inset-right, 0px)) !important;
 }
 
 @media (min-width: 900px) {
   body.rs-portal-header .header-wrap .container {
-    max-width: var(--rs-content-max, 1200px) !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: var(--rs-pad-x-lg) !important;
-    padding-right: var(--rs-pad-x-lg) !important;
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding-left: max(0px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(0px, env(safe-area-inset-right, 0px)) !important;
   }
 }
 
@@ -286,7 +287,7 @@ body.rs-portal-header .rs-ph-cta {
   justify-content: center;
   padding: 8px 16px;
   border-radius: var(--radius-pill);
-  background: var(--black);
+  background: var(--accent);
   color: #fff !important;
   font-family: var(--font-display);
   font-size: 14px;
@@ -306,7 +307,7 @@ body.rs-portal-header .rs-ph-cta {
 
 body.rs-portal-header .rs-ph-cta:hover,
 body.rs-portal-header .rs-ph-cta:focus-visible {
-  background: var(--accent);
+  background: var(--rs-shop-accent-hover, #db2777);
   color: #fff !important;
   transform: translateY(-1px);
 }
@@ -513,6 +514,11 @@ body.rs-portal-header .rs-header-drawer__sublinks a:last-child {
   border-bottom: none !important;
 }
 
+body.rs-portal-header .rs-header-drawer__sublinks a:hover,
+body.rs-portal-header .rs-header-drawer__sublinks a:focus-visible {
+  color: var(--black) !important;
+}
+
 body.rs-portal-header .rs-header-drawer__footer {
   padding: 16px 20px 24px !important;
   border-top: 1px solid var(--gray-200) !important;
@@ -583,19 +589,30 @@ body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header.rs-header--sc
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ph-navdesk a,
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ph-navdesk a:visited {
-  color: rgba(250, 250, 248, 0.82);
+  color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow:
+    0 0 12px rgba(0, 0, 0, 0.65),
+    0 1px 2px rgba(0, 0, 0, 0.5);
   transition: color 0.18s ease;
 }
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ph-navdesk a:hover,
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ph-navdesk a:focus-visible {
-  color: #fff;
+  color: #fff !important;
+}
+
+/* Marque « Recrute Stagiaire » en rose (accueil, barre transparente ou blanche après scroll) */
+body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header .rs-nav-brand__name.logo.rs-nav-brand__name--headline,
+body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header .rs-header-mobile-bar__title {
+  color: var(--accent) !important;
+  text-shadow: none !important;
 }
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-nav-brand__name.logo.rs-nav-brand__name--headline,
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-mobile-bar__title {
-  color: #fafaf8 !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+  text-shadow:
+    0 0 18px rgba(255, 255, 255, 0.55),
+    0 1px 3px rgba(0, 0, 0, 0.45) !important;
 }
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ph-brandlink-logo,
@@ -604,18 +621,20 @@ body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-heade
 }
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ph-cta {
-  background: rgba(250, 250, 248, 0.94);
-  color: var(--black) !important;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  background: var(--accent) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.12),
+    0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ph-cta:hover,
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ph-cta:focus-visible {
-  background: var(--accent);
+  background: var(--rs-shop-accent-hover, #db2777) !important;
   color: #fff !important;
-  border-color: transparent;
-  box-shadow: 0 8px 28px rgba(244, 114, 182, 0.35);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 10px 32px rgba(244, 114, 182, 0.45);
 }
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-banner-top__actions .rs-caf-btn-dossier.abt-btn,
@@ -642,4 +661,12 @@ body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-heade
       0 1px 0 rgba(255, 255, 255, 0.2) inset,
       0 4px 16px rgba(0, 0, 0, 0.2) !important;
   }
+}
+
+/* Contre max-width 980px (rs-shopify-header) + tout .container hérité */
+body.rs-paris-startup.rs-portal-header .header-wrap.rs-header .rs-header-body > .container {
+  max-width: none !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }

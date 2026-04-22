@@ -19,8 +19,10 @@
 
   assign c1 = section.settings.menu_cand_1_link | default: '' | strip
   if c1 == blank or c1 contains '/pages/candidatures' or c1 contains 'pages/candidatures'
-    assign c1 = rs_p_prof
+    assign c1 = 'https://portail.recrutestagiaire.eu'
   endif
+
+  assign nav_portail_lbl = section.settings.menu_cand_1_label | default: 'Portail candidats' | strip
 
   assign c3 = section.settings.menu_cand_3_link | default: '' | strip
   if c3 == blank
@@ -37,6 +39,8 @@
   endif
 
   assign cart_lbl = section.settings.cart_label | default: 'Mon dossier'
+
+  assign nav_vote_lbl = section.settings.menu_cand_3_label | default: 'Voter' | strip
 
   assign brand_logo_max = section.settings.brand_max_height | default: 80
   if brand_logo_max > 200
@@ -149,8 +153,8 @@
 
             <nav class="rs-ph-navdesk" aria-label="Navigation principale">
               <a href="{{ routes.root_url }}">Boutique</a>
-              <a href="{{ c1 }}" rel="noopener noreferrer">Profils candidats</a>
-              <a href="{{ c3 }}" rel="noopener noreferrer">Voter (swipe)</a>
+              <a href="{{ c1 }}" rel="noopener noreferrer">{{ nav_portail_lbl | escape }}</a>
+              <a href="{{ c3 }}" rel="noopener noreferrer">{{ nav_vote_lbl | escape }}</a>
               <a href="{{ k1 }}">Le collectif</a>
             </nav>
 
@@ -204,8 +208,8 @@
         <div class="rs-header-drawer__section">
           <div class="rs-header-drawer__sublinks">
             <a href="{{ routes.root_url }}">Boutique</a>
-            <a href="{{ c1 }}" rel="noopener noreferrer">Profils candidats</a>
-            <a href="{{ c3 }}" rel="noopener noreferrer">Voter (swipe)</a>
+            <a href="{{ c1 }}" rel="noopener noreferrer">{{ nav_portail_lbl | escape }}</a>
+            <a href="{{ c3 }}" rel="noopener noreferrer">{{ nav_vote_lbl | escape }}</a>
             <a href="{{ k1 }}">Le collectif</a>
             <a href="{{ k2 }}">Contact</a>
           </div>
@@ -458,10 +462,10 @@
     { "type": "checkbox", "id": "show_site_name", "label": "Afficher le nom du site", "default": true },
     { "type": "text", "id": "site_title", "label": "Titre personnalisé (optionnel)" },
     { "type": "header", "content": "Liens navigation (portail / pages)" },
-    { "type": "text", "id": "menu_cand_1_label", "label": "Profils — libellé (réservé)", "default": "Profils candidats" },
-    { "type": "url", "id": "menu_cand_1_link", "label": "Profils candidats — URL (vide = portail profils)" },
-    { "type": "text", "id": "menu_cand_3_label", "label": "Swipe — libellé (réservé)", "default": "Swipe les profils" },
-    { "type": "url", "id": "menu_cand_3_link", "label": "Voter (swipe) — URL (vide = portail swipe)" },
+    { "type": "text", "id": "menu_cand_1_label", "label": "Portail candidats — libellé", "default": "Portail candidats" },
+    { "type": "url", "id": "menu_cand_1_link", "label": "Portail candidats — URL (vide = portail.recrutestagiaire.eu)" },
+    { "type": "text", "id": "menu_cand_3_label", "label": "Lien vote / swipe — libellé", "default": "Voter" },
+    { "type": "url", "id": "menu_cand_3_link", "label": "Vote — URL (vide = portail swipe)" },
     { "type": "text", "id": "menu_coll_1_label", "label": "Collectif — libellé (réservé)", "default": "Histoire" },
     { "type": "url", "id": "menu_coll_1_link", "label": "Le collectif — URL (vide = /pages/about)" },
     { "type": "text", "id": "menu_coll_2_label", "label": "Contact — libellé (réservé)", "default": "Contact" },
