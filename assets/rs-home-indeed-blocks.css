@@ -6,7 +6,25 @@
 body[data-rs-page='index'] .rs-hero-runway,
 body[data-rs-page='index'] .section-home-unified-page .rs-uni-page,
 body[data-rs-page='index'] .rs-site-footer {
-  font-family: var(--rs-ds-font-sans);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Titres blocs accueil : Syne (aligné thème Paris) */
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__title,
+body[data-rs-page='index'] .section-home-unified-page .rs-stat-kitsch__n,
+body[data-rs-page='index'] .section-home-unified-page .rs-top-profile-api__block-title,
+body[data-rs-page='index'] .section-home-unified-page .rs-hero-search-metro__titlebar,
+body[data-rs-page='index'] .section-home-unified-page .rs-hero-search-2010__ribbon {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__richtext,
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__richtext p,
+body[data-rs-page='index'] .section-home-unified-page .rs-stat-kitsch__suffix,
+body[data-rs-page='index'] .section-home-unified-page .rs-stat-kitsch__sub,
+body[data-rs-page='index'] .section-home-unified-page .rs-hero-search-metro input,
+body[data-rs-page='index'] .section-home-unified-page .rs-hero-search-metro button {
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif !important;
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-uni-page {

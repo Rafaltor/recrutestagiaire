@@ -98,10 +98,11 @@
 
     <div class="rs-hero-runway__content container">
       <div class="rs-hero-runway__copy">
-        {%- if section.settings.badge_text != blank -%}
+        {%- assign _hr_badge = section.settings.badge_text | default: '' | strip -%}
+        {%- if _hr_badge != '' -%}
           <p class="rs-hero-runway__badge">
             <span class="rs-hero-runway__badge-dot" aria-hidden="true"></span>
-            <span>{{ section.settings.badge_text | escape }}</span>
+            <span>{{ _hr_badge | escape }}</span>
           </p>
         {%- endif -%}
         {%- if section.settings.kicker != blank -%}
@@ -253,8 +254,7 @@
       "type": "text",
       "id": "badge_text",
       "label": "Badge (au-dessus du surtitre)",
-      "default": "Candidatures ouvertes",
-      "info": "Laisse vide pour masquer le badge type maquette portail."
+      "info": "Optionnel : laisser vide pour masquer le badge."
     },
     { "type": "text", "id": "kicker", "label": "Surtitre", "default": "Collectif — Paris" },
     { "type": "text", "id": "title", "label": "Titre", "default": "On a commencé stagiaires. Pourquoi pas vous ?" },

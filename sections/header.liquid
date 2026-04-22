@@ -38,9 +38,9 @@
 
   assign cart_lbl = section.settings.cart_label | default: 'Mon dossier'
 
-  assign brand_logo_max = section.settings.brand_max_height | default: 124
-  if brand_logo_max > 140
-    assign brand_logo_max = 140
+  assign brand_logo_max = section.settings.brand_max_height | default: 168
+  if brand_logo_max > 200
+    assign brand_logo_max = 200
   endif
 %}
 <div
@@ -55,7 +55,7 @@
         <div class="rs-ticker__group">
           <span>POSTE DISPONIBLE · </span>
           <span class="rs-ticker__accent">TEE EN STOCK</span>
-          <span> · CANDIDATURE OUVERTE · DÉPOSE TON CV · </span>
+          <span> · DÉPOSE TON CV · </span>
           <span class="rs-ticker__accent">SWIPE LES PROFILS</span>
           <span> · </span>
           <span class="rs-ticker__accent">REJOINS LE COLLECTIF</span>
@@ -68,7 +68,7 @@
         <div class="rs-ticker__group" aria-hidden="true">
           <span>POSTE DISPONIBLE · </span>
           <span class="rs-ticker__accent">TEE EN STOCK</span>
-          <span> · CANDIDATURE OUVERTE · DÉPOSE TON CV · </span>
+          <span> · DÉPOSE TON CV · </span>
           <span class="rs-ticker__accent">SWIPE LES PROFILS</span>
           <span> · </span>
           <span class="rs-ticker__accent">REJOINS LE COLLECTIF</span>
@@ -106,10 +106,10 @@
             {%- if brand_image != blank -%}
               <img
                 class="rs-header-mobile-bar__logo"
-                src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 200 }}{% endif %}"
+                src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 320 }}{% endif %}"
                 alt=""
-                width="64"
-                height="64"
+                width="88"
+                height="88"
                 loading="eager"
                 decoding="async">
             {%- endif -%}
@@ -123,16 +123,15 @@
           </a>
           <button
             type="button"
-            class="rs-header-mobile-bar__menu-btn"
+            class="rs-header-mobile-bar__menu-btn rs-header-burger-btn"
             id="rs-header-mobile-menu-btn"
             aria-expanded="false"
             aria-controls="rs-header-drawer-panel"
             data-rs-header-drawer-open>
             <span class="visually-hidden">Ouvrir le menu</span>
-            <span class="rs-header-mobile-bar__burger" aria-hidden="true">
-              <span class="rs-header-mobile-bar__burger-line"></span>
-              <span class="rs-header-mobile-bar__burger-line"></span>
-              <span class="rs-header-mobile-bar__burger-line"></span>
+            <span class="rs-header-burger" aria-hidden="true">
+              <span class="rs-header-burger__line"></span>
+              <span class="rs-header-burger__line"></span>
             </span>
           </button>
         </div>
@@ -146,7 +145,7 @@
                 {%- if brand_image != blank -%}
                   <img
                     class="rs-ph-brandlink-logo"
-                    src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 400 }}{% endif %}"
+                    src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 560 }}{% endif %}"
                     alt=""
                     width="{{ brand_logo_max }}"
                     height="{{ brand_logo_max }}"
@@ -457,13 +456,13 @@
   "settings": [
     { "type": "header", "content": "Bandeau kitsch (au-dessus du header)" },
     { "type": "checkbox", "id": "show_kitsch_pop", "label": "Afficher la 2e bande animée (sous le ticker)", "default": false },
-    { "type": "text", "id": "kitsch_pop_text", "label": "Texte défilant (bandeau kitsch, optionnel)", "default": "Collectif mode & textile — Paris · Profils · Vote · Dépose ton CV" },
+    { "type": "text", "id": "kitsch_pop_text", "label": "Texte défilant (bandeau kitsch, optionnel)", "default": "Collectif — Paris · Profils · Vote · Dépose ton CV" },
     { "type": "color", "id": "kitsch_pop_bg_a", "label": "Fond bandeau (côté A)", "default": "#f472b6" },
     { "type": "color", "id": "kitsch_pop_bg_b", "label": "Fond bandeau (côté B)", "default": "#e8e8f0" },
     { "type": "color", "id": "kitsch_pop_fg", "label": "Couleur du texte", "default": "#f472b6" },
     { "type": "header", "content": "Images" },
     { "type": "image_picker", "id": "brand_image", "label": "Logo (barre mobile + marque bureau)", "info": "Vide = logo thème ou image par défaut." },
-    { "type": "range", "id": "brand_max_height", "min": 48, "max": 200, "step": 2, "unit": "px", "label": "Hauteur max logo (bureau)", "default": 124 },
+    { "type": "range", "id": "brand_max_height", "min": 56, "max": 220, "step": 2, "unit": "px", "label": "Hauteur max logo (bureau)", "default": 168 },
     { "type": "image_picker", "id": "banner_image", "label": "Image de fond de la bannière haute (optionnel)" },
     { "type": "header", "content": "Titre" },
     { "type": "checkbox", "id": "show_site_name", "label": "Afficher le nom du site", "default": true },

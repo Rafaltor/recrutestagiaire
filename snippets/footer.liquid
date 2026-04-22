@@ -11,7 +11,7 @@
             <span class="rs-site-footer__brand-name">{{ shop.name | upcase }}</span>
           </a>
           <p class="rs-site-footer__intro">
-            Collectif artistique mode & textile, Paris. Chaque vêtement est une offre. Chaque achat, une candidature.
+            {{ settings.footer_tagline | default: 'Collectif artistique — Paris' | escape }}. Chaque vêtement est une offre. Chaque achat, une candidature.
           </p>
           <ul class="rs-site-footer__social" aria-label="Réseaux sociaux">
             <li>

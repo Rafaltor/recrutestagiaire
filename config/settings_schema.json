@@ -135,7 +135,7 @@
       { "type": "color", "id": "footer_text", "label": "Texte footer", "default": "#6c757d" },
       { "type": "color", "id": "footer_border", "label": "Bordure haut footer", "default": "#e2e8f0" },
       { "type": "range", "id": "footer_padding", "min": 12, "max": 60, "step": 4, "unit": "px", "label": "Espacement vertical footer", "default": 24 },
-      { "type": "text", "id": "footer_tagline", "label": "Tagline", "default": "Collectif artistique mode & textile, Paris" },
+      { "type": "text", "id": "footer_tagline", "label": "Tagline", "default": "Collectif artistique — Paris" },
       { "type": "range", "id": "footer_font_size", "min": 10, "max": 14, "step": 1, "unit": "px", "label": "Taille texte footer", "default": 12 }
     ]
   },

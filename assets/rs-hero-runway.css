@@ -145,11 +145,20 @@ body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__subtitle,
 body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__trust {
   color: rgba(250, 250, 248, 0.94) !important;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif !important;
 }
 
 body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__title {
   color: #fafaf8 !important;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+}
+
+body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__btn--primary,
+body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__btn--ghost {
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif !important;
 }
 
 body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__accent {
