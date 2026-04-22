@@ -115,31 +115,37 @@ body.rs-portal-header .header-wrap .container {
   }
 }
 
-body.rs-portal-header .header-wrap .rs-header-main-row--desktop {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 0 !important;
-  padding: 0 !important;
-}
+/*
+ * Rangée « bureau » : uniquement ≥900px. Sinon on écrase le display:none mobile
+ * de rs-shopify-header.css → deux barres (mobile + desktop) visibles en même temps.
+ */
+@media (min-width: 900px) {
+  body.rs-portal-header .header-wrap .rs-header-main-row--desktop {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    padding: 0 !important;
+  }
 
-body.rs-portal-header .header-wrap .rs-header-top-line {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 16px !important;
-  min-height: 56px !important;
-  height: 56px !important;
-  max-width: none !important;
-  width: 100% !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  border-bottom: none !important;
-  padding: 0 !important;
-}
+  body.rs-portal-header .header-wrap .rs-header-top-line {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    min-height: 56px !important;
+    height: 56px !important;
+    max-width: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-bottom: none !important;
+    padding: 0 !important;
+  }
 
-body.rs-portal-header .header-wrap .rs-banner-top.rs-header-pole-brand {
-  display: flex !important;
-  align-items: center !important;
+  body.rs-portal-header .header-wrap .rs-banner-top.rs-header-pole-brand {
+    display: flex !important;
+    align-items: center !important;
+  }
 }
 
 @media (min-width: 900px) {

@@ -139,7 +139,7 @@ body[data-rs-page='index'] .rs-hero-runway__copy {
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.1) inset,
     0 24px 56px rgba(0, 0, 0, 0.38);
-  /* Écusson : SVG dans assets, URL injectée sur la section (template index) */
+  /* Écusson (PNG plein) : taille du bloc = taille du masque avec contain */
   -webkit-mask-image: var(--rs-hr-copy-mask-url, none);
   mask-image: var(--rs-hr-copy-mask-url, none);
   -webkit-mask-repeat: no-repeat;
@@ -149,6 +149,22 @@ body[data-rs-page='index'] .rs-hero-runway__copy {
   -webkit-mask-size: contain;
   mask-size: contain;
   mask-mode: alpha;
+  width: 100%;
+  /* Téléphone : écusson un peu plus compact */
+  max-width: min(22rem, calc(100vw - 1.75rem));
+}
+
+@media (min-width: 600px) and (max-width: 899.98px) {
+  body[data-rs-page='index'] .rs-hero-runway__copy {
+    max-width: min(30rem, calc(100vw - 2.25rem));
+  }
+}
+
+@media (min-width: 900px) {
+  body[data-rs-page='index'] .rs-hero-runway__copy {
+    /* Bureau : plus large que le mobile */
+    max-width: min(44rem, min(90vw, 720px));
+  }
 }
 
 body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__kicker,
