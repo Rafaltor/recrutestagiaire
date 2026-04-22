@@ -9,51 +9,30 @@
  */
 {
   "sections": {
+    "rs_hero_runway": {
+      "type": "rs-hero-runway",
+      "settings": {
+        "placeholder_label": "Vidéo à ajouter",
+        "kicker": "Collectif — Paris",
+        "title": "La mode comme terrain de jeu professionnel",
+        "subtitle": "Collections pensées comme des offres : clarté, parcours guidé, accompagnement humain.",
+        "trust_line": "Paiements sécurisés · Livraison suivie · Support réactif",
+        "btn_primary_label": "Voir les offres",
+        "btn_primary_url": "shopify://collections/all",
+        "btn_secondary_label": "Profils candidats",
+        "btn_secondary_url": "shopify://pages/profils-candidats",
+        "min_height_desktop": 72,
+        "min_height_mobile": 44,
+        "overlay_strength": 55
+      }
+    },
     "home_unified": {
       "type": "home-unified-page",
       "blocks": {
-        "uni_intro": {
-          "type": "hero_intro_bundle",
-          "settings": {
-            "col_span": "8",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 0,
-            "cell_border": "#212529",
-            "show_band": false,
-            "band_title": "Services & parcours",
-            "band_bg_top": "#4d79ff",
-            "band_bg_bottom": "#0033cc",
-            "band_text": "#ffffff",
-            "text_align": "text-start",
-            "badge_text": "Collectif artistique — Paris 2026",
-            "badge_color": "#f5f8ff",
-            "badge_size": 12,
-            "heading_text": "Les meilleures opportunités vestimentaires du moment.",
-            "heading_size": 32,
-            "subheading_text": "Chaque vêtement est une offre. Chaque achat, une candidature.",
-            "subheading_size": 16,
-            "subheading_max_width": 560,
-            "btn1_label": "Voir les offres en cours",
-            "btn1_url": "",
-            "btn1_bg": "#0033cc",
-            "btn1_color": "#ffffff",
-            "btn1_border": "#0015a3",
-            "btn2_label": "Profils candidats",
-            "btn2_url": "",
-            "btn2_bg": "#ffffff",
-            "btn2_color": "#212529",
-            "btn2_border": "#dee2e6",
-            "btn_font_size": 14,
-            "btn_padding_v": 11,
-            "btn_padding_h": 20,
-            "btn_radius": 6
-          }
-        },
         "uni_kitsch": {
           "type": "kitsch_counter",
           "settings": {
-            "col_span": "4",
+            "col_span": "12",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -232,7 +211,6 @@
         }
       },
       "block_order": [
-        "uni_intro",
         "uni_kitsch",
         "sponsored_inline_1",
         "uni_top_profile",
@@ -243,7 +221,7 @@
         "uni_gp_offres"
       ],
       "settings": {
-        "page_bg": "#efefef",
+        "page_bg": "#f4f5f7",
         "page_padding_top": 0,
         "page_padding_bottom": 0,
         "grid_gap": 8,
@@ -272,7 +250,5 @@
       }
     }
   },
-  "order": [
-    "home_unified"
-  ]
+  "order": ["rs_hero_runway", "home_unified"]
 }

@@ -1,0 +1,232 @@
+{%- liquid
+  assign vm = section.settings.video_mobile
+  if vm == blank
+    assign vm = section.settings.video_d1
+  endif
+  assign scrim_a = section.settings.overlay_strength | times: 0.01
+-%}
+<section
+  class="rs-hero-runway shopify-section"
+  style="--rs-hr-min-h-desk: {{ section.settings.min_height_desktop }}vh;--rs-hr-min-h-mob: {{ section.settings.min_height_mobile }}vh;--rs-hr-scrim-a: {{ scrim_a }};"
+  {{ section.shopify_attributes }}>
+  <div class="rs-hero-runway__shell">
+    <div class="rs-hero-runway__media" aria-hidden="true">
+      {%- comment -%} Bureau : grille 2×2 — quatre extraits runway {%- endcomment -%}
+      <div class="rs-hero-runway__grid rs-hero-runway__grid--desktop">
+        {%- assign v1 = section.settings.video_d1 -%}
+        <div class="rs-hero-runway__cell">
+          {%- if v1 != blank -%}
+            <div class="rs-hero-runway__video-wrap">
+              {{
+                v1
+                | video_tag:
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  controls: false,
+                  playsinline: true,
+                  image_size: '1200x'
+              }}
+            </div>
+          {%- else -%}
+            <div class="rs-hero-runway__placeholder">
+              <span>{{ section.settings.placeholder_label }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+        {%- assign v2 = section.settings.video_d2 -%}
+        <div class="rs-hero-runway__cell">
+          {%- if v2 != blank -%}
+            <div class="rs-hero-runway__video-wrap">
+              {{
+                v2
+                | video_tag:
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  controls: false,
+                  playsinline: true,
+                  image_size: '1200x'
+              }}
+            </div>
+          {%- else -%}
+            <div class="rs-hero-runway__placeholder">
+              <span>{{ section.settings.placeholder_label }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+        {%- assign v3 = section.settings.video_d3 -%}
+        <div class="rs-hero-runway__cell">
+          {%- if v3 != blank -%}
+            <div class="rs-hero-runway__video-wrap">
+              {{
+                v3
+                | video_tag:
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  controls: false,
+                  playsinline: true,
+                  image_size: '1200x'
+              }}
+            </div>
+          {%- else -%}
+            <div class="rs-hero-runway__placeholder">
+              <span>{{ section.settings.placeholder_label }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+        {%- assign v4 = section.settings.video_d4 -%}
+        <div class="rs-hero-runway__cell">
+          {%- if v4 != blank -%}
+            <div class="rs-hero-runway__video-wrap">
+              {{
+                v4
+                | video_tag:
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  controls: false,
+                  playsinline: true,
+                  image_size: '1200x'
+              }}
+            </div>
+          {%- else -%}
+            <div class="rs-hero-runway__placeholder">
+              <span>{{ section.settings.placeholder_label }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- comment -%} Mobile : un seul plan paysage (défilé) {%- endcomment -%}
+      <div class="rs-hero-runway__landscape rs-hero-runway__landscape--mobile">
+        {%- if vm != blank -%}
+          <div class="rs-hero-runway__video-wrap">
+            {{
+              vm
+              | video_tag:
+                autoplay: true,
+                loop: true,
+                muted: true,
+                controls: false,
+                playsinline: true,
+                image_size: '1600x'
+            }}
+          </div>
+        {%- else -%}
+          <div class="rs-hero-runway__placeholder rs-hero-runway__placeholder--wide">
+            <span>{{ section.settings.placeholder_label }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="rs-hero-runway__scrim"></div>
+    </div>
+
+    <div class="rs-hero-runway__content container">
+      {%- if section.settings.kicker != blank -%}
+        <p class="rs-hero-runway__kicker">{{ section.settings.kicker | escape }}</p>
+      {%- endif -%}
+      <h1 class="rs-hero-runway__title">{{ section.settings.title | escape }}</h1>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="rs-hero-runway__subtitle">{{ section.settings.subtitle | escape }}</p>
+      {%- endif -%}
+      <div class="rs-hero-runway__actions">
+        {%- if section.settings.btn_primary_label != blank -%}
+          <a
+            class="rs-hero-runway__btn rs-hero-runway__btn--primary"
+            href="{% if section.settings.btn_primary_url != blank %}{{ section.settings.btn_primary_url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">
+            {{- section.settings.btn_primary_label | escape -}}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.btn_secondary_label != blank -%}
+          <a
+            class="rs-hero-runway__btn rs-hero-runway__btn--ghost"
+            href="{% if section.settings.btn_secondary_url != blank %}{{ section.settings.btn_secondary_url }}{% else %}/pages/profils-candidats{% endif %}">
+            {{- section.settings.btn_secondary_label | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.trust_line != blank -%}
+        <p class="rs-hero-runway__trust">{{ section.settings.trust_line | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{{ 'rs-hero-runway.css' | asset_url | stylesheet_tag }}
+
+{% schema %}
+{
+  "name": "Hero runway (vidéos)",
+  "tag": "section",
+  "class": "section-rs-hero-runway",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Bureau : assemblez 4 vidéos (grille 2×2). Mobile : une vidéo paysage (extrait défilé). Si la vidéo mobile est vide, la vidéo 1 est utilisée. Les vidéos sont muettes et en boucle (autoplay navigateur)."
+    },
+    { "type": "header", "content": "Médias — bureau (2×2)" },
+    { "type": "video", "id": "video_d1", "label": "Vidéo 1" },
+    { "type": "video", "id": "video_d2", "label": "Vidéo 2" },
+    { "type": "video", "id": "video_d3", "label": "Vidéo 3" },
+    { "type": "video", "id": "video_d4", "label": "Vidéo 4" },
+    { "type": "header", "content": "Médias — mobile" },
+    { "type": "video", "id": "video_mobile", "label": "Vidéo mobile (paysage / défilé)" },
+    { "type": "text", "id": "placeholder_label", "label": "Texte emplacement vide", "default": "Vidéo à ajouter" },
+    { "type": "header", "content": "Texte" },
+    { "type": "text", "id": "kicker", "label": "Surtitre", "default": "Collectif — Paris" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "La mode comme terrain de jeu professionnel" },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "Collections pensées comme des offres : clarté, parcours guidé, accompagnement humain."
+    },
+    {
+      "type": "text",
+      "id": "trust_line",
+      "label": "Ligne confiance (sous les boutons)",
+      "default": "Paiements sécurisés · Livraison suivie · Support réactif"
+    },
+    { "type": "header", "content": "Boutons" },
+    { "type": "text", "id": "btn_primary_label", "label": "Bouton principal — libellé", "default": "Voir les offres" },
+    { "type": "url", "id": "btn_primary_url", "label": "Bouton principal — lien" },
+    { "type": "text", "id": "btn_secondary_label", "label": "Bouton secondaire — libellé", "default": "Profils candidats" },
+    { "type": "url", "id": "btn_secondary_url", "label": "Bouton secondaire — lien" },
+    { "type": "header", "content": "Mise en forme" },
+    {
+      "type": "range",
+      "id": "min_height_desktop",
+      "min": 52,
+      "max": 92,
+      "step": 2,
+      "unit": "vh",
+      "label": "Hauteur min. hero (bureau)",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "min": 36,
+      "max": 72,
+      "step": 2,
+      "unit": "vh",
+      "label": "Hauteur min. zone vidéo (mobile)",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "overlay_strength",
+      "min": 35,
+      "max": 85,
+      "step": 5,
+      "unit": "%",
+      "label": "Assombrissement lecture texte",
+      "default": 55
+    }
+  ],
+  "presets": [{ "name": "Hero runway (vidéos)", "category": "Image" }]
+}
+{% endschema %}

@@ -94,6 +94,13 @@
         "unit": "px",
         "label": "Largeur viewport mobile",
         "default": 1180
+      },
+      {
+        "type": "checkbox",
+        "id": "rs_trust_modern_ui",
+        "label": "Esthétique moderne & confiance",
+        "default": true,
+        "info": "Surfaces claires, bords fins, typographie du thème (réglages Typographie), accent rose plus sobre, bandeau défilant masqué. À combiner avec la section « Hero runway (vidéos) » sur l’accueil."
       }
     ]
   },

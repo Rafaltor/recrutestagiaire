@@ -1,0 +1,118 @@
+/*
+ * Couche « moderne / confiance » — s’applique quand le réglage thème
+ * « Esthétique moderne » est activé (classe html.rs-theme-trust).
+ * Chargé après rs-portail-2010.css pour adoucir la DA années 2010.
+ */
+
+html.rs-theme-trust {
+  font-size: 15px !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html.rs-theme-trust body {
+  font-size: 1rem !important;
+  line-height: 1.55 !important;
+  color: #1e293b !important;
+  background: #f4f5f7 !important;
+}
+
+html.rs-theme-trust :root {
+  --rs-da-page-bg: #f4f5f7;
+  --rs-da-block-bg: #ffffff;
+  --rs-da-border: #e8eaed;
+  --rs-da-border-w: 1px;
+  --rs-da-radius: 12px;
+  --rs-da-pad: 16px;
+  --rs-da-gap: 12px;
+  --rs-da-pink: #e11d48;
+  --rs-da-pink-hover: #be123c;
+  --rs-da-pink-border: #be123c;
+  --rs-da-btn-gold-top: #f8fafc;
+  --rs-da-btn-gold-bot: #e2e8f0;
+  --rs-da-btn-gold-border: #cbd5e1;
+}
+
+html.rs-theme-trust body,
+html.rs-theme-trust main,
+html.rs-theme-trust main *,
+html.rs-theme-trust .header-wrap,
+html.rs-theme-trust .header-wrap *,
+html.rs-theme-trust footer.footer,
+html.rs-theme-trust footer.footer * {
+  font-family: var(--rs-trust-font-body, system-ui, -apple-system, 'Segoe UI', sans-serif) !important;
+}
+
+html.rs-theme-trust h1,
+html.rs-theme-trust h2,
+html.rs-theme-trust h3,
+html.rs-theme-trust h4,
+html.rs-theme-trust h5,
+html.rs-theme-trust h6,
+html.rs-theme-trust .h1,
+html.rs-theme-trust .h2,
+html.rs-theme-trust .h3 {
+  font-family: var(--rs-trust-font-heading, system-ui, -apple-system, 'Segoe UI', sans-serif) !important;
+  letter-spacing: -0.02em;
+  color: #0f172a !important;
+}
+
+html.rs-theme-trust main {
+  background: var(--rs-da-page-bg) !important;
+  padding-top: 0 !important;
+}
+
+html.rs-theme-trust .section-home-unified-page .rs-uni-page {
+  background: var(--rs-da-page-bg) !important;
+}
+
+html.rs-theme-trust .rs-uni-cell {
+  border-radius: 14px !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+html.rs-theme-trust .rs-pole-panel__title,
+html.rs-theme-trust .rs-uni-blue-band__title,
+html.rs-theme-trust .rs-fake-promo__title {
+  border-bottom-width: 1px !important;
+  letter-spacing: 0.06em !important;
+  color: #475569 !important;
+}
+
+html.rs-theme-trust .rs-header-kitsch-pop {
+  display: none !important;
+}
+
+html.rs-theme-trust .rs-site-footer {
+  border-top: 1px solid #e8eaed !important;
+}
+
+html.rs-theme-trust .rs-site-footer__brand-name {
+  letter-spacing: 0.08em;
+  font-weight: 700 !important;
+}
+
+html.rs-theme-trust .rs-rail-ad {
+  border-radius: 12px !important;
+  border-color: var(--rs-da-border) !important;
+}
+
+html.rs-theme-trust .rs-rail-ad__cta:not(.rs-rail-ad__cta--half) {
+  border-radius: 999px !important;
+}
+
+html.rs-theme-trust .shopify-section.section-home-unified-page .rs-hero-search-2010__btn-offres,
+html.rs-theme-trust .shopify-section.section-home-unified-page .rs-hero-search-metro__cell--offres {
+  border-radius: 999px !important;
+}
+
+html.rs-theme-trust .shopify-section.section-home-unified-page .rs-stat-kitsch {
+  border: 1px solid #e8eaed !important;
+  background: #fff !important;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06) !important;
+}
+
+html.rs-theme-trust .shopify-section.section-home-unified-page .rs-stat-kitsch__ribbon {
+  border-bottom-color: #e8eaed !important;
+  color: #64748b !important;
+}
