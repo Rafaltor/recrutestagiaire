@@ -38,7 +38,7 @@
 
   assign cart_lbl = section.settings.cart_label | default: 'Mon dossier'
 
-  assign brand_logo_max = section.settings.brand_max_height | default: 168
+  assign brand_logo_max = section.settings.brand_max_height | default: 80
   if brand_logo_max > 200
     assign brand_logo_max = 200
   endif
@@ -108,8 +108,8 @@
                 class="rs-header-mobile-bar__logo"
                 src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 320 }}{% endif %}"
                 alt=""
-                width="88"
-                height="88"
+                width="72"
+                height="72"
                 loading="eager"
                 decoding="async">
             {%- endif -%}
@@ -462,7 +462,17 @@
     { "type": "color", "id": "kitsch_pop_fg", "label": "Couleur du texte", "default": "#f472b6" },
     { "type": "header", "content": "Images" },
     { "type": "image_picker", "id": "brand_image", "label": "Logo (barre mobile + marque bureau)", "info": "Vide = logo thème ou image par défaut." },
-    { "type": "range", "id": "brand_max_height", "min": 56, "max": 220, "step": 2, "unit": "px", "label": "Hauteur max logo (bureau)", "default": 168 },
+    {
+      "type": "range",
+      "id": "brand_max_height",
+      "min": 48,
+      "max": 220,
+      "step": 2,
+      "unit": "px",
+      "label": "Hauteur max logo (bureau, repère éditeur)",
+      "default": 80,
+      "info": "Valeur max 220 pour compatibilité avec d’anciens réglages ; l’affichage réel est plafonné par le CSS du thème."
+    },
     { "type": "image_picker", "id": "banner_image", "label": "Image de fond de la bannière haute (optionnel)" },
     { "type": "header", "content": "Titre" },
     { "type": "checkbox", "id": "show_site_name", "label": "Afficher le nom du site", "default": true },

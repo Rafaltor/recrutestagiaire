@@ -87,21 +87,14 @@ body.rs-portal-header .header-wrap .rs-header-two-tier {
   position: relative;
   z-index: 1;
   background: rgba(250, 250, 248, 0.92);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
   border-bottom: 1px solid var(--gray-200);
   transition:
     background 0.22s ease,
     border-color 0.22s ease,
     -webkit-backdrop-filter 0.22s ease,
     backdrop-filter 0.22s ease;
-}
-
-@media (min-width: 900px) {
-  body.rs-portal-header .header-wrap .rs-header-two-tier {
-    padding-left: var(--rs-pad-x-lg);
-    padding-right: var(--rs-pad-x-lg);
-  }
 }
 
 body.rs-portal-header .header-wrap .container {
@@ -183,8 +176,8 @@ body.rs-portal-header .header-wrap .rs-header-mobile-bar__logo {
   width: auto !important;
   height: auto !important;
   object-fit: contain;
-  max-height: 56px !important;
-  max-width: 200px !important;
+  max-height: min(80px, 22vw) !important;
+  max-width: min(90px, 42vw) !important;
 }
 
 body.rs-portal-header .rs-ph-dot {
@@ -209,8 +202,8 @@ body.rs-portal-header .rs-ph-brandlink-logo {
   flex-shrink: 0;
   width: auto !important;
   height: auto !important;
-  max-height: min(200px, 22vw) !important;
-  max-width: min(280px, 42vw) !important;
+  max-height: min(80px, 22vw) !important;
+  max-width: min(90px, 42vw) !important;
   object-fit: contain;
 }
 
@@ -547,15 +540,15 @@ body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header.rs-header--sc
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-two-tier {
   background: rgba(250, 250, 248, 0.14);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header.rs-header--scroll-solid .rs-header-two-tier {
   background: rgba(250, 250, 248, 0.92);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
   border-bottom: 1px solid var(--gray-200);
 }
 
