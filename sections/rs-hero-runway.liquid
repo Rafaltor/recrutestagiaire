@@ -1,11 +1,11 @@
 {%- assign scrim_a = section.settings.overlay_strength | times: 0.01 -%}
 <section
   class="rs-hero-runway shopify-section"
-  style="--rs-hr-min-h-desk: {{ section.settings.min_height_desktop }}vh;--rs-hr-cell-mob-min: {{ section.settings.min_height_mobile }}vh;--rs-hr-scrim-a: {{ scrim_a }};"
+  style="--rs-hr-min-h: {{ section.settings.min_height_desktop }}vh;--rs-hr-scrim-a: {{ scrim_a }};"
   {{ section.shopify_attributes }}>
   <div class="rs-hero-runway__shell">
     <div class="rs-hero-runway__media" aria-hidden="true">
-      {%- comment -%} Bureau : 2×2 · Mobile : 4 bandeaux pleine largeur, portrait (9:16), style éditorial {%- endcomment -%}
+      {%- comment -%} Grille 2×2 identique mobile / bureau ; texte en overlay {%- endcomment -%}
       <div class="rs-hero-runway__grid">
         {%- assign v1 = section.settings.video_d1 -%}
         <div class="rs-hero-runway__cell">
@@ -128,6 +128,31 @@
 </section>
 
 {{ 'rs-hero-runway.css' | asset_url | stylesheet_tag }}
+<script>
+  (function () {
+    function rsHeroRunwayPlay() {
+      document.querySelectorAll('.rs-hero-runway video').forEach(function (v) {
+        try {
+          v.muted = true;
+          v.setAttribute('playsinline', '');
+          v.setAttribute('webkit-playsinline', '');
+          v.loop = true;
+          var p = v.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(function () {});
+          }
+        } catch (e) {}
+      });
+    }
+    rsHeroRunwayPlay();
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) {
+        rsHeroRunwayPlay();
+      }
+    });
+    document.addEventListener('shopify:section:load', rsHeroRunwayPlay);
+  })();
+</script>
 
 {% schema %}
 {
@@ -137,7 +162,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Les 4 mêmes extraits : bureau en grille 2×2, mobile en colonne pleine largeur format portrait (9:16), façon lookbook éditorial. Vidéos muettes, boucle, autoplay (navigateur)."
+      "content": "Grille 2×2 identique sur tous les écrans, texte en overlay. Les vidéos sont muettes, en boucle ; l’autoplay dépend du navigateur (script de relance au retour sur l’onglet)."
     },
     { "type": "header", "content": "Médias — 4 extraits runway" },
     { "type": "video", "id": "video_d1", "label": "Vidéo 1" },
@@ -169,23 +194,13 @@
     {
       "type": "range",
       "id": "min_height_desktop",
-      "min": 52,
-      "max": 92,
+      "min": 60,
+      "max": 100,
       "step": 2,
       "unit": "vh",
-      "label": "Hauteur min. hero (bureau)",
-      "default": 72
-    },
-    {
-      "type": "range",
-      "id": "min_height_mobile",
-      "min": 40,
-      "max": 95,
-      "step": 1,
-      "unit": "vh",
-      "label": "Mobile : hauteur min. par bandeau vertical",
-      "default": 58,
-      "info": "Chaque vidéo occupe toute la largeur ; le format est portrait (9:16). Ce réglage impose une hauteur minimum si vous voulez des plans plus « plein écran »."
+      "label": "Hauteur min. du hero (mobile + bureau)",
+      "default": 86,
+      "info": "Bloc vidéo 2×2 + zone texte overlay : une valeur proche de 88–92 % de la hauteur fenêtre remplit bien l’écran sur ordinateur."
     },
     {
       "type": "range",
