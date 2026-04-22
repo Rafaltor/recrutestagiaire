@@ -1213,7 +1213,7 @@ html[data-rs-swipe="1"] main.mx-auto {
   padding-right: 0 !important;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   html[data-rs-swipe="1"] main.mx-auto {
     padding-bottom: calc(var(--rs-swipe-bottom-chrome, 128px) + 12px) !important;
   }
@@ -1235,10 +1235,10 @@ html[data-rs-swipe="1"] main.mx-auto {
 }
 
 /* =============================================================================
-   Header mobile uniquement (<768px) — barre 52px + drawer (sans modifier le desktop ni le bandeau kitsch)
+   Header mobile uniquement (<900px) — barre + drawer
    ============================================================================= */
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .rs-header-mobile-bar,
   .rs-header-drawer {
     display: none !important;
@@ -1249,7 +1249,7 @@ html[data-rs-swipe="1"] main.mx-auto {
   display: none;
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 899.98px) {
   /* Motif « papier millimétré » : sous mobile il peut ressembler à une ligne pointillée — masqué */
   .header-wrap::after {
     display: none !important;

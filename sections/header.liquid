@@ -50,15 +50,15 @@
 
   assign cart_lbl = section.settings.cart_label | default: 'Mon dossier'
 
-  assign lbl_offres = section.settings.nav_offres_label | default: 'Offres'
-  assign lbl_cand = section.settings.nav_candidatures_label | default: 'Candidatures'
+  assign lbl_offres = section.settings.nav_offres_label | default: 'Profils candidats'
+  assign lbl_cand = section.settings.nav_candidatures_label | default: 'Voter (swipe)'
   assign lbl_coll = section.settings.nav_collectif_label | default: 'Le collectif'
 
   assign l_o1 = section.settings.menu_offres_1_label | default: 'Collection ABCDRS'
   assign l_o2 = section.settings.menu_offres_2_label | default: 'Les stagiaires de base'
   assign l_c1 = section.settings.menu_cand_1_label | default: 'Profils candidats'
-  assign l_c2 = section.settings.menu_cand_2_label | default: 'Déposer sa candidature'
-  assign l_c3 = section.settings.menu_cand_3_label | default: 'Voter (Swipe)'
+  assign l_c2 = section.settings.menu_cand_2_label | default: 'Déposer mon CV'
+  assign l_c3 = section.settings.menu_cand_3_label | default: 'Swipe les profils'
   assign l_k1 = section.settings.menu_coll_1_label | default: 'Histoire'
   assign l_k2 = section.settings.menu_coll_2_label | default: 'Contact'
 
@@ -67,6 +67,8 @@
     assign rs_nav_active = 'offres'
   elsif template.name == 'page'
     if page.handle == 'candidatures'
+      assign rs_nav_active = 'offres'
+    elsif page.handle == 'swipe' or page.handle == 'vote'
       assign rs_nav_active = 'cand'
     elsif page.handle == 'about' or page.handle == 'contact'
       assign rs_nav_active = 'coll'
@@ -86,6 +88,44 @@
     style="--rs-header-bg-img: url('{{ section.settings.banner_image | image_url: width: 2400 }}');"
   {% endif %}
   {{ section.shopify_attributes }}>
+  <div class="rs-startup-ticker" aria-hidden="true">
+    <div class="rs-startup-ticker__viewport">
+      <div class="rs-startup-ticker__track">
+        <div class="rs-startup-ticker__group">
+          <span>POSTE DISPONIBLE</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span class="rs-startup-ticker__accent">T</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span>CANDIDATURE OUVERTE</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span>DÉPOSE TON CV</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span>SWIPE LES PROFILS</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span>REJOINS LE COLLECTIF</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span>LES MEILLEURS FINISSENT SUR LE PACKAGING</span>
+          <span>&nbsp;·&nbsp;</span>
+        </div>
+        <div class="rs-startup-ticker__group" aria-hidden="true">
+          <span>POSTE DISPONIBLE</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span class="rs-startup-ticker__accent">T</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span>CANDIDATURE OUVERTE</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span>DÉPOSE TON CV</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span>SWIPE LES PROFILS</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span>REJOINS LE COLLECTIF</span>
+          <span>&nbsp;·&nbsp;</span>
+          <span>LES MEILLEURS FINISSENT SUR LE PACKAGING</span>
+          <span>&nbsp;·&nbsp;</span>
+        </div>
+      </div>
+    </div>
+  </div>
   {%- if section.settings.show_kitsch_pop -%}
     <div
       class="rs-header-kitsch-pop rs-header-kitsch-pop--brand"
@@ -122,7 +162,7 @@
     {%- endif -%}
     <div class="container">
       <header class="rs-header-two-tier" aria-label="En-tête du site">
-        {%- comment -%} Barre & menu mobile uniquement (<768px), sans impacter le desktop {%- endcomment -%}
+        {%- comment -%} Barre & menu mobile uniquement (&lt;900px) {%- endcomment -%}
         <div class="rs-header-mobile-bar" data-rs-header-mobile-bar>
           <a class="rs-header-mobile-bar__brand" href="{{ routes.root_url }}">
             {%- if brand_image != blank -%}
@@ -135,6 +175,7 @@
                 loading="eager"
                 decoding="async">
             {%- endif -%}
+            <span class="rs-startup-logo-dot" aria-hidden="true"></span>
             <span class="rs-header-mobile-bar__title">
               {%- if section.settings.site_title != blank -%}
                 {{ section.settings.site_title | upcase }}
@@ -163,6 +204,7 @@
           <div class="rs-header-top-line">
             <div class="rs-banner-top rs-header-pole-brand rs-header-pole-title">
               <a class="nav-brand rs-nav-brand rs-nav-brand--title-row" href="{{ routes.root_url }}">
+              <span class="rs-startup-logo-dot" aria-hidden="true"></span>
               {%- if section.settings.show_site_name -%}
                 <span class="rs-nav-brand__name logo rs-nav-brand__name--headline">
                   {%- if section.settings.site_title != blank -%}
@@ -176,6 +218,14 @@
               {%- endif -%}
             </a>
           </div>
+
+          <a
+            href="{{ rs_p_dep }}"
+            rel="noopener noreferrer"
+            class="rs-startup-header-cta"
+          >
+            Déposer mon CV
+          </a>
 
           <div class="rs-banner-top__actions d-inline-flex align-items-center">
             <a href="{{ routes.cart_url }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__cart d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" aria-label="{{ cart_lbl | escape }}">
@@ -208,6 +258,8 @@
             <li class="rs-subnav__item{% if rs_nav_active == 'offres' %} is-active{% endif %}">
               <button type="button" class="rs-subnav__trigger">{{ lbl_offres }}</button>
               <ul class="rs-subnav__dropdown">
+                <li><a href="{{ c1 }}" rel="noopener noreferrer">{{ l_c1 }}</a></li>
+                <li><a href="{{ c2 }}" rel="noopener noreferrer">{{ l_c2 }}</a></li>
                 <li><a href="{{ o1 }}">{{ l_o1 }}</a></li>
                 <li><a href="{{ o2 }}">{{ l_o2 }}</a></li>
               </ul>
@@ -215,8 +267,6 @@
             <li class="rs-subnav__item{% if rs_nav_active == 'cand' %} is-active{% endif %}">
               <button type="button" class="rs-subnav__trigger">{{ lbl_cand }}</button>
               <ul class="rs-subnav__dropdown">
-                <li><a href="{{ c1 }}" rel="noopener noreferrer">{{ l_c1 }}</a></li>
-                <li><a href="{{ c2 }}" rel="noopener noreferrer">{{ l_c2 }}</a></li>
                 <li><a href="{{ c3 }}" rel="noopener noreferrer">{{ l_c3 }}</a></li>
               </ul>
             </li>
@@ -253,6 +303,8 @@
         <details class="rs-header-drawer__section">
           <summary class="rs-header-drawer__summary">{{ lbl_offres }}</summary>
           <div class="rs-header-drawer__sublinks">
+            <a href="{{ c1 }}" rel="noopener noreferrer">{{ l_c1 }}</a>
+            <a href="{{ c2 }}" rel="noopener noreferrer">{{ l_c2 }}</a>
             <a href="{{ o1 }}">{{ l_o1 }}</a>
             <a href="{{ o2 }}">{{ l_o2 }}</a>
           </div>
@@ -260,8 +312,6 @@
         <details class="rs-header-drawer__section">
           <summary class="rs-header-drawer__summary">{{ lbl_cand }}</summary>
           <div class="rs-header-drawer__sublinks">
-            <a href="{{ c1 }}" rel="noopener noreferrer">{{ l_c1 }}</a>
-            <a href="{{ c2 }}" rel="noopener noreferrer">{{ l_c2 }}</a>
             <a href="{{ c3 }}" rel="noopener noreferrer">{{ l_c3 }}</a>
           </div>
         </details>
@@ -274,6 +324,7 @@
         </details>
       </nav>
       <div class="rs-header-drawer__footer">
+        <a href="{{ rs_p_dep }}" rel="noopener noreferrer" class="rs-startup-drawer-cta">Déposer mon CV</a>
         {%- comment -%} Même conteneur classe que le header bureau pour hériter des mêmes règles CSS {%- endcomment -%}
         <div class="rs-banner-top__actions rs-header-drawer__footer-actions d-inline-flex flex-column align-items-stretch gap-2 w-100">
           <a
@@ -324,7 +375,7 @@
         if (window.matchMedia('(pointer: coarse)').matches) return true;
       } catch (e) {}
       var w = window.innerWidth || document.documentElement.clientWidth || 0;
-      if (w > 0 && w <= 991.98) return true;
+      if (w > 0 && w <= 899.98) return true;
       var isIndex = document.body && document.body.getAttribute('data-rs-page') === 'index';
       if (isIndex && (navigator.maxTouchPoints || 0) > 0) return true;
       return false;
@@ -421,9 +472,9 @@
 
     function isMobileDrawer() {
       try {
-        return window.matchMedia('(max-width: 767.98px)').matches;
+        return window.matchMedia('(max-width: 899.98px)').matches;
       } catch (e) {
-        return (window.innerWidth || 0) <= 767;
+        return (window.innerWidth || 0) <= 899;
       }
     }
 
@@ -525,9 +576,9 @@
 
     function isMobileHeader() {
       try {
-        return window.matchMedia('(max-width: 767.98px)').matches;
+        return window.matchMedia('(max-width: 899.98px)').matches;
       } catch (e) {
-        return (window.innerWidth || 0) <= 767;
+        return (window.innerWidth || 0) <= 899;
       }
     }
 
@@ -586,8 +637,8 @@
   "class": "section-header",
   "settings": [
     { "type": "header", "content": "Bandeau kitsch (au-dessus du header)" },
-    { "type": "checkbox", "id": "show_kitsch_pop", "label": "Afficher la bande animée", "default": true },
-    { "type": "text", "id": "kitsch_pop_text", "label": "Texte défilant", "default": "★ OFFRE FLASH ★ -30% SUR VOTRE 2E CANDIDATURE — AGISSEZ VITE !!! ★" },
+    { "type": "checkbox", "id": "show_kitsch_pop", "label": "Afficher la 2e bande animée (sous le ticker)", "default": false },
+    { "type": "text", "id": "kitsch_pop_text", "label": "Texte défilant (bandeau kitsch, optionnel)", "default": "Collectif mode & textile — Paris · Profils · Vote · Dépose ton CV" },
     { "type": "color", "id": "kitsch_pop_bg_a", "label": "Fond bandeau (côté A)", "default": "#f472b6" },
     { "type": "color", "id": "kitsch_pop_bg_b", "label": "Fond bandeau (côté B)", "default": "#e8e8f0" },
     { "type": "color", "id": "kitsch_pop_fg", "label": "Couleur du texte", "default": "#f472b6" },
@@ -598,19 +649,19 @@
     { "type": "header", "content": "Titre" },
     { "type": "checkbox", "id": "show_site_name", "label": "Afficher le nom du site", "default": true },
     { "type": "text", "id": "site_title", "label": "Titre personnalisé (optionnel)" },
-    { "type": "header", "content": "Menu — Offres (libellé principal + sous-liens)" },
-    { "type": "text", "id": "nav_offres_label", "label": "Libellé du bouton", "default": "Offres" },
+    { "type": "header", "content": "Menu — Profils (libellé principal + sous-liens)" },
+    { "type": "text", "id": "nav_offres_label", "label": "Libellé du bouton", "default": "Profils candidats" },
     { "type": "text", "id": "menu_offres_1_label", "label": "Sous-lien 1 — libellé", "default": "Collection ABCDRS" },
     { "type": "url", "id": "menu_offres_1_link", "label": "Sous-lien 1 — URL (vide = /collections/abcdrs)" },
     { "type": "text", "id": "menu_offres_2_label", "label": "Sous-lien 2 — libellé", "default": "Les stagiaires de base" },
     { "type": "url", "id": "menu_offres_2_link", "label": "Sous-lien 2 — URL (vide = /collections/les-stagiaires-de-base)" },
-    { "type": "header", "content": "Menu — Candidatures" },
-    { "type": "text", "id": "nav_candidatures_label", "label": "Libellé du bouton", "default": "Candidatures" },
+    { "type": "header", "content": "Menu — Vote / swipe" },
+    { "type": "text", "id": "nav_candidatures_label", "label": "Libellé du bouton", "default": "Voter (swipe)" },
     { "type": "text", "id": "menu_cand_1_label", "label": "Sous-lien 1 — libellé", "default": "Profils candidats" },
     { "type": "url", "id": "menu_cand_1_link", "label": "Sous-lien 1 — URL" },
-    { "type": "text", "id": "menu_cand_2_label", "label": "Sous-lien 2 — libellé", "default": "Déposer sa candidature" },
+    { "type": "text", "id": "menu_cand_2_label", "label": "Sous-lien 2 — libellé", "default": "Déposer mon CV" },
     { "type": "url", "id": "menu_cand_2_link", "label": "Sous-lien 2 — URL (vide = portail dépôt)" },
-    { "type": "text", "id": "menu_cand_3_label", "label": "Sous-lien 3 — libellé (vote / swipe)", "default": "Vote (swipe)" },
+    { "type": "text", "id": "menu_cand_3_label", "label": "Sous-lien (lien swipe)", "default": "Swipe les profils" },
     { "type": "url", "id": "menu_cand_3_link", "label": "Sous-lien 3 — URL (vide = portail swipe)" },
     { "type": "header", "content": "Menu — Le collectif" },
     { "type": "text", "id": "nav_collectif_label", "label": "Libellé du bouton", "default": "Le collectif" },

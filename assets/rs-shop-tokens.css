@@ -1,0 +1,46 @@
+/**
+ * Design system « startup moderne parisienne » — variables canoniques (toutes les pages).
+ * Alias --rs-shop-* pour compatibilité avec les feuilles existantes.
+ */
+:root {
+  --black: #0a0a0a;
+  --white: #fafaf8;
+  --accent: #f472b6;
+  --accent-light: #fdf2f8;
+  --accent-border: #fce7f3;
+  --gray-100: #f4f4f2;
+  --gray-200: #e8e8e4;
+  --gray-400: #999990;
+  --gray-600: #555550;
+
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 100px;
+
+  --rs-card-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --rs-content-max: 1200px;
+  --rs-pad-x: 20px;
+  --rs-pad-x-lg: 40px;
+  --rs-section-y: 60px;
+  --rs-section-y-lg: 80px;
+
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* Alias legacy */
+  --rs-shop-black: var(--black);
+  --rs-shop-white: var(--white);
+  --rs-shop-accent: var(--accent);
+  --rs-shop-accent-hover: #db2777;
+  --rs-shop-accent-light: var(--accent-light);
+  --rs-shop-accent-border: var(--accent-border);
+  --rs-shop-gray-100: var(--gray-100);
+  --rs-shop-gray-200: var(--gray-200);
+  --rs-shop-gray-600: var(--gray-600);
+}
+
+@media (min-width: 900px) {
+  :root {
+    --rs-pad-x: var(--rs-pad-x-lg);
+  }
+}

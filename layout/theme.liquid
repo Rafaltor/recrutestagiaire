@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html
   lang="{{ request.locale.iso_code | default: 'fr' }}"
-  class="{% if settings.rs_viewport_desktop_wrap and request.page_type == 'index' %}rs-viewport-desktop{% endif %}{% if settings.rs_trust_modern_ui %} rs-theme-trust{% endif %}">
+  class="rs-paris-startup{% if settings.rs_viewport_desktop_wrap and request.page_type == 'index' %} rs-viewport-desktop{% endif %}{% if settings.rs_trust_modern_ui %} rs-theme-trust{% endif %}">
 <head>
   <meta charset="UTF-8">
   {%- comment -%}
@@ -28,6 +28,12 @@
   {%- endif -%}
 
   {{ content_for_header }}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet">
 
   {%- comment -%}
     Viewport « bureau sur mobile » : uniquement si l’option thème est activée (accueil).
@@ -220,6 +226,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   {{ 'jobhill-style.css' | asset_url | stylesheet_tag }}
   {{ 'theme-overrides.css' | asset_url | stylesheet_tag }}
+  {{ 'rs-design-system.css' | asset_url | stylesheet_tag }}
+  {{ 'rs-shop-tokens.css' | asset_url | stylesheet_tag }}
   {{ 'rs-shopify-header.css' | asset_url | stylesheet_tag }}
   {%- if settings.rs_header_jobboard -%}
     {{ 'rs-header-jobboard.css' | asset_url | stylesheet_tag }}
@@ -244,6 +252,11 @@
     {{ 'rs-trust-modern.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
 
+  {%- if request.page_type == 'index' -%}
+    {{ 'rs-home-indeed-blocks.css' | asset_url | stylesheet_tag }}
+  {%- endif -%}
+  {{ 'rs-paris-startup.css' | asset_url | stylesheet_tag }}
+
   {% if settings.custom_head_code != blank %}
     {{ settings.custom_head_code }}
   {% endif %}
@@ -251,7 +264,7 @@
 
 <body
   data-rs-page="{{ request.page_type }}"
-  {% if settings.rs_viewport_desktop_wrap and request.page_type == 'index' %}class="rs-viewport-desktop"{% endif %}
+  class="rs-paris-startup{% if settings.rs_viewport_desktop_wrap and request.page_type == 'index' %} rs-viewport-desktop{% endif %}"
 >
   {% section 'header' %}
   <main>{{ content_for_layout }}</main>

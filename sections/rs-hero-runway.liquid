@@ -98,10 +98,31 @@
 
     <div class="rs-hero-runway__content container">
       <div class="rs-hero-runway__copy">
+        {%- if section.settings.badge_text != blank -%}
+          <p class="rs-hero-runway__badge">
+            <span class="rs-hero-runway__badge-dot" aria-hidden="true"></span>
+            <span>{{ section.settings.badge_text | escape }}</span>
+          </p>
+        {%- endif -%}
         {%- if section.settings.kicker != blank -%}
           <p class="rs-hero-runway__kicker">{{ section.settings.kicker | escape }}</p>
         {%- endif -%}
-        <h1 class="rs-hero-runway__title">{{ section.settings.title | escape }}</h1>
+        {%- liquid
+          assign t = section.settings.title | default: ''
+          assign em = section.settings.title_emphasis | default: '' | strip
+        -%}
+        {%- if em != '' and t contains em -%}
+          {%- assign _parts = t | split: em -%}
+          <h1 class="rs-hero-runway__title">
+            {{- _parts[0] | escape -}}
+            <em class="rs-hero-runway__accent">{{ em | escape }}</em>
+            {%- if _parts.size > 1 -%}
+              {{- _parts[1] | escape -}}
+            {%- endif -%}
+          </h1>
+        {%- else -%}
+          <h1 class="rs-hero-runway__title">{{ t | escape }}</h1>
+        {%- endif -%}
         {%- if section.settings.subtitle != blank -%}
           <p class="rs-hero-runway__subtitle">{{ section.settings.subtitle | escape }}</p>
         {%- endif -%}
@@ -205,8 +226,22 @@
     { "type": "video", "id": "video_d4", "label": "Vidéo 4" },
     { "type": "text", "id": "placeholder_label", "label": "Texte emplacement vide", "default": "Vidéo à ajouter" },
     { "type": "header", "content": "Texte" },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge (au-dessus du surtitre)",
+      "default": "Candidatures ouvertes",
+      "info": "Laisse vide pour masquer le badge type maquette portail."
+    },
     { "type": "text", "id": "kicker", "label": "Surtitre", "default": "Collectif — Paris" },
-    { "type": "text", "id": "title", "label": "Titre", "default": "La mode comme terrain de jeu professionnel" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "On a commencé stagiaires. Pourquoi pas vous ?" },
+    {
+      "type": "text",
+      "id": "title_emphasis",
+      "label": "Mot du titre en accent (rose)",
+      "default": "stagiaires",
+      "info": "Doit apparaître tel quel dans le titre pour être mis en couleur accent."
+    },
     {
       "type": "textarea",
       "id": "subtitle",
