@@ -12,6 +12,10 @@
     "rs_hero_runway": {
       "type": "rs-hero-runway",
       "settings": {
+        "video_d1": "shopify://files/videos/Défilé VFinale - copie 2.mov",
+        "video_d2": "shopify://files/videos/Défilé VFinale - copie.mov",
+        "video_d3": "shopify://files/videos/Défilé VFinale - copie 3.mov",
+        "video_d4": "shopify://files/videos/Défilé VFinale - copie 4.mov",
         "placeholder_label": "Vidéo à ajouter",
         "kicker": "Collectif — Paris",
         "title": "La mode comme terrain de jeu professionnel",
@@ -250,5 +254,8 @@
       }
     }
   },
-  "order": ["rs_hero_runway", "home_unified"]
+  "order": [
+    "rs_hero_runway",
+    "home_unified"
+  ]
 }
