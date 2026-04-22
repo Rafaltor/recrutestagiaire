@@ -78,34 +78,42 @@
   inset: 0;
   z-index: 1;
   --_s: var(--rs-hr-scrim-a, 0.55);
-  background: linear-gradient(
-    120deg,
-    rgba(5, 8, 16, calc(0.35 * var(--_s))) 0%,
-    rgba(5, 8, 16, var(--_s)) 42%,
-    rgba(5, 8, 16, calc(0.55 * var(--_s))) 100%
-  );
+  background:
+    radial-gradient(ellipse 75% 70% at 50% 50%, rgba(5, 8, 16, calc(0.55 * var(--_s))) 0%, transparent 72%),
+    linear-gradient(
+      120deg,
+      rgba(5, 8, 16, calc(0.28 * var(--_s))) 0%,
+      rgba(5, 8, 16, calc(0.5 * var(--_s))) 42%,
+      rgba(5, 8, 16, calc(0.32 * var(--_s))) 100%
+    );
 }
 
+/* Texte centré au milieu de la grille 2×2 */
 .rs-hero-runway__content {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 2;
-  max-width: 640px;
+  width: 100%;
+  max-width: none;
   min-height: var(--rs-hr-min-h, 86vh);
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding-top: clamp(1.5rem, 4vw, 3rem);
-  padding-bottom: clamp(1.75rem, 4vh, 3.25rem);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: clamp(1rem, 4vw, 2rem) 1rem;
   color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
 }
 
-@media (max-width: 767.98px) {
-  .rs-hero-runway__content {
-    max-width: 100%;
-    padding-left: 0;
-    padding-right: 0;
-  }
+.rs-hero-runway__copy {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 38rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .rs-hero-runway__kicker {
@@ -138,7 +146,7 @@
   font-size: clamp(0.9375rem, 1.4vw, 1.125rem);
   line-height: 1.55;
   margin: 0 0 1.25rem;
-  max-width: 36rem;
+  max-width: 100%;
   color: rgba(255, 255, 255, 0.92);
 }
 
@@ -147,6 +155,7 @@
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-bottom: 0.75rem;
+  justify-content: center;
 }
 
 .rs-hero-runway__btn {
@@ -199,4 +208,133 @@
   color: rgba(255, 255, 255, 0.78);
   letter-spacing: 0.02em;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+/* ----- Accueil : hero sous header transparent (vidéos visibles derrière) ----- */
+body[data-rs-page='index'] main {
+  padding-top: 0 !important;
+}
+
+body[data-rs-page='index'] .shopify-section.section-rs-hero-runway {
+  margin-top: calc(-1 * var(--rs-home-header-h, 168px));
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: none !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero::after {
+  display: none !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero.rs-header--banner {
+  background-image: none !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero.rs-header--banner::before {
+  display: none !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-nav-brand__name.logo.rs-nav-brand__name--headline {
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-header-logo-tile__img,
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-header-mobile-bar__logo {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45));
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-header-mobile-bar {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-header-mobile-bar__title {
+  color: #fff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-header-mobile-bar__menu-btn {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-header-mobile-bar__burger-line {
+  background: #fff !important;
+}
+
+/* Onglets (style jobboard) sur vidéo */
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero.rs-header--jobboard .rs-subnav__trigger {
+  color: rgba(255, 255, 255, 0.92) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero.rs-header--jobboard .rs-subnav__item:hover .rs-subnav__trigger,
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero.rs-header--jobboard .rs-subnav__item:focus-within .rs-subnav__trigger {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero.rs-header--jobboard .rs-subnav__item.is-active .rs-subnav__trigger,
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero.rs-header--jobboard .rs-subnav__item.is-active:hover .rs-subnav__trigger,
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero.rs-header--jobboard .rs-subnav__item.is-active:focus-within .rs-subnav__trigger {
+  background: transparent !important;
+  color: #fff !important;
+  border-bottom-color: #fff !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero.rs-header--jobboard .rs-banner-top__actions .abt-btn.rs-caf-btn-dossier {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #fff !important;
+  backdrop-filter: blur(6px);
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero.rs-header--jobboard .rs-banner-top__actions .abt-btn.rs-caf-btn-dossier:hover {
+  background: rgba(255, 255, 255, 0.24) !important;
+  border-color: #fff !important;
+  color: #fff !important;
+}
+
+/* Onglets style « portail » (rose) sur vidéo */
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero:not(.rs-header--jobboard) .rs-subnav__trigger {
+  color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero:not(.rs-header--jobboard) .rs-subnav__item.is-active .rs-subnav__trigger,
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero:not(.rs-header--jobboard) .rs-subnav__item.is-active:hover .rs-subnav__trigger,
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero:not(.rs-header--jobboard) .rs-subnav__item.is-active:focus-within .rs-subnav__trigger {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #fff !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero:not(.rs-header--jobboard) .rs-subnav__item:hover .rs-subnav__trigger,
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero:not(.rs-header--jobboard) .rs-subnav__item:focus-within .rs-subnav__trigger {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero:not(.rs-header--jobboard) .rs-banner-top__actions .abt-btn.rs-caf-btn-dossier {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  color: #fff !important;
+  backdrop-filter: blur(6px);
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero:not(.rs-header--jobboard) .rs-banner-top__actions .abt-btn.rs-caf-btn-dossier:hover {
+  background: rgba(255, 255, 255, 0.24) !important;
+  border-color: #fff !important;
+  color: #fff !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero .rs-header-top-line {
+  border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+body[data-rs-page='index'] .header-wrap.rs-header--over-hero.rs-header--jobboard .rs-subnav.rs-subnav--buttons {
+  border-bottom-color: rgba(255, 255, 255, 0.14) !important;
 }

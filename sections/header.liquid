@@ -81,7 +81,7 @@
   endif
   assign brand_logo_inset = 14
 %}
-<div class="header-wrap rs-header{% if settings.rs_header_jobboard %} rs-header--jobboard{% endif %}{% if section.settings.banner_image != blank %} rs-header--banner{% endif %}"
+<div class="header-wrap rs-header{% if settings.rs_header_jobboard %} rs-header--jobboard{% endif %}{% if request.page_type == 'index' %} rs-header--over-hero{% endif %}{% if section.settings.banner_image != blank %} rs-header--banner{% endif %}"
   {% if section.settings.banner_image != blank %}
     style="--rs-header-bg-img: url('{{ section.settings.banner_image | image_url: width: 2400 }}');"
   {% endif %}

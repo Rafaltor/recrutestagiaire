@@ -97,32 +97,34 @@
     </div>
 
     <div class="rs-hero-runway__content container">
-      {%- if section.settings.kicker != blank -%}
-        <p class="rs-hero-runway__kicker">{{ section.settings.kicker | escape }}</p>
-      {%- endif -%}
-      <h1 class="rs-hero-runway__title">{{ section.settings.title | escape }}</h1>
-      {%- if section.settings.subtitle != blank -%}
-        <p class="rs-hero-runway__subtitle">{{ section.settings.subtitle | escape }}</p>
-      {%- endif -%}
-      <div class="rs-hero-runway__actions">
-        {%- if section.settings.btn_primary_label != blank -%}
-          <a
-            class="rs-hero-runway__btn rs-hero-runway__btn--primary"
-            href="{% if section.settings.btn_primary_url != blank %}{{ section.settings.btn_primary_url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">
-            {{- section.settings.btn_primary_label | escape -}}
-          </a>
+      <div class="rs-hero-runway__copy">
+        {%- if section.settings.kicker != blank -%}
+          <p class="rs-hero-runway__kicker">{{ section.settings.kicker | escape }}</p>
         {%- endif -%}
-        {%- if section.settings.btn_secondary_label != blank -%}
-          <a
-            class="rs-hero-runway__btn rs-hero-runway__btn--ghost"
-            href="{% if section.settings.btn_secondary_url != blank %}{{ section.settings.btn_secondary_url }}{% else %}/pages/profils-candidats{% endif %}">
-            {{- section.settings.btn_secondary_label | escape -}}
-          </a>
+        <h1 class="rs-hero-runway__title">{{ section.settings.title | escape }}</h1>
+        {%- if section.settings.subtitle != blank -%}
+          <p class="rs-hero-runway__subtitle">{{ section.settings.subtitle | escape }}</p>
+        {%- endif -%}
+        <div class="rs-hero-runway__actions">
+          {%- if section.settings.btn_primary_label != blank -%}
+            <a
+              class="rs-hero-runway__btn rs-hero-runway__btn--primary"
+              href="{% if section.settings.btn_primary_url != blank %}{{ section.settings.btn_primary_url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">
+              {{- section.settings.btn_primary_label | escape -}}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.btn_secondary_label != blank -%}
+            <a
+              class="rs-hero-runway__btn rs-hero-runway__btn--ghost"
+              href="{% if section.settings.btn_secondary_url != blank %}{{ section.settings.btn_secondary_url }}{% else %}/pages/profils-candidats{% endif %}">
+              {{- section.settings.btn_secondary_label | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.trust_line != blank -%}
+          <p class="rs-hero-runway__trust">{{ section.settings.trust_line | escape }}</p>
         {%- endif -%}
       </div>
-      {%- if section.settings.trust_line != blank -%}
-        <p class="rs-hero-runway__trust">{{ section.settings.trust_line | escape }}</p>
-      {%- endif -%}
     </div>
   </div>
 </section>
@@ -130,13 +132,23 @@
 {{ 'rs-hero-runway.css' | asset_url | stylesheet_tag }}
 <script>
   (function () {
+    function rsHomeHeaderUnderHero() {
+      if (document.body.getAttribute('data-rs-page') !== 'index') return;
+      var h = document.querySelector('.header-wrap');
+      if (!h) return;
+      document.documentElement.style.setProperty('--rs-home-header-h', h.offsetHeight + 'px');
+    }
+
     function rsHeroRunwayPlay() {
       document.querySelectorAll('.rs-hero-runway video').forEach(function (v) {
         try {
           v.muted = true;
+          v.defaultMuted = true;
+          v.setAttribute('muted', '');
           v.setAttribute('playsinline', '');
           v.setAttribute('webkit-playsinline', '');
           v.loop = true;
+          v.setAttribute('loop', '');
           var p = v.play();
           if (p && typeof p.catch === 'function') {
             p.catch(function () {});
@@ -144,13 +156,35 @@
         } catch (e) {}
       });
     }
-    rsHeroRunwayPlay();
+
+    function boot() {
+      rsHomeHeaderUnderHero();
+      rsHeroRunwayPlay();
+    }
+
+    boot();
+    document.addEventListener('DOMContentLoaded', boot);
+    window.addEventListener('load', boot);
+    window.addEventListener('resize', function () {
+      rsHomeHeaderUnderHero();
+    });
     document.addEventListener('visibilitychange', function () {
       if (!document.hidden) {
         rsHeroRunwayPlay();
       }
     });
-    document.addEventListener('shopify:section:load', rsHeroRunwayPlay);
+    document.addEventListener('shopify:section:load', boot);
+
+    /* Mobile : première interaction débloque souvent la lecture auto */
+    ['touchstart', 'pointerdown', 'click'].forEach(function (ev) {
+      document.addEventListener(
+        ev,
+        function () {
+          rsHeroRunwayPlay();
+        },
+        { capture: true, passive: true, once: true }
+      );
+    });
   })();
 </script>
 
@@ -162,7 +196,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Grille 2×2 identique sur tous les écrans, texte en overlay. Les vidéos sont muettes, en boucle ; l’autoplay dépend du navigateur (script de relance au retour sur l’onglet)."
+      "content": "Sur l’accueil, le hero remonte sous l’en-tête transparent : les vidéos passent derrière le header. Texte centré au milieu de la grille 2×2. Autoplay renforcé (y compris après un toucher sur mobile)."
     },
     { "type": "header", "content": "Médias — 4 extraits runway" },
     { "type": "video", "id": "video_d1", "label": "Vidéo 1" },
