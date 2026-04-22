@@ -6,7 +6,7 @@
 :root {
   --rs-ds-color-primary: var(--accent);
   --rs-ds-color-primary-hover: var(--rs-shop-accent-hover);
-  --rs-ds-color-page: var(--gray-100);
+  --rs-ds-color-page: var(--white);
   --rs-ds-color-ink: var(--black);
 }
 

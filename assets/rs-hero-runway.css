@@ -125,7 +125,9 @@ body[data-rs-page='index'] .rs-hero-runway__scrim {
   background: rgba(255, 255, 255, 0.97);
   border: 1px solid var(--rs-shop-gray-200);
   border-radius: var(--rs-ds-radius-card-lg);
-  padding: var(--rs-ds-space-card-pad) clamp(1.25rem, 4vw, 2.25rem);
+  /* Padding vertical plus léger que la carte DS (le texte gagne en place) */
+  padding-block: clamp(0.65rem, 2vw, 1.1rem);
+  padding-inline: clamp(1.25rem, 4vw, 2.25rem);
   box-shadow: var(--rs-ds-shadow-elevated);
 }
 
@@ -154,10 +156,11 @@ body[data-rs-page='index'] .rs-hero-runway__copy {
   width: min(calc(100vw - 1.75rem), 21rem);
   aspect-ratio: var(--rs-hr-shield-ar);
   box-sizing: border-box;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  /* Pas de padding vertical ; horizontal seulement sous les bords courbes du masque */
-  padding-block: 0;
+  /* Contenu calé vers le haut de l’écusson ; 10px sous le bord supérieur du masque */
+  padding-top: 10px;
+  padding-bottom: 0;
   padding-inline: clamp(0.45rem, 1.6vw, 0.65rem);
   overflow: visible;
   -webkit-mask-image: var(--rs-hr-copy-mask-url, none);
@@ -176,8 +179,27 @@ body[data-rs-page='index'] .rs-hero-runway__copy-inner {
   max-width: 100%;
   max-height: 90%;
   min-height: 0;
-  justify-content: center;
+  justify-content: flex-start;
   flex: 0 1 auto;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Accueil : moins d’air vertical entre les lignes (complément au padding-block: 0 du bloc écusson) */
+body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__kicker {
+  margin-bottom: 0.4rem !important;
+}
+
+body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__title {
+  margin-bottom: 0.5rem !important;
+}
+
+body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__subtitle {
+  margin-bottom: 0.65rem !important;
+}
+
+body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__actions {
+  margin-bottom: 0.45rem !important;
 }
 
 @media (min-width: 600px) and (max-width: 899.98px) {
@@ -194,7 +216,8 @@ body[data-rs-page='index'] .rs-hero-runway__copy-inner {
 @media (min-width: 900px) {
   body[data-rs-page='index'] .rs-hero-runway__copy {
     width: min(36rem, min(82vw, 600px));
-    padding-block: 0;
+    padding-top: 10px;
+    padding-bottom: 0;
     padding-inline: clamp(0.5rem, 1.2vw, 0.75rem);
   }
 
@@ -231,6 +254,7 @@ body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__accent {
 }
 
 body[data-rs-page='index'] .rs-hero-runway__copy .rs-hero-runway__badge {
+  margin-bottom: 0.5rem !important;
   background: rgba(253, 242, 248, 0.9);
   border-color: rgba(252, 231, 243, 0.95);
 }

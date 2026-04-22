@@ -8,7 +8,7 @@
 /* -------------------------------------------------------------------------- */
 
 body.rs-paris-startup[data-rs-page='index'] .section-home-unified-page .rs-uni-page {
-  background: var(--gray-100) !important;
+  background: var(--white) !important;
   font-family: var(--font-body) !important;
 }
 
@@ -468,4 +468,35 @@ body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__similar-bar .rs-rail
   border-radius: var(--radius-lg) !important;
   border: 1px solid var(--gray-200) !important;
   background: var(--white) !important;
+}
+
+/* Fil d’Ariane produit : Syne 11px, ton discret (charte éditoriale) */
+body.rs-paris-startup[data-rs-page='product'] .rs-product-breadcrumb,
+body[data-rs-page='product'] .rs-product-breadcrumb {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--gray-400) !important;
+}
+
+body.rs-paris-startup[data-rs-page='product'] .rs-product-breadcrumb a,
+body[data-rs-page='product'] .rs-product-breadcrumb a {
+  color: var(--gray-400) !important;
+}
+
+body.rs-paris-startup[data-rs-page='product'] .rs-product-breadcrumb a:hover,
+body[data-rs-page='product'] .rs-product-breadcrumb a:hover {
+  color: var(--black) !important;
+}
+
+body.rs-paris-startup[data-rs-page='product'] .rs-product-breadcrumb .text-body,
+body[data-rs-page='product'] .rs-product-breadcrumb .text-body {
+  color: var(--gray-400) !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+  text-transform: inherit !important;
 }

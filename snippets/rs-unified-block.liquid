@@ -307,7 +307,7 @@
       data-rs-kitsch="1"
       data-api="{{ section.settings.rs_api_url | escape }}"
       hidden>
-      <span class="rs-stat-kitsch__ribbon">{{ b.ribbon_text | default: '★ CHIFFRE OFFICIEL ★' }}</span>
+      <span class="rs-stat-kitsch__ribbon">{{ b.ribbon_text | default: 'Base candidats' }}</span>
       <p class="rs-stat-kitsch__line">
         <span class="rs-stat-kitsch__n" data-rs-kitsch-n>—</span>
         <span class="rs-stat-kitsch__suffix">
@@ -315,7 +315,7 @@
           <strong>{{ b.brand_name | default: 'Recrute Stagiaire' }}</strong>
         </span>
       </p>
-      <p class="rs-stat-kitsch__sub">{{ b.sub_text | default: 'Mise à jour en temps quasi réel — merci de votre confiance !!' }}</p>
+      <p class="rs-stat-kitsch__sub">{{ b.sub_text | default: 'Mise à jour en temps quasi réel.' }}</p>
     </div>
 
   {%- when 'product_offer' -%}
