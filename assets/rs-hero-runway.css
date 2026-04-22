@@ -129,8 +129,19 @@ body[data-rs-page='index'] .rs-hero-runway__scrim {
   box-shadow: var(--rs-ds-shadow-elevated);
 }
 
+.rs-hero-runway__copy-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+}
+
 /* Accueil : panneau central vitré (vidéos visibles) + typographie claire sur fond variable */
+/* Ratio PNG rs-hero-shield-embleme.png (1580×1851) — .copy = écusson ; .copy-inner = zone texte un peu plus petite */
 body[data-rs-page='index'] .rs-hero-runway__copy {
+  --rs-hr-shield-ar: 1580 / 1851;
   background: rgba(10, 10, 10, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.32);
   border-radius: 0;
@@ -139,31 +150,57 @@ body[data-rs-page='index'] .rs-hero-runway__copy {
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.1) inset,
     0 24px 56px rgba(0, 0, 0, 0.38);
-  /* Écusson (PNG plein) : taille du bloc = taille du masque avec contain */
+  max-width: none;
+  width: min(calc(100vw - 1.75rem), 21rem);
+  aspect-ratio: var(--rs-hr-shield-ar);
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  /* Pas de padding vertical ; horizontal seulement sous les bords courbes du masque */
+  padding-block: 0;
+  padding-inline: clamp(0.45rem, 1.6vw, 0.65rem);
+  overflow: visible;
   -webkit-mask-image: var(--rs-hr-copy-mask-url, none);
   mask-image: var(--rs-hr-copy-mask-url, none);
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-position: center;
   mask-position: center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
   mask-mode: alpha;
-  width: 100%;
-  /* Téléphone : écusson un peu plus compact */
-  max-width: min(22rem, calc(100vw - 1.75rem));
+}
+
+body[data-rs-page='index'] .rs-hero-runway__copy-inner {
+  width: 86%;
+  max-width: 100%;
+  max-height: 90%;
+  min-height: 0;
+  justify-content: center;
+  flex: 0 1 auto;
 }
 
 @media (min-width: 600px) and (max-width: 899.98px) {
   body[data-rs-page='index'] .rs-hero-runway__copy {
-    max-width: min(30rem, calc(100vw - 2.25rem));
+    width: min(calc(100vw - 2.25rem), 28rem);
+  }
+
+  body[data-rs-page='index'] .rs-hero-runway__copy-inner {
+    width: 87%;
+    max-height: 89%;
   }
 }
 
 @media (min-width: 900px) {
   body[data-rs-page='index'] .rs-hero-runway__copy {
-    /* Bureau : plus large que le mobile */
-    max-width: min(44rem, min(90vw, 720px));
+    width: min(36rem, min(82vw, 600px));
+    padding-block: 0;
+    padding-inline: clamp(0.5rem, 1.2vw, 0.75rem);
+  }
+
+  body[data-rs-page='index'] .rs-hero-runway__copy-inner {
+    width: 85%;
+    max-height: 88%;
   }
 }
 
