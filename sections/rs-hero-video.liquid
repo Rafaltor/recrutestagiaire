@@ -1,0 +1,325 @@
+{{ 'rs-hero-video.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign search_action = routes.search_url
+  assign v_shopify = section.settings.background_video
+  assign v_mp4 = section.settings.mp4_url | strip
+  assign v_poster = section.settings.poster_image
+-%}
+
+<section
+  class="rs-hero-video section-rs-hero-video"
+  id="shopify-section-{{ section.id }}"
+  {{ section.shopify_attributes }}>
+  <div class="rs-hero-video__media-wrap" aria-hidden="true">
+    {%- if v_shopify != blank -%}
+      {{
+        v_shopify
+        | video_tag:
+          image_size: '2048x',
+          autoplay: true,
+          loop: true,
+          muted: true,
+          controls: false,
+          playsinline: true,
+          class: 'rs-hero-video__el'
+      }}
+    {%- elsif v_mp4 != blank -%}
+      <video
+        class="rs-hero-video__el"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        {% if v_poster != blank %}
+          poster="{{ v_poster | image_url: width: 1920 }}"
+        {% endif %}>
+        <source src="{{ v_mp4 }}" type="video/mp4">
+      </video>
+    {%- elsif v_poster != blank -%}
+      {{
+        v_poster
+        | image_url: width: 2400
+        | image_tag:
+          class: 'rs-hero-video__el rs-hero-video__el--image',
+          widths: '750, 1100, 1500, 1920, 2400',
+          sizes: '100vw',
+          loading: 'eager',
+          alt: ''
+      }}
+    {%- endif -%}
+  </div>
+  <div class="rs-hero-video__overlay"></div>
+
+  <div class="rs-hero-video__content container">
+    {%- if section.settings.show_badge and section.settings.badge_text != blank -%}
+      <div class="rs-hero-video__badge">
+        <span class="rs-hero-video__badge-dot"></span>
+        <span>{{ section.settings.badge_text | escape }}</span>
+      </div>
+    {%- endif -%}
+
+    <h1 class="rs-hero-video__title">
+      {%- if section.settings.heading_line_1 != blank -%}
+        <span class="rs-hero-video__title-line">{{ section.settings.heading_line_1 | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading_line_2 != blank or section.settings.heading_emphasis != blank -%}
+        <span class="rs-hero-video__title-line">
+          {{ section.settings.heading_line_2 | escape }}
+          {% if section.settings.heading_emphasis != blank %}
+            <span class="rs-hero-video__title-accent">{{ section.settings.heading_emphasis | escape }}</span>
+          {% endif %}
+        </span>
+      {%- endif -%}
+    </h1>
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="rs-hero-video__subtitle">{{ section.settings.subtitle | escape }}</p>
+    {%- endif -%}
+
+    <form class="rs-hero-video__search" action="{{ search_action }}" method="get" role="search">
+      <input type="hidden" name="type" value="product">
+      <span class="rs-hero-video__search-icon" aria-hidden="true">🔍</span>
+      <input
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ section.settings.search_placeholder | escape }}"
+        autocomplete="off"
+        aria-label="{{ section.settings.search_placeholder | escape }}">
+      <button type="submit" class="rs-hero-video__search-btn">{{ section.settings.search_btn_label | escape }}</button>
+    </form>
+
+    {%- assign pill_count = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'pill' -%}
+        {%- assign pill_count = pill_count | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if pill_count > 0 -%}
+      <div class="rs-hero-video__pills">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'pill' -%}
+            <a
+              class="rs-hero-video__pill"
+              href="{{ block.settings.link | default: routes.all_products_collection_url }}"
+              {{ block.shopify_attributes }}>
+              {{ block.settings.label | escape }}
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- assign stat_count = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'stat' -%}
+        {%- assign stat_count = stat_count | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if stat_count > 0 -%}
+      <div class="rs-hero-video__stats">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'stat' -%}
+            <div class="rs-hero-video__stat" {{ block.shopify_attributes }}>
+              <span class="rs-hero-video__stat-val">{{ block.settings.value | escape }}</span>
+              <span class="rs-hero-video__stat-lbl">{{ block.settings.label | escape }}</span>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function () {
+    function rsHomeHeaderUnderHero() {
+      if (document.body.getAttribute('data-rs-page') !== 'index') return;
+      var h = document.querySelector('.header-wrap');
+      if (!h) return;
+      var px = Math.ceil(h.getBoundingClientRect().height);
+      if (px < 1) px = h.offsetHeight || 168;
+      document.documentElement.style.setProperty('--rs-home-header-h', px + 'px');
+    }
+    rsHomeHeaderUnderHero();
+    document.addEventListener('DOMContentLoaded', rsHomeHeaderUnderHero);
+    window.addEventListener('resize', rsHomeHeaderUnderHero);
+    document.addEventListener('shopify:section:load', rsHomeHeaderUnderHero);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Hero vidéo",
+  "tag": "section",
+  "class": "section-rs-hero-video",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Média"
+    },
+    {
+      "type": "video",
+      "id": "background_video",
+      "label": "Vidéo (fichiers Shopify)"
+    },
+    {
+      "type": "text",
+      "id": "mp4_url",
+      "label": "URL MP4 externe (repli)",
+      "info": "Utilisée si aucune vidéo Shopify. Lien direct .mp4 (HTTPS)."
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_image",
+      "label": "Image / poster (repli)",
+      "info": "Affichée si pas de vidéo, ou poster du MP4 externe."
+    },
+    {
+      "type": "header",
+      "content": "Textes"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Afficher le badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Texte du badge",
+      "default": "Candidatures ouvertes"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Titre — ligne 1",
+      "default": "Chaque vêtement"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Titre — ligne 2 (avant le mot accent)",
+      "default": "est une"
+    },
+    {
+      "type": "text",
+      "id": "heading_emphasis",
+      "label": "Mot accent (ligne rose)",
+      "default": "offre"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "Postule. Candidature non négociable. Les meilleurs CV finissent sur le packaging."
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Placeholder recherche",
+      "default": "Cherche un poste..."
+    },
+    {
+      "type": "text",
+      "id": "search_btn_label",
+      "label": "Libellé bouton recherche",
+      "default": "Voir les offres →"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pill",
+      "name": "Filtre (pill)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Libellé",
+          "default": "Tous les postes"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Lien"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "name": "Statistique",
+      "settings": [
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Valeur",
+          "default": "2"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Texte",
+          "default": "offres actives"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero vidéo",
+      "blocks": [
+        {
+          "type": "pill",
+          "settings": {
+            "label": "Tous les postes",
+            "link": "shopify://collections/all"
+          }
+        },
+        {
+          "type": "pill",
+          "settings": {
+            "label": "Édition limitée"
+          }
+        },
+        {
+          "type": "pill",
+          "settings": {
+            "label": "CDI"
+          }
+        },
+        {
+          "type": "pill",
+          "settings": {
+            "label": "Disponible maintenant"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "2",
+            "label": "offres actives"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "48h",
+            "label": "expédition"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "SS26",
+            "label": "collection Paris"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

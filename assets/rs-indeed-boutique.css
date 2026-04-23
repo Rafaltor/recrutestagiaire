@@ -3,7 +3,7 @@
  * Chargé en dernier (après rs-da-visual-polish).
  */
 :root {
-  --rs-pink: #e11d48;
+  --rs-pink: #f472b6;
   --rs-black: #0a0a0a;
   --rs-white: #ffffff;
   --rs-gray: #f5f5f5;
@@ -44,7 +44,7 @@ body.rs-portal-header .rs-ph-cta:hover,
 .rs-ind-stats__btn:hover,
 .rs-404-indeed__btn:hover,
 .rs-ind-coll-card__cta:hover {
-  background: #c91840 !important;
+  background: #db2777 !important;
   color: var(--rs-white) !important;
 }
 

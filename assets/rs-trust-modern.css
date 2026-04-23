@@ -25,9 +25,9 @@ html.rs-theme-trust :root {
   --rs-da-radius: 12px;
   --rs-da-pad: 16px;
   --rs-da-gap: 12px;
-  --rs-da-pink: #e11d48;
-  --rs-da-pink-hover: #be123c;
-  --rs-da-pink-border: #be123c;
+  --rs-da-pink: #f472b6;
+  --rs-da-pink-hover: #db2777;
+  --rs-da-pink-border: #db2777;
   --rs-da-btn-gold-top: #f8fafc;
   --rs-da-btn-gold-bot: #e2e8f0;
   --rs-da-btn-gold-border: #cbd5e1;
