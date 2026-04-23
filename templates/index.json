@@ -11,16 +11,6 @@
   "sections": {
     "rs_hero_video": {
       "type": "rs-hero-video",
-      "settings": {
-        "show_badge": true,
-        "badge_text": "Candidatures ouvertes",
-        "heading_line_1": "Chaque vêtement",
-        "heading_line_2": "est une",
-        "heading_emphasis": "offre",
-        "subtitle": "Postule. Candidature non négociable. Les meilleurs CV finissent sur le packaging.",
-        "search_placeholder": "Cherche un poste...",
-        "search_btn_label": "Voir les offres →"
-      },
       "blocks": {
         "hv_pill_1": {
           "type": "pill",
@@ -80,7 +70,19 @@
         "hv_stat_1",
         "hv_stat_2",
         "hv_stat_3"
-      ]
+      ],
+      "settings": {
+        "background_video": "shopify://files/videos/Défilé VFinale - copie 4.mov",
+        "mp4_url": "",
+        "show_badge": true,
+        "badge_text": "Candidatures ouvertes",
+        "heading_line_1": "Chaque vêtement",
+        "heading_line_2": "est une",
+        "heading_emphasis": "offre",
+        "subtitle": "Postule. Candidature non négociable. Les meilleurs CV finissent sur le packaging.",
+        "search_placeholder": "Cherche un poste...",
+        "search_btn_label": "Voir les offres →"
+      }
     },
     "rs_ind_home_stats": {
       "type": "rs-ind-home-stats",
