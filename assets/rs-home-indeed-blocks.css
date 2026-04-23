@@ -4,6 +4,7 @@
  */
 
 body[data-rs-page='index'] .rs-hero-runway,
+body[data-rs-page='index'] .rs-hero-video,
 body[data-rs-page='index'] .section-home-unified-page .rs-uni-page,
 body[data-rs-page='index'] .rs-site-footer {
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;

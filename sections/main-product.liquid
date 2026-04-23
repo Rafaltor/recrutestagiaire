@@ -56,25 +56,6 @@
     });
   });
 
-  var shareBtn = document.getElementById('rs-pro-share-offer');
-  if (shareBtn) {
-    var resetLabel = shareBtn.getAttribute('data-reset-label') || "Sauvegarder l'offre";
-    shareBtn.addEventListener('click', function () {
-      var url = window.location.href;
-      if (navigator.share) {
-        navigator.share({ title: document.title, url: url }).catch(function () {});
-      } else if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(function () {
-          shareBtn.textContent = 'Lien copié';
-          setTimeout(function () {
-            shareBtn.textContent = resetLabel;
-          }, 2000);
-        });
-      } else {
-        window.prompt('Copier le lien :', url);
-      }
-    });
-  }
 })();
 </script>
 
@@ -108,8 +89,6 @@
     },
     { "type": "text", "id": "add_to_cart_text", "label": "Texte bouton postuler", "default": "Postuler — Ajouter au dossier" },
     { "type": "text", "id": "free_shipping_text", "label": "Sous-texte prix (ex. livraison)", "default": "Livraison offerte dès 200 € de candidatures" },
-    { "type": "text", "id": "save_offer_label", "label": "Libellé bouton secondaire", "default": "Sauvegarder l’offre" },
-    { "type": "url", "id": "save_offer_url", "label": "Lien « Sauvegarder l’offre » (optionnel)", "info": "Vide = partage / copie du lien au clic." },
     { "type": "text", "id": "similar_title", "label": "Titre offres similaires", "default": "Autres offres disponibles" },
     { "type": "text", "id": "description_title", "label": "Titre bloc description", "default": "Description du poste" },
     { "type": "text", "id": "sold_out_message", "label": "Message poste pourvu", "default": "Ce poste est actuellement pourvu." },

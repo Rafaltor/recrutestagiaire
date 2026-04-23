@@ -68,10 +68,9 @@
   {%- unless _rs_skip_cell -%}
     {%- assign _rs_home_render_idx = _rs_home_render_idx | plus: 1 -%}
     {%- comment -%}
-      Ordre mobile (page d’accueil) : 1 hero fond sombre → 2 chiffre officiel → 3–3 deux produits (même ligne, span 6) →
-      4 meilleur profil → 5 espace candidat → 6 espace offres → 7 recherche / mots-clés → 8 actualités.
+      Ordre mobile (--rs-mo) : 1–8 = ordre d’affichage des cellules ; au-delà du tableau, index de rendu par défaut.
     {%- endcomment -%}
-    {%- assign _rs_home_mob_map = '1|2|3|4|3|7|8|5|6' | split: '|' -%}
+    {%- assign _rs_home_mob_map = '1|2|3|4|5|6|7|8|9' | split: '|' -%}
     {%- assign _rs_home_mo_idx = _rs_home_render_idx | minus: 1 -%}
     {%- assign _rs_home_mo = _rs_home_mob_map[_rs_home_mo_idx] | default: _rs_home_render_idx -%}
     {%- assign pad = block.settings.cell_padding | default: 16 -%}
@@ -79,7 +78,7 @@
     {%- if span_n < 1 or span_n > 12 -%}
       {%- assign span_n = 12 -%}
     {%- endif -%}
-    {%- if block.type == 'blue_band' or block.type == 'hero_intro_bundle' -%}
+    {%- if block.type == 'blue_band' or block.type == 'hero_intro_bundle' or block.type == 'home_stats_strip' -%}
       {%- assign pad = 0 -%}
     {%- endif -%}
     <div
@@ -230,68 +229,6 @@
       return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] || c;
     });
   }
-  function ensurePdfJs() {
-    if (window.pdfjsLib) return Promise.resolve();
-    if (window.__rsTopProfilePdfJs) return window.__rsTopProfilePdfJs;
-    window.__rsTopProfilePdfJs = new Promise(function (resolve, reject) {
-      var s = document.createElement('script');
-      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-      s.async = true;
-      s.onload = function () {
-        if (window.pdfjsLib) resolve();
-        else reject(new Error('pdfjsLib'));
-      };
-      s.onerror = function () {
-        reject(new Error('pdfjs load'));
-      };
-      document.head.appendChild(s);
-    });
-    return window.__rsTopProfilePdfJs;
-  }
-  /** Aperçu net (1re page) sans barre d’outils du navigateur ; repli iframe si CORS / chargement. */
-  function rsRenderTopProfilePdf(hostEl, pdfUrl) {
-    var inner = hostEl.querySelector('.rs-top-profile-api__pdf-canvas-inner');
-    if (!inner) return;
-    inner.innerHTML = '<p class="text-muted small mb-0">Chargement du CV…</p>';
-    function fallbackIframe() {
-      var u = pdfUrl + (pdfUrl.indexOf('#') === -1 ? '#toolbar=0' : '');
-      inner.innerHTML =
-        '<iframe class="rs-top-profile-api__cv-frame rs-top-profile-api__cv-frame--fallback" title="CV PDF" src="' +
-        esc(u) +
-        '" loading="lazy"></iframe>';
-    }
-    ensurePdfJs()
-      .then(function () {
-        var lib = window.pdfjsLib;
-        lib.GlobalWorkerOptions.workerSrc =
-          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        return lib.getDocument({ url: pdfUrl, withCredentials: false }).promise;
-      })
-      .then(function (pdf) {
-        return pdf.getPage(1);
-      })
-      .then(function (page) {
-        inner.innerHTML = '';
-        var canvas = document.createElement('canvas');
-        canvas.className = 'rs-top-profile-api__pdf-canvas';
-        inner.appendChild(canvas);
-        var cssW = hostEl.clientWidth || hostEl.offsetWidth || 320;
-        if (cssW < 80) cssW = 320;
-        var dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-        var vp1 = page.getViewport({ scale: 1 });
-        var scale = (cssW / vp1.width) * dpr;
-        var viewport = page.getViewport({ scale: scale });
-        var ctx = canvas.getContext('2d', { alpha: false });
-        canvas.width = Math.floor(viewport.width);
-        canvas.height = Math.floor(viewport.height);
-        canvas.style.width = Math.floor(cssW) + 'px';
-        canvas.style.height = Math.floor(viewport.height / dpr) + 'px';
-        return page.render({ canvasContext: ctx, viewport: viewport }).promise;
-      })
-      .catch(function () {
-        fallbackIframe();
-      });
-  }
   function runTopProfiles() {
     document.querySelectorAll('.rs-top-profile-api').forEach(function (wrap) {
       var url = wrap.getAttribute('data-rs-top-profile-api');
@@ -330,46 +267,6 @@
           var handle = p.handle || p.instagram || '—';
           var job = p.job_title || p.metier || '—';
           var nom = p.name && String(p.name).trim() ? String(p.name).trim() : '';
-          var cvRaw = p.cv != null && String(p.cv).trim() !== '' ? String(p.cv).trim() : '';
-          if (cvRaw === '' && p.cv_url != null && String(p.cv_url).trim() !== '') {
-            cvRaw = String(p.cv_url).trim();
-          }
-          var cvEsc = esc(cvRaw);
-          var cvLower = cvRaw.toLowerCase();
-          var isPdf = cvRaw !== '' && /\.pdf(\?|#|$)/i.test(cvRaw);
-          var isImg =
-            cvRaw !== '' &&
-            (/\.(png|jpe?g|webp|gif)(\?|$)/i.test(cvRaw) ||
-              cvLower.indexOf('image/') !== -1);
-          var cvCol = '';
-          if (cvRaw !== '') {
-            if (isImg) {
-              cvCol =
-                '<div class="rs-top-profile-api__cv">' +
-                '<a class="rs-top-profile-api__cv-img-wrap" href="' +
-                cvEsc +
-                '" target="_blank" rel="noopener noreferrer">' +
-                '<img class="rs-top-profile-api__cv-img" src="' +
-                cvEsc +
-                '" alt="CV" loading="lazy" decoding="async">' +
-                '</a></div>';
-            } else if (isPdf) {
-              /* Rendu PDF dans pdfSlot (plus bas), pas dans cvCol */
-              cvCol = '';
-            } else {
-              cvCol =
-                '<div class="rs-top-profile-api__cv">' +
-                '<a class="rs-top-profile-api__cv-link" href="' +
-                cvEsc +
-                '" target="_blank" rel="noopener noreferrer">Voir le CV</a>' +
-                '</div>';
-            }
-          } else {
-            cvCol =
-              '<div class="rs-top-profile-api__cv rs-top-profile-api__cv--empty">' +
-              '<span class="text-muted small">CV non joint</span>' +
-              '</div>';
-          }
           var kickerAttr = wrap.getAttribute('data-rs-top-kicker') || '';
           var titleAttr = wrap.getAttribute('data-rs-top-title') || '';
           var titleBlock = '';
@@ -384,14 +281,6 @@
               ? '<p class="mb-2 rs-top-profile-api__name"><strong>' + esc(nom) + '</strong></p>' +
                 (handle !== '—' ? '<p class="mb-2 rs-top-profile-api__handle text-muted">' + esc(handle) + '</p>' : '')
               : '<p class="mb-2 rs-top-profile-api__name"><strong>' + esc(handle) + '</strong></p>';
-          var cvInner =
-            isPdf && cvRaw !== ''
-              ? '<div class="rs-top-profile-api__cv rs-top-profile-api__cv--pdf">' +
-                '<div class="rs-top-profile-api__pdf-canvas-host" data-rs-pdf-url="' +
-                esc(cvRaw) +
-                '"><div class="rs-top-profile-api__pdf-canvas-inner"></div></div>' +
-                '</div>'
-              : cvCol;
           var textCol =
             '<div class="rs-top-profile-api__text-col">' +
             titleBlock +
@@ -411,17 +300,7 @@
             esc(btnLabel) +
             '</a></div>';
           mount.innerHTML =
-            '<div class="rs-top-profile-api__layout rs-top-profile-api__layout--split">' +
-            textCol +
-            '<div class="rs-top-profile-api__cv-col">' +
-            cvInner +
-            '</div></div>';
-          if (isPdf && cvRaw !== '') {
-            var pdfHost = mount.querySelector('.rs-top-profile-api__pdf-canvas-host');
-            if (pdfHost) {
-              rsRenderTopProfilePdf(pdfHost, cvRaw.split('#')[0]);
-            }
-          }
+            '<div class="rs-top-profile-api__layout rs-top-profile-api__layout--text-only">' + textCol + '</div>';
         })
         .catch(function () {
           mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
@@ -964,6 +843,40 @@
           "label": "2e offre sous la pub",
           "info": "Laissez vide pour n’afficher qu’une carte par slot (recommandé pour 3 encarts de même taille). Renseignez pour une 2e carte compacte en dessous."
         }
+      ]
+    },
+    {
+      "type": "home_stats_strip",
+      "name": "Bandeau stats collectif",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "col_span",
+          "label": "Largeur colonnes",
+          "default": "12",
+          "options": [
+            { "value": "12", "label": "12" },
+            { "value": "9", "label": "9" },
+            { "value": "8", "label": "8" },
+            { "value": "7", "label": "7" },
+            { "value": "6", "label": "6" },
+            { "value": "5", "label": "5" },
+            { "value": "4", "label": "4" },
+            { "value": "3", "label": "3" }
+          ]
+        },
+        { "type": "checkbox", "id": "use_strip_bg", "label": "Fond bandeau rouge", "default": false },
+        { "type": "color", "id": "cell_bg", "label": "Fond cellule", "default": "#ffffff" },
+        { "type": "range", "id": "cell_padding", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Padding cellule", "default": 0 },
+        { "type": "color", "id": "cell_border", "label": "Bordure (vide = défaut)" },
+        { "type": "text", "id": "stat1_num", "label": "Chiffre gauche", "default": "20" },
+        { "type": "text", "id": "stat1_label", "label": "Texte gauche", "default": "candidats dans la base nationale" },
+        { "type": "text", "id": "stat2_num", "label": "Chiffre centre", "default": "126" },
+        { "type": "text", "id": "stat2_label", "label": "Texte centre", "default": "votes enregistrés" },
+        { "type": "text", "id": "cta_lead", "label": "Texte CTA", "default": "Le meilleur rejoint le collectif." },
+        { "type": "text", "id": "cta_label", "label": "Libellé bouton", "default": "Voter →" },
+        { "type": "url", "id": "cta_url", "label": "Lien bouton" }
       ]
     },
     {

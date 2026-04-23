@@ -1,0 +1,24 @@
+{%- comment -%}
+  Bandeau chiffres collectif (même contenu que la section rs-ind-home-stats), pour bloc « home_stats_strip » dans home-unified-page.
+{%- endcomment -%}
+{%- assign b = block.settings -%}
+<div class="rs-ind-stats rs-ind-stats--embedded">
+  <div class="rs-ind-stats__col">
+    <div class="rs-ind-stats__num">{{ b.stat1_num | default: '20' | escape }}</div>
+    <div class="rs-ind-stats__label">{{ b.stat1_label | default: 'candidats dans la base nationale' | escape }}</div>
+  </div>
+  <div class="rs-ind-stats__sep" aria-hidden="true"></div>
+  <div class="rs-ind-stats__col">
+    <div class="rs-ind-stats__num">{{ b.stat2_num | default: '126' | escape }}</div>
+    <div class="rs-ind-stats__label">{{ b.stat2_label | default: 'votes enregistrés' | escape }}</div>
+  </div>
+  <div class="rs-ind-stats__sep" aria-hidden="true"></div>
+  <div class="rs-ind-stats__cta-wrap">
+    <div class="rs-ind-stats__cta-text">{{ b.cta_lead | default: 'Le meilleur rejoint le collectif.' | escape }}</div>
+    <a
+      class="rs-ind-stats__btn rs-btn--primary text-decoration-none"
+      href="{{ b.cta_url | default: 'https://portail.recrutestagiaire.eu/swipe' }}">
+      {{ b.cta_label | default: 'Voter →' | escape }}
+    </a>
+  </div>
+</div>

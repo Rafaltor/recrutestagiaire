@@ -92,8 +92,8 @@
         {{ section.settings.cta_subtitle | default: 'Le recrutement est ouvert. C’est la communauté qui décide.' }}
       </p>
       <div class="rs-collectif-cta__actions">
-        <a href="{{ rs_depot }}" class="btn btn-primary" rel="noopener noreferrer">{{ section.settings.cta_primary_label | default: 'Déposer sa candidature' }}</a>
-        <a href="{{ rs_profils }}" class="btn btn-outline-primary rs-collectif-cta__btn-secondary" rel="noopener noreferrer">{{ section.settings.cta_secondary_label | default: 'Voir les profils' }}</a>
+        <a href="{{ rs_depot }}" class="rs-btn rs-btn--primary text-decoration-none" rel="noopener noreferrer">{{ section.settings.cta_primary_label | default: 'Déposer sa candidature' }}</a>
+        <a href="{{ rs_profils }}" class="rs-btn rs-btn--secondary text-decoration-none" rel="noopener noreferrer">{{ section.settings.cta_secondary_label | default: 'Voir les profils' }}</a>
       </div>
       <p class="rs-collectif-cta__fineprint">Sans engagement. Dans la limite des stocks disponibles.</p>
     </div>

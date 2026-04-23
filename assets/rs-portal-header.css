@@ -630,18 +630,25 @@ body.rs-portal-header .rs-header-drawer__footer .rs-banner-top__account {
   color: var(--black) !important;
 }
 
-/* Accueil : hero sous le header opaque (plus de chevauchement type over-hero) */
+/* Accueil : hero vidéo remonté sous le header fixe (plein viewport, vidéo derrière la barre) */
+body.rs-portal-header[data-rs-page='index'] main > .shopify-section.section-rs-hero-video:first-child {
+  margin-top: calc(-1 * var(--rs-portal-header-h, 140px)) !important;
+  position: relative;
+  z-index: 0;
+}
+
+/* Ancien hero job board : pas de chevauchement */
 body.rs-portal-header[data-rs-page='index'] .shopify-section.section-rs-hero-runway {
   margin-top: 0 !important;
 }
 
 /*
- * Accueil : en haut de page (scroll faible) = barre quasi transparente sur le hero ;
- * après scroll vers le bas = barre blanche (classe .rs-header--scroll-solid sur .header-wrap).
+ * Accueil : en haut de page = header très transparent sur la vidéo ;
+ * après scroll = barre lisible (classe .rs-header--scroll-solid sur .header-wrap).
  */
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ticker {
-  background: rgba(10, 10, 10, 0.42);
-  border-bottom-color: rgba(255, 255, 255, 0.08);
+  background: rgba(10, 10, 10, 0.22);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
   transition: background 0.22s ease, border-color 0.22s ease;
 }
 
@@ -651,10 +658,10 @@ body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header.rs-header--sc
 }
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-two-tier {
-  --rs-hdr-blur-edge: 1px;
-  --rs-hdr-blur-center: 18px;
-  --rs-hdr-frost-edge: rgba(250, 250, 248, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  --rs-hdr-blur-edge: 0px;
+  --rs-hdr-blur-center: 14px;
+  --rs-hdr-frost-edge: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header.rs-header--scroll-solid .rs-header-two-tier {
@@ -678,17 +685,20 @@ body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-heade
   color: #fff !important;
 }
 
-/* Marque « Recrute Stagiaire » en rose (accueil, barre transparente ou blanche après scroll) */
-body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header .rs-nav-brand__name.logo.rs-nav-brand__name--headline,
-body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header .rs-header-mobile-bar__title {
+/* Marque « Recrute Stagiaire » : blanc sur hero (header transparent), rose après scroll */
+body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header.rs-header--scroll-solid .rs-nav-brand__name.logo.rs-nav-brand__name--headline,
+body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header.rs-header--scroll-solid .rs-header-mobile-bar__title {
   color: var(--accent) !important;
+  -webkit-text-fill-color: var(--accent) !important;
   text-shadow: none !important;
 }
 
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-nav-brand__name.logo.rs-nav-brand__name--headline,
 body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-mobile-bar__title {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
   text-shadow:
-    0 0 18px rgba(255, 255, 255, 0.55),
+    0 0 14px rgba(0, 0, 0, 0.5),
     0 1px 3px rgba(0, 0, 0, 0.45) !important;
 }
 

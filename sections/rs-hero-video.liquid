@@ -66,9 +66,8 @@
       {%- endif -%}
       {%- if section.settings.heading_line_2 != blank or section.settings.heading_emphasis != blank -%}
         <span class="rs-hero-video__title-line">
-          {{ section.settings.heading_line_2 | escape }}
-          {% if section.settings.heading_emphasis != blank %}
-            <span class="rs-hero-video__title-accent">{{ section.settings.heading_emphasis | escape }}</span>
+          {{ section.settings.heading_line_2 | escape }}{% if section.settings.heading_emphasis != blank %}
+            <span class="rs-hero-video__title-accent"> {{ section.settings.heading_emphasis | escape }}</span>
           {% endif %}
         </span>
       {%- endif -%}
@@ -80,7 +79,12 @@
 
     <form class="rs-hero-video__search" action="{{ search_action }}" method="get" role="search">
       <input type="hidden" name="type" value="product">
-      <span class="rs-hero-video__search-icon" aria-hidden="true">🔍</span>
+      <span class="rs-hero-video__search-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="10.5" cy="10.5" r="6.25" stroke="currentColor" stroke-width="2" fill="none"/>
+          <path d="M15.2 15.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+        </svg>
+      </span>
       <input
         type="search"
         name="q"
@@ -91,24 +95,18 @@
       <button type="submit" class="rs-hero-video__search-btn">{{ section.settings.search_btn_label | escape }}</button>
     </form>
 
-    {%- assign pill_count = 0 -%}
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'pill' -%}
-        {%- assign pill_count = pill_count | plus: 1 -%}
-      {%- endif -%}
-    {%- endfor -%}
-    {%- if pill_count > 0 -%}
-      <div class="rs-hero-video__pills">
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'pill' -%}
-            <a
-              class="rs-hero-video__pill"
-              href="{{ block.settings.link | default: routes.all_products_collection_url }}"
-              {{ block.shopify_attributes }}>
-              {{ block.settings.label | escape }}
-            </a>
-          {%- endif -%}
-        {%- endfor -%}
+    {%- liquid
+      assign portal_href = section.settings.portal_url | default: 'https://portail.recrutestagiaire.eu' | strip
+      if portal_href == blank
+        assign portal_href = 'https://portail.recrutestagiaire.eu'
+      endif
+      assign portal_lbl = section.settings.portal_label | default: 'Portail Candidat' | strip
+    -%}
+    {%- if portal_lbl != blank -%}
+      <div class="rs-hero-video__portal">
+        <a class="rs-hero-video__portal-btn text-decoration-none" href="{{ portal_href }}" rel="noopener noreferrer">
+          {{- portal_lbl | escape -}}
+        </a>
       </div>
     {%- endif -%}
 
@@ -155,7 +153,7 @@
   "name": "Hero vidéo",
   "tag": "section",
   "class": "section-rs-hero-video",
-  "max_blocks": 16,
+  "max_blocks": 8,
   "settings": [
     {
       "type": "header",
@@ -229,26 +227,25 @@
       "id": "search_btn_label",
       "label": "Libellé bouton recherche",
       "default": "Voir les offres →"
+    },
+    {
+      "type": "header",
+      "content": "Portail candidats"
+    },
+    {
+      "type": "url",
+      "id": "portal_url",
+      "label": "Lien portail",
+      "info": "Si vide : https://portail.recrutestagiaire.eu"
+    },
+    {
+      "type": "text",
+      "id": "portal_label",
+      "label": "Libellé du bouton",
+      "default": "Portail Candidat"
     }
   ],
   "blocks": [
-    {
-      "type": "pill",
-      "name": "Filtre (pill)",
-      "settings": [
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Libellé",
-          "default": "Tous les postes"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Lien"
-        }
-      ]
-    },
     {
       "type": "stat",
       "name": "Statistique",
@@ -271,54 +268,7 @@
   "presets": [
     {
       "name": "Hero vidéo",
-      "blocks": [
-        {
-          "type": "pill",
-          "settings": {
-            "label": "Tous les postes",
-            "link": "shopify://collections/all"
-          }
-        },
-        {
-          "type": "pill",
-          "settings": {
-            "label": "Édition limitée"
-          }
-        },
-        {
-          "type": "pill",
-          "settings": {
-            "label": "CDI"
-          }
-        },
-        {
-          "type": "pill",
-          "settings": {
-            "label": "Disponible maintenant"
-          }
-        },
-        {
-          "type": "stat",
-          "settings": {
-            "value": "2",
-            "label": "offres actives"
-          }
-        },
-        {
-          "type": "stat",
-          "settings": {
-            "value": "48h",
-            "label": "expédition"
-          }
-        },
-        {
-          "type": "stat",
-          "settings": {
-            "value": "SS26",
-            "label": "collection Paris"
-          }
-        }
-      ]
+      "blocks": []
     }
   ]
 }

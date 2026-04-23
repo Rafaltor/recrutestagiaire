@@ -15,6 +15,8 @@
 
 /* ---------- 3 boutons uniquement ---------- */
 .rs-btn--primary,
+.rs-hero-video__search-btn,
+.rs-hero-video__portal-btn,
 body.rs-portal-header .rs-ph-cta,
 .rs-hero-jobboard__search-btn,
 .rs-pro-mock__apply-btn,
@@ -38,6 +40,8 @@ body.rs-portal-header .rs-ph-cta,
   transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
 }
 .rs-btn--primary:hover,
+.rs-hero-video__search-btn:hover,
+.rs-hero-video__portal-btn:hover,
 body.rs-portal-header .rs-ph-cta:hover,
 .rs-hero-jobboard__search-btn:hover,
 .rs-pro-mock__apply-btn:hover,
@@ -99,8 +103,8 @@ body.rs-portal-header .rs-ph-navdesk a:hover {
 body.rs-portal-header .rs-ph-brandlink {
   gap: 12px !important;
 }
-body.rs-portal-header .rs-nav-brand__name--headline,
-body.rs-portal-header .rs-header-mobile-bar__title {
+body.rs-portal-header:not([data-rs-page='index']) .rs-nav-brand__name--headline,
+body.rs-portal-header:not([data-rs-page='index']) .rs-header-mobile-bar__title {
   animation: none !important;
   background: none !important;
   background-clip: unset !important;
@@ -110,6 +114,15 @@ body.rs-portal-header .rs-header-mobile-bar__title {
   font-weight: 700 !important;
   letter-spacing: 0.05em !important;
   text-shadow: none !important;
+}
+body.rs-portal-header[data-rs-page='index'] .rs-nav-brand__name--headline,
+body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar__title {
+  animation: none !important;
+  background: none !important;
+  background-clip: unset !important;
+  -webkit-background-clip: unset !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
 }
 body.rs-portal-header .rs-banner-top__actions .rs-header-ghost-link {
   color: var(--rs-muted) !important;
@@ -286,7 +299,7 @@ a.rs-ind-job-row:hover {
 @media (min-width: 768px) {
   .rs-ind-job-row {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 24px;
   }
 }
@@ -300,13 +313,17 @@ a.rs-ind-job-row:hover {
 }
 @media (min-width: 768px) {
   .rs-ind-job-row__media {
-    width: 80px;
-    height: 80px;
+    width: min(200px, 28vw);
+    flex: 0 0 min(200px, 28vw);
+    height: auto;
+    min-height: 100%;
+    align-self: stretch;
   }
 }
 .rs-ind-job-row__media img {
   width: 100%;
   height: 100%;
+  min-height: 100%;
   object-fit: cover;
 }
 .rs-ind-job-row__body {
@@ -395,8 +412,11 @@ a.rs-ind-job-row:hover {
 }
 @media (min-width: 768px) {
   .rs-ind-job-row--compact .rs-ind-job-row__media {
-    width: 64px !important;
-    height: 64px !important;
+    width: 120px !important;
+    flex: 0 0 120px !important;
+    height: auto !important;
+    min-height: 100% !important;
+    align-self: stretch !important;
   }
 }
 
@@ -682,6 +702,9 @@ a.rs-ind-job-row:hover {
 }
 
 /* Homepage stats strip */
+.rs-ind-stats.rs-ind-stats--embedded {
+  margin: 0;
+}
 .rs-ind-stats {
   background: var(--rs-black);
   border-radius: 16px;
@@ -898,4 +921,102 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
 .rs-ind-coll-card__cta {
   margin-top: auto;
   align-self: flex-start;
+}
+
+/* Colonne produit : pas de scroll interne sur le bloc prix / postuler */
+@media (min-width: 992px) {
+  body[data-rs-page='product'] .rs-pro-mock__right {
+    max-height: none !important;
+    overflow-y: visible !important;
+    overflow: visible !important;
+  }
+}
+
+/* Page Collectif — charte Indeed × boutique (rose #f472b6, gris #f5f5f5) */
+.section-page-collectif-histoire .rs-collectif-page {
+  background: var(--rs-gray);
+  color: var(--rs-black);
+  padding-bottom: 48px;
+}
+.section-page-collectif-histoire .rs-collectif-hero {
+  padding-top: 40px;
+  padding-bottom: 8px;
+}
+.section-page-collectif-histoire .rs-collectif-hero__title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--rs-black) !important;
+  letter-spacing: -0.02em;
+}
+.section-page-collectif-histoire .rs-collectif-hero__subtitle {
+  color: var(--rs-muted) !important;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+.section-page-collectif-histoire .rs-collectif-hero__img {
+  border-radius: 12px;
+  border: 1px solid var(--rs-border);
+}
+.section-page-collectif-histoire .rs-collectif-section__title {
+  border-bottom-color: var(--rs-border);
+  color: var(--rs-black) !important;
+  font-size: 1.25rem;
+}
+.section-page-collectif-histoire .rs-collectif-section__title::before {
+  background: var(--rs-pink);
+  width: 4px;
+  height: 1.1em;
+  border-radius: 2px;
+}
+.section-page-collectif-histoire .rs-collectif-manifeste .container--narrow,
+.section-page-collectif-histoire .rs-collectif-vision .container--narrow {
+  background: var(--rs-white);
+  border: 1px solid var(--rs-border);
+  border-radius: 12px;
+  border-left: 3px solid var(--rs-pink);
+  box-shadow: none;
+}
+.section-page-collectif-histoire .rs-collectif-manifeste__body p,
+.section-page-collectif-histoire .rs-collectif-vision__body p {
+  color: var(--rs-black);
+}
+.section-page-collectif-histoire .rs-collectif-founder-card {
+  background: var(--rs-white);
+  border: 1px solid var(--rs-border);
+  border-left: 3px solid var(--rs-pink);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: none;
+}
+.section-page-collectif-histoire .rs-collectif-founder-card__badge {
+  background: var(--rs-pink);
+  color: var(--rs-white) !important;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+}
+.section-page-collectif-histoire .rs-collectif-founder-card__name {
+  color: var(--rs-black) !important;
+}
+.section-page-collectif-histoire .rs-collectif-founder-card__role {
+  color: var(--rs-muted) !important;
+}
+.section-page-collectif-histoire .rs-collectif-founders__kicker {
+  color: var(--rs-pink) !important;
+}
+.section-page-collectif-histoire .rs-collectif-vision__img {
+  border-radius: 12px;
+  border: 1px solid var(--rs-border);
+}
+.section-page-collectif-histoire .rs-collectif-cta {
+  padding-top: 24px;
+}
+.section-page-collectif-histoire .rs-collectif-cta__title {
+  color: var(--rs-black) !important;
+}
+.section-page-collectif-histoire .rs-collectif-cta__subtitle {
+  color: var(--rs-muted) !important;
+}
+.section-page-collectif-histoire .rs-collectif-cta__fineprint {
+  color: var(--rs-muted) !important;
 }

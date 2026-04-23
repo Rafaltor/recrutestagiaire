@@ -1084,6 +1084,16 @@ body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-hero__
   border-color: #ec4899 !important;
 }
 
+/* Meilleur profil : texte seul (sans aperçu CV) */
+.rs-top-profile-api__layout--text-only {
+  display: block;
+  width: 100%;
+}
+.rs-top-profile-api__layout--text-only .rs-top-profile-api__text-col {
+  flex: none;
+  max-width: 100%;
+}
+
 /* Meilleur profil : texte à gauche, colonne CV à droite sur toute la hauteur du bloc */
 .rs-top-profile-api__layout--split {
   display: flex;

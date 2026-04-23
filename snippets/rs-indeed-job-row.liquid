@@ -27,10 +27,10 @@
     {%- if product.featured_image != blank -%}
       <a href="{{ product.url }}" tabindex="-1" aria-hidden="true">
         <img
-          src="{{ product.featured_image | image_url: width: 240 }}"
+          src="{{ product.featured_image | image_url: width: 600 }}"
           alt=""
-          width="160"
-          height="160"
+          width="400"
+          height="400"
           loading="lazy">
       </a>
     {%- endif -%}

@@ -11,66 +11,6 @@
   "sections": {
     "rs_hero_video": {
       "type": "rs-hero-video",
-      "blocks": {
-        "hv_pill_1": {
-          "type": "pill",
-          "settings": {
-            "label": "Tous les postes",
-            "link": "shopify://collections/all"
-          }
-        },
-        "hv_pill_2": {
-          "type": "pill",
-          "settings": {
-            "label": "Édition limitée",
-            "link": ""
-          }
-        },
-        "hv_pill_3": {
-          "type": "pill",
-          "settings": {
-            "label": "CDI",
-            "link": ""
-          }
-        },
-        "hv_pill_4": {
-          "type": "pill",
-          "settings": {
-            "label": "Disponible maintenant",
-            "link": ""
-          }
-        },
-        "hv_stat_1": {
-          "type": "stat",
-          "settings": {
-            "value": "2",
-            "label": "offres actives"
-          }
-        },
-        "hv_stat_2": {
-          "type": "stat",
-          "settings": {
-            "value": "48h",
-            "label": "expédition"
-          }
-        },
-        "hv_stat_3": {
-          "type": "stat",
-          "settings": {
-            "value": "SS26",
-            "label": "collection Paris"
-          }
-        }
-      },
-      "block_order": [
-        "hv_pill_1",
-        "hv_pill_2",
-        "hv_pill_3",
-        "hv_pill_4",
-        "hv_stat_1",
-        "hv_stat_2",
-        "hv_stat_3"
-      ],
       "settings": {
         "background_video": "shopify://files/videos/Défilé VFinale - copie 4.mov",
         "mp4_url": "",
@@ -81,19 +21,9 @@
         "heading_emphasis": "offre",
         "subtitle": "Postule. Candidature non négociable. Les meilleurs CV finissent sur le packaging.",
         "search_placeholder": "Cherche un poste...",
-        "search_btn_label": "Voir les offres →"
-      }
-    },
-    "rs_ind_home_stats": {
-      "type": "rs-ind-home-stats",
-      "settings": {
-        "stat1_num": "20",
-        "stat1_label": "candidats dans la base nationale",
-        "stat2_num": "126",
-        "stat2_label": "votes enregistrés",
-        "cta_lead": "Le meilleur rejoint le collectif.",
-        "cta_label": "Voter →",
-        "cta_url": "https://portail.recrutestagiaire.eu/swipe"
+        "search_btn_label": "Voir les offres →",
+        "portal_url": "https://portail.recrutestagiaire.eu",
+        "portal_label": "Portail Candidat"
       }
     },
     "home_unified": {
@@ -151,6 +81,23 @@
             "show_stars": false,
             "cta_label": "Voir",
             "product_below": ""
+          }
+        },
+        "uni_home_stats": {
+          "type": "home_stats_strip",
+          "settings": {
+            "col_span": "12",
+            "use_strip_bg": false,
+            "cell_bg": "#ffffff",
+            "cell_padding": 0,
+            "cell_border": "",
+            "stat1_num": "20",
+            "stat1_label": "candidats dans la base nationale",
+            "stat2_num": "126",
+            "stat2_label": "votes enregistrés",
+            "cta_lead": "Le meilleur rejoint le collectif.",
+            "cta_label": "Voter →",
+            "cta_url": "https://portail.recrutestagiaire.eu/swipe"
           }
         },
         "uni_search": {
@@ -270,6 +217,7 @@
         "sponsored_inline_1",
         "uni_top_profile",
         "sponsored_inline_2",
+        "uni_home_stats",
         "uni_search",
         "uni_gp_actus",
         "uni_gp_cand",
@@ -307,7 +255,6 @@
   },
   "order": [
     "rs_hero_video",
-    "rs_ind_home_stats",
     "home_unified"
   ]
 }

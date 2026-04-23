@@ -122,10 +122,6 @@
   {%- endfor -%}
 {%- endunless -%}
 {%- assign rs_matiere = product.metafields.custom.matiere.value | default: product.metafields.custom.matiere | default: '—' -%}
-{%- assign rs_drop_display = product.metafields.custom.drop_date | metafield_text | strip -%}
-{%- if rs_drop_display == blank -%}
-  {%- assign rs_drop_display = 'Prochainement' -%}
-{%- endif -%}
 {%- if product.type != blank -%}
   {%- assign rs_dept_meta = product.type -%}
   {%- if rs_dept_detail != blank -%}
@@ -327,10 +323,6 @@
                   <div class="rs-pro-mock__info-line-label">LIEU DE TRAVAIL</div>
                   <div class="rs-pro-mock__info-line-value">{{ rs_loc | escape }} — Expédition nationale</div>
                 </div>
-                <div>
-                  <div class="rs-pro-mock__info-line-label">PRISE DE POSTE</div>
-                  <div class="rs-pro-mock__info-line-value">{{ rs_drop_display | escape }}</div>
-                </div>
               </div>
 
               <div class="rs-pro-mock__ind-divider" aria-hidden="true"></div>
@@ -433,20 +425,6 @@
                   Déposer mon CV →
                 </a>
               </div>
-
-              {% if section.settings.save_offer_url != blank %}
-                <a href="{{ section.settings.save_offer_url }}" class="rs-pro-mock__save-btn text-center d-block text-decoration-none">
-                  {{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' }}
-                </a>
-              {% else %}
-                <button
-                  type="button"
-                  class="rs-pro-mock__save-btn"
-                  id="rs-pro-share-offer"
-                  data-reset-label="{{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' | escape }}">
-                  {{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' }}
-                </button>
-              {% endif %}
             </form>
           {% else %}
             <p class="text-muted mb-0">{{ section.settings.sold_out_message | default: 'Ce poste est actuellement pourvu.' }}</p>

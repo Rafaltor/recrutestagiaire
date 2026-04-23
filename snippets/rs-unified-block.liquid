@@ -339,6 +339,9 @@
       </div>
     {%- endif -%}
 
+  {%- when 'home_stats_strip' -%}
+    {% render 'rs-home-stats-strip', block: block %}
+
   {%- when 'top_profile_portail' -%}
     {%- assign _api = b.api_url | default: settings.rs_api_url_top_profile | default: 'https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top' -%}
     {%- assign _base = b.portail_base_url | default: 'https://portail.recrutestagiaire.eu' | strip | rstrip: '/' -%}

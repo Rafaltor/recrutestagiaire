@@ -153,27 +153,28 @@ body.rs-paris-startup main .container {
 }
 
 /* Sections alternées (hors hero vidéo plein écran) */
-body.rs-paris-startup main > .shopify-section:nth-child(even):not(.section-rs-hero-runway) {
+body.rs-paris-startup main > .shopify-section:nth-child(even):not(.section-rs-hero-runway):not(.section-rs-hero-video) {
   background: var(--gray-100);
 }
 
-body.rs-paris-startup main > .shopify-section:nth-child(odd):not(.section-rs-hero-runway) {
+body.rs-paris-startup main > .shopify-section:nth-child(odd):not(.section-rs-hero-runway):not(.section-rs-hero-video) {
   background: var(--white);
 }
 
-body.rs-paris-startup main > .shopify-section:not(.section-rs-hero-runway) {
+body.rs-paris-startup main > .shopify-section:not(.section-rs-hero-runway):not(.section-rs-hero-video) {
   padding-top: var(--rs-section-y);
   padding-bottom: var(--rs-section-y);
 }
 
 @media (min-width: 900px) {
-  body.rs-paris-startup main > .shopify-section:not(.section-rs-hero-runway) {
+  body.rs-paris-startup main > .shopify-section:not(.section-rs-hero-runway):not(.section-rs-hero-video) {
     padding-top: var(--rs-section-y-lg);
     padding-bottom: var(--rs-section-y-lg);
   }
 }
 
-body.rs-paris-startup main > .shopify-section.section-rs-hero-runway {
+body.rs-paris-startup main > .shopify-section.section-rs-hero-runway,
+body.rs-paris-startup main > .shopify-section.section-rs-hero-video {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   background: transparent !important;
