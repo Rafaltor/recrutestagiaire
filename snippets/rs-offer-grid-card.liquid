@@ -71,10 +71,12 @@
 
   <div class="rs-pe-card__head rs-offer-list-card__head rs-offer-list-card__head--desktop-meta d-none d-md-flex"
     style="background:linear-gradient(180deg,{{ bar_from }} 0%,{{ bar_to }} 100%);">
-    <span class="rs-pe-card__status">
-      {%- if cv.available -%}{{ status_open }}{%- else -%}{{ status_closed }}{%- endif -%}
-    </span>
-    <span class="rs-pe-card__ref">{{ s.offer_ref_prefix | default: 'Réf.' }} {{ ref_val }}</span>
+    <div class="rs-offer-list-card__head-meta-inner">
+      <span class="rs-pe-card__status rs-offer-card__badge-status">
+        {%- if cv.available -%}{{ status_open }}{%- else -%}{{ status_closed }}{%- endif -%}
+      </span>
+      <span class="rs-pe-card__ref rs-offer-card__ref-line">{{ s.offer_ref_prefix | default: 'Réf.' }} {{ ref_val }}</span>
+    </div>
   </div>
 
   <div class="rs-offer-list-card__split">

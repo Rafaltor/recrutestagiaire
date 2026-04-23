@@ -4,7 +4,7 @@
       "type": "main-collection",
       "settings": {
         "products_per_page": 12,
-        "grid_cols": "4",
+        "grid_cols": "3",
         "offer_media_height": 220,
         "offer_carousel_interval": 0,
         "collection_page_bg": "#f4f4f2",

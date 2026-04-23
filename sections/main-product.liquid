@@ -2,8 +2,10 @@
 <div class="rs-product-top-band py-3 border-bottom" {{ section.shopify_attributes }}>
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-      <a href="{{ collection.url | default: routes.all_products_collection_url }}" class="btn btn-sm btn-light-primary rounded-pill fw-medium px-4">
-        <i class="bi bi-box-arrow-in-left me-2"></i>Retour aux offres
+      <a
+        href="{{ collection.url | default: routes.all_products_collection_url }}"
+        class="rs-pro-back-offers text-decoration-none">
+        Retour aux offres
       </a>
       <div class="rs-pro-mock__breadcrumb-top rs-product-breadcrumb small text-muted ms-md-auto text-md-end">
         <a href="{{ routes.all_products_collection_url }}" class="text-muted text-decoration-none">Offres en cours</a>

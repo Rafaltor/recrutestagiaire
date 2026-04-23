@@ -221,26 +221,16 @@
     <div class="rs-pole-panel rs-pole-panel--{{ b.layout_style }} h-100" style="background:{{ b.bg_color }};border-color:{{ b.border_color }};border-width:0;">
       {%- if b.layout_style == 'service' -%}
         <div class="rs-pole-panel__service">
-          {%- if b.circle_label != blank -%}
-            {%- assign _circ_l = b.circle_label | strip | downcase -%}
-            {%- assign _circ_offres = false -%}
-            {%- if _circ_l contains 'offre' -%}
-              {%- assign _circ_offres = true -%}
-            {%- endif -%}
-            {%- assign _circ_cand = false -%}
-            {%- if _circ_l contains 'candidat' -%}
-              {%- assign _circ_cand = true -%}
-            {%- endif -%}
-            <div
-              class="rs-pole-panel__circle{% if _circ_offres %} rs-pole-panel__circle--offres-pale{% endif %}{% if _circ_cand %} rs-pole-panel__circle--candidat{% endif %}"
-              style="{% unless _circ_offres %}background:{{ b.circle_bg }};{% endunless %}color:{{ b.circle_text }};">
-              <span>{{ b.circle_label | escape }}</span>
-            </div>
+          {%- if b.kicker != blank or b.circle_label != blank -%}
+            <p class="rs-pole-panel__da-kicker">
+              {%- if b.kicker != blank -%}
+                {{ b.kicker | escape }}
+              {%- else -%}
+                {{ b.circle_label | escape }}
+              {%- endif -%}
+            </p>
           {%- endif -%}
           <div class="rs-pole-panel__main">
-            {%- if b.kicker != blank -%}
-              <p class="rs-pole-panel__kicker">{{ b.kicker | escape }}</p>
-            {%- endif -%}
             {%- if b.title != blank -%}
               <h3 class="rs-pole-panel__title">{{ b.title | escape }}</h3>
             {%- endif -%}
@@ -270,7 +260,7 @@
       {%- else -%}
         <div class="rs-pole-panel__encart">
           {%- if b.kicker != blank -%}
-            <p class="rs-pole-panel__kicker">{{ b.kicker | escape }}</p>
+            <p class="rs-pole-panel__kicker rs-pole-panel__da-kicker">{{ b.kicker | escape }}</p>
           {%- endif -%}
           {%- if b.title != blank -%}
             <h3 class="rs-pole-panel__title">{{ b.title | escape }}</h3>

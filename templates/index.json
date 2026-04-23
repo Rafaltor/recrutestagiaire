@@ -124,7 +124,7 @@
         "uni_gp_actus": {
           "type": "grid_panel",
           "settings": {
-            "col_span": "6",
+            "col_span": "4",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -155,7 +155,7 @@
         "uni_gp_cand": {
           "type": "grid_panel",
           "settings": {
-            "col_span": "5",
+            "col_span": "4",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,
@@ -186,7 +186,7 @@
         "uni_gp_offres": {
           "type": "grid_panel",
           "settings": {
-            "col_span": "7",
+            "col_span": "4",
             "use_strip_bg": false,
             "cell_bg": "#ffffff",
             "cell_padding": 0,

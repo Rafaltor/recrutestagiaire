@@ -1812,33 +1812,36 @@ body[data-rs-page='product'] .rs-pro-mock__similar-title {
 }
 
 button.shopify-pc__banner__btn-accept {
-  background: linear-gradient(180deg, var(--rs-da-pink-top) 0%, var(--rs-da-pink) 100%) !important;
-  border: 1px solid var(--rs-da-pink-border) !important;
+  background: #f472b6 !important;
+  background-image: none !important;
+  border: 1px solid #f472b6 !important;
   color: #fff !important;
+  border-radius: 100px !important;
   box-shadow: none !important;
   text-shadow: none !important;
 }
 
 button.shopify-pc__banner__btn-accept:hover {
-  background: linear-gradient(180deg, var(--rs-da-pink-hover) 0%, var(--rs-da-pink-hover) 100%) !important;
-  border-color: var(--rs-da-pink-hover) !important;
+  background: #db2777 !important;
+  border-color: #db2777 !important;
   color: #fff !important;
 }
 
 button.shopify-pc__banner__btn-decline,
 button.shopify-pc__banner__btn-manage-prefs {
   background: #ffffff !important;
-  border: 1px solid #cccccc !important;
-  color: #333333 !important;
+  border: 1.5px solid #e8e8e4 !important;
+  color: #0a0a0a !important;
+  border-radius: 100px !important;
   box-shadow: none !important;
   text-shadow: none !important;
 }
 
 button.shopify-pc__banner__btn-decline:hover,
 button.shopify-pc__banner__btn-manage-prefs:hover {
-  background: #f5f5f5 !important;
-  border-color: #cccccc !important;
-  color: #333333 !important;
+  background: #ffffff !important;
+  border-color: #0a0a0a !important;
+  color: #0a0a0a !important;
 }
 
 .shopify-pc__prefs__dialog {

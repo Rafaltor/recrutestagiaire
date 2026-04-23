@@ -4,63 +4,55 @@
 -%}
 <footer class="footer rs-site-footer" role="contentinfo">
   <div class="container">
-    <div class="row rs-site-footer__grid g-4">
-      <div class="col-12 col-lg-4 col-md-5">
-        <div class="rs-site-footer__block">
-          <a href="{{ routes.root_url }}" class="rs-site-footer__brand-link text-decoration-none">
-            <span class="rs-site-footer__brand-name">{{ shop.name | upcase }}</span>
-          </a>
-          <p class="rs-site-footer__intro">
-            {{ settings.footer_tagline | default: 'Collectif artistique — Paris' | escape }}. Chaque vêtement est une offre. Chaque achat, une candidature.
-          </p>
-          <ul class="rs-site-footer__social" aria-label="Réseaux sociaux">
-            <li>
-              <a href="#" class="rs-site-footer__social-link" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
-            </li>
-            <li>
-              <a href="#" class="rs-site-footer__social-link" aria-label="TikTok"><i class="bi bi-tiktok" aria-hidden="true"></i></a>
-            </li>
-            <li>
-              <a href="#" class="rs-site-footer__social-link" aria-label="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
-            </li>
-          </ul>
-        </div>
+    <div class="rs-site-footer__columns">
+      <div class="rs-site-footer__col rs-site-footer__col--brand">
+        <a href="{{ routes.root_url }}" class="rs-site-footer__brand-link text-decoration-none">
+          <span class="rs-site-footer__brand-name">{{ shop.name | upcase }}</span>
+        </a>
+        <p class="rs-site-footer__intro">
+          {{ settings.footer_tagline | default: 'Collectif artistique — Paris' | escape }}. Chaque vêtement est une offre. Chaque achat, une candidature.
+        </p>
+        <ul class="rs-site-footer__social" aria-label="Réseaux sociaux">
+          <li>
+            <a href="#" class="rs-site-footer__social-link" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+          </li>
+          <li>
+            <a href="#" class="rs-site-footer__social-link" aria-label="TikTok"><i class="bi bi-tiktok" aria-hidden="true"></i></a>
+          </li>
+          <li>
+            <a href="#" class="rs-site-footer__social-link" aria-label="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+          </li>
+        </ul>
       </div>
-      <div class="col-6 col-lg-2 col-md-4 offset-md-3 offset-lg-0">
-        <div class="rs-site-footer__block">
-          <h2 class="rs-site-footer__title">Collections</h2>
-          <ul class="rs-site-footer__menu">
-            <li><a href="{{ rs_footer_all }}">Toutes les offres</a></li>
-            <li><a href="/collections/abcdrs">Collection ABCDRS</a></li>
-            <li><a href="/collections/les-stagiaires-de-base">Les stagiaires de base</a></li>
-            <li><a href="{{ routes.collections_url }}">Index des collections</a></li>
-          </ul>
-        </div>
+      <div class="rs-site-footer__col">
+        <h2 class="rs-site-footer__title">Collections</h2>
+        <ul class="rs-site-footer__menu">
+          <li><a href="{{ rs_footer_all }}">Toutes les offres</a></li>
+          <li><a href="/collections/abcdrs">Collection ABCDRS</a></li>
+          <li><a href="/collections/les-stagiaires-de-base">Les stagiaires de base</a></li>
+          <li><a href="{{ routes.collections_url }}">Index des collections</a></li>
+        </ul>
       </div>
-      <div class="col-6 col-md-4 col-lg-2">
-        <div class="rs-site-footer__block">
-          <h2 class="rs-site-footer__title">Le collectif</h2>
-          <ul class="rs-site-footer__menu">
-            <li><a href="/pages/about">À propos</a></li>
-            <li><a href="/pages/profils-candidats">Profils candidats</a></li>
-            <li><a href="/pages/deposer-candidature">Déposer une candidature</a></li>
-            <li>
-              <a href="{{ rs_footer_swipe }}" rel="noopener noreferrer">Voter (swipe)</a>
-            </li>
-            <li><a href="/pages/contact">Contact</a></li>
-          </ul>
-        </div>
+      <div class="rs-site-footer__col">
+        <h2 class="rs-site-footer__title">Le collectif</h2>
+        <ul class="rs-site-footer__menu">
+          <li><a href="/pages/about">À propos</a></li>
+          <li><a href="/pages/profils-candidats">Profils candidats</a></li>
+          <li><a href="/pages/deposer-candidature">Déposer une candidature</a></li>
+          <li>
+            <a href="{{ rs_footer_swipe }}" rel="noopener noreferrer">Voter (swipe)</a>
+          </li>
+          <li><a href="/pages/contact">Contact</a></li>
+        </ul>
       </div>
-      <div class="col-6 col-md-4 col-lg-2">
-        <div class="rs-site-footer__block">
-          <h2 class="rs-site-footer__title">Informations</h2>
-          <ul class="rs-site-footer__menu">
-            <li><a href="/policies/privacy-policy">Politique de confidentialité</a></li>
-            <li><a href="/policies/terms-of-service">CGV</a></li>
-            <li><a href="/policies/refund-policy">Retours</a></li>
-            <li><a href="/pages/mentions-legales">Mentions légales</a></li>
-          </ul>
-        </div>
+      <div class="rs-site-footer__col">
+        <h2 class="rs-site-footer__title">Informations</h2>
+        <ul class="rs-site-footer__menu">
+          <li><a href="/policies/privacy-policy">Politique de confidentialité</a></li>
+          <li><a href="/policies/terms-of-service">CGV</a></li>
+          <li><a href="/policies/refund-policy">Retours</a></li>
+          <li><a href="/pages/mentions-legales">Mentions légales</a></li>
+        </ul>
       </div>
     </div>
   </div>

@@ -13,19 +13,15 @@
           {{ section.settings.hero_subtitle | default: "Fondé par 11 personnes qui ont commencé stagiaires." }}
         </p>
       </div>
-      <div class="rs-collectif-hero__media">
-        {%- if section.settings.hero_group_photo != blank -%}
+      {%- if section.settings.hero_group_photo != blank -%}
+        <div class="rs-collectif-hero__media">
           <img
             src="{{ section.settings.hero_group_photo | image_url: width: 1200 }}"
             alt="{{ section.settings.hero_photo_alt | default: 'Photo de groupe du collectif' | escape }}"
             class="rs-collectif-hero__img"
             loading="lazy">
-        {%- else -%}
-          <div class="rs-collectif-placeholder" role="img" aria-label="Espace photo groupe">
-            <span class="rs-collectif-placeholder__label">Photo à venir</span>
-          </div>
-        {%- endif -%}
-      </div>
+        </div>
+      {%- endif -%}
     </div>
   </section>
 
@@ -47,9 +43,9 @@
       <h2 class="rs-collectif-section__title rs-collectif-section__title--center">
         {{ section.settings.founders_title | default: "L'équipe fondatrice — 11 postes pourvus" }}
       </h2>
-      <p class="rs-collectif-founders__kicker">
-        {{ section.settings.founders_kicker | default: "Offre non négociable. Dans la limite des stocks disponibles." }}
-      </p>
+      {%- if section.settings.founders_kicker != blank -%}
+        <p class="rs-collectif-founders__kicker">{{ section.settings.founders_kicker }}</p>
+      {%- endif -%}
       <div class="row g-3 rs-collectif-founders__grid">
         {%- assign founders = 'Virgile Pages|Président — Designer textile, peintre||Gabin Cornu|DG Commercial — Architecture, impression 3D||Paul-Maxence Baraton|Directeur Opérations — Ingénieur ENS Paris-Saclay, tricot, 3D||Arthur Charton|Directeur Production — Designer textile||Joachim Soumaré|Directeur Création — Designer textile féminin||Eloïne Baraton|Présidente association — Événementiel||Gabriel Rivié|Trésorier — Gestion financière||Alexandre Martin|Communication digitale||Garance Leclerc|Secrétaire — Tricot||Lou Baume|Responsable artistique — Bijoux, accessoires||Louis De La Forge|Vice-Président — Designer textile' | split: '||' -%}
         {%- for founder in founders -%}
@@ -58,9 +54,6 @@
           {%- assign frole = parts[1] | strip -%}
           <div class="col-6 col-lg-4">
             <article class="rs-collectif-founder-card">
-              <div class="rs-collectif-founder-card__photo">
-                <span class="rs-collectif-placeholder__label rs-collectif-placeholder__label--sm">Photo à venir</span>
-              </div>
               <span class="rs-collectif-founder-card__badge">Poste pourvu</span>
               <h3 class="rs-collectif-founder-card__name">{{ fname }}</h3>
               <p class="rs-collectif-founder-card__role">{{ frole }}</p>
@@ -79,19 +72,15 @@
         <p>On voulait une marque qui ressemble à ceux qui la portent. Pas une marque solo, pas une marque corporate — un collectif. 11 personnes, 11 expertises, une seule direction : vers le haut.</p>
         <p><strong>Le vêtement comme point de départ. L’ambition comme uniforme. L’Europe comme terrain de jeu.</strong></p>
       </div>
-      <div class="rs-collectif-vision__media">
-        {%- if section.settings.vision_photo != blank -%}
+      {%- if section.settings.vision_photo != blank -%}
+        <div class="rs-collectif-vision__media">
           <img
             src="{{ section.settings.vision_photo | image_url: width: 1200 }}"
             alt="{{ section.settings.vision_photo_alt | default: 'Atelier ou création' | escape }}"
             class="rs-collectif-vision__img"
             loading="lazy">
-        {%- else -%}
-          <div class="rs-collectif-placeholder rs-collectif-placeholder--wide" role="img" aria-label="Espace photo atelier">
-            <span class="rs-collectif-placeholder__label">Photo à venir</span>
-          </div>
-        {%- endif -%}
-      </div>
+        </div>
+      {%- endif -%}
     </div>
   </section>
 
@@ -167,8 +156,8 @@
     {
       "type": "textarea",
       "id": "founders_kicker",
-      "label": "Sous-titre",
-      "default": "Offre non négociable. Dans la limite des stocks disponibles."
+      "label": "Sous-titre (optionnel, au-dessus de la grille)",
+      "info": "Ne rien saisir pour n’afficher aucune ligne sous le titre de section (aucune valeur par défaut)."
     },
     {
       "type": "header",

@@ -263,6 +263,7 @@
   -%}
     {{ 'rs-paris-unified-pages.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
+  {{ 'rs-da-visual-polish.css' | asset_url | stylesheet_tag }}
 
   {% if settings.custom_head_code != blank %}
     {{ settings.custom_head_code }}
