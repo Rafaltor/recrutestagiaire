@@ -218,7 +218,7 @@
     </article>
 
   {%- when 'grid_panel' -%}
-    <div class="rs-pole-panel rs-pole-panel--{{ b.layout_style }} h-100" style="background:{{ b.bg_color }};border-color:{{ b.border_color }};border-width:0;">
+    <div class="rs-pole-panel rs-editorial-column rs-pole-panel--{{ b.layout_style }} h-100" style="background:{{ b.bg_color }};border-color:{{ b.border_color }};border-width:0;">
       {%- if b.layout_style == 'service' -%}
         <div class="rs-pole-panel__service">
           {%- if b.kicker != blank or b.circle_label != blank -%}
@@ -292,7 +292,7 @@
 
   {%- when 'kitsch_counter' -%}
     <div
-      class="rs-stat-kitsch{% if b.tile_mode %} rs-stat-kitsch--tile h-100{% else %} rs-tile-frame mx-auto{% endif %}"
+      class="rs-stat-kitsch rs-editorial-kitsch{% if b.tile_mode %} rs-stat-kitsch--tile h-100{% else %} rs-tile-frame mx-auto{% endif %}"
       {% unless b.tile_mode %}style="max-width:520px;"{% endunless %}
       data-rs-kitsch="1"
       data-api="{{ section.settings.rs_api_url | escape }}"
@@ -343,7 +343,7 @@
     {%- assign _api = b.api_url | default: settings.rs_api_url_top_profile | default: 'https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top' -%}
     {%- assign _base = b.portail_base_url | default: 'https://portail.recrutestagiaire.eu' | strip | rstrip: '/' -%}
     <div
-      class="rs-pole-panel rs-pole-panel--encart h-100 rs-top-profile-api"
+      class="rs-pole-panel rs-pole-panel--encart rs-editorial-profile h-100 rs-top-profile-api"
       data-rs-top-profile-api="{{ _api | escape }}"
       data-rs-portail-base="{{ _base | escape }}"
       data-rs-top-profile-fallback="{{ b.fallback_text | default: 'Classement en cours...' | escape }}"

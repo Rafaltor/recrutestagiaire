@@ -27,7 +27,24 @@
       assign rs_uni_text_pct = 68
     endif
   endif
+  assign rs_uni_grid_gap = section.settings.grid_gap | default: 10 | plus: 0
+  if rs_uni_grid_gap < 0
+    assign rs_uni_grid_gap = 0
+  endif
 -%}
+{% style %}
+  /* !important : bat la règle globale section { padding:0 } sur les autres wrappers */
+  #shopify-section-{{ section.id }}.section-home-unified-page,
+  #shopify-section-{{ section.id }} {
+    --rs-uni-gap: {{ rs_uni_grid_gap }}px;
+    padding-top: {{ rs_uni_grid_gap }}px !important;
+    padding-bottom: {{ rs_uni_grid_gap }}px !important;
+    background: #ffffff !important;
+  }
+  #shopify-section-{{ section.id }} .rs-uni-page {
+    padding-bottom: 0 !important;
+  }
+{% endstyle %}
 {%- capture rs_uni_grid_inner -%}
 {%- assign _rs_home_render_idx = 0 -%}
 {%- for block in section.blocks -%}

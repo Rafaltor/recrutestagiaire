@@ -441,8 +441,89 @@ body[data-rs-page='index'] .section-home-unified-page .rs-stat-kitsch__sub {
   margin-top: 12px !important;
 }
 
-body[data-rs-page='index'] .section-home-unified-page .rs-stat-kitsch__ribbon {
+body[data-rs-page='index']
+  .section-home-unified-page
+  .rs-stat-kitsch:not(.rs-editorial-kitsch)
+  .rs-stat-kitsch__ribbon {
   display: none !important;
+}
+
+/* Compteur : ruban type revue (classe rs-editorial-kitsch sur le bloc) */
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-kitsch.rs-stat-kitsch--tile,
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-kitsch.rs-stat-kitsch.rs-stat-kitsch--tile {
+  background: #f0eeea !important;
+  box-shadow: 0 18px 40px rgba(10, 10, 10, 0.06) !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-kitsch .rs-stat-kitsch__ribbon {
+  display: inline-block !important;
+  font-family: var(--font-display), Syne, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 10px !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: #0a0a0a !important;
+  border-bottom: 2px solid #f472b6 !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 20px !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-kitsch .rs-stat-kitsch__n {
+  color: #0a0a0a !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-kitsch .rs-stat-kitsch__suffix strong {
+  color: #0a0a0a !important;
+  font-weight: 600 !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-kitsch .rs-stat-kitsch__sub {
+  font-style: italic !important;
+  color: #666660 !important;
+  max-width: 28em;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Colonnes bas de page : trait éditorial + typo */
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column.rs-pole-panel {
+  position: relative !important;
+  padding-left: 32px !important;
+  box-shadow: 0 14px 36px rgba(10, 10, 10, 0.05) !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column.rs-pole-panel::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 28px;
+  bottom: 28px;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #f472b6 0%, #fbcfe8 100%);
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-pole-panel__richtext,
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-pole-panel__richtext p {
+  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  color: #555550 !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-pole-panel__title {
+  letter-spacing: -0.02em !important;
+}
+
+/* Meilleur profil : encart « une » */
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-profile.rs-pole-panel {
+  box-shadow: 0 14px 36px rgba(10, 10, 10, 0.05) !important;
+  border-top: 3px solid #f472b6 !important;
+  padding-top: 32px !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-profile .rs-top-profile-api__encart {
+  border-radius: 12px !important;
 }
 
 /* Recherche : un seul champ visible */
@@ -619,3 +700,4 @@ button.shopify-pc__banner__btn-manage-prefs:hover {
   color: #0a0a0a !important;
   background: #fff !important;
 }
+

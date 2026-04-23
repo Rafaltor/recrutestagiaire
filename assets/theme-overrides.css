@@ -133,8 +133,9 @@ main:has(.section-home-unified-page) + footer.footer {
   margin-top: 0;
 }
 
-/* Jobhill : supprime le padding global des section (80px / .min / .mid) sur tout le site */
-section,
+/* Jobhill : supprime le padding global des section (80px / .min / .mid) sur tout le site.
+   Exclut le wrapper accueil unifié : padding haut/bas = grille (voir home-unified-page.liquid). */
+section:not(.section-home-unified-page),
 section.min,
 section.mid {
   padding: 0 !important;
