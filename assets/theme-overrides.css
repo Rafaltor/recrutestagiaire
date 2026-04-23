@@ -1324,7 +1324,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 }
 @media (min-width: 992px) {
   .rs-pro-mock {
-    max-width: 1140px;
+    max-width: 1240px;
   }
 }
 .rs-pro-mock__breadcrumb-top a:hover {
@@ -1401,8 +1401,8 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 /* Desktop: rail autres offres à gauche du main, carte prix normal à droite */
 @media (min-width: 992px) {
   .rs-pro-mock__layout {
-    grid-template-columns: 168px minmax(0, 1fr) 340px;
-    gap: 24px;
+    grid-template-columns: 128px minmax(0, 1fr) 300px;
+    gap: 20px;
   }
   .rs-pro-mock__rail-left {
     display: block;

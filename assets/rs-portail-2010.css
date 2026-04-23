@@ -570,11 +570,11 @@ footer.footer:not(.rs-site-footer) {
 }
 
 /* 8. Liens (bleu → rose) — hors boutons / onglets / icônes réseaux pied de page (header menus → rs-shopify-header.css) ; hors CTA hero runway (.rs-hero-runway__btn) */
-main a:not(.btn):not(.abt-btn):not(.rs-subnav__trigger):not(.rs-rail-ad__cta):not(.rs-hero-runway__btn),
+main a:not(.btn):not(.abt-btn):not(.rs-subnav__trigger):not(.rs-rail-ad__cta):not(.rs-hero-runway__btn):not(.rs-hero-video__portal-btn):not(.rs-btn--primary):not(.rs-ind-stats__btn),
 footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link) {
   color: var(--rs-da-pink) !important;
 }
-main a:not(.btn):not(.abt-btn):not(.rs-subnav__trigger):not(.rs-rail-ad__cta):not(.rs-hero-runway__btn):hover,
+main a:not(.btn):not(.abt-btn):not(.rs-subnav__trigger):not(.rs-rail-ad__cta):not(.rs-hero-runway__btn):not(.rs-hero-video__portal-btn):not(.rs-btn--primary):not(.rs-ind-stats__btn):hover,
 footer.footer a:not(.btn):not(.abt-btn):not(.rs-site-footer__social-link):hover {
   color: var(--rs-da-pink-hover) !important;
 }

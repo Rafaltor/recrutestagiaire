@@ -58,14 +58,14 @@
   width: 100%;
   max-width: 720px;
   padding: 24px 16px calc(32px + env(safe-area-inset-bottom, 0px));
-  transform: translateY(-14px);
+  transform: translateY(-52px);
 }
 
 @media (min-width: 768px) {
   .rs-hero-video__content {
     padding: 48px 24px 56px;
     max-width: 820px;
-    transform: translateY(-18px);
+    transform: translateY(-68px);
   }
 }
 

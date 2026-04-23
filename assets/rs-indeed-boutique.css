@@ -87,6 +87,19 @@ a.rs-btn--ghost:hover {
   color: var(--rs-pink) !important;
 }
 
+/* Liens CTA sur fond rose : la règle globale `main a` (portail) ne doit pas gagner — texte toujours blanc */
+main .shopify-section.section-rs-hero-video .rs-hero-video__search-btn,
+main .shopify-section.section-rs-hero-video .rs-hero-video__portal-btn,
+main .shopify-section.section-rs-hero-video .rs-hero-video__portal-btn:visited {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+main .section-home-unified-page .rs-ind-stats .rs-btn--primary,
+main .section-home-unified-page .rs-ind-stats__btn.rs-btn--primary {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
 /* Header — nav + ghost liens */
 body.rs-portal-header .rs-ph-navdesk a {
   font-size: 14px !important;
@@ -475,7 +488,8 @@ a.rs-ind-job-row:hover {
 }
 @media (min-width: 992px) {
   .rs-pro-mock__layout {
-    grid-template-columns: minmax(0, 1.15fr) minmax(280px, 400px) !important;
+    /* Colonne contenu (gauche) plus large, carte postuler un peu resserrée */
+    grid-template-columns: minmax(0, 1.5fr) minmax(248px, 340px) !important;
   }
 }
 .rs-pro-mock__rail-left {
