@@ -57,10 +57,10 @@
     <div class="rs-ticker__viewport">
       <div class="rs-ticker__track">
         <div class="rs-ticker__group">
-          <span class="rs-ticker__accent">CANDIDATURE OUVERTE</span><span> · DÉPOSE TON CV · SWIPE LES PROFILS · REJOINS LE COLLECTIF · </span><span class="rs-ticker__accent">LES MEILLEURS FINISSENT SUR LE PACKAGING</span><span> · </span>
+          <span class="rs-ticker__accent">CANDIDATURE OUVERTE</span><span class="rs-ticker__sep">✦</span><span>DÉPOSE TON CV</span><span class="rs-ticker__sep">✦</span><span>SWIPE LES PROFILS</span><span class="rs-ticker__sep">✦</span><span>REJOINS LE COLLECTIF</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__accent">LES MEILLEURS FINISSENT SUR LE PACKAGING</span><span class="rs-ticker__sep">✦</span>
         </div>
         <div class="rs-ticker__group" aria-hidden="true">
-          <span class="rs-ticker__accent">CANDIDATURE OUVERTE</span><span> · DÉPOSE TON CV · SWIPE LES PROFILS · REJOINS LE COLLECTIF · </span><span class="rs-ticker__accent">LES MEILLEURS FINISSENT SUR LE PACKAGING</span><span> · </span>
+          <span class="rs-ticker__accent">CANDIDATURE OUVERTE</span><span class="rs-ticker__sep">✦</span><span>DÉPOSE TON CV</span><span class="rs-ticker__sep">✦</span><span>SWIPE LES PROFILS</span><span class="rs-ticker__sep">✦</span><span>REJOINS LE COLLECTIF</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__accent">LES MEILLEURS FINISSENT SUR LE PACKAGING</span><span class="rs-ticker__sep">✦</span>
         </div>
       </div>
     </div>
@@ -159,10 +159,10 @@
             </nav>
 
             <div class="rs-banner-top__actions d-inline-flex align-items-center">
-              <a href="{{ rs_p_dep }}" rel="noopener noreferrer" class="rs-ph-cta text-decoration-none">
+              <a href="{{ rs_p_dep }}" rel="noopener noreferrer" class="rs-ph-cta rs-btn--primary text-decoration-none">
                 Déposer mon CV
               </a>
-              <a href="{{ routes.cart_url }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__cart d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" aria-label="{{ cart_lbl | escape }}">
+              <a href="{{ routes.cart_url }}" class="rs-header-ghost-link abt-btn rs-caf-btn-dossier rs-banner-top__cart d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" aria-label="{{ cart_lbl | escape }}">
                 {% render 'icon-folder-dossier', w: 16, h: 16 %}
                 <span class="rs-caf-btn-dossier__label">
                   <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--full">{{ cart_lbl }}</span>
@@ -173,7 +173,7 @@
                 {% endif %}
               </a>
 
-              <a href="{{ rs_p_login }}" class="abt-btn rs-caf-btn-dossier rs-banner-top__account d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" rel="noopener noreferrer" aria-label="Mon espace">
+              <a href="{{ rs_p_login }}" class="rs-header-ghost-link abt-btn rs-caf-btn-dossier rs-banner-top__account d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" rel="noopener noreferrer" aria-label="Mon espace">
                 <svg class="rs-icon-account" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20 21a8 8 0 0 0-16 0"/>
                   <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/>
@@ -217,12 +217,12 @@
       </nav>
       <div class="rs-header-drawer__footer">
         <div class="rs-banner-top__actions rs-header-drawer__footer-actions d-inline-flex flex-column align-items-stretch gap-2 w-100">
-          <a href="{{ rs_p_dep }}" rel="noopener noreferrer" class="rs-ph-drawer-cta rs-header-drawer__caf-btn text-center text-decoration-none">
+          <a href="{{ rs_p_dep }}" rel="noopener noreferrer" class="rs-ph-drawer-cta rs-btn--primary rs-header-drawer__caf-btn text-center text-decoration-none">
             Déposer mon CV
           </a>
           <a
             href="{{ routes.cart_url }}"
-            class="abt-btn rs-caf-btn-dossier rs-banner-top__cart rs-header-drawer__caf-btn d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none text-nowrap"
+            class="rs-header-ghost-link abt-btn rs-caf-btn-dossier rs-banner-top__cart rs-header-drawer__caf-btn d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none text-nowrap"
             aria-label="{{ cart_lbl | escape }}">
             {% render 'icon-folder-dossier', w: 16, h: 16 %}
             <span class="rs-caf-btn-dossier__label">
@@ -235,7 +235,7 @@
           </a>
           <a
             href="{{ rs_p_login }}"
-            class="abt-btn rs-caf-btn-dossier rs-banner-top__account rs-header-drawer__caf-btn d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none text-nowrap"
+            class="rs-header-ghost-link abt-btn rs-caf-btn-dossier rs-banner-top__account rs-header-drawer__caf-btn d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none text-nowrap"
             rel="noopener noreferrer"
             aria-label="Mon espace">
             <svg class="rs-icon-account" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">

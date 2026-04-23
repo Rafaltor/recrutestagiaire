@@ -6,42 +6,31 @@
   {%- assign _is_all_collection = true -%}
 {%- endif -%}
 
-{%- if _is_all_collection -%}
-  <div class="rs-collection-head rs-collection-head--all border-bottom">
-    <div class="container py-3 py-md-4">
-      <h1 class="rs-collection-head--all__title mb-2 mb-md-3">
+{%- liquid
+  assign _coll_sub = section.settings.collection_all_subtitle
+  if _coll_sub == blank
+    assign _coll_sub = collection.products_count | append: ' offres · Collection · Paris'
+  endif
+-%}
+<div class="rs-ind-collection-head">
+  <div class="container">
+    <p class="rs-ind-collection-head__kicker">{{ section.settings.collection_kicker | default: 'OFFRES EN COURS' | escape }}</p>
+    <h1 class="rs-ind-collection-head__title">
+      {%- if _is_all_collection -%}
         {{ section.settings.collection_all_title | default: 'Offres en cours' | escape }}
-      </h1>
-      <p class="rs-collection-head--all__subtitle mb-2 mb-md-3">
-        {{ section.settings.collection_all_subtitle | default: "Mes Basiques d'Amour · Collection SS26" | escape }}
-      </p>
-      {% if section.settings.show_breadcrumb %}
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb rs-collection-head--all__crumb mb-0 small">
-            <li class="breadcrumb-item"><a href="{{ routes.root_url }}">Accueil</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ collection.title }}</li>
-          </ol>
-        </nav>
-      {% endif %}
-    </div>
+      {%- else -%}
+        {{ collection.title | escape }}
+      {%- endif -%}
+    </h1>
+    <p class="rs-ind-collection-head__sub">
+      {%- if _is_all_collection -%}
+        {{ section.settings.collection_all_subtitle | default: _coll_sub | escape }}
+      {%- else -%}
+        {{ collection.products_count }} offre{% if collection.products_count > 1 %}s{% endif %} · Paris
+      {%- endif -%}
+    </p>
   </div>
-{%- else -%}
-  <div class="rs-collection-head border-bottom" style="background: linear-gradient(180deg, {{ rs_strip_top }} 0%, {{ rs_strip_bot }} 100%);">
-    <div class="container py-2 py-md-3">
-      <h1 class="rs-collection-head__title mb-1 mb-md-2" style="font-size:{{ section.settings.title_size }}px;font-weight:{{ section.settings.title_weight }};">
-        {{ collection.title }}
-      </h1>
-      {% if section.settings.show_breadcrumb %}
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb rs-collection-head__crumb mb-0 small">
-            <li class="breadcrumb-item"><a href="{{ routes.root_url }}">Accueil</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ collection.title }}</li>
-          </ol>
-        </nav>
-      {% endif %}
-    </div>
-  </div>
-{%- endif -%}
+</div>
 
 {%- assign rs_needs_api = false -%}
 {%- for b in section.blocks -%}
@@ -78,29 +67,30 @@
       <div class="container">
         <div class="row g-4">
 
-      <!-- Grille produits -->
+      <!-- Feed offres (Indeed) -->
       <div class="col-12 col-md-12">
-
-        <!-- Produits -->
-        {%- comment -%} Desktop : 3 colonnes par défaut (lg/xl). Tablette md : 2 par ligne. {%- endcomment -%}
-        {% assign col_class = 'col-12 col-md-6 col-lg-4 col-xl-4' %}
-        {% if section.settings.grid_cols == '1' %}{% assign col_class = 'col-12' %}{% endif %}
-        {% if section.settings.grid_cols == '2' %}{% assign col_class = 'col-12 col-md-6 col-lg-6 col-xl-6' %}{% endif %}
-        {% if section.settings.grid_cols == '3' %}{% assign col_class = 'col-12 col-md-6 col-lg-4 col-xl-4' %}{% endif %}
-        {% if section.settings.grid_cols == '4' %}{% assign col_class = 'col-12 col-md-6 col-lg-3 col-xl-3' %}{% endif %}
+        <div class="rs-ind-collection-toolbar d-none d-md-flex flex-wrap align-items-center">
+          <span class="text-muted">Trier par :</span>
+          <a href="{{ collection.url }}?sort_by=created-descending">Plus récent</a>
+          <span class="text-muted">|</span>
+          <a href="{{ collection.url }}?sort_by=title-ascending">Titre A–Z</a>
+          <span class="text-muted">|</span>
+          <a href="{{ collection.url }}?sort_by=price-ascending">Prix croissant</a>
+          <span class="text-muted">|</span>
+          <a href="{{ collection.url }}?sort_by=price-descending">Prix décroissant</a>
+        </div>
 
         {% paginate collection.products by section.settings.products_per_page %}
-          <div class="row g-3 rs-tile-grid rs-tile-grid--floating" id="products-grid">
+          <div class="rs-ind-feed" id="products-grid">
             {% for product in collection.products %}
-              <div class="{{ col_class }} product-item d-flex align-items-stretch"
+              <div
+                class="product-item"
                 data-tags="{{ product.tags | join: ',' | downcase }}"
                 data-type="{{ product.type | downcase }}">
-                <div class="w-100">
-                  {% render 'rs-offer-grid-card', product: product, card_settings: section.settings, collection: collection, carousel_uid: section.id %}
-                </div>
+                {% render 'rs-indeed-job-row', product: product, collection: collection %}
               </div>
             {% else %}
-              <div class="col-12 text-center py-5 text-muted">Aucun poste disponible pour le moment.</div>
+              <div class="text-center py-5 text-muted">Aucun poste disponible pour le moment.</div>
             {% endfor %}
           </div>
 
@@ -223,6 +213,12 @@
       "id": "collection_all_subtitle",
       "label": "Sous-titre — « Toutes les offres »",
       "default": "Mes Basiques d'Amour · Collection SS26"
+    },
+    {
+      "type": "text",
+      "id": "collection_kicker",
+      "label": "Label rose (toutes collections)",
+      "default": "OFFRES EN COURS"
     },
     {
       "type": "header",

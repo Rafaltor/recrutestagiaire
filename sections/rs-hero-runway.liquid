@@ -1,155 +1,85 @@
-{%- assign scrim_a = section.settings.overlay_strength | times: 0.01 -%}
+{%- liquid
+  assign hp1 = section.settings.preview_product_1
+  assign hp2 = section.settings.preview_product_2
+  assign preview_index = 0
+  for p in collections.all.products limit: 4
+    if hp1 == blank and preview_index == 0
+      assign hp1 = p
+    endif
+    if hp2 == blank and preview_index == 1
+      assign hp2 = p
+    endif
+    assign preview_index = preview_index | plus: 1
+  endfor
+  if hp2 == blank and hp1 != blank
+    assign hp2 = hp1
+  endif
+  assign search_action = routes.search_url
+  assign coll_all = routes.all_products_collection_url
+-%}
 <section
-  class="rs-hero-runway shopify-section"
-  style="--rs-hr-min-h: {{ section.settings.min_height_desktop }}vh;--rs-hr-scrim-a: {{ scrim_a }};"
+  class="rs-hero-jobboard shopify-section section-rs-hero-runway"
   {{ section.shopify_attributes }}>
-  <div class="rs-hero-runway__shell">
-    <div class="rs-hero-runway__media" aria-hidden="true">
-      {%- comment -%} Grille 2×2 identique mobile / bureau ; texte en overlay {%- endcomment -%}
-      <div class="rs-hero-runway__grid">
-        {%- assign v1 = section.settings.video_d1 -%}
-        <div class="rs-hero-runway__cell">
-          {%- if v1 != blank -%}
-            <div class="rs-hero-runway__video-wrap">
-              {{
-                v1
-                | video_tag:
-                  autoplay: true,
-                  loop: true,
-                  muted: true,
-                  controls: false,
-                  playsinline: true,
-                  image_size: '1200x'
-              }}
-            </div>
-          {%- else -%}
-            <div class="rs-hero-runway__placeholder">
-              <span>{{ section.settings.placeholder_label }}</span>
-            </div>
+  <div class="container">
+    <div class="rs-hero-jobboard__grid">
+      <div class="rs-hero-jobboard__left">
+        {%- if section.settings.kicker != blank -%}
+          <p class="rs-hero-jobboard__kicker">{{ section.settings.kicker | escape }}</p>
+        {%- endif -%}
+        {%- liquid
+          assign t1 = section.settings.title_line1 | default: 'Chaque vêtement' | escape
+          assign t2 = section.settings.title_line2 | default: 'est une' | escape
+          assign em = section.settings.title_emphasis | default: 'offre' | strip | escape
+        -%}
+        <h1 class="rs-hero-jobboard__title">
+          {{ t1 }}<br>
+          {{ t2 }} <em>{{ em }}</em>.
+        </h1>
+        {%- if section.settings.subtitle != blank -%}
+          <p class="rs-hero-jobboard__subtitle">{{ section.settings.subtitle | escape }}</p>
+        {%- endif -%}
+
+        <form class="rs-hero-jobboard__search" action="{{ search_action }}" method="get" role="search">
+          <input type="hidden" name="type" value="product">
+          <span class="text-muted" aria-hidden="true">🔍</span>
+          <input
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ section.settings.search_placeholder | default: 'Cherche un poste...' | escape }}"
+            autocomplete="off">
+          <button type="submit" class="rs-hero-jobboard__search-btn">{{ section.settings.search_btn_label | default: 'Voir les offres →' | escape }}</button>
+        </form>
+
+        <div class="rs-hero-jobboard__filters">
+          {%- if section.settings.pill1_label != blank -%}
+            <a class="rs-hero-jobboard__pill" href="{{ section.settings.pill1_url | default: coll_all }}">{{ section.settings.pill1_label | escape }}</a>
+          {%- endif -%}
+          {%- if section.settings.pill2_label != blank -%}
+            <a class="rs-hero-jobboard__pill" href="{{ section.settings.pill2_url | default: coll_all }}">{{ section.settings.pill2_label | escape }}</a>
+          {%- endif -%}
+          {%- if section.settings.pill3_label != blank -%}
+            <a class="rs-hero-jobboard__pill" href="{{ section.settings.pill3_url | default: coll_all }}">{{ section.settings.pill3_label | escape }}</a>
+          {%- endif -%}
+          {%- if section.settings.pill4_label != blank -%}
+            <a class="rs-hero-jobboard__pill" href="{{ section.settings.pill4_url | default: coll_all }}">{{ section.settings.pill4_label | escape }}</a>
           {%- endif -%}
         </div>
-        {%- assign v2 = section.settings.video_d2 -%}
-        <div class="rs-hero-runway__cell">
-          {%- if v2 != blank -%}
-            <div class="rs-hero-runway__video-wrap">
-              {{
-                v2
-                | video_tag:
-                  autoplay: true,
-                  loop: true,
-                  muted: true,
-                  controls: false,
-                  playsinline: true,
-                  image_size: '1200x'
-              }}
-            </div>
-          {%- else -%}
-            <div class="rs-hero-runway__placeholder">
-              <span>{{ section.settings.placeholder_label }}</span>
-            </div>
-          {%- endif -%}
-        </div>
-        {%- assign v3 = section.settings.video_d3 -%}
-        <div class="rs-hero-runway__cell">
-          {%- if v3 != blank -%}
-            <div class="rs-hero-runway__video-wrap">
-              {{
-                v3
-                | video_tag:
-                  autoplay: true,
-                  loop: true,
-                  muted: true,
-                  controls: false,
-                  playsinline: true,
-                  image_size: '1200x'
-              }}
-            </div>
-          {%- else -%}
-            <div class="rs-hero-runway__placeholder">
-              <span>{{ section.settings.placeholder_label }}</span>
-            </div>
-          {%- endif -%}
-        </div>
-        {%- assign v4 = section.settings.video_d4 -%}
-        <div class="rs-hero-runway__cell">
-          {%- if v4 != blank -%}
-            <div class="rs-hero-runway__video-wrap">
-              {{
-                v4
-                | video_tag:
-                  autoplay: true,
-                  loop: true,
-                  muted: true,
-                  controls: false,
-                  playsinline: true,
-                  image_size: '1200x'
-              }}
-            </div>
-          {%- else -%}
-            <div class="rs-hero-runway__placeholder">
-              <span>{{ section.settings.placeholder_label }}</span>
-            </div>
-          {%- endif -%}
-        </div>
+
+        {%- if section.settings.stats_line != blank -%}
+          <div class="rs-hero-jobboard__stats">
+            <span class="rs-hero-jobboard__stats-dot">{{ section.settings.stats_line | escape }}</span>
+          </div>
+        {%- endif -%}
       </div>
 
-      <div class="rs-hero-runway__scrim"></div>
-    </div>
-
-    <div class="rs-hero-runway__content container">
-      <div class="rs-hero-runway__copy">
-        <div class="rs-hero-runway__copy-inner">
-          {%- assign _hr_badge = section.settings.badge_text | default: '' | strip -%}
-          {%- if _hr_badge != '' -%}
-            <p class="rs-hero-runway__badge">
-              <span class="rs-hero-runway__badge-dot" aria-hidden="true"></span>
-              <span>{{ _hr_badge | escape }}</span>
-            </p>
+      <div class="rs-hero-jobboard__right">
+        <div class="rs-hero-jobboard__cards">
+          {%- if hp1 != blank -%}
+            {% render 'rs-indeed-job-row', product: hp1, collection: collections.all, compact: true %}
           {%- endif -%}
-          {%- if section.settings.kicker != blank -%}
-            <p class="rs-hero-runway__kicker">{{ section.settings.kicker | escape }}</p>
-          {%- endif -%}
-          {%- liquid
-            assign t = section.settings.title | default: ''
-            assign em = section.settings.title_emphasis | default: '' | strip
-          -%}
-          {%- if em != '' and t contains em -%}
-            {%- assign _parts = t | split: em -%}
-            <h1 class="rs-hero-runway__title">
-              {{- _parts[0] | escape -}}
-              <em class="rs-hero-runway__accent">{{ em | escape }}</em>
-              {%- if _parts.size > 1 -%}
-                {{- _parts[1] | escape -}}
-              {%- endif -%}
-            </h1>
-          {%- else -%}
-            <h1 class="rs-hero-runway__title">{{ t | escape }}</h1>
-          {%- endif -%}
-          {%- if section.settings.subtitle != blank -%}
-            <p class="rs-hero-runway__subtitle">{{ section.settings.subtitle | escape }}</p>
-          {%- endif -%}
-          <div class="rs-hero-runway__actions">
-            {%- if section.settings.btn_primary_label != blank -%}
-              <a
-                class="rs-hero-runway__btn rs-hero-runway__btn--primary"
-                href="{% if section.settings.btn_primary_url != blank %}{{ section.settings.btn_primary_url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">
-                {{- section.settings.btn_primary_label | escape -}}
-              </a>
-            {%- endif -%}
-            {%- if section.settings.btn_secondary_label != blank -%}
-              {%- liquid
-                assign sec2 = section.settings.btn_secondary_url | default: '' | strip
-                if sec2 == blank
-                  assign sec2 = 'https://portail.recrutestagiaire.eu'
-                endif
-              -%}
-              <a class="rs-hero-runway__btn rs-hero-runway__btn--ghost" href="{{ sec2 }}">
-                {{- section.settings.btn_secondary_label | escape -}}
-              </a>
-            {%- endif -%}
-          </div>
-          {%- if section.settings.trust_line != blank -%}
-            <p class="rs-hero-runway__trust">{{ section.settings.trust_line | escape }}</p>
+          {%- if hp2 != blank -%}
+            {% render 'rs-indeed-job-row', product: hp2, collection: collections.all, compact: true %}
           {%- endif -%}
         </div>
       </div>
@@ -157,11 +87,8 @@
   </div>
 </section>
 
-{{ 'rs-hero-runway.css' | asset_url | stylesheet_tag }}
 <script>
   (function () {
-    var rsHeaderResizeObs = null;
-
     function rsHomeHeaderUnderHero() {
       if (document.body.getAttribute('data-rs-page') !== 'index') return;
       var h = document.querySelector('.header-wrap');
@@ -170,152 +97,64 @@
       if (px < 1) px = h.offsetHeight || 168;
       document.documentElement.style.setProperty('--rs-home-header-h', px + 'px');
     }
-
-    function rsWireHeaderHeightObserver() {
-      var h = document.querySelector('.header-wrap');
-      if (!h || rsHeaderResizeObs || typeof ResizeObserver === 'undefined') return;
-      try {
-        rsHeaderResizeObs = new ResizeObserver(function () {
-          rsHomeHeaderUnderHero();
-        });
-        rsHeaderResizeObs.observe(h);
-      } catch (e) {}
-    }
-
-    function rsHeroRunwayPlay() {
-      document.querySelectorAll('.rs-hero-runway video').forEach(function (v) {
-        try {
-          v.muted = true;
-          v.defaultMuted = true;
-          v.setAttribute('muted', '');
-          v.setAttribute('playsinline', '');
-          v.setAttribute('webkit-playsinline', '');
-          v.loop = true;
-          v.setAttribute('loop', '');
-          var p = v.play();
-          if (p && typeof p.catch === 'function') {
-            p.catch(function () {});
-          }
-        } catch (e) {}
-      });
-    }
-
-    function boot() {
-      rsHomeHeaderUnderHero();
-      rsHeroRunwayPlay();
-      requestAnimationFrame(function () {
-        rsHomeHeaderUnderHero();
-        requestAnimationFrame(rsHomeHeaderUnderHero);
-      });
-    }
-
-    boot();
-    rsWireHeaderHeightObserver();
-    document.addEventListener('DOMContentLoaded', function () {
-      boot();
-      rsWireHeaderHeightObserver();
-    });
-    window.addEventListener('load', boot);
-    window.addEventListener('resize', function () {
-      rsHomeHeaderUnderHero();
-    });
-    document.addEventListener('visibilitychange', function () {
-      if (!document.hidden) {
-        rsHeroRunwayPlay();
-      }
-    });
-    document.addEventListener('shopify:section:load', boot);
-
-    /* Mobile : première interaction débloque souvent la lecture auto */
-    ['touchstart', 'pointerdown', 'click'].forEach(function (ev) {
-      document.addEventListener(
-        ev,
-        function () {
-          rsHeroRunwayPlay();
-        },
-        { capture: true, passive: true, once: true }
-      );
-    });
+    rsHomeHeaderUnderHero();
+    document.addEventListener('DOMContentLoaded', rsHomeHeaderUnderHero);
+    window.addEventListener('resize', rsHomeHeaderUnderHero);
+    document.addEventListener('shopify:section:load', rsHomeHeaderUnderHero);
   })();
 </script>
 
 {% schema %}
 {
-  "name": "Hero runway (vidéos)",
+  "name": "Hero accueil (offres)",
   "tag": "section",
   "class": "section-rs-hero-runway",
   "settings": [
-    {
-      "type": "paragraph",
-      "content": "Sur l’accueil, le hero suit l’en-tête (barre type portail). Texte centré au milieu de la grille 2×2. Autoplay renforcé (y compris après un toucher sur mobile)."
-    },
-    { "type": "header", "content": "Médias — 4 extraits runway" },
-    { "type": "video", "id": "video_d1", "label": "Vidéo 1" },
-    { "type": "video", "id": "video_d2", "label": "Vidéo 2" },
-    { "type": "video", "id": "video_d3", "label": "Vidéo 3" },
-    { "type": "video", "id": "video_d4", "label": "Vidéo 4" },
-    { "type": "text", "id": "placeholder_label", "label": "Texte emplacement vide", "default": "Vidéo à ajouter" },
-    { "type": "header", "content": "Texte" },
+    { "type": "header", "content": "Colonne gauche" },
     {
       "type": "text",
-      "id": "badge_text",
-      "label": "Badge (au-dessus du surtitre)",
-      "info": "Optionnel : laisser vide pour masquer le badge."
+      "id": "kicker",
+      "label": "Label (uppercase)",
+      "default": "OFFRES EN COURS · PARIS · SS26"
     },
-    { "type": "text", "id": "kicker", "label": "Surtitre", "default": "Collectif — Paris" },
-    { "type": "text", "id": "title", "label": "Titre", "default": "On a commencé stagiaires. Pourquoi pas vous ?" },
-    {
-      "type": "text",
-      "id": "title_emphasis",
-      "label": "Mot du titre en accent (rose)",
-      "default": "stagiaires",
-      "info": "Doit apparaître tel quel dans le titre pour être mis en couleur accent."
-    },
+    { "type": "text", "id": "title_line1", "label": "Titre — ligne 1", "default": "Chaque vêtement" },
+    { "type": "text", "id": "title_line2", "label": "Titre — avant le mot accent", "default": "est une" },
+    { "type": "text", "id": "title_emphasis", "label": "Mot accent (rose)", "default": "offre" },
     {
       "type": "textarea",
       "id": "subtitle",
       "label": "Sous-titre",
-      "default": "Collections pensées comme des offres : clarté, parcours guidé, accompagnement humain."
+      "default": "Postule. Candidature non négociable. Les meilleurs CV finissent sur le packaging."
     },
+    { "type": "text", "id": "search_placeholder", "label": "Placeholder recherche", "default": "Cherche un poste..." },
+    { "type": "text", "id": "search_btn_label", "label": "Bouton recherche", "default": "Voir les offres →" },
     {
       "type": "text",
-      "id": "trust_line",
-      "label": "Ligne confiance (sous les boutons)",
-      "default": "Paiements sécurisés · Livraison suivie · Support réactif"
+      "id": "stats_line",
+      "label": "Ligne stats (texte libre)",
+      "default": "● 2 offres actives  ·  ● Expédition 48h  ·  ● Collection SS26"
     },
-    { "type": "header", "content": "Boutons" },
-    { "type": "text", "id": "btn_primary_label", "label": "Bouton principal — libellé", "default": "Voir la collection" },
-    { "type": "url", "id": "btn_primary_url", "label": "Bouton principal — lien" },
-    { "type": "text", "id": "btn_secondary_label", "label": "Bouton secondaire — libellé", "default": "Portail candidats" },
+    { "type": "header", "content": "Filtres rapides (pills)" },
+    { "type": "text", "id": "pill1_label", "label": "Pill 1 — libellé", "default": "Tous les postes" },
+    { "type": "url", "id": "pill1_url", "label": "Pill 1 — lien" },
+    { "type": "text", "id": "pill2_label", "label": "Pill 2 — libellé", "default": "Édition limitée" },
+    { "type": "url", "id": "pill2_url", "label": "Pill 2 — lien" },
+    { "type": "text", "id": "pill3_label", "label": "Pill 3 — libellé", "default": "CDI" },
+    { "type": "url", "id": "pill3_url", "label": "Pill 3 — lien" },
+    { "type": "text", "id": "pill4_label", "label": "Pill 4 — libellé", "default": "Disponible maintenant" },
+    { "type": "url", "id": "pill4_url", "label": "Pill 4 — lien" },
+    { "type": "header", "content": "Aperçu cartes (droite)" },
     {
-      "type": "url",
-      "id": "btn_secondary_url",
-      "label": "Bouton secondaire — lien",
-      "info": "Vide = https://portail.recrutestagiaire.eu"
-    },
-    { "type": "header", "content": "Mise en forme" },
-    {
-      "type": "range",
-      "id": "min_height_desktop",
-      "min": 60,
-      "max": 100,
-      "step": 2,
-      "unit": "vh",
-      "label": "Hauteur min. du hero (mobile + bureau)",
-      "default": 86,
-      "info": "Bloc vidéo 2×2 + zone texte overlay : une valeur proche de 88–92 % de la hauteur fenêtre remplit bien l’écran sur ordinateur."
+      "type": "product",
+      "id": "preview_product_1",
+      "label": "Produit 1 (optionnel, sinon 1er de la boutique)"
     },
     {
-      "type": "range",
-      "id": "overlay_strength",
-      "min": 35,
-      "max": 85,
-      "step": 5,
-      "unit": "%",
-      "label": "Assombrissement lecture texte",
-      "default": 55
+      "type": "product",
+      "id": "preview_product_2",
+      "label": "Produit 2 (optionnel, sinon 2e de la boutique)"
     }
   ],
-  "presets": [{ "name": "Hero runway (vidéos)", "category": "Image" }]
+  "presets": [{ "name": "Hero accueil (offres)", "category": "Bannière" }]
 }
 {% endschema %}

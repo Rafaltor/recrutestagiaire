@@ -1,0 +1,42 @@
+<section class="rs-ind-home-stats section-rs-ind-home-stats" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="rs-ind-stats">
+  <div class="rs-ind-stats__col">
+    <div class="rs-ind-stats__num">{{ section.settings.stat1_num | default: '20' | escape }}</div>
+    <div class="rs-ind-stats__label">{{ section.settings.stat1_label | default: 'candidats dans la base nationale' | escape }}</div>
+  </div>
+  <div class="rs-ind-stats__sep" aria-hidden="true"></div>
+  <div class="rs-ind-stats__col">
+    <div class="rs-ind-stats__num">{{ section.settings.stat2_num | default: '126' | escape }}</div>
+    <div class="rs-ind-stats__label">{{ section.settings.stat2_label | default: 'votes enregistrés' | escape }}</div>
+  </div>
+  <div class="rs-ind-stats__sep" aria-hidden="true"></div>
+  <div class="rs-ind-stats__cta-wrap">
+    <div class="rs-ind-stats__cta-text">{{ section.settings.cta_lead | default: 'Le meilleur rejoint le collectif.' | escape }}</div>
+    <a
+      class="rs-ind-stats__btn rs-btn--primary text-decoration-none"
+      href="{{ section.settings.cta_url | default: 'https://portail.recrutestagiaire.eu/swipe' }}">
+      {{ section.settings.cta_label | default: 'Voter →' | escape }}
+    </a>
+  </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bandeau stats collectif",
+  "tag": "section",
+  "class": "section-rs-ind-home-stats",
+  "settings": [
+    { "type": "text", "id": "stat1_num", "label": "Chiffre gauche", "default": "20" },
+    { "type": "text", "id": "stat1_label", "label": "Texte gauche", "default": "candidats dans la base nationale" },
+    { "type": "text", "id": "stat2_num", "label": "Chiffre centre", "default": "126" },
+    { "type": "text", "id": "stat2_label", "label": "Texte centre", "default": "votes enregistrés" },
+    { "type": "text", "id": "cta_lead", "label": "Texte CTA", "default": "Le meilleur rejoint le collectif." },
+    { "type": "text", "id": "cta_label", "label": "Libellé bouton", "default": "Voter →" },
+    { "type": "url", "id": "cta_url", "label": "Lien bouton" }
+  ],
+  "presets": [{ "name": "Bandeau stats collectif", "category": "Promotional" }]
+}
+{% endschema %}

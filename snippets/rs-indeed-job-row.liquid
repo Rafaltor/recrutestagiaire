@@ -1,0 +1,80 @@
+{%- comment -%}
+  Carte offre type Indeed — params: product (required), collection (opt), compact (opt bool)
+{%- endcomment -%}
+{%- assign cv = product.selected_or_first_available_variant -%}
+{%- assign coll = collection | default: collections.all -%}
+{%- assign role_line = product.type | default: 'Stagiaire' -%}
+{%- assign mtxt = product.metafields.custom.missions | metafield_text | default: '' | strip -%}
+{%- if mtxt == blank -%}
+  {%- assign mtxt = product.description | strip_html | truncate: 200 -%}
+{%- endif -%}
+{%- assign mlines = mtxt | newline_to_br | split: '<br />' -%}
+{%- assign cdi_pill = 'CDI' -%}
+{%- assign tg = product.tags | join: ',' | downcase -%}
+{%- if tg contains 'cdd' -%}
+  {%- assign cdi_pill = 'CDD' -%}
+{%- endif -%}
+{%- assign avail_class = 'rs-ind-job-row__avail--soon' -%}
+{%- assign avail_dot = '●' -%}
+{%- if cv.available -%}
+  {%- assign avail_label = 'Disponibilité : Immédiate' -%}
+  {%- assign avail_class = 'rs-ind-job-row__avail--ok' -%}
+{%- else -%}
+  {%- assign avail_label = 'Disponibilité : Prochainement' -%}
+{%- endif -%}
+<div class="rs-ind-job-row{% if compact %} rs-ind-job-row--compact{% endif %}">
+  <div class="rs-ind-job-row__media">
+    {%- if product.featured_image != blank -%}
+      <a href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+        <img
+          src="{{ product.featured_image | image_url: width: 240 }}"
+          alt=""
+          width="160"
+          height="160"
+          loading="lazy">
+      </a>
+    {%- endif -%}
+  </div>
+  <div class="rs-ind-job-row__body">
+    <a href="{{ product.url }}" class="text-decoration-none text-reset">
+      <h2 class="rs-ind-job-row__title">{{ product.title | escape }}</h2>
+    </a>
+    <p class="rs-ind-job-row__role">{{ role_line | escape }}</p>
+    <p class="rs-ind-job-row__company">Recrute Stagiaire · Paris, France</p>
+    <div class="rs-ind-job-row__tags">
+      {%- if coll != blank and coll.title != blank -%}
+        <span class="rs-ind-job-row__tag">{{ coll.title | escape }}</span>
+      {%- endif -%}
+      {%- assign _ed_lim = false -%}
+      {%- for _t in product.tags -%}
+        {%- assign _th = _t | handle -%}
+        {%- if _th == 'edition-limitee' or _th == 'edition-limited' -%}
+          {%- assign _ed_lim = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if _ed_lim -%}
+        <span class="rs-ind-job-row__tag">Édition limitée</span>
+      {%- endif -%}
+      <span class="rs-ind-job-row__tag">{{ cdi_pill | escape }}</span>
+    </div>
+    <div class="rs-ind-job-row__missions">
+      {%- assign _n = 0 -%}
+      {%- for line in mlines -%}
+        {%- assign line = line | strip -%}
+        {%- if line != '' and _n < 2 -%}
+          <p>— {{ line | strip_html | truncate: 80 }}</p>
+          {%- assign _n = _n | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if _n == 0 -%}
+        <p>— {{ product.description | strip_html | truncate: 72 }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="rs-ind-job-row__side">
+    <div class="rs-ind-job-row__salary">Salaire : {{ cv.price | money }}</div>
+    <div class="rs-ind-job-row__avail {{ avail_class }}">{{ avail_label }}</div>
+    <a class="rs-btn--primary rs-ind-job-row__cta text-decoration-none" href="{{ product.url }}">Postuler →</a>
+  </div>
+</div>

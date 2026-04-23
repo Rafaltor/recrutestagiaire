@@ -12,43 +12,39 @@
     "rs_hero_runway": {
       "type": "rs-hero-runway",
       "settings": {
-        "video_d1": "shopify://files/videos/Défilé VFinale - copie 2.mov",
-        "video_d2": "shopify://files/videos/Défilé VFinale - copie.mov",
-        "video_d3": "shopify://files/videos/Défilé VFinale - copie 4.mov",
-        "video_d4": "shopify://files/videos/Défilé VFinale - copie 3.mov",
-        "placeholder_label": "Vidéo à ajouter",
-        "badge_text": "",
-        "kicker": "Collectif — Paris",
-        "title": "On a commencé stagiaires. Pourquoi pas vous ?",
-        "title_emphasis": "stagiaires",
-        "subtitle": "Dépose ton CV. Va voter et rejoins nous",
-        "trust_line": "",
-        "btn_primary_label": "Voir la collection",
-        "btn_primary_url": "shopify://collections/all",
-        "btn_secondary_label": "Portail candidats",
-        "btn_secondary_url": "https://portail.recrutestagiaire.eu",
-        "min_height_desktop": 86,
-        "overlay_strength": 55
+        "kicker": "OFFRES EN COURS · PARIS · SS26",
+        "title_line1": "Chaque vêtement",
+        "title_line2": "est une",
+        "title_emphasis": "offre",
+        "subtitle": "Postule. Candidature non négociable. Les meilleurs CV finissent sur le packaging.",
+        "search_placeholder": "Cherche un poste...",
+        "search_btn_label": "Voir les offres →",
+        "stats_line": "● 2 offres actives  ·  ● Expédition 48h  ·  ● Collection SS26",
+        "pill1_label": "Tous les postes",
+        "pill1_url": "shopify://collections/all",
+        "pill2_label": "Édition limitée",
+        "pill2_url": "",
+        "pill3_label": "CDI",
+        "pill3_url": "",
+        "pill4_label": "Disponible maintenant",
+        "pill4_url": ""
+      }
+    },
+    "rs_ind_home_stats": {
+      "type": "rs-ind-home-stats",
+      "settings": {
+        "stat1_num": "20",
+        "stat1_label": "candidats dans la base nationale",
+        "stat2_num": "126",
+        "stat2_label": "votes enregistrés",
+        "cta_lead": "Le meilleur rejoint le collectif.",
+        "cta_label": "Voter →",
+        "cta_url": "https://portail.recrutestagiaire.eu/swipe"
       }
     },
     "home_unified": {
       "type": "home-unified-page",
       "blocks": {
-        "uni_kitsch": {
-          "type": "kitsch_counter",
-          "settings": {
-            "col_span": "12",
-            "use_strip_bg": false,
-            "cell_bg": "#ffffff",
-            "cell_padding": 0,
-            "cell_border": "",
-            "tile_mode": true,
-            "ribbon_text": "Chiffre du collectif",
-            "suffix_text": "candidat(s) actuellement recensé(e)s dans la base nationale",
-            "brand_name": "Recrute Stagiaire",
-            "sub_text": "Indicateur communautaire — mis à jour lors des synchronisations portail."
-          }
-        },
         "sponsored_inline_1": {
           "type": "sponsored_rail",
           "settings": {
@@ -217,7 +213,6 @@
         }
       },
       "block_order": [
-        "uni_kitsch",
         "sponsored_inline_1",
         "uni_top_profile",
         "sponsored_inline_2",
@@ -227,11 +222,11 @@
         "uni_gp_offres"
       ],
       "settings": {
-        "page_bg": "#f4f4f2",
+        "page_bg": "#f5f5f5",
         "page_padding_top": 0,
         "page_padding_bottom": 0,
         "grid_gap": 10,
-        "default_cell_border": "#dddddd",
+        "default_cell_border": "#e8e8e8",
         "sidebar_ads": false,
         "rail_column_title": "OFFRES EN VEDETTE",
         "rail_content": "products",
@@ -258,6 +253,7 @@
   },
   "order": [
     "rs_hero_runway",
+    "rs_ind_home_stats",
     "home_unified"
   ]
 }

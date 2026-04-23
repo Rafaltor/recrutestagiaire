@@ -1,22 +1,15 @@
-<!-- Breadcrumb (retour + fil type mockup) -->
+<!-- Fil d'ariane fiche poste -->
 <div class="rs-product-top-band py-3 border-bottom" {{ section.shopify_attributes }}>
   <div class="container">
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-      <a
-        href="{{ collection.url | default: routes.all_products_collection_url }}"
-        class="rs-pro-back-offers text-decoration-none">
-        Retour aux offres
-      </a>
-      <div class="rs-pro-mock__breadcrumb-top rs-product-breadcrumb small text-muted ms-md-auto text-md-end">
-        <a href="{{ routes.all_products_collection_url }}" class="text-muted text-decoration-none">Offres en cours</a>
-        {% if collection %}
-          <span class="text-muted"> › </span>
-          <a href="{{ collection.url }}" class="text-muted text-decoration-none">{{ collection.title }}</a>
-        {% endif %}
+    <nav class="rs-pro-mock__breadcrumb small" aria-label="Fil d'ariane">
+      <a href="{{ routes.all_products_collection_url }}">Toutes les offres</a>
+      {% if collection %}
         <span class="text-muted"> › </span>
-        <span class="text-body">{{ section.settings.breadcrumb_ref_prefix | default: 'Poste n°' }}RS-{{ product.id }}</span>
-      </div>
-    </div>
+        <a href="{{ collection.url }}">{{ collection.title | escape }}</a>
+      {% endif %}
+      <span class="text-muted"> › </span>
+      <span class="rs-pro-mock__breadcrumb-current">{{ product.title | escape }}</span>
+    </nav>
   </div>
 </div>
 

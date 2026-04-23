@@ -122,6 +122,10 @@
   {%- endfor -%}
 {%- endunless -%}
 {%- assign rs_matiere = product.metafields.custom.matiere.value | default: product.metafields.custom.matiere | default: '—' -%}
+{%- assign rs_drop_display = product.metafields.custom.drop_date | metafield_text | strip -%}
+{%- if rs_drop_display == blank -%}
+  {%- assign rs_drop_display = 'Prochainement' -%}
+{%- endif -%}
 {%- if product.type != blank -%}
   {%- assign rs_dept_meta = product.type -%}
   {%- if rs_dept_detail != blank -%}
@@ -155,49 +159,10 @@
 
 <div class="rs-pro-mock">
   <div class="rs-pro-mock__layout">
-    {% if similar_products.size > 1 %}
-      <aside class="rs-pro-mock__rail-left rs-pro-mock__similar-bar rs-pro-mock__similar-bar--desktop" aria-label="Autres offres">
-        <div class="rs-pro-mock__similar-title">{{ section.settings.similar_title | default: 'Autres offres disponibles' }}</div>
-        <div class="rs-pro-mock__similar-grid">
-          {% assign shown_count = 0 %}
-          {% for sim in similar_products limit: 12 %}
-            {% unless sim.id == product.id %}
-              {% assign shown_count = shown_count | plus: 1 %}
-              {% if shown_count <= 3 %}
-                <article class="rs-rail-ad rs-pro-mock__similar-rail-ad">
-                  <span class="rs-rail-ad__sponsored">Autre offre</span>
-                  <a href="{{ sim.url }}" class="rs-rail-ad__media">
-                    {%- if sim.featured_image != blank -%}
-                      <img
-                        src="{{ sim.featured_image | image_url: width: 280 }}"
-                        alt=""
-                        width="110"
-                        height="110"
-                        loading="lazy"
-                        decoding="async"
-                        class="rs-rail-ad__img">
-                    {%- else -%}
-                      <div class="rs-rail-ad__img-fallback">IMG</div>
-                    {%- endif -%}
-                  </a>
-                  <a href="{{ sim.url }}" class="rs-rail-ad__title">{{ sim.title | escape }}</a>
-                  <div class="rs-rail-ad__price"><strong>{{ sim.price | money }}</strong></div>
-                  {%- if sim.type != blank -%}
-                    <div class="rs-rail-ad__type">{{ sim.type | escape }}</div>
-                  {%- endif -%}
-                  <a href="{{ sim.url }}" class="rs-rail-ad__cta">Voir</a>
-                </article>
-              {% endif %}
-            {% endunless %}
-          {% endfor %}
-        </div>
-      </aside>
-    {% endif %}
-
     <div class="rs-pro-mock__left-top">
       <div class="rs-pro-mock__tag-row">
         {% if cv.available %}
-          <span class="rs-pro-mock__tag rs-pro-mock__tag--green">Candidatures ouvertes</span>
+          <span class="rs-pro-mock__tag rs-pro-mock__tag--green rs-pro-mock__tag--open">Candidatures ouvertes</span>
         {% else %}
           <span class="rs-pro-mock__tag rs-pro-mock__tag--muted">Poste pourvu</span>
         {% endif %}
@@ -224,18 +189,21 @@
       <h1 class="rs-pro-mock__job-title">{{ product.title }}</h1>
 
       {%- if product.featured_image -%}
+        {%- liquid
+          assign hero_img_w = 1200
+          assign hero_img_h = product.featured_image.height | times: hero_img_w | divided_by: product.featured_image.width
+        -%}
         <div class="rs-pro-mock__img-block">
           <div class="rs-pro-mock__img-inner">
             <img
               id="rs-pro-hero-img"
               class="rs-pro-mock__hero-img"
               src="{{ product.featured_image | image_url: width: 1600 }}"
+              width="{{ hero_img_w }}"
+              height="{{ hero_img_h }}"
               alt="{{ product.featured_image.alt | default: product.title | escape }}"
               loading="eager"
               decoding="async">
-          </div>
-          <div class="rs-pro-mock__img-overlay">
-            <span class="rs-pro-mock__img-ref">RS-{{ product.id }}{% if cv.sku != blank %} — {{ cv.sku }}{% endif %} · {{ product.title | truncate: 48 }}</span>
           </div>
           {%- if product.images.size > 1 -%}
             <span class="rs-pro-mock__img-corner">{{ product.images.size }} visuels</span>
@@ -243,7 +211,7 @@
         </div>
       {%- else -%}
         <div class="rs-pro-mock__img-block rs-pro-mock__img-block--empty">
-          <span class="rs-pro-mock__img-ref">RS-{{ product.id }}</span>
+          <span class="rs-pro-mock__img-ref text-muted">Visuel à venir</span>
         </div>
       {%- endif -%}
 
@@ -291,7 +259,7 @@
       {%- if product.metafields.custom.missions != blank -%}
         <div class="rs-pro-mock__section">
           <div class="rs-pro-mock__section-title">{{ section.settings.missions_title | default: 'Missions du poste' }}</div>
-          <div class="rs-pro-mock__mf-body">{{ product.metafields.custom.missions | metafield_tag }}</div>
+          <div class="rs-pro-mock__mf-body rs-pro-mock__mf-body--missions">{{ product.metafields.custom.missions | metafield_tag }}</div>
         </div>
       {%- endif -%}
       <div class="rs-pro-mock__section">
@@ -320,49 +288,23 @@
         </div>
       {% endif %}
 
-      {% if similar_products.size > 1 %}
-        <div class="rs-pro-mock__similar-bar rs-pro-mock__similar-bar--mobile">
-          <div class="rs-pro-mock__similar-title">{{ section.settings.similar_title | default: 'Autres offres disponibles' }}</div>
-          <div class="rs-pro-mock__similar-grid">
-            {% assign shown_count = 0 %}
-            {% for sim in similar_products limit: 12 %}
-              {% unless sim.id == product.id %}
-                {% assign shown_count = shown_count | plus: 1 %}
-                {% if shown_count <= 3 %}
-                  <article class="rs-rail-ad rs-pro-mock__similar-rail-ad">
-                    <span class="rs-rail-ad__sponsored">Autre offre</span>
-                    <a href="{{ sim.url }}" class="rs-rail-ad__media">
-                      {%- if sim.featured_image != blank -%}
-                        <img
-                          src="{{ sim.featured_image | image_url: width: 280 }}"
-                          alt=""
-                          width="110"
-                          height="110"
-                          loading="lazy"
-                          decoding="async"
-                          class="rs-rail-ad__img">
-                      {%- else -%}
-                        <div class="rs-rail-ad__img-fallback">IMG</div>
-                      {%- endif -%}
-                    </a>
-                    <a href="{{ sim.url }}" class="rs-rail-ad__title">{{ sim.title | escape }}</a>
-                    <div class="rs-rail-ad__price"><strong>{{ sim.price | money }}</strong></div>
-                    {%- if sim.type != blank -%}
-                      <div class="rs-rail-ad__type">{{ sim.type | escape }}</div>
-                    {%- endif -%}
-                    <a href="{{ sim.url }}" class="rs-rail-ad__cta">Voir</a>
-                  </article>
-                {% endif %}
-              {% endunless %}
-            {% endfor %}
-          </div>
-        </div>
-      {% endif %}
     </div>
 
     <div class="rs-pro-mock__right">
       <div class="rs-pro-mock__apply-card" id="apply-section">
           {% if cv.available %}
+            {%- liquid
+              assign rs_d1 = rs_re1 | default: section.settings.reassurance_default_1
+              assign rs_d2 = rs_re2 | default: section.settings.reassurance_default_2
+              assign rs_d3 = rs_re3 | default: section.settings.reassurance_default_3
+              assign rs_has_re = false
+              if rs_d1 != blank or rs_d2 != blank or rs_d3 != blank
+                assign rs_has_re = true
+              endif
+              if rs_reassurance_block != blank
+                assign rs_has_re = true
+              endif
+            -%}
             <form action="{{ routes.cart_add_url }}" method="post" id="add-to-cart-form">
               <input type="hidden" name="id" id="product-variant-id" value="{{ cv.id }}">
 
@@ -372,45 +314,32 @@
                 {% if section.settings.free_shipping_text != blank %}
                   <div class="rs-pro-mock__price-sub">{{ section.settings.free_shipping_text }}</div>
                 {% endif %}
+              </div>
 
-                <div class="rs-pro-mock__qty-row">
-                  <label class="rs-pro-mock__qty-label" for="rs-pro-qty">{{ section.settings.qty_label | default: 'Quantité' }}</label>
-                  <input
-                    id="rs-pro-qty"
-                    class="rs-pro-mock__qty-input"
-                    type="number"
-                    name="quantity"
-                    value="1"
-                    min="1"
-                    max="99"
-                    step="1"
-                    inputmode="numeric"
-                    aria-label="{{ section.settings.qty_label | default: 'Quantité' }}">
+              <div class="rs-pro-mock__ind-divider" aria-hidden="true"></div>
+
+              <div class="rs-pro-mock__info-stack">
+                <div>
+                  <div class="rs-pro-mock__info-line-label">AVANTAGES EN NATURE</div>
+                  <div class="rs-pro-mock__info-line-value">{{ rs_matiere | escape }}</div>
+                </div>
+                <div>
+                  <div class="rs-pro-mock__info-line-label">LIEU DE TRAVAIL</div>
+                  <div class="rs-pro-mock__info-line-value">{{ rs_loc | escape }} — Expédition nationale</div>
+                </div>
+                <div>
+                  <div class="rs-pro-mock__info-line-label">PRISE DE POSTE</div>
+                  <div class="rs-pro-mock__info-line-value">{{ rs_drop_display | escape }}</div>
                 </div>
               </div>
 
-              <div class="rs-fiche-poste" style="margin: 1.5rem 0; border-top: 1px solid #F0F0F0; padding-top: 1rem;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
-                  <tr>
-                    <td style="padding: 0.4rem 0; color: #6B6B6B; width: 50%;">Avantages en nature</td>
-                    <td style="padding: 0.4rem 0; font-weight: 600; color: #0A0A0A;">{{ product.metafields.custom.matiere | default: product.description | strip_html | truncate: 60 }}</td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 0.4rem 0; color: #6B6B6B;">Lieu de travail</td>
-                    <td style="padding: 0.4rem 0; font-weight: 600; color: #0A0A0A;">Paris, France — Expédition nationale</td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 0.4rem 0; color: #6B6B6B;">Prise de poste</td>
-                    <td style="padding: 0.4rem 0; font-weight: 600; color: #0A0A0A;">{{ product.metafields.custom.drop_date | default: 'Prochainement' }}</td>
-                  </tr>
-                </table>
-              </div>
+              <div class="rs-pro-mock__ind-divider" aria-hidden="true"></div>
 
               {% if product.variants.size > 1 %}
                 {%- liquid
                   assign rs_variant_lead = section.settings.apply_lead_text | strip
                   if rs_variant_lead == blank
-                    assign rs_variant_lead = section.settings.variant_heading | default: "Sélectionnez votre niveau d'expérience."
+                    assign rs_variant_lead = section.settings.variant_heading | default: 'Sélectionne ta taille'
                   endif
                 -%}
                 <div class="rs-pro-mock__size-section">
@@ -437,51 +366,23 @@
                 </div>
               {% endif %}
 
-              <button type="submit" class="rs-pro-mock__apply-btn">{{ section.settings.add_to_cart_text }}</button>
-
-              <div style="margin-top: 1.5rem; padding: 1.25rem 1.5rem; background: #FFF1F2; border: 1px solid #E11D48; border-radius: 12px;">
-                <p style="margin: 0 0 0.5rem; font-size: 0.875rem; font-weight: 700; color: #0A0A0A;">
-                  Tu veux que ton CV soit sur ce packaging ?
-                </p>
-                <p style="margin: 0 0 1rem; font-size: 0.8125rem; color: #6B6B6B; line-height: 1.5;">
-                  Les meilleurs CVs du portail finissent imprimés sur nos boîtes. C'est gratuit.
-                </p>
-                <a
-                  href="https://portail.recrutestagiaire.eu/depot"
-                  style="display: inline-block; padding: 0.6rem 1.25rem; border: 1.5px solid #E11D48; border-radius: 999px; font-size: 0.8125rem; font-weight: 600; color: #E11D48; text-decoration: none;"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  Déposer mon CV →
-                </a>
+              <div class="rs-pro-mock__qty-row">
+                <label class="rs-pro-mock__qty-label" for="rs-pro-qty">{{ section.settings.qty_label | default: 'Quantité' }}</label>
+                <input
+                  id="rs-pro-qty"
+                  class="rs-pro-mock__qty-input"
+                  type="number"
+                  name="quantity"
+                  value="1"
+                  min="1"
+                  max="99"
+                  step="1"
+                  inputmode="numeric"
+                  aria-label="{{ section.settings.qty_label | default: 'Quantité' }}">
               </div>
 
-              {% if section.settings.save_offer_url != blank %}
-                <a href="{{ section.settings.save_offer_url }}" class="rs-pro-mock__save-btn text-center d-block text-decoration-none">
-                  {{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' }}
-                </a>
-              {% else %}
-                <button
-                  type="button"
-                  class="rs-pro-mock__save-btn"
-                  id="rs-pro-share-offer"
-                  data-reset-label="{{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' | escape }}">
-                  {{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' }}
-                </button>
-              {% endif %}
+              <button type="submit" class="rs-pro-mock__apply-btn">{{ section.settings.add_to_cart_text }}</button>
 
-              {%- liquid
-                assign rs_d1 = rs_re1 | default: section.settings.reassurance_default_1
-                assign rs_d2 = rs_re2 | default: section.settings.reassurance_default_2
-                assign rs_d3 = rs_re3 | default: section.settings.reassurance_default_3
-                assign rs_has_re = false
-                if rs_d1 != blank or rs_d2 != blank or rs_d3 != blank
-                  assign rs_has_re = true
-                endif
-                if rs_reassurance_block != blank
-                  assign rs_has_re = true
-                endif
-              -%}
               {% if rs_has_re %}
                 <div class="rs-pro-mock__delivery-info">
                   {% if rs_d1 != blank %}
@@ -516,11 +417,57 @@
                   {% endif %}
                 </div>
               {% endif %}
+
+              <div class="rs-pro-mock__ind-divider" aria-hidden="true"></div>
+
+              <div class="rs-pro-mock__cross-sell">
+                <p class="rs-pro-mock__cross-sell-title">Ton CV sur ce packaging ?</p>
+                <p class="rs-pro-mock__cross-sell-text">
+                  Les meilleurs CVs du portail finissent imprimés sur nos boîtes. C'est gratuit.
+                </p>
+                <a
+                  class="rs-btn--ghost"
+                  href="https://portail.recrutestagiaire.eu/depot"
+                  target="_blank"
+                  rel="noopener">
+                  Déposer mon CV →
+                </a>
+              </div>
+
+              {% if section.settings.save_offer_url != blank %}
+                <a href="{{ section.settings.save_offer_url }}" class="rs-pro-mock__save-btn text-center d-block text-decoration-none">
+                  {{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' }}
+                </a>
+              {% else %}
+                <button
+                  type="button"
+                  class="rs-pro-mock__save-btn"
+                  id="rs-pro-share-offer"
+                  data-reset-label="{{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' | escape }}">
+                  {{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' }}
+                </button>
+              {% endif %}
             </form>
           {% else %}
             <p class="text-muted mb-0">{{ section.settings.sold_out_message | default: 'Ce poste est actuellement pourvu.' }}</p>
-            <a href="{{ routes.all_products_collection_url }}" class="btn btn-outline-secondary btn-sm mt-3">{{ section.settings.sold_out_cta | default: 'Voir les autres offres' }}</a>
+            <a href="{{ routes.all_products_collection_url }}" class="rs-btn rs-btn--secondary mt-3 d-inline-flex align-items-center justify-content-center text-decoration-none">{{ section.settings.sold_out_cta | default: 'Voir les autres offres' }}</a>
           {% endif %}
     </div>
   </div>
+  </div>
+
+  {% if similar_products.size > 1 %}
+    <div class="rs-pro-mock__more-jobs">
+      <h2 class="rs-pro-mock__more-jobs-title">{{ section.settings.similar_title | default: "D'autres postes à pourvoir" }}</h2>
+      {% assign _mj = 0 %}
+      {% for sim in similar_products limit: 12 %}
+        {% unless sim.id == product.id %}
+          {% assign _mj = _mj | plus: 1 %}
+          {% if _mj <= 2 %}
+            {% render 'rs-indeed-job-row', product: sim, collection: similar_collection %}
+          {% endif %}
+        {% endunless %}
+      {% endfor %}
+    </div>
+  {% endif %}
 </div>

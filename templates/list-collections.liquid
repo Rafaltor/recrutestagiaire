@@ -1,0 +1,32 @@
+{% comment %}
+  Page /collections — sans section JSON : évite les erreurs d’upload si le fichier
+  sections/*.liquid n’est pas présent sur le thème distant.
+{% endcomment %}
+<section class="rs-ind-coll-list">
+  <div class="container">
+    <h1 class="rs-ind-coll-list__title">Nos offres</h1>
+    <div class="rs-ind-coll-grid">
+      {%- for coll in collections -%}
+        {%- unless coll.handle == 'frontpage' or coll.products_count == 0 -%}
+          <a href="{{ coll.url }}" class="rs-ind-coll-card">
+            <div class="rs-ind-coll-card__media">
+              {%- if coll.featured_image != blank -%}
+                <img
+                  src="{{ coll.featured_image | image_url: width: 800 }}"
+                  alt=""
+                  width="800"
+                  height="450"
+                  loading="lazy">
+              {%- endif -%}
+            </div>
+            <div class="rs-ind-coll-card__body">
+              <h2 class="rs-ind-coll-card__name">{{ coll.title | escape }}</h2>
+              <p class="rs-ind-coll-card__count">{{ coll.products_count }} offre{% if coll.products_count > 1 %}s{% endif %}</p>
+              <span class="rs-btn--primary rs-ind-coll-card__cta">Voir les offres →</span>
+            </div>
+          </a>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
