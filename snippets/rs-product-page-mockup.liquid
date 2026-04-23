@@ -389,6 +389,23 @@
                 </div>
               </div>
 
+              <div class="rs-fiche-poste" style="margin: 1.5rem 0; border-top: 1px solid #F0F0F0; padding-top: 1rem;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+                  <tr>
+                    <td style="padding: 0.4rem 0; color: #6B6B6B; width: 50%;">Avantages en nature</td>
+                    <td style="padding: 0.4rem 0; font-weight: 600; color: #0A0A0A;">{{ product.metafields.custom.matiere | default: product.description | strip_html | truncate: 60 }}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.4rem 0; color: #6B6B6B;">Lieu de travail</td>
+                    <td style="padding: 0.4rem 0; font-weight: 600; color: #0A0A0A;">Paris, France — Expédition nationale</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.4rem 0; color: #6B6B6B;">Prise de poste</td>
+                    <td style="padding: 0.4rem 0; font-weight: 600; color: #0A0A0A;">{{ product.metafields.custom.drop_date | default: 'Prochainement' }}</td>
+                  </tr>
+                </table>
+              </div>
+
               {% if product.variants.size > 1 %}
                 {%- liquid
                   assign rs_variant_lead = section.settings.apply_lead_text | strip
@@ -421,6 +438,24 @@
               {% endif %}
 
               <button type="submit" class="rs-pro-mock__apply-btn">{{ section.settings.add_to_cart_text }}</button>
+
+              <div style="margin-top: 1.5rem; padding: 1.25rem 1.5rem; background: #FFF1F2; border: 1px solid #E11D48; border-radius: 12px;">
+                <p style="margin: 0 0 0.5rem; font-size: 0.875rem; font-weight: 700; color: #0A0A0A;">
+                  Tu veux que ton CV soit sur ce packaging ?
+                </p>
+                <p style="margin: 0 0 1rem; font-size: 0.8125rem; color: #6B6B6B; line-height: 1.5;">
+                  Les meilleurs CVs du portail finissent imprimés sur nos boîtes. C'est gratuit.
+                </p>
+                <a
+                  href="https://portail.recrutestagiaire.eu/depot"
+                  style="display: inline-block; padding: 0.6rem 1.25rem; border: 1.5px solid #E11D48; border-radius: 999px; font-size: 0.8125rem; font-weight: 600; color: #E11D48; text-decoration: none;"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Déposer mon CV →
+                </a>
+              </div>
+
               {% if section.settings.save_offer_url != blank %}
                 <a href="{{ section.settings.save_offer_url }}" class="rs-pro-mock__save-btn text-center d-block text-decoration-none">
                   {{ section.settings.save_offer_label | default: 'Sauvegarder l’offre' }}
