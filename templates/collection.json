@@ -1,37 +1,68 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-collection",
-      "settings": {
-        "products_per_page": 12,
-        "grid_cols": "3",
-        "offer_media_height": 220,
-        "offer_carousel_interval": 0,
-        "collection_page_bg": "#f4f4f2",
-        "collection_strip_top": "#fafaf8",
-        "collection_strip_bot": "#f4f4f2",
-        "collection_cell_border": "#e8e8e4",
-        "center_column_pct": 60,
-        "rs_api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php",
-        "cand_email_btn_label": "E-mail",
-        "cand_cv_btn_label": "CV"
-      },
       "blocks": {
         "rail_left_a": {
           "type": "sponsored_rail",
-          "settings": { "side": "left", "content_type": "profiles_api" }
+          "settings": {
+            "side": "left",
+            "content_type": "profiles_api",
+            "product": "",
+            "kicker": "Sponsorisé",
+            "show_price": true,
+            "show_stars": true,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
         },
         "rail_left_b": {
           "type": "sponsored_rail",
-          "settings": { "side": "left", "content_type": "profiles_api" }
+          "settings": {
+            "side": "left",
+            "content_type": "profiles_api",
+            "product": "",
+            "kicker": "Sponsorisé",
+            "show_price": true,
+            "show_stars": true,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
         },
         "rail_right_a": {
           "type": "sponsored_rail",
-          "settings": { "side": "right", "content_type": "profiles_api" }
+          "settings": {
+            "side": "right",
+            "content_type": "profiles_api",
+            "product": "",
+            "kicker": "Sponsorisé",
+            "show_price": true,
+            "show_stars": true,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
         },
         "rail_right_b": {
           "type": "sponsored_rail",
-          "settings": { "side": "right", "content_type": "profiles_api" }
+          "settings": {
+            "side": "right",
+            "content_type": "profiles_api",
+            "product": "",
+            "kicker": "Sponsorisé",
+            "show_price": true,
+            "show_stars": true,
+            "cta_label": "Voir",
+            "product_below": ""
+          }
         }
       },
       "block_order": [
@@ -39,8 +70,78 @@
         "rail_left_b",
         "rail_right_a",
         "rail_right_b"
-      ]
+      ],
+      "settings": {
+        "collection_page_bg": "#f4f4f2",
+        "collection_strip_top": "#fafaf8",
+        "collection_strip_bot": "#f4f4f2",
+        "collection_cell_border": "#e8e8e4",
+        "title_size": 16,
+        "title_weight": "600",
+        "show_breadcrumb": true,
+        "collection_all_title": "Offres en cours",
+        "collection_all_subtitle": "Mes Basiques d'Amour · Collection SS26",
+        "products_per_page": 12,
+        "grid_cols": "3",
+        "card_gap": "3",
+        "card_radius": 12,
+        "card_padding": 16,
+        "logo_size": 60,
+        "logo_radius": 8,
+        "title_size_card": 16,
+        "subtitle_size": 13,
+        "type_size": 11,
+        "tag_size": 12,
+        "badge_size": 11,
+        "show_type": false,
+        "label_rayon": "Rayon / univers",
+        "show_vendor_line": false,
+        "card_logistics": "Expédition France",
+        "show_offer_meta": true,
+        "show_location": false,
+        "location_text": "Paris, France",
+        "show_tags": false,
+        "show_location_tag": false,
+        "location_tag": "Paris",
+        "show_price_tag": false,
+        "max_tags": 1,
+        "badge_open": "Offre active",
+        "badge_closed": "Pourvu",
+        "offer_media_height": 220,
+        "offer_carousel": true,
+        "offer_carousel_interval": 0,
+        "offer_bar_from": "#5b86e5",
+        "offer_bar_to": "#001a57",
+        "offer_accent": "#e85d04",
+        "offer_ref_prefix": "Réf.",
+        "offer_cta_label": "Voir l'offre",
+        "show_offer_cart": true,
+        "offer_cart_label": "Candidater",
+        "offer_location_pill": "Paris",
+        "show_contract_line": true,
+        "contract_label_cdi": "CDI",
+        "contract_label_cdd": "CDD",
+        "contract_cdi_collection_handles": "permanent,permanents",
+        "contract_tag_override": true,
+        "card_title_size": 16,
+        "card_dl_size": 13,
+        "label_vendor": "Marque",
+        "label_price": "Salaire",
+        "label_logistics": "Logistique",
+        "rs_api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php",
+        "sidebar_candidate_ads": true,
+        "center_column_pct": 60,
+        "rail_center_max": 900,
+        "cand_kicker": "Sponsorisé",
+        "cand_email_btn_label": "E-mail",
+        "cand_cv_btn_label": "CV",
+        "cand_profiles_url": "",
+        "padding_top": 16,
+        "padding_bottom": 48
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
