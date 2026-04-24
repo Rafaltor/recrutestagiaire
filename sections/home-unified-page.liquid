@@ -70,7 +70,8 @@
     {%- comment -%}
       Ordre mobile (--rs-mo) : 1–8 = ordre d’affichage des cellules ; au-delà du tableau, index de rendu par défaut.
     {%- endcomment -%}
-    {%- assign _rs_home_mob_map = '1|2|3|4|5|6|7|8|9' | split: '|' -%}
+    {%- comment -%}Mobile : deux pubs (order 1) sur une ligne, puis profil (order 2), puis la suite.{%- endcomment -%}
+    {%- assign _rs_home_mob_map = '1|2|1|4|5|6|7|8|9' | split: '|' -%}
     {%- assign _rs_home_mo_idx = _rs_home_render_idx | minus: 1 -%}
     {%- assign _rs_home_mo = _rs_home_mob_map[_rs_home_mo_idx] | default: _rs_home_render_idx -%}
     {%- assign pad = block.settings.cell_padding | default: 16 -%}

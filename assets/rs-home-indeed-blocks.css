@@ -132,6 +132,20 @@ body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__kicker {
   letter-spacing: 0.04em !important;
 }
 
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--encart .rs-pole-panel__kicker {
+  color: var(--rs-shop-accent) !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--encart .rs-pole-panel__richtext,
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--encart .rs-pole-panel__richtext p {
+  color: var(--rs-shop-gray-600) !important;
+  margin: 0 !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__links:empty {
+  display: none !important;
+}
+
 body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__link {
   color: var(--rs-shop-accent) !important;
   font-weight: 600 !important;
@@ -283,6 +297,14 @@ body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell--ad-flush .rs
     margin-top: auto !important;
     flex: 0 0 auto !important;
   }
+  /* +10 px de large par carte produit (hors gap) */
+  body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell--ad-flush .rs-rail-ad:not(.rs-rail-ad--compact) {
+    box-sizing: border-box !important;
+    width: calc(100% + 10px) !important;
+    max-width: none !important;
+    margin-left: -5px !important;
+    margin-right: -5px !important;
+  }
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-uni-inline-sponsored .rs-rail-ad__title,
@@ -315,6 +337,27 @@ body[data-rs-page='index'] .section-home-unified-page .rs-top-profile-api__block
 
 body[data-rs-page='index'] .section-home-unified-page .rs-top-profile-api__profil-link.rs-pole-panel__footer-link {
   color: var(--rs-shop-accent) !important;
+}
+
+/* Mobile : grille 12 col — deux pubs produit sur une ligne (ordre --rs-mo 1|10|1 dans home-unified-page) */
+@media (max-width: 767.98px) {
+  body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-uni-page > .container > .rs-uni-grid,
+  body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-uni-main .container > .rs-uni-grid {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    flex-direction: unset !important;
+  }
+  body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-uni-grid > .rs-uni-cell:not(.rs-uni-cell--ad-flush) {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-uni-grid > .rs-uni-cell--ad-flush {
+    grid-column: span 6 !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+  }
 }
 
 /* — Pied de page (même langage que la grille) — */
