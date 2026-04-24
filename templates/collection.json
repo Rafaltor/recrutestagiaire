@@ -11,66 +11,6 @@
   "sections": {
     "main": {
       "type": "main-collection",
-      "blocks": {
-        "rail_left_a": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "left",
-            "content_type": "profiles_api",
-            "product": "",
-            "kicker": "Sponsorisé",
-            "show_price": true,
-            "show_stars": true,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
-        "rail_left_b": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "left",
-            "content_type": "profiles_api",
-            "product": "",
-            "kicker": "Sponsorisé",
-            "show_price": true,
-            "show_stars": true,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
-        "rail_right_a": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "right",
-            "content_type": "profiles_api",
-            "product": "",
-            "kicker": "Sponsorisé",
-            "show_price": true,
-            "show_stars": true,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        },
-        "rail_right_b": {
-          "type": "sponsored_rail",
-          "settings": {
-            "side": "right",
-            "content_type": "profiles_api",
-            "product": "",
-            "kicker": "Sponsorisé",
-            "show_price": true,
-            "show_stars": true,
-            "cta_label": "Voir",
-            "product_below": ""
-          }
-        }
-      },
-      "block_order": [
-        "rail_left_a",
-        "rail_left_b",
-        "rail_right_a",
-        "rail_right_b"
-      ],
       "settings": {
         "collection_page_bg": "#f4f4f2",
         "collection_strip_top": "#fafaf8",
@@ -129,7 +69,7 @@
         "label_price": "Salaire",
         "label_logistics": "Logistique",
         "rs_api_url": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php",
-        "sidebar_candidate_ads": true,
+        "sidebar_candidate_ads": false,
         "center_column_pct": 60,
         "rail_center_max": 900,
         "cand_kicker": "Sponsorisé",

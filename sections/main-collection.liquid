@@ -603,7 +603,7 @@
       "content": "Rails latéraux"
     },
     { "type": "text", "id": "rs_api_url", "label": "URL API (proxy Supabase)", "default": "https://example.com/rs-airtable-proxy.php" },
-    { "type": "checkbox", "id": "sidebar_candidate_ads", "label": "Afficher les rails latéraux", "default": true, "info": "Ajoutez des blocs « Pub rail latéral » (gauche/droite). Chaque bloc : offre Shopify ou profil API." },
+    { "type": "checkbox", "id": "sidebar_candidate_ads", "label": "Afficher les rails latéraux", "default": false, "info": "Ajoutez des blocs « Pub rail latéral » (gauche/droite). Chaque bloc : offre Shopify ou profil API." },
     {
       "type": "range",
       "id": "center_column_pct",
@@ -683,12 +683,9 @@
   "presets": [
     {
       "name": "Liste des offres",
-      "blocks": [
-        { "type": "sponsored_rail", "settings": { "side": "left", "content_type": "profiles_api" } },
-        { "type": "sponsored_rail", "settings": { "side": "left", "content_type": "profiles_api" } },
-        { "type": "sponsored_rail", "settings": { "side": "right", "content_type": "profiles_api" } },
-        { "type": "sponsored_rail", "settings": { "side": "right", "content_type": "profiles_api" } }
-      ]
+      "settings": {
+        "sidebar_candidate_ads": false
+      }
     }
   ]
 }

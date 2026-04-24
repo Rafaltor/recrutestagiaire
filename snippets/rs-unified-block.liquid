@@ -237,6 +237,18 @@
             {%- if b.text != blank -%}
               <div class="rs-pole-panel__richtext">{{ b.text }}</div>
             {%- endif -%}
+            {%- if b.footer_link_label != blank -%}
+              {%- assign _fu = b.footer_link_url | default: '' | downcase -%}
+              {%- assign _vote_arrow = false -%}
+              {%- if _fu contains 'swipe' or _fu contains '/vote' -%}
+                {%- assign _vote_arrow = true -%}
+              {%- endif -%}
+              <a
+                href="{% if b.footer_link_url != blank %}{{ b.footer_link_url }}{% else %}#{% endif %}"
+                class="rs-pole-panel__footer-link{% if _vote_arrow %} rs-pole-panel__footer-link--vote-arrow{% endif %}">
+                {{ b.footer_link_label | escape }}
+              </a>
+            {%- endif -%}
             <ul class="rs-pole-panel__links list-unstyled mb-0">
               {%- for i in (1..5) -%}
                 {%- assign lk = 'link_' | append: i | append: '_label' -%}
@@ -250,11 +262,6 @@
                 {%- endif -%}
               {%- endfor -%}
             </ul>
-            {%- if b.footer_link_label != blank -%}
-              <a href="{% if b.footer_link_url != blank %}{{ b.footer_link_url }}{% else %}#{% endif %}" class="rs-pole-panel__footer-link">
-                {{ b.footer_link_label | escape }}
-              </a>
-            {%- endif -%}
           </div>
         </div>
       {%- else -%}

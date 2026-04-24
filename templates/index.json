@@ -19,7 +19,7 @@
         "heading_line_1": "Chaque vêtement",
         "heading_line_2": "est une",
         "heading_emphasis": "offre",
-        "subtitle": "Postule. Candidature non négociable. Les meilleurs CV finissent sur le packaging.",
+        "subtitle": "Dépose ton CV. Vote. Rejoins le collectif",
         "search_placeholder": "Cherche un poste...",
         "search_btn_label": "Voir les offres →",
         "portal_url": "https://portail.recrutestagiaire.eu",
@@ -175,8 +175,8 @@
             "link_4_url": "",
             "link_5_label": "",
             "link_5_url": "",
-            "footer_link_label": "",
-            "footer_link_url": "",
+            "footer_link_label": "Voter",
+            "footer_link_url": "https://portail.recrutestagiaire.eu/swipe",
             "bg_color": "#ffffff",
             "border_color": "#888888"
           }
