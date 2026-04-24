@@ -269,3 +269,45 @@
   line-height: 1.35;
   max-width: 12rem;
 }
+
+@media (max-width: 767.98px) {
+  .rs-hero-video {
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--rs-portal-header-h, 100px) + 12px) 16px calc(28px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .rs-hero-video__content {
+    padding: 12px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+    transform: none;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .rs-hero-video__badge,
+  .rs-hero-video__title,
+  .rs-hero-video__subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .rs-hero-video__subtitle {
+    max-width: 34em;
+  }
+
+  .rs-hero-video__search {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .rs-hero-video__portal {
+    display: flex;
+    justify-content: center;
+  }
+
+  .rs-hero-video__stats {
+    justify-content: center;
+  }
+}

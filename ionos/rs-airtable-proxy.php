@@ -302,28 +302,35 @@ function rs_supabase_profiles(): array {
 }
 
 /**
- * Une ligne : profil publié avec le plus de likes (tri côté Supabase).
+ * Profils publiés triés par likes (tri côté Supabase).
  *
- * @return array<string,mixed>|null
+ * @return array<int, array<string,mixed>>
  */
-function rs_supabase_top_published_by_likes(): ?array {
+function rs_supabase_top_published_rows_by_likes(int $limit): array {
   $table = rawurlencode(RS_SUPABASE_TABLE);
   $appCol = rs_supabase_approved_column();
   $likesEnc = rawurlencode(rs_supabase_likes_column());
+  $lim = max(1, min(50, $limit));
   $path = "/rest/v1/{$table}?select=*";
   if ($appCol !== null) {
     $path .= '&' . rawurlencode($appCol) . '=eq.true';
   }
-  $path .= "&order={$likesEnc}.desc.nullslast&limit=1";
+  $path .= "&order={$likesEnc}.desc.nullslast&limit={$lim}";
   $r = rs_supabase_request('GET', $path, []);
   if (!$r['ok']) {
     rs_json(['error' => 'supabase', 'details' => $r['data']], 502);
   }
   $rows = $r['data'];
-  if (!is_array($rows) || !isset($rows[0]) || !is_array($rows[0])) {
-    return null;
+  if (!is_array($rows)) {
+    return [];
   }
-  return $rows[0];
+  $out = [];
+  foreach ($rows as $row) {
+    if (is_array($row)) {
+      $out[] = $row;
+    }
+  }
+  return $out;
 }
 
 function rs_instagram_api_value(?string $raw): string {
@@ -458,11 +465,19 @@ function rs_supabase_row_to_top_public(array $row): array {
 }
 
 function rs_handle_profil_top(): void {
-  $row = rs_supabase_top_published_by_likes();
-  if ($row === null) {
+  $rows = rs_supabase_top_published_rows_by_likes(2);
+  if (!count($rows)) {
     rs_json(['error' => 'no_published_profile'], 404);
   }
-  rs_json(rs_supabase_row_to_top_public($row));
+  $profiles = [];
+  foreach ($rows as $i => $row) {
+    $pub = rs_supabase_row_to_top_public($row);
+    $n = $i + 1;
+    $pub['rank'] = $n;
+    $pub['rank_label'] = 'N°' . $n . ' — cette semaine';
+    $profiles[] = $pub;
+  }
+  rs_json(['profiles' => $profiles]);
 }
 
 function rs_supabase_submit(array $payload): void {

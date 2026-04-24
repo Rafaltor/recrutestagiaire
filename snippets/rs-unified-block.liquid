@@ -134,8 +134,7 @@
           <div class="rs-hero-search-metro__sheet">
             <div class="rs-hero-search-metro__line">
               <span class="rs-hero-search-metro__tag">Q</span>
-              <form action="{{ routes.search_url }}" method="get" class="rs-hero-search-metro__form">
-                <input type="hidden" name="type" value="product">
+              <form action="{{ _offres_btn_url }}" method="get" class="rs-hero-search-metro__form">
                 <label class="visually-hidden" for="rs-home-search-m-{{ block.id }}">Recherche</label>
                 <input
                   id="rs-home-search-m-{{ block.id }}"
@@ -173,8 +172,7 @@
             <div class="rs-hero-search-2010__row">
               <label class="rs-hero-search-2010__label" for="rs-home-search-q-{{ block.id }}">Mots-clés</label>
               <div class="rs-hero-search-2010__field formField icons rs-hero__pole-field">
-                <form action="{{ routes.search_url }}" method="get" class="rs-hero-search-2010__form">
-                  <input type="hidden" name="type" value="product">
+                <form action="{{ _offres_btn_url }}" method="get" class="rs-hero-search-2010__form">
                   <input
                     id="rs-home-search-q-{{ block.id }}"
                     type="text"

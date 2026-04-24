@@ -1,7 +1,11 @@
 {{ 'rs-hero-video.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign search_action = routes.search_url
+  if collections.stagiaire != blank
+    assign search_action = collections.stagiaire.url
+  else
+    assign search_action = '/collections/stagiaire'
+  endif
   assign v_shopify = section.settings.background_video
   assign v_mp4 = section.settings.mp4_url | strip
   assign v_poster = section.settings.poster_image
@@ -79,7 +83,6 @@
     {%- endif -%}
 
     <form class="rs-hero-video__search" action="{{ search_action }}" method="get" role="search">
-      <input type="hidden" name="type" value="product">
       <span class="rs-hero-video__search-icon" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <circle cx="10.5" cy="10.5" r="6.25" stroke="currentColor" stroke-width="2" fill="none"/>

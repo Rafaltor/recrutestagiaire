@@ -255,75 +255,87 @@
           return r.json();
         })
         .then(function (d) {
-          /* Ionos : { id, name, instagram, metier, likes, rank, token } — portail possible : { profile: { … } } */
-          var p = d && (d.profile || (d.id ? d : null));
-          if (!p || !p.id) {
+          /* Ionos : { profiles: [ {...}, {...} ] } — ancien plat { id, … } ou portail { profile } */
+          var profiles = [];
+          if (d && Array.isArray(d.profiles)) {
+            profiles = d.profiles.filter(function (x) {
+              return x && x.id;
+            });
+          } else if (d && d.profile && d.profile.id) {
+            profiles = [d.profile];
+          } else if (d && d.id) {
+            profiles = [d];
+          }
+          if (!profiles.length) {
             mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
             return;
           }
-          var path =
-            p.profile_url ||
-            '/profil/' + encodeURIComponent(p.token != null && String(p.token) !== '' ? String(p.token) : String(p.id));
-          var href = base.replace(/\/$/, '') + path;
-          var likes =
-            typeof p.likes === 'number'
-              ? p.likes
-              : typeof d.likes === 'number'
-                ? d.likes
-                : parseFloat(p.likes) || 0;
-          var rank =
-            p.rank_label ||
-            d.rank_label ||
-            (typeof p.rank === 'number' ? 'N°' + p.rank + ' — cette semaine' : 'Profil N°1 cette semaine');
-          var handle = p.handle || p.instagram || '—';
-          var job = p.job_title || p.metier || '—';
-          var nom = p.name && String(p.name).trim() ? String(p.name).trim() : '';
           var kickerAttr = wrap.getAttribute('data-rs-top-kicker') || '';
           var titleAttr = wrap.getAttribute('data-rs-top-title') || '';
-          var kickerHtml =
-            kickerAttr !== ''
-              ? esc(kickerAttr)
-              : 'Sortie du cycle';
-          var titleHtml = titleAttr !== '' ? esc(titleAttr) : 'Le meilleur profil';
-          var handleClean = String(handle).replace(/^@+/, '');
-          var lineName =
-            nom !== ''
-              ? '<strong>' + esc(nom) + '</strong>'
-              : '<strong>' + esc(handle) + '</strong>';
-          var lineAt =
-            nom !== '' && handle !== '—'
-              ? '@' + esc(handleClean)
-              : nom === '' && handle !== '—'
+          var kickerHtml = kickerAttr !== '' ? esc(kickerAttr) : 'Sortie du cycle';
+          var titleDefault =
+            profiles.length > 1 ? 'Les meilleurs profils' : 'Le meilleur profil';
+          var titleHtml = titleAttr !== '' ? esc(titleAttr) : titleDefault;
+
+          function cardFromProfile(p) {
+            var path =
+              p.profile_url ||
+              '/profil/' +
+                encodeURIComponent(p.token != null && String(p.token) !== '' ? String(p.token) : String(p.id));
+            var href = base.replace(/\/$/, '') + path;
+            var likes = typeof p.likes === 'number' ? p.likes : parseFloat(p.likes) || 0;
+            var rank =
+              p.rank_label ||
+              (typeof p.rank === 'number' ? 'N°' + p.rank + ' — cette semaine' : 'Profil en tête');
+            var handle = p.handle || p.instagram || '—';
+            var job = p.job_title || p.metier || '—';
+            var nom = p.name && String(p.name).trim() ? String(p.name).trim() : '';
+            var handleClean = String(handle).replace(/^@+/, '');
+            var lineName =
+              nom !== ''
+                ? '<strong>' + esc(nom) + '</strong>'
+                : '<strong>' + esc(handle) + '</strong>';
+            var lineAt =
+              nom !== '' && handle !== '—'
                 ? '@' + esc(handleClean)
-                : '';
-          var bullets =
-            bulletLine(lineName) +
-            bulletLine(lineAt) +
-            bulletLine(esc(job)) +
-            bulletLine(esc(String(likes)) + ' likes') +
-            bulletLine(esc(rank));
-          var cardInner =
-            '<article class="rs-portail-home-best-cv">' +
-            '<div class="rs-portail-home-best-cv__top">' +
-            '<div class="rs-portail-home-best-cv__titles">' +
-            '<p class="rs-portail-home-best-cv__kicker">' +
-            kickerHtml +
-            '</p>' +
-            '<h3 class="rs-portail-home-best-cv__h">' +
-            titleHtml +
-            '</h3></div>' +
-            '<a class="rs-portail-home-best-cv__cta" href="' +
-            esc(href) +
-            '" rel="noopener noreferrer">' +
-            esc(btnLabel) +
-            '</a></div>' +
-            '<div class="rs-portail-home-best-cv__bullets">' +
-            bullets +
-            '</div></article>';
+                : nom === '' && handle !== '—'
+                  ? '@' + esc(handleClean)
+                  : '';
+            var bullets =
+              bulletLine(lineName) +
+              bulletLine(lineAt) +
+              bulletLine(esc(job)) +
+              bulletLine(esc(String(likes)) + ' likes') +
+              bulletLine(esc(rank));
+            return (
+              '<article class="rs-portail-home-best-cv">' +
+              '<div class="rs-portail-home-best-cv__top">' +
+              '<div class="rs-portail-home-best-cv__titles">' +
+              '<p class="rs-portail-home-best-cv__kicker">' +
+              kickerHtml +
+              '</p>' +
+              '<h3 class="rs-portail-home-best-cv__h">' +
+              titleHtml +
+              '</h3></div>' +
+              '<a class="rs-portail-home-best-cv__cta" href="' +
+              esc(href) +
+              '" rel="noopener noreferrer">' +
+              esc(btnLabel) +
+              '</a></div>' +
+              '<div class="rs-portail-home-best-cv__bullets">' +
+              bullets +
+              '</div></article>'
+            );
+          }
+
+          var cards = profiles.map(function (p) {
+            return cardFromProfile(p);
+          });
           mount.innerHTML =
             '<div class="rs-top-profile-api__layout rs-top-profile-api__layout--text-only">' +
-            cardInner +
-            '</div>';
+            '<div class="rs-portail-home-best-cv-stack">' +
+            cards.join('') +
+            '</div></div>';
         })
         .catch(function () {
           mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
@@ -948,7 +960,7 @@
           "info": "Préfixe du lien fiche profil (/profil/[id])."
         },
         { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Sortie du cycle" },
-        { "type": "text", "id": "title", "label": "Titre", "default": "Le meilleur profil" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Les meilleurs profils" },
         { "type": "text", "id": "btn_label", "label": "Libellé du bouton", "default": "Lire la fiche →" },
         {
           "type": "text",

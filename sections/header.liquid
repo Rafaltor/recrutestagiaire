@@ -47,6 +47,7 @@
     assign brand_logo_max = 200
   endif
 %}
+{%- capture rs_ticker_phrases -%}<span class="rs-ticker__phrase rs-ticker__phrase--a">CANDIDATURE OUVERTE</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--b">DÉPOSE TON CV</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--a">SWIPE LES PROFILS</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--b">REJOINS LE COLLECTIF</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--a">LES MEILLEURS FINISSENT SUR LE PACKAGING</span><span class="rs-ticker__sep">✦</span>{%- endcapture -%}
 <div
   class="header-wrap rs-header{% if section.settings.banner_image != blank %} rs-header--banner{% endif %}"
   {% if section.settings.banner_image != blank %}
@@ -56,12 +57,10 @@
   <div class="rs-ticker" aria-hidden="true">
     <div class="rs-ticker__viewport">
       <div class="rs-ticker__track">
-        <div class="rs-ticker__group">
-          <span class="rs-ticker__accent">CANDIDATURE OUVERTE</span><span class="rs-ticker__sep">✦</span><span>DÉPOSE TON CV</span><span class="rs-ticker__sep">✦</span><span>SWIPE LES PROFILS</span><span class="rs-ticker__sep">✦</span><span>REJOINS LE COLLECTIF</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__accent">LES MEILLEURS FINISSENT SUR LE PACKAGING</span><span class="rs-ticker__sep">✦</span>
-        </div>
-        <div class="rs-ticker__group" aria-hidden="true">
-          <span class="rs-ticker__accent">CANDIDATURE OUVERTE</span><span class="rs-ticker__sep">✦</span><span>DÉPOSE TON CV</span><span class="rs-ticker__sep">✦</span><span>SWIPE LES PROFILS</span><span class="rs-ticker__sep">✦</span><span>REJOINS LE COLLECTIF</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__accent">LES MEILLEURS FINISSENT SUR LE PACKAGING</span><span class="rs-ticker__sep">✦</span>
-        </div>
+        <div class="rs-ticker__group">{{ rs_ticker_phrases }}</div>
+        <div class="rs-ticker__group" aria-hidden="true">{{ rs_ticker_phrases }}</div>
+        <div class="rs-ticker__group" aria-hidden="true">{{ rs_ticker_phrases }}</div>
+        <div class="rs-ticker__group" aria-hidden="true">{{ rs_ticker_phrases }}</div>
       </div>
     </div>
   </div>
