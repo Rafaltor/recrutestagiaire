@@ -117,6 +117,14 @@
 
   {%- when 'hero_search' -%}
     {%- assign _hs_layout = b.layout_variant | default: 'panel' -%}
+    {%- liquid
+      assign _offres_btn_url = b.offres_btn_url | strip
+      if _offres_btn_url == blank and collections.stagiaire != blank
+        assign _offres_btn_url = collections.stagiaire.url
+      elsif _offres_btn_url == blank
+        assign _offres_btn_url = '/collections/stagiaire'
+      endif
+    -%}
     <div class="rs-hero__search-strip-inner rs-uni-search-stack h-100 d-flex flex-column justify-content-center">
       {%- if _hs_layout == 'metro' -%}
         <div class="rs-hero-search-metro">
@@ -140,7 +148,7 @@
             </div>
             <div class="rs-hero-search-metro__split{% if b.secondary_label == blank %} rs-hero-search-metro__split--single{% endif %}">
               <a
-                href="{{ routes.all_products_collection_url }}"
+                href="{{ _offres_btn_url }}"
                 class="rs-hero-search-metro__cell rs-hero-search-metro__cell--offres btn btn-warning fw-bold rs-hero__pole-cta-btn"
                 style="min-height:calc({{ b.height }}px * var(--rs-uni-text-pct, 100) / 100);font-size:calc({{ b.font_size }}px * var(--rs-uni-text-pct, 100) / 100);">
                 {{ b.btn_label | default: 'Voir toutes les offres' }}
@@ -180,7 +188,7 @@
             </div>
             <div class="rs-hero-search-2010__actions">
               <a
-                href="{{ routes.all_products_collection_url }}"
+                href="{{ _offres_btn_url }}"
                 class="btn btn-warning w-100 fw-bold rs-hero__pole-cta-btn rs-hero-search-2010__btn-offres"
                 style="min-height:calc({{ b.height }}px * var(--rs-uni-text-pct, 100) / 100);font-size:calc({{ b.font_size }}px * var(--rs-uni-text-pct, 100) / 100);">
                 {{ b.btn_label | default: 'Voir toutes les offres' }}
@@ -237,18 +245,6 @@
             {%- if b.text != blank -%}
               <div class="rs-pole-panel__richtext">{{ b.text }}</div>
             {%- endif -%}
-            {%- if b.footer_link_label != blank -%}
-              {%- assign _fu = b.footer_link_url | default: '' | downcase -%}
-              {%- assign _vote_arrow = false -%}
-              {%- if _fu contains 'swipe' or _fu contains '/vote' -%}
-                {%- assign _vote_arrow = true -%}
-              {%- endif -%}
-              <a
-                href="{% if b.footer_link_url != blank %}{{ b.footer_link_url }}{% else %}#{% endif %}"
-                class="rs-pole-panel__footer-link{% if _vote_arrow %} rs-pole-panel__footer-link--vote-arrow{% endif %}">
-                {{ b.footer_link_label | escape }}
-              </a>
-            {%- endif -%}
             <ul class="rs-pole-panel__links list-unstyled mb-0">
               {%- for i in (1..5) -%}
                 {%- assign lk = 'link_' | append: i | append: '_label' -%}
@@ -262,6 +258,18 @@
                 {%- endif -%}
               {%- endfor -%}
             </ul>
+            {%- if b.footer_link_label != blank -%}
+              {%- assign _fu = b.footer_link_url | default: '' | downcase -%}
+              {%- assign _vote_arrow = false -%}
+              {%- if _fu contains 'swipe' or _fu contains '/vote' -%}
+                {%- assign _vote_arrow = true -%}
+              {%- endif -%}
+              <a
+                href="{% if b.footer_link_url != blank %}{{ b.footer_link_url }}{% else %}#{% endif %}"
+                class="rs-pole-panel__footer-link{% if _vote_arrow %} rs-pole-panel__footer-link--vote-arrow{% endif %}">
+                {{ b.footer_link_label | escape }}
+              </a>
+            {%- endif -%}
           </div>
         </div>
       {%- else -%}

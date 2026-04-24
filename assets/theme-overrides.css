@@ -1332,12 +1332,12 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 }
 .rs-pro-mock__layout {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: minmax(0, 1fr) 340px;
   gap: 2rem;
   align-items: start;
 }
 .rs-pro-mock__rail-left {
-  display: none;
+  display: none !important;
 }
 .rs-pro-mock__left-top {
   grid-column: 1;
@@ -1398,34 +1398,25 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   }
 }
 
-/* Desktop: rail autres offres à gauche du main, carte prix normal à droite */
+/* Desktop : contenu + colonne sticky (sans colonne rail gauche) */
 @media (min-width: 992px) {
   .rs-pro-mock__layout {
-    grid-template-columns: 128px minmax(0, 1fr) 300px;
+    grid-template-columns: minmax(0, 1.5fr) minmax(248px, 300px);
     gap: 20px;
   }
   .rs-pro-mock__rail-left {
-    display: block;
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    position: sticky;
-    top: 72px;
-    align-self: start;
+    display: none !important;
   }
   .rs-pro-mock__left-top {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1;
   }
   .rs-pro-mock__left-body {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 2;
   }
-  /*
-   * Sticky sur la colonne (pas seulement la carte) + align-self:start : évite l’étirement
-   * de la cellule grille qui annule l’effet « barre latérale » (cf. rail gauche).
-   */
   .rs-pro-mock__right {
-    grid-column: 3;
+    grid-column: 2;
     grid-row: 1 / span 2;
     align-self: start;
     position: sticky;
@@ -1435,18 +1426,6 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
     max-height: calc(100dvh - 88px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-  }
-  .rs-pro-mock__rail-left.rs-pro-mock__similar-bar--desktop {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: none;
-  }
-  .rs-pro-mock__rail-left .rs-pro-mock__similar-title {
-    margin-bottom: 8px;
-  }
-  .rs-pro-mock__rail-left .rs-pro-mock__similar-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
   }
 }
 

@@ -515,15 +515,16 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   letter-spacing: -0.02em !important;
 }
 
-/* Meilleur profil : encart « une » */
+/* Meilleur profil : la carte interne (.rs-portail-profil-card) porte la DA ; cadre extérieur neutre */
 body[data-rs-page='index'] .section-home-unified-page .rs-editorial-profile.rs-pole-panel {
-  box-shadow: 0 14px 36px rgba(10, 10, 10, 0.05) !important;
-  border-top: 3px solid #f472b6 !important;
-  padding-top: 32px !important;
+  box-shadow: none !important;
+  border-top: none !important;
+  padding-top: 0 !important;
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-editorial-profile .rs-top-profile-api__encart {
-  border-radius: 12px !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
 }
 
 /* Recherche : un seul champ visible */

@@ -147,13 +147,12 @@ body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__footer-lin
   font-weight: 600 !important;
 }
 
-/* Lien vote sous le texte (bloc Recrutement) : rose + flèche */
-body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--service .rs-pole-panel__main > .rs-pole-panel__richtext + .rs-pole-panel__footer-link {
+/* Lien vote sous les liens (bloc Recrutement) : rose + flèche */
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--service .rs-pole-panel__main > .rs-pole-panel__links + .rs-pole-panel__footer-link {
   display: inline-flex;
   align-items: center;
   gap: 0.35em;
-  margin-top: 0.6rem;
-  margin-bottom: 0.85rem;
+  margin-top: 0.75rem;
   text-decoration: none !important;
 }
 
@@ -339,6 +338,153 @@ body[data-rs-page='index'] .section-home-unified-page .rs-top-profile-api__block
 
 body[data-rs-page='index'] .section-home-unified-page .rs-top-profile-api__profil-link.rs-pole-panel__footer-link {
   color: var(--rs-shop-accent) !important;
+}
+
+/* Carte « meilleur profil » — DA proche liste profils portail (carte + avatar + pills + CTA) */
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card {
+  width: 100%;
+  border-radius: var(--rs-ds-radius-card-lg, 16px);
+  border: 1px solid var(--rs-shop-gray-200);
+  background: var(--rs-shop-white);
+  box-shadow: 0 10px 32px rgba(0, 26, 87, 0.07);
+  overflow: hidden;
+  text-align: left;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__accent {
+  height: 4px;
+  background: linear-gradient(90deg, var(--rs-shop-accent) 0%, #001a57 100%);
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__body {
+  padding: 1rem 1.15rem 1.2rem;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__editorial {
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--rs-shop-gray-200);
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__editorial .rs-top-profile-api__block-kicker {
+  margin-bottom: 0.35rem !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__editorial .rs-top-profile-api__block-title {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  font-size: 1.05rem !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__editorial .rs-top-profile-api__block-title::before {
+  display: none !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin-bottom: 0.65rem;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__avatar {
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  background: linear-gradient(145deg, var(--rs-shop-accent) 0%, #001a57 100%);
+  box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35);
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__identity {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__name {
+  margin: 0 0 0.15rem !important;
+  font-size: 1rem !important;
+  line-height: 1.25 !important;
+  color: var(--rs-shop-black) !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__handle {
+  margin: 0 !important;
+  font-size: var(--rs-ds-type-caption, 0.8rem) !important;
+  color: var(--rs-shop-gray-600) !important;
+  font-weight: 600 !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__metier {
+  margin: 0 0 0.75rem !important;
+  font-size: var(--rs-ds-type-body-sm, 0.9rem) !important;
+  line-height: 1.45 !important;
+  color: var(--rs-shop-gray-600) !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  font-size: var(--rs-ds-type-caption, 0.75rem);
+  font-weight: 600;
+  border: 1px solid var(--rs-shop-gray-200);
+  background: var(--rs-shop-gray-100);
+  color: var(--rs-shop-black) !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__pill--likes {
+  border-color: rgba(236, 72, 153, 0.35);
+  background: rgba(236, 72, 153, 0.08);
+  color: #001a57 !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__pill--rank {
+  color: var(--rs-shop-gray-600) !important;
+  font-weight: 500;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.65rem 1rem;
+  border-radius: var(--rs-ds-radius-control, 10px);
+  font-weight: 700 !important;
+  font-size: var(--rs-ds-type-body-sm, 0.9rem) !important;
+  text-decoration: none !important;
+  color: #ffffff !important;
+  background: var(--rs-shop-accent) !important;
+  border: 1px solid var(--rs-shop-accent) !important;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.15s ease;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-profil-card__cta:hover {
+  background: var(--rs-shop-accent-hover) !important;
+  border-color: var(--rs-shop-accent-hover) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
 }
 
 /* Mobile : grille 12 col — deux pubs produit sur une ligne (ordre --rs-mo 1|10|1 dans home-unified-page) */

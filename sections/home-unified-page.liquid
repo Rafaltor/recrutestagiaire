@@ -230,6 +230,19 @@
       return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] || c;
     });
   }
+  function initialsFromProfile(name, handle) {
+    var n = String(name == null ? '' : name).trim();
+    var h = String(handle == null ? '' : handle).replace(/^@+/, '').trim();
+    var src = n || h || 'RS';
+    var parts = src.split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) {
+      var a = parts[0].charAt(0);
+      var b = parts[parts.length - 1].charAt(0);
+      return (a + b).toUpperCase();
+    }
+    if (src.length >= 2) return src.substring(0, 2).toUpperCase();
+    return (src.charAt(0) + src.charAt(0)).toUpperCase();
+  }
   function runTopProfiles() {
     document.querySelectorAll('.rs-top-profile-api').forEach(function (wrap) {
       var url = wrap.getAttribute('data-rs-top-profile-api');
@@ -277,31 +290,51 @@
           if (titleAttr !== '') {
             titleBlock += '<h3 class="rs-top-profile-api__block-title">' + esc(titleAttr) + '</h3>';
           }
-          var headBlock =
+          var ini = initialsFromProfile(nom, handle);
+          var nameLine =
             nom !== ''
-              ? '<p class="mb-2 rs-top-profile-api__name"><strong>' + esc(nom) + '</strong></p>' +
-                (handle !== '—' ? '<p class="mb-2 rs-top-profile-api__handle text-muted">' + esc(handle) + '</p>' : '')
-              : '<p class="mb-2 rs-top-profile-api__name"><strong>' + esc(handle) + '</strong></p>';
-          var textCol =
-            '<div class="rs-top-profile-api__text-col">' +
-            titleBlock +
-            headBlock +
-            '<p class="mb-2 rs-top-profile-api__body-line">' +
+              ? '<p class="rs-portail-profil-card__name"><strong>' + esc(nom) + '</strong></p>'
+              : '<p class="rs-portail-profil-card__name"><strong>' + esc(handle) + '</strong></p>';
+          var handleLine =
+            nom !== '' && handle !== '—'
+              ? '<p class="rs-portail-profil-card__handle">@' + esc(String(handle).replace(/^@+/, '')) + '</p>'
+              : nom === '' && handle !== '—'
+                ? '<p class="rs-portail-profil-card__handle">@' + esc(String(handle).replace(/^@+/, '')) + '</p>'
+                : '';
+          var cardInner =
+            '<div class="rs-portail-profil-card__accent" aria-hidden="true"></div>' +
+            '<div class="rs-portail-profil-card__body">' +
+            (titleBlock !== ''
+              ? '<div class="rs-portail-profil-card__editorial">' + titleBlock + '</div>'
+              : '') +
+            '<div class="rs-portail-profil-card__head">' +
+            '<div class="rs-portail-profil-card__avatar" aria-hidden="true">' +
+            esc(ini) +
+            '</div>' +
+            '<div class="rs-portail-profil-card__identity">' +
+            nameLine +
+            handleLine +
+            '</div></div>' +
+            '<p class="rs-portail-profil-card__metier">' +
             esc(job) +
             '</p>' +
-            '<p class="mb-2 rs-top-profile-api__body-line">Likes : <strong>' +
+            '<div class="rs-portail-profil-card__stats">' +
+            '<span class="rs-portail-profil-card__pill rs-portail-profil-card__pill--likes">' +
             esc(String(likes)) +
-            '</strong></p>' +
-            '<p class="mb-3 rs-top-profile-api__body-line rs-top-profile-api__rank text-muted">' +
+            ' likes</span>' +
+            '<span class="rs-portail-profil-card__pill rs-portail-profil-card__pill--rank">' +
             esc(rank) +
-            '</p>' +
-            '<a class="rs-pole-panel__footer-link rs-top-profile-api__profil-link" href="' +
+            '</span></div>' +
+            '<a class="rs-portail-profil-card__cta" href="' +
             esc(href) +
             '" rel="noopener noreferrer">' +
             esc(btnLabel) +
             '</a></div>';
           mount.innerHTML =
-            '<div class="rs-top-profile-api__layout rs-top-profile-api__layout--text-only">' + textCol + '</div>';
+            '<div class="rs-top-profile-api__layout rs-top-profile-api__layout--text-only">' +
+            '<article class="rs-portail-profil-card">' +
+            cardInner +
+            '</article></div>';
         })
         .catch(function () {
           mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
@@ -664,6 +697,12 @@
         { "type": "text", "id": "strip_kicker", "label": "Texte au-dessus champ", "default": "Offre ou collection recherchée" },
         { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "Rechercher un poste, une collection..." },
         { "type": "text", "id": "btn_label", "label": "Texte bouton principal", "default": "Voir toutes les offres" },
+        {
+          "type": "url",
+          "id": "offres_btn_url",
+          "label": "Bouton principal — URL des offres",
+          "info": "Vide = collection « stagiaire » si elle existe, sinon /collections/stagiaire. Ne pointe pas vers la page recherche Shopify."
+        },
         { "type": "text", "id": "secondary_label", "label": "2e bouton", "default": "Profils" },
         { "type": "url", "id": "secondary_url", "label": "2e bouton — URL" },
         { "type": "range", "id": "height", "min": 32, "max": 60, "step": 2, "unit": "px", "label": "Hauteur champs", "default": 46 },
@@ -947,7 +986,15 @@
       },
       "blocks": [
         { "type": "hero_intro_bundle", "settings": { "col_span": "9", "cell_padding": 0, "cell_bg": "#e8e8e8" } },
-        { "type": "hero_search", "settings": { "col_span": "3", "use_strip_bg": true, "cell_padding": 12 } },
+        {
+          "type": "hero_search",
+          "settings": {
+            "col_span": "3",
+            "use_strip_bg": true,
+            "cell_padding": 12,
+            "offres_btn_url": "shopify://collections/stagiaire"
+          }
+        },
         { "type": "kitsch_counter", "settings": { "col_span": "3", "tile_mode": true, "cell_padding": 0, "cell_bg": "#ffffff" } },
         { "type": "grid_panel", "settings": { "col_span": "3", "layout_style": "service", "circle_label": "Offres", "title": "Collections" } },
         { "type": "grid_panel", "settings": { "col_span": "3", "layout_style": "service", "circle_label": "Candidat", "circle_bg": "#0033cc", "title": "Espace candidat" } },

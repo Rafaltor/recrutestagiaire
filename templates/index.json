@@ -113,6 +113,7 @@
             "strip_kicker": "Offre ou collection recherchée",
             "placeholder": "Rechercher un poste, une collection...",
             "btn_label": "Voir toutes les offres",
+            "offres_btn_url": "shopify://collections/stagiaire",
             "secondary_label": "",
             "secondary_url": "",
             "height": 46,
