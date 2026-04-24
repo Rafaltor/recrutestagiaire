@@ -31,6 +31,7 @@
         muted
         loop
         playsinline
+        webkit-playsinline
         preload="auto"
         {% if v_poster != blank %}
           poster="{{ v_poster | image_url: width: 1920 }}"
@@ -145,6 +146,37 @@
     document.addEventListener('DOMContentLoaded', rsHomeHeaderUnderHero);
     window.addEventListener('resize', rsHomeHeaderUnderHero);
     document.addEventListener('shopify:section:load', rsHomeHeaderUnderHero);
+  })();
+</script>
+
+<script>
+  (function () {
+    function rsHeroVideoEnsurePlay() {
+      var root = document.querySelector('.section-rs-hero-video');
+      if (!root) return;
+      root.querySelectorAll('.rs-hero-video__media-wrap video').forEach(function (v) {
+        v.muted = true;
+        v.defaultMuted = true;
+        v.setAttribute('muted', '');
+        v.setAttribute('playsinline', '');
+        v.setAttribute('webkit-playsinline', '');
+        if ('playsInline' in v) v.playsInline = true;
+        v.setAttribute('autoplay', '');
+        var p = v.play();
+        if (p && typeof p.catch === 'function') p.catch(function () {});
+      });
+    }
+    rsHeroVideoEnsurePlay();
+    document.addEventListener('DOMContentLoaded', rsHeroVideoEnsurePlay);
+    window.addEventListener('pageshow', function (ev) {
+      if (ev.persisted) rsHeroVideoEnsurePlay();
+    });
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) rsHeroVideoEnsurePlay();
+    });
+    document.addEventListener('shopify:section:load', function (ev) {
+      if (ev.target && ev.target.querySelector && ev.target.querySelector('.rs-hero-video')) rsHeroVideoEnsurePlay();
+    });
   })();
 </script>
 

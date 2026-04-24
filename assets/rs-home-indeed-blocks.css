@@ -132,20 +132,6 @@ body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__kicker {
   letter-spacing: 0.04em !important;
 }
 
-body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--encart .rs-pole-panel__kicker {
-  color: var(--rs-shop-accent) !important;
-}
-
-body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--encart .rs-pole-panel__richtext,
-body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--encart .rs-pole-panel__richtext p {
-  color: var(--rs-shop-gray-600) !important;
-  margin: 0 !important;
-}
-
-body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__links:empty {
-  display: none !important;
-}
-
 body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__link {
   color: var(--rs-shop-accent) !important;
   font-weight: 600 !important;
