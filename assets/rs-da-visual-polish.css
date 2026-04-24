@@ -515,7 +515,7 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   letter-spacing: -0.02em !important;
 }
 
-/* Meilleur profil : la carte interne (.rs-portail-profil-card) porte la DA ; cadre extérieur neutre */
+/* Meilleur profil : carte sombre (.rs-portail-home-best-cv) porte la DA ; cadre extérieur neutre */
 body[data-rs-page='index'] .section-home-unified-page .rs-editorial-profile.rs-pole-panel {
   box-shadow: none !important;
   border-top: none !important;

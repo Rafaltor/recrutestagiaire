@@ -1591,8 +1591,10 @@ body[data-rs-page='product'] .rs-pro-mock__thumb.active {
   box-shadow: none !important;
 }
 
-/* Bannière image + référence — léger dégradé rose (fond « kiffant ») */
+/* Bannière image + référence — léger dégradé rose (fond « kiffant ») + zone plus grande */
 body[data-rs-page='product'] .rs-pro-mock__img-block {
+  --rs-pro-photo-overlay: 48px !important;
+  aspect-ratio: 3 / 4 !important;
   background: linear-gradient(
     148deg,
     #fffafd 0%,
@@ -1604,8 +1606,20 @@ body[data-rs-page='product'] .rs-pro-mock__img-block {
   border: none !important;
   box-shadow: none !important;
 }
+
+@media (min-width: 992px) {
+  body[data-rs-page='product'] .rs-pro-mock__img-block {
+    min-height: min(600px, 74vh) !important;
+    aspect-ratio: auto !important;
+  }
+}
+
 body[data-rs-page='product'] .rs-pro-mock__img-inner {
   background: transparent !important;
+  left: 8px !important;
+  right: 8px !important;
+  top: 8px !important;
+  bottom: calc(8px + var(--rs-pro-photo-overlay)) !important;
 }
 body[data-rs-page='product'] .rs-pro-mock__img-overlay {
   background: linear-gradient(
@@ -1632,6 +1646,11 @@ body[data-rs-page='product'] .rs-pro-mock__img-corner {
   background: rgba(255, 255, 255, 0.95) !important;
   border: 1px solid #f472b6 !important;
   color: #0a0a0a !important;
+}
+
+body[data-rs-page='product'] .rs-pro-mock__hero-img {
+  max-width: 100% !important;
+  max-height: 100% !important;
 }
 
 /* Bloc rémunération / quantité / CTA */

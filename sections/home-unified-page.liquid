@@ -230,18 +230,15 @@
       return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] || c;
     });
   }
-  function initialsFromProfile(name, handle) {
-    var n = String(name == null ? '' : name).trim();
-    var h = String(handle == null ? '' : handle).replace(/^@+/, '').trim();
-    var src = n || h || 'RS';
-    var parts = src.split(/\s+/).filter(Boolean);
-    if (parts.length >= 2) {
-      var a = parts[0].charAt(0);
-      var b = parts[parts.length - 1].charAt(0);
-      return (a + b).toUpperCase();
-    }
-    if (src.length >= 2) return src.substring(0, 2).toUpperCase();
-    return (src.charAt(0) + src.charAt(0)).toUpperCase();
+  function bulletLine(html) {
+    if (!html || String(html).trim() === '') return '';
+    return (
+      '<span class="rs-portail-home-best-cv__line">' +
+      '<span class="rs-portail-home-best-cv__dia" aria-hidden="true">&#9670;</span>' +
+      '<span class="rs-portail-home-best-cv__line-text">' +
+      html +
+      '</span></span>'
+    );
   }
   function runTopProfiles() {
     document.querySelectorAll('.rs-top-profile-api').forEach(function (wrap) {
@@ -283,58 +280,50 @@
           var nom = p.name && String(p.name).trim() ? String(p.name).trim() : '';
           var kickerAttr = wrap.getAttribute('data-rs-top-kicker') || '';
           var titleAttr = wrap.getAttribute('data-rs-top-title') || '';
-          var titleBlock = '';
-          if (kickerAttr !== '') {
-            titleBlock += '<p class="rs-top-profile-api__block-kicker">' + esc(kickerAttr) + '</p>';
-          }
-          if (titleAttr !== '') {
-            titleBlock += '<h3 class="rs-top-profile-api__block-title">' + esc(titleAttr) + '</h3>';
-          }
-          var ini = initialsFromProfile(nom, handle);
-          var nameLine =
+          var kickerHtml =
+            kickerAttr !== ''
+              ? esc(kickerAttr)
+              : 'Sortie du cycle';
+          var titleHtml = titleAttr !== '' ? esc(titleAttr) : 'Le meilleur profil';
+          var handleClean = String(handle).replace(/^@+/, '');
+          var lineName =
             nom !== ''
-              ? '<p class="rs-portail-profil-card__name"><strong>' + esc(nom) + '</strong></p>'
-              : '<p class="rs-portail-profil-card__name"><strong>' + esc(handle) + '</strong></p>';
-          var handleLine =
+              ? '<strong>' + esc(nom) + '</strong>'
+              : '<strong>' + esc(handle) + '</strong>';
+          var lineAt =
             nom !== '' && handle !== '—'
-              ? '<p class="rs-portail-profil-card__handle">@' + esc(String(handle).replace(/^@+/, '')) + '</p>'
+              ? '@' + esc(handleClean)
               : nom === '' && handle !== '—'
-                ? '<p class="rs-portail-profil-card__handle">@' + esc(String(handle).replace(/^@+/, '')) + '</p>'
+                ? '@' + esc(handleClean)
                 : '';
+          var bullets =
+            bulletLine(lineName) +
+            bulletLine(lineAt) +
+            bulletLine(esc(job)) +
+            bulletLine(esc(String(likes)) + ' likes') +
+            bulletLine(esc(rank));
           var cardInner =
-            '<div class="rs-portail-profil-card__accent" aria-hidden="true"></div>' +
-            '<div class="rs-portail-profil-card__body">' +
-            (titleBlock !== ''
-              ? '<div class="rs-portail-profil-card__editorial">' + titleBlock + '</div>'
-              : '') +
-            '<div class="rs-portail-profil-card__head">' +
-            '<div class="rs-portail-profil-card__avatar" aria-hidden="true">' +
-            esc(ini) +
-            '</div>' +
-            '<div class="rs-portail-profil-card__identity">' +
-            nameLine +
-            handleLine +
-            '</div></div>' +
-            '<p class="rs-portail-profil-card__metier">' +
-            esc(job) +
+            '<article class="rs-portail-home-best-cv">' +
+            '<div class="rs-portail-home-best-cv__top">' +
+            '<div class="rs-portail-home-best-cv__titles">' +
+            '<p class="rs-portail-home-best-cv__kicker">' +
+            kickerHtml +
             '</p>' +
-            '<div class="rs-portail-profil-card__stats">' +
-            '<span class="rs-portail-profil-card__pill rs-portail-profil-card__pill--likes">' +
-            esc(String(likes)) +
-            ' likes</span>' +
-            '<span class="rs-portail-profil-card__pill rs-portail-profil-card__pill--rank">' +
-            esc(rank) +
-            '</span></div>' +
-            '<a class="rs-portail-profil-card__cta" href="' +
+            '<h3 class="rs-portail-home-best-cv__h">' +
+            titleHtml +
+            '</h3></div>' +
+            '<a class="rs-portail-home-best-cv__cta" href="' +
             esc(href) +
             '" rel="noopener noreferrer">' +
             esc(btnLabel) +
-            '</a></div>';
+            '</a></div>' +
+            '<div class="rs-portail-home-best-cv__bullets">' +
+            bullets +
+            '</div></article>';
           mount.innerHTML =
             '<div class="rs-top-profile-api__layout rs-top-profile-api__layout--text-only">' +
-            '<article class="rs-portail-profil-card">' +
             cardInner +
-            '</article></div>';
+            '</div>';
         })
         .catch(function () {
           mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
@@ -958,9 +947,9 @@
           "default": "https://portail.recrutestagiaire.eu",
           "info": "Préfixe du lien fiche profil (/profil/[id])."
         },
-        { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Portail" },
-        { "type": "text", "id": "title", "label": "Titre", "default": "Meilleur profil du moment" },
-        { "type": "text", "id": "btn_label", "label": "Libellé du bouton", "default": "Voir son profil →" },
+        { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Sortie du cycle" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Le meilleur profil" },
+        { "type": "text", "id": "btn_label", "label": "Libellé du bouton", "default": "Lire la fiche →" },
         {
           "type": "text",
           "id": "fallback_text",
