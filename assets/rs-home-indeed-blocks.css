@@ -557,40 +557,12 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-s
     object-fit: contain !important;
   }
 
-  /* 1re pub produit sous le hero : pleine largeur + visuel plus grand */
-  body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-uni-grid > .rs-uni-cell--ad-flush:first-of-type {
-    grid-column: 1 / -1 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    margin-bottom: 6px !important;
-  }
-
-  body[data-rs-page='index']
-    .shopify-section.section-home-unified-page
-    .rs-uni-grid
-    > .rs-uni-cell--ad-flush:first-of-type
-    .rs-rail-ad:not(.rs-rail-ad--compact) {
-    padding: 18px 16px 20px !important;
-    box-shadow: 0 14px 40px rgba(0, 26, 87, 0.12) !important;
-    border-width: 1.5px !important;
-  }
-
-  body[data-rs-page='index']
-    .shopify-section.section-home-unified-page
-    .rs-uni-grid
-    > .rs-uni-cell--ad-flush:first-of-type
-    .rs-rail-ad__media {
-    max-width: min(240px, 78vw) !important;
-  }
-
-  body[data-rs-page='index']
-    .shopify-section.section-home-unified-page
-    .rs-uni-grid
-    > .rs-uni-cell--ad-flush:first-of-type
-    .rs-rail-ad__img {
-    max-height: min(260px, 68vw) !important;
+  /* Mobile : les deux blocs produit côte à côte, même taille, pleine largeur ensemble */
+  body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-uni-grid > .rs-uni-cell--ad-flush {
+    grid-column: span 6 !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
   }
 }
 

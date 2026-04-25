@@ -238,15 +238,9 @@
       font_face renvoie uniquement des règles @font-face (sans <style>). Sans enveloppe, le navigateur peut les afficher comme texte en haut de page.
     {%- endcomment -%}
     <style id="rs-trust-fonts">
-      {%- unless settings.font_body.system? -%}
-        {{- settings.font_body | font_face: font_display: 'swap' -}}
-      {%- endunless -%}
-      {%- unless settings.font_heading.system? -%}
-        {{- settings.font_heading | font_face: font_display: 'swap' -}}
-      {%- endunless -%}
       html.rs-theme-trust {
-        --rs-trust-font-body: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};
-        --rs-trust-font-heading: {{ settings.font_heading.family }}, {{ settings.font_heading.fallback_families }};
+        --rs-trust-font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+        --rs-trust-font-heading: 'Syne', ui-sans-serif, system-ui, sans-serif;
       }
     </style>
     {{ 'rs-trust-modern.css' | asset_url | stylesheet_tag }}

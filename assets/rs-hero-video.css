@@ -280,23 +280,23 @@
 
 @media (max-width: 767.98px) {
   .rs-hero-video {
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
     padding: calc(var(--rs-portal-header-h, 100px) + 12px) 16px calc(28px + env(safe-area-inset-bottom, 0px));
   }
 
   .rs-hero-video__content {
     padding: 12px 16px calc(20px + env(safe-area-inset-bottom, 0px));
     transform: none;
-    margin: 0 auto;
-    text-align: center;
+    margin: 0;
+    text-align: left;
   }
 
   .rs-hero-video__badge,
   .rs-hero-video__title,
   .rs-hero-video__subtitle {
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .rs-hero-video__subtitle {
@@ -304,19 +304,19 @@
   }
 
   .rs-hero-video__search {
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
     width: 100%;
     max-width: 100%;
   }
 
   .rs-hero-video__portal {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .rs-hero-video__stats {
-    justify-content: center;
+    justify-content: flex-start;
   }
 }
 
