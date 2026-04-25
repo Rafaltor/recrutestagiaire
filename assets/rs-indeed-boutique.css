@@ -13,6 +13,22 @@
   --rs-orange: #f59e0b;
 }
 
+body,
+p,
+span,
+input,
+button,
+a {
+  font-family: 'Manrope', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Syne', sans-serif;
+}
+
 /* ---------- 3 boutons uniquement ---------- */
 .rs-btn--primary,
 .rs-hero-video__search-btn,
@@ -110,6 +126,22 @@ body[data-rs-page='index'] main .section-home-unified-page .rs-portail-home-best
 body[data-rs-page='index'] main .section-home-unified-page .rs-portail-home-best-cv__cta:visited {
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api),
+body[data-rs-page='index'] .section-home-unified-page .rs-top-profile-api,
+body[data-rs-page='index'] .section-home-unified-page .rs-top-profile-api__encart,
+body[data-rs-page='index'] .section-home-unified-page .rs-top-profile-api__mount,
+body[data-rs-page='index'] .section-home-unified-page .rs-top-profile-api__layout,
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-stack,
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: auto !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv {
+  inset: auto !important;
 }
 
 /* Header — nav + ghost liens */

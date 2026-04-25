@@ -1,5 +1,5 @@
 /**
- * Recrute Stagiaire — polish visuel DA (Syne + DM Sans, #f472b6 / #0a0a0a / #fafaf8).
+ * Recrute Stagiaire — polish visuel DA (Syne + Manrope, #f472b6 / #0a0a0a / #fafaf8).
  * Chargé en dernier pour corriger footer, collectif, collection, produit, accueil, cookies.
  */
 
@@ -68,7 +68,7 @@
 }
 
 .rs-site-footer__menu a {
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-weight: 400 !important;
   font-size: 13px !important;
   color: #555550 !important;
@@ -173,7 +173,7 @@ body[data-rs-page='index'] .rs-site-footer__menu a:hover {
 }
 
 .rs-collectif-founder-card__role {
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   color: #555550 !important;
@@ -205,7 +205,7 @@ body.rs-paris-startup[data-rs-page='collection'] .section-main-collection .rs-co
 }
 
 body.rs-paris-startup[data-rs-page='collection'] .section-main-collection .rs-collection-head--all__subtitle {
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-weight: 300 !important;
   color: #555550 !important;
 }
@@ -285,7 +285,7 @@ body.rs-paris-startup[data-rs-page='collection'] .section-main-collection .rs-ti
 
 .rs-pe-card__ref.rs-offer-card__ref-line {
   display: block;
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-size: 11px !important;
   font-weight: 400 !important;
   color: #999990 !important;
@@ -310,7 +310,7 @@ body.rs-paris-startup[data-rs-page='collection'] .section-main-collection .rs-pe
   align-items: center;
   justify-content: center;
   padding: 10px 22px;
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-size: 13px !important;
   font-weight: 500 !important;
   color: #0a0a0a !important;
@@ -349,7 +349,7 @@ body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__similar-rail-ad .rs-
 
 body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__apply-lead,
 body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__apply-lead--above-variants {
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   color: #555550 !important;
@@ -360,7 +360,7 @@ body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__size-btn {
   border-radius: 12px !important;
   background: #fff !important;
   color: #0a0a0a !important;
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-weight: 500 !important;
   box-shadow: none !important;
 }
@@ -395,7 +395,7 @@ body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__meta-label {
 }
 
 body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__meta-value {
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-size: 15px !important;
   font-weight: 500 !important;
   color: #0a0a0a !important;
@@ -427,14 +427,14 @@ body[data-rs-page='index'] .section-home-unified-page .rs-stat-kitsch__n {
 
 body[data-rs-page='index'] .section-home-unified-page .rs-stat-kitsch__suffix,
 body[data-rs-page='index'] .section-home-unified-page .rs-stat-kitsch__suffix strong {
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-weight: 400 !important;
   font-size: 15px !important;
   color: #555550 !important;
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-stat-kitsch__sub {
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-weight: 300 !important;
   font-size: 12px !important;
   color: #999990 !important;
@@ -505,7 +505,7 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column.rs-po
 
 body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-pole-panel__richtext,
 body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-pole-panel__richtext p {
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-size: 14px !important;
   line-height: 1.55 !important;
   color: #555550 !important;
@@ -563,7 +563,7 @@ body[data-rs-page='index'] .section-home-unified-page .rs-hero-search-2010 .form
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-hero-search-2010__input::placeholder {
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-size: 14px !important;
   font-weight: 400 !important;
   color: #999990 !important;
@@ -574,7 +574,7 @@ body[data-rs-page='index'] .section-home-unified-page .rs-hero-search-2010__btn-
   color: #fafaf8 !important;
   border: none !important;
   border-radius: 100px !important;
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-weight: 500 !important;
   font-size: 13px !important;
   box-shadow: none !important;
@@ -625,7 +625,7 @@ body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__service {
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__link {
-  font-family: var(--font-body), 'DM Sans', sans-serif !important;
+  font-family: var(--font-body), 'Manrope', sans-serif !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   color: #f472b6 !important;

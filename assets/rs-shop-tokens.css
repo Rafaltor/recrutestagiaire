@@ -25,7 +25,7 @@
   --rs-section-y-lg: 80px;
 
   --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
 
   /* Alias legacy */
   --rs-shop-black: var(--black);
