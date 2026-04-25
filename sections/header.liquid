@@ -96,14 +96,14 @@
                 loading="eager"
                 decoding="async">
             {%- endif -%}
-            <span class="rs-header-mobile-bar__title">
-              {%- if section.settings.site_title != blank -%}
-                {{ section.settings.site_title | upcase }}
-              {%- else -%}
-                {{ shop.name | upcase }}
-              {%- endif -%}
-            </span>
           </a>
+          <span class="rs-header-mobile-bar__title">
+            {%- if section.settings.site_title != blank -%}
+              {{ section.settings.site_title | upcase }}
+            {%- else -%}
+              {{ shop.name | upcase }}
+            {%- endif -%}
+          </span>
           <button
             type="button"
             class="rs-header-mobile-bar__menu-btn rs-header-burger-btn"

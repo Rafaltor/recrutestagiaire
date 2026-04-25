@@ -167,6 +167,22 @@ body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__richtext p
   color: var(--rs-shop-gray-600) !important;
 }
 
+/* Bloc « Comment ça marche » (titre ou kicker contenant comment + marche) : texte plus compact */
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--how-it-works .rs-pole-panel__richtext,
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--how-it-works .rs-pole-panel__richtext p {
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--how-it-works .rs-pole-panel__title {
+  font-size: 0.9rem !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--how-it-works .rs-pole-panel__kicker,
+body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--how-it-works .rs-pole-panel__da-kicker {
+  font-size: 10px !important;
+}
+
 body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--service .rs-pole-panel__circle.rs-pole-panel__circle--candidat {
   background: var(--rs-shop-accent) !important;
   border: none !important;

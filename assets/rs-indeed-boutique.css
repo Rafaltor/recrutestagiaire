@@ -26,7 +26,34 @@ html body h1,
 html body h2,
 html body h3,
 html body h4,
-html body .heading {
+html body .heading,
+html.rs-theme-trust h1,
+html.rs-theme-trust h2,
+html.rs-theme-trust h3,
+html.rs-theme-trust h4,
+html.rs-theme-trust h5,
+html.rs-theme-trust h6,
+html.rs-theme-trust .h1,
+html.rs-theme-trust .h2,
+html.rs-theme-trust .h3 {
+  font-family: 'Syne', sans-serif !important;
+}
+
+/* Battre html.rs-theme-trust main * (spec 0,0,1,2) : on monte à (0,0,1,3) */
+html.rs-theme-trust h1 *,
+html.rs-theme-trust h2 *,
+html.rs-theme-trust h3 *,
+html.rs-theme-trust h4 *,
+html.rs-theme-trust h5 *,
+html.rs-theme-trust h6 *,
+html.rs-theme-trust .h1 *,
+html.rs-theme-trust .h2 *,
+html.rs-theme-trust .h3 *,
+html body h1 span,
+html body h2 span,
+html body h3 span,
+html body h4 span,
+html body .heading span {
   font-family: 'Syne', sans-serif !important;
 }
 
@@ -845,6 +872,16 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   font-size: 14px !important;
   color: var(--rs-muted) !important;
   line-height: 1.6 !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column.rs-pole-panel--how-it-works .rs-pole-panel__richtext,
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column.rs-pole-panel--how-it-works .rs-pole-panel__richtext p {
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column.rs-pole-panel--how-it-works .rs-pole-panel__title {
+  font-size: 0.9rem !important;
 }
 body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-pole-panel__footer-link,
 body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-pole-panel__link {

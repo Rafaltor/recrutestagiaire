@@ -411,15 +411,15 @@ body.rs-portal-header .header-wrap .rs-header-tabstrip {
 }
 
 @media (max-width: 899.98px) {
+  /* Barre mobile + menu : même gabarit que rs-shopify-header.css (boutique) */
   body.rs-portal-header .rs-header-mobile-bar {
-    min-height: 56px !important;
+    min-height: 80px !important;
     height: auto !important;
     max-height: none !important;
-    padding: 0 max(10px, var(--rs-pad-x, 16px)) !important;
-    background: transparent !important;
+    padding: 8px max(10px, var(--rs-pad-x, 16px)) !important;
+    background: linear-gradient(180deg, #e8e8f0 0%, #ffffff 100%) !important;
     border-bottom: none !important;
     align-items: center !important;
-    /* Plus d’air entre le bloc marque (logo + texte) et le menu */
     gap: clamp(14px, 4.5vw, 22px) !important;
     justify-content: space-between !important;
   }
@@ -431,86 +431,21 @@ body.rs-portal-header .header-wrap .rs-header-tabstrip {
   }
 
   body.rs-portal-header .header-wrap .rs-header-mobile-bar__logo {
-    max-height: 36px !important;
-    max-width: 36px !important;
+    max-height: 64px !important;
+    max-width: 64px !important;
   }
 
-  /* Titre marque lisible en entier : plus petit + retour à la ligne (plus de …) */
-  body.rs-portal-header .rs-header-mobile-bar .rs-header-mobile-bar__title {
-    font-size: clamp(10px, 2.85vw, 11px) !important;
-    letter-spacing: 0.02em !important;
-    line-height: 1.2 !important;
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    word-break: break-word !important;
-    hyphens: auto;
-    max-width: 100% !important;
-  }
-
-  /* Bouton menu : pastille moderne + icône 2 traits */
-  body.rs-portal-header .rs-header-burger-btn {
-    display: inline-flex !important;
-    align-items: center !important;
+  html.rs-header-drawer-open body.rs-portal-header .rs-header-mobile-bar .rs-header-burger {
     justify-content: center !important;
-    flex-shrink: 0 !important;
-    width: 42px !important;
-    height: 42px !important;
-    padding: 0 !important;
-    border: none !important;
-    border-radius: 14px !important;
-    background: rgba(10, 10, 10, 0.06) !important;
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.55) inset,
-      0 1px 2px rgba(0, 0, 0, 0.06) !important;
-    transition:
-      background 0.2s ease,
-      box-shadow 0.2s ease,
-      transform 0.2s ease !important;
+    gap: 0 !important;
   }
 
-  body.rs-portal-header .rs-header-burger-btn:hover {
-    background: rgba(10, 10, 10, 0.1) !important;
+  html.rs-header-drawer-open body.rs-portal-header .rs-header-mobile-bar .rs-header-burger__line:first-child {
+    transform: translateY(11px) rotate(45deg);
   }
 
-  body.rs-portal-header .rs-header-burger-btn:active {
-    transform: scale(0.96);
-  }
-
-  body.rs-portal-header .rs-header-burger {
-    position: relative;
-    width: 22px;
-    height: 14px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 6px;
-    pointer-events: none;
-  }
-
-  body.rs-portal-header .rs-header-burger__line {
-    display: block;
-    width: 22px;
-    height: 2.5px;
-    border-radius: 999px;
-    background: var(--black);
-    transform-origin: center;
-    transition:
-      transform 0.25s ease,
-      opacity 0.2s ease,
-      background 0.2s ease;
-  }
-
-  html.rs-header-drawer-open body.rs-portal-header .rs-header-burger {
-    gap: 0;
-  }
-
-  html.rs-header-drawer-open body.rs-portal-header .rs-header-burger__line:first-child {
-    transform: translateY(1.25px) rotate(45deg);
-  }
-
-  html.rs-header-drawer-open body.rs-portal-header .rs-header-burger__line:last-child {
-    transform: translateY(-1.25px) rotate(-45deg);
+  html.rs-header-drawer-open body.rs-portal-header .rs-header-mobile-bar .rs-header-burger__line:last-child {
+    transform: translateY(-11px) rotate(-45deg);
   }
 }
 
@@ -755,15 +690,19 @@ body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-heade
 }
 
 @media (max-width: 899.98px) {
-  body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-burger__line {
-    background: #fafaf8 !important;
+  body.rs-portal-header[data-rs-page='index']
+    .header-wrap.rs-header:not(.rs-header--scroll-solid)
+    .rs-header-mobile-bar
+    .rs-header-burger__line {
+    background: #f472b6 !important;
   }
 
-  body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-burger-btn {
-    background: rgba(255, 255, 255, 0.14) !important;
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.2) inset,
-      0 4px 16px rgba(0, 0, 0, 0.2) !important;
+  body.rs-portal-header[data-rs-page='index']
+    .header-wrap.rs-header:not(.rs-header--scroll-solid)
+    .rs-header-mobile-bar
+    .rs-header-burger-btn {
+    background: transparent !important;
+    box-shadow: none !important;
   }
 }
 

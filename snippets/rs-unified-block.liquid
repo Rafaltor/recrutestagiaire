@@ -224,7 +224,14 @@
     </article>
 
   {%- when 'grid_panel' -%}
-    <div class="rs-pole-panel rs-editorial-column rs-pole-panel--{{ b.layout_style }} h-100" style="background:{{ b.bg_color }};border-color:{{ b.border_color }};border-width:0;">
+    {%- liquid
+      assign _how_ctx = b.title | append: ' ' | append: b.kicker | append: ' ' | append: b.circle_label | strip | downcase
+      assign _how_class = ''
+      if _how_ctx contains 'comment' and _how_ctx contains 'marche'
+        assign _how_class = ' rs-pole-panel--how-it-works'
+      endif
+    -%}
+    <div class="rs-pole-panel rs-editorial-column rs-pole-panel--{{ b.layout_style }} h-100{{ _how_class }}" style="background:{{ b.bg_color }};border-color:{{ b.border_color }};border-width:0;">
       {%- if b.layout_style == 'service' -%}
         <div class="rs-pole-panel__service">
           {%- if b.kicker != blank or b.circle_label != blank -%}
