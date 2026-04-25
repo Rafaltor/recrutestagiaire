@@ -142,7 +142,6 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv {
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-uni-grid > .rs-uni-cell:has(.rs-top-profile-api) {
-  grid-column: 1 / -1 !important;
   align-self: stretch !important;
 }
 

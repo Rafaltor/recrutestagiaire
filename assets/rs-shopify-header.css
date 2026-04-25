@@ -149,8 +149,6 @@
 
 /* Titre seul au-dessus des onglets (logo RS = hors .container, voir .rs-header-body) */
 .rs-banner-top.rs-header-pole-title {
-  min-height: 0 !important;
-  padding: 4px 0 4px !important;
   border-bottom: none !important;
 }
 .header-wrap .rs-nav-brand--title-row {
