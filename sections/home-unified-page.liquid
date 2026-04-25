@@ -291,16 +291,9 @@
             var job = p.job_title || p.metier || '—';
             var nom = p.name && String(p.name).trim() ? String(p.name).trim() : '';
             var handleClean = String(handle).replace(/^@+/, '');
-            var lineName =
-              nom !== ''
-                ? '<strong>' + esc(nom) + '</strong>'
-                : '<strong>' + esc(handle) + '</strong>';
-            var lineAt =
-              nom !== '' && handle !== '—'
-                ? '@' + esc(handleClean)
-                : nom === '' && handle !== '—'
-                  ? '@' + esc(handleClean)
-                  : '';
+            var hasName = nom !== '' && nom.replace(/^@+/, '').toLowerCase() !== handleClean.toLowerCase();
+            var lineName = hasName ? '<strong>' + esc(nom) + '</strong>' : '';
+            var lineAt = handle !== '—' ? '@' + esc(handleClean) : '';
             var bullets =
               bulletLine(lineName) +
               bulletLine(lineAt) +
@@ -702,7 +695,7 @@
           "type": "url",
           "id": "offres_btn_url",
           "label": "Bouton principal — URL des offres",
-          "info": "Vide = collection « stagiaire » si elle existe, sinon /collections/stagiaire. Ne pointe pas vers la page recherche Shopify."
+          "info": "Vide = collection « les-stagiaires-de-base » si elle existe, sinon /collections/les-stagiaires-de-base. Ne pointe pas vers la page recherche Shopify."
         },
         { "type": "text", "id": "secondary_label", "label": "2e bouton", "default": "Profils" },
         { "type": "url", "id": "secondary_url", "label": "2e bouton — URL" },
@@ -993,7 +986,7 @@
             "col_span": "3",
             "use_strip_bg": true,
             "cell_padding": 12,
-            "offres_btn_url": "shopify://collections/stagiaire"
+            "offres_btn_url": "shopify://collections/les-stagiaires-de-base"
           }
         },
         { "type": "kitsch_counter", "settings": { "col_span": "3", "tile_mode": true, "cell_padding": 0, "cell_bg": "#ffffff" } },

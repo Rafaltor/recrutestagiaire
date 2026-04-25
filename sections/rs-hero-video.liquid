@@ -1,10 +1,10 @@
 {{ 'rs-hero-video.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  if collections.stagiaire != blank
-    assign search_action = collections.stagiaire.url
+  if collections['les-stagiaires-de-base'] != blank
+    assign search_action = collections['les-stagiaires-de-base'].url
   else
-    assign search_action = '/collections/stagiaire'
+    assign search_action = '/collections/les-stagiaires-de-base'
   endif
   assign v_shopify = section.settings.background_video
   assign v_mp4 = section.settings.mp4_url | strip
@@ -82,7 +82,7 @@
       <p class="rs-hero-video__subtitle">{{ section.settings.subtitle | escape }}</p>
     {%- endif -%}
 
-    <form class="rs-hero-video__search" action="{{ search_action }}" method="get" role="search">
+    <div class="rs-hero-video__search">
       <span class="rs-hero-video__search-icon" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <circle cx="10.5" cy="10.5" r="6.25" stroke="currentColor" stroke-width="2" fill="none"/>
@@ -96,8 +96,10 @@
         placeholder="{{ section.settings.search_placeholder | escape }}"
         autocomplete="off"
         aria-label="{{ section.settings.search_placeholder | escape }}">
-      <button type="submit" class="rs-hero-video__search-btn">{{ section.settings.search_btn_label | escape }}</button>
-    </form>
+      <a class="rs-hero-video__search-btn" href="{{ search_action }}">
+        {{- section.settings.search_btn_label | escape -}}
+      </a>
+    </div>
 
     {%- liquid
       assign portal_href = section.settings.portal_url | default: 'https://portail.recrutestagiaire.eu' | strip

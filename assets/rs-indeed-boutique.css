@@ -100,6 +100,18 @@ main .section-home-unified-page .rs-ind-stats__btn.rs-btn--primary {
   -webkit-text-fill-color: #fff !important;
 }
 
+main .section-home-unified-page .rs-portail-home-best-cv__cta,
+main .section-home-unified-page .rs-portail-home-best-cv__cta:link,
+main .section-home-unified-page .rs-portail-home-best-cv__cta:visited,
+main .section-home-unified-page .rs-portail-home-best-cv__cta:hover,
+main .section-home-unified-page .rs-portail-home-best-cv__cta:focus-visible,
+main .section-home-unified-page .rs-portail-home-best-cv__cta *,
+body[data-rs-page='index'] main .section-home-unified-page .rs-portail-home-best-cv__cta,
+body[data-rs-page='index'] main .section-home-unified-page .rs-portail-home-best-cv__cta:visited {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
 /* Header — nav + ghost liens */
 body.rs-portal-header .rs-ph-navdesk a {
   font-size: 14px !important;
@@ -957,11 +969,11 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
 .section-page-collectif-histoire .rs-collectif-page {
   background: var(--rs-gray);
   color: var(--rs-black);
-  padding-bottom: 48px;
+  padding-bottom: clamp(72px, 9vw, 112px);
 }
 .section-page-collectif-histoire .rs-collectif-hero {
-  padding-top: 40px;
-  padding-bottom: 8px;
+  padding-top: clamp(64px, 8vw, 96px);
+  padding-bottom: clamp(36px, 6vw, 64px);
 }
 .section-page-collectif-histoire .rs-collectif-hero__title {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
@@ -972,7 +984,8 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
 .section-page-collectif-histoire .rs-collectif-hero__subtitle {
   color: var(--rs-muted) !important;
   font-size: 1.05rem;
-  line-height: 1.6;
+  line-height: 1.75;
+  margin-bottom: 36px;
 }
 .section-page-collectif-histoire .rs-collectif-hero__img {
   border-radius: 12px;
@@ -982,6 +995,8 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   border-bottom-color: var(--rs-border);
   color: var(--rs-black) !important;
   font-size: 1.25rem;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
 }
 .section-page-collectif-histoire .rs-collectif-section__title::before {
   background: var(--rs-pink);
@@ -989,24 +1004,38 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   height: 1.1em;
   border-radius: 2px;
 }
+
+.section-page-collectif-histoire .rs-collectif-section {
+  padding-top: clamp(56px, 8vw, 88px);
+  padding-bottom: clamp(56px, 8vw, 88px);
+}
+
+.section-page-collectif-histoire .rs-collectif-hero__media,
+.section-page-collectif-histoire .rs-collectif-vision__media {
+  margin-top: 36px;
+}
+
 .section-page-collectif-histoire .rs-collectif-manifeste .container--narrow,
 .section-page-collectif-histoire .rs-collectif-vision .container--narrow {
   background: var(--rs-white);
   border: 1px solid var(--rs-border);
   border-radius: 12px;
   border-left: 3px solid var(--rs-pink);
+  padding: clamp(36px, 6vw, 56px) clamp(26px, 6vw, 48px);
   box-shadow: none;
 }
 .section-page-collectif-histoire .rs-collectif-manifeste__body p,
 .section-page-collectif-histoire .rs-collectif-vision__body p {
   color: var(--rs-black);
+  line-height: 1.95;
+  margin-bottom: 22px;
 }
 .section-page-collectif-histoire .rs-collectif-founder-card {
   background: var(--rs-white);
   border: 1px solid var(--rs-border);
   border-left: 3px solid var(--rs-pink);
   border-radius: 12px;
-  padding: 16px;
+  padding: clamp(24px, 4vw, 34px);
   box-shadow: none;
 }
 .section-page-collectif-histoire .rs-collectif-founder-card__badge {
@@ -1030,7 +1059,8 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   border: 1px solid var(--rs-border);
 }
 .section-page-collectif-histoire .rs-collectif-cta {
-  padding-top: 24px;
+  padding-top: clamp(64px, 8vw, 96px);
+  padding-bottom: 32px;
 }
 .section-page-collectif-histoire .rs-collectif-cta__title {
   color: var(--rs-black) !important;
@@ -1048,15 +1078,15 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
 .shopify-pc__banner {
   z-index: 2147483646 !important;
   font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
-  padding: max(14px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px))
-    max(18px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)) !important;
+  padding: max(22px, env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px))
+    max(26px, env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px)) !important;
   box-sizing: border-box !important;
 }
 
 .shopify-pc__banner__dialog {
-  max-width: min(560px, calc(100vw - 32px)) !important;
+  max-width: min(640px, calc(100vw - 32px)) !important;
   margin: 0 auto !important;
-  padding: 22px 22px 20px !important;
+  padding: clamp(24px, 4vw, 34px) !important;
   border-radius: 18px !important;
   border: 1px solid rgba(15, 23, 42, 0.08) !important;
   background: rgba(255, 255, 255, 0.9) !important;
@@ -1067,7 +1097,7 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
     0 18px 40px -12px rgba(15, 23, 42, 0.2) !important;
   color: var(--rs-black) !important;
   font-size: 14px !important;
-  line-height: 1.55 !important;
+  line-height: 1.7 !important;
 }
 
 .shopify-pc__banner__dialog .shopify-pc__banner__heading,
@@ -1111,8 +1141,8 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
 .shopify-pc__banner__btns {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 10px !important;
-  margin-top: 16px !important;
+  gap: 12px !important;
+  margin-top: 24px !important;
   align-items: center !important;
 }
 
@@ -1167,7 +1197,7 @@ button.shopify-pc__banner__btn-manage-prefs:hover {
   -webkit-backdrop-filter: blur(12px) !important;
   box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.25) !important;
   color: var(--rs-black) !important;
-  padding: 22px 22px 20px !important;
+  padding: clamp(24px, 4vw, 34px) !important;
   box-sizing: border-box !important;
 }
 
@@ -1185,6 +1215,17 @@ button.shopify-pc__banner__btn-manage-prefs:hover {
   border-radius: 10px !important;
   clip-path: none !important;
   box-shadow: none !important;
+}
+
+@media (max-width: 640px) {
+  .shopify-pc__banner {
+    padding: max(16px, env(safe-area-inset-top, 0px)) max(14px, env(safe-area-inset-right, 0px))
+      max(18px, env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)) !important;
+  }
+
+  .shopify-pc__banner__dialog {
+    max-width: calc(100vw - 28px) !important;
+  }
 }
 
 /* Accueil mobile : marque centrée, logo + « RECRUTE STAGIAIRE » plus visibles ; ticker légèrement plus lisible */

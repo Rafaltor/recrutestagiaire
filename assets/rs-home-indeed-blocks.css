@@ -413,6 +413,12 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__
     color 0.18s ease;
 }
 
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__cta:link,
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__cta:visited,
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__cta * {
+  color: #ffffff !important;
+}
+
 @media (min-width: 640px) {
   body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__cta {
     min-height: 48px;
