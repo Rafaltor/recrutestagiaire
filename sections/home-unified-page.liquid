@@ -79,6 +79,9 @@
     {%- if span_n < 1 or span_n > 12 -%}
       {%- assign span_n = 12 -%}
     {%- endif -%}
+    {%- if block.type == 'top_profile_portail' -%}
+      {%- assign span_n = 12 -%}
+    {%- endif -%}
     {%- if block.type == 'blue_band' or block.type == 'hero_intro_bundle' or block.type == 'home_stats_strip' -%}
       {%- assign pad = 0 -%}
     {%- endif -%}

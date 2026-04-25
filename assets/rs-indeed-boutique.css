@@ -13,20 +13,21 @@
   --rs-orange: #f59e0b;
 }
 
-body,
-p,
-span,
-input,
-button,
-a {
-  font-family: 'Manrope', sans-serif;
+html body,
+html body p,
+html body span,
+html body input,
+html body button,
+html body a {
+  font-family: 'Manrope', sans-serif !important;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: 'Syne', sans-serif;
+html body h1,
+html body h2,
+html body h3,
+html body h4,
+html body .heading {
+  font-family: 'Syne', sans-serif !important;
 }
 
 /* ---------- 3 boutons uniquement ---------- */
@@ -138,6 +139,11 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv {
   position: relative !important;
   overflow: visible !important;
   z-index: auto !important;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-uni-grid > .rs-uni-cell:has(.rs-top-profile-api) {
+  grid-column: 1 / -1 !important;
+  align-self: stretch !important;
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv {
