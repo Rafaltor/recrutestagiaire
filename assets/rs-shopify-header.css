@@ -1407,14 +1407,15 @@ html[data-rs-swipe="1"] main.mx-auto {
     flex-shrink: 0;
   }
 
-  /* Markup réel (header.liquid) : .rs-header-burger + .rs-header-burger__line */
+  /* Markup réel (header.liquid) : .rs-header-burger + .rs-header-burger__line (3 lignes) */
   .rs-header-mobile-bar .rs-header-burger {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 5px;
     width: 24px;
-    height: 24px;
+    height: 20px;
     flex-shrink: 0;
   }
 
@@ -1423,7 +1424,7 @@ html[data-rs-swipe="1"] main.mx-auto {
     width: 24px;
     height: 2px;
     background: #f472b6;
-    border-radius: 0;
+    border-radius: 2px;
     flex-shrink: 0;
     transform-origin: center;
     transition:

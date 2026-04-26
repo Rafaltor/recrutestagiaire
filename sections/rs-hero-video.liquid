@@ -156,21 +156,38 @@
 
 <script>
   (function () {
+    function rsPlayVideo(v) {
+      v.muted = true;
+      v.defaultMuted = true;
+      v.setAttribute('muted', '');
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
+      v.setAttribute('x5-playsinline', '');
+      if ('playsInline' in v) v.playsInline = true;
+      v.setAttribute('autoplay', '');
+      /* reload si src présente mais pas encore décodée */
+      if (v.readyState === 0 && v.src) v.load();
+      var p = v.play();
+      if (p && typeof p.catch === 'function') p.catch(function () {});
+    }
+
     function rsHeroVideoEnsurePlay() {
       var root = document.querySelector('.section-rs-hero-video');
       if (!root) return;
       root.querySelectorAll('.rs-hero-video__media-wrap video').forEach(function (v) {
-        v.muted = true;
-        v.defaultMuted = true;
-        v.setAttribute('muted', '');
-        v.setAttribute('playsinline', '');
-        v.setAttribute('webkit-playsinline', '');
-        if ('playsInline' in v) v.playsInline = true;
-        v.setAttribute('autoplay', '');
-        var p = v.play();
-        if (p && typeof p.catch === 'function') p.catch(function () {});
+        rsPlayVideo(v);
+        /* IntersectionObserver : déclenche play dès que la vidéo entre dans le viewport (iOS) */
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries, obs) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) { rsPlayVideo(e.target); obs.unobserve(e.target); }
+            });
+          }, { threshold: 0.1 });
+          io.observe(v);
+        }
       });
     }
+
     rsHeroVideoEnsurePlay();
     document.addEventListener('DOMContentLoaded', rsHeroVideoEnsurePlay);
     window.addEventListener('pageshow', function (ev) {
@@ -179,6 +196,11 @@
     document.addEventListener('visibilitychange', function () {
       if (!document.hidden) rsHeroVideoEnsurePlay();
     });
+    /* iOS : relance au premier toucher si le navigateur a bloqué l'autoplay */
+    document.addEventListener('touchstart', function onTouch() {
+      rsHeroVideoEnsurePlay();
+      document.removeEventListener('touchstart', onTouch);
+    }, { once: true, passive: true });
     document.addEventListener('shopify:section:load', function (ev) {
       if (ev.target && ev.target.querySelector && ev.target.querySelector('.rs-hero-video')) rsHeroVideoEnsurePlay();
     });

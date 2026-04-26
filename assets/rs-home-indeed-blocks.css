@@ -546,6 +546,13 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-s
   }
 }
 
+/* Mobile : un seul profil affiché */
+@media (max-width: 899.98px) {
+  body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-stack > .rs-portail-home-best-cv:nth-child(n+2) {
+    display: none !important;
+  }
+}
+
 /* Mobile : grille 12 col — deux pubs produit sur une ligne (ordre --rs-mo 1|10|1 dans home-unified-page) */
 @media (max-width: 767.98px) {
   body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-uni-page > .container > .rs-uni-grid,
