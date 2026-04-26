@@ -307,7 +307,7 @@
   }
 
   .rs-hero-video__content {
-    padding: 12px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+    padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px));
     transform: none;
     margin: 0;
     text-align: left;
