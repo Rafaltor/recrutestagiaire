@@ -156,7 +156,10 @@
 
 <script>
   (function () {
+    var _observed = new WeakSet();
+
     function rsPlayVideo(v) {
+      if (_observed.has(v) && !v.paused) return;
       v.muted = true;
       v.defaultMuted = true;
       v.setAttribute('muted', '');
@@ -165,42 +168,61 @@
       v.setAttribute('x5-playsinline', '');
       if ('playsInline' in v) v.playsInline = true;
       v.setAttribute('autoplay', '');
-      /* reload si src présente mais pas encore décodée */
-      if (v.readyState === 0 && v.src) v.load();
+      /* load() toujours : couvre src="" et <source> enfants */
+      try { v.load(); } catch (e) {}
       var p = v.play();
-      if (p && typeof p.catch === 'function') p.catch(function () {});
+      if (p && typeof p.catch === 'function') {
+        p.catch(function () {
+          /* second essai après 300 ms (cas iOS strict) */
+          setTimeout(function () { try { v.play(); } catch (e) {} }, 300);
+        });
+      }
+    }
+
+    function rsAttach(v) {
+      if (_observed.has(v)) return;
+      _observed.add(v);
+      rsPlayVideo(v);
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries, obs) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { rsPlayVideo(e.target); obs.unobserve(e.target); }
+          });
+        }, { threshold: 0.01 }).observe(v);
+      }
     }
 
     function rsHeroVideoEnsurePlay() {
       var root = document.querySelector('.section-rs-hero-video');
       if (!root) return;
-      root.querySelectorAll('.rs-hero-video__media-wrap video').forEach(function (v) {
-        rsPlayVideo(v);
-        /* IntersectionObserver : déclenche play dès que la vidéo entre dans le viewport (iOS) */
-        if ('IntersectionObserver' in window) {
-          var io = new IntersectionObserver(function (entries, obs) {
-            entries.forEach(function (e) {
-              if (e.isIntersecting) { rsPlayVideo(e.target); obs.unobserve(e.target); }
-            });
-          }, { threshold: 0.1 });
-          io.observe(v);
-        }
-      });
+      root.querySelectorAll('video').forEach(rsAttach);
     }
 
     rsHeroVideoEnsurePlay();
     document.addEventListener('DOMContentLoaded', rsHeroVideoEnsurePlay);
+    window.addEventListener('load', rsHeroVideoEnsurePlay);
     window.addEventListener('pageshow', function (ev) {
       if (ev.persisted) rsHeroVideoEnsurePlay();
     });
     document.addEventListener('visibilitychange', function () {
       if (!document.hidden) rsHeroVideoEnsurePlay();
     });
+
+    /* MutationObserver : détecte les vidéos ajoutées dynamiquement par Shopify */
+    if ('MutationObserver' in window) {
+      new MutationObserver(function (muts) {
+        muts.forEach(function (m) {
+          m.addedNodes.forEach(function (n) {
+            if (n.nodeType !== 1) return;
+            if (n.tagName === 'VIDEO') rsAttach(n);
+            n.querySelectorAll && n.querySelectorAll('video').forEach(rsAttach);
+          });
+        });
+      }).observe(document.body, { childList: true, subtree: true });
+    }
+
     /* iOS : relance au premier toucher si le navigateur a bloqué l'autoplay */
-    document.addEventListener('touchstart', function onTouch() {
-      rsHeroVideoEnsurePlay();
-      document.removeEventListener('touchstart', onTouch);
-    }, { once: true, passive: true });
+    document.addEventListener('touchstart', rsHeroVideoEnsurePlay, { once: true, passive: true });
     document.addEventListener('shopify:section:load', function (ev) {
       if (ev.target && ev.target.querySelector && ev.target.querySelector('.rs-hero-video')) rsHeroVideoEnsurePlay();
     });

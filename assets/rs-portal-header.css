@@ -307,8 +307,7 @@ body.rs-portal-header .rs-ph-brandlink-title {
   text-overflow: ellipsis;
 }
 
-body.rs-portal-header .rs-nav-brand__name.logo.rs-nav-brand__name--headline,
-body.rs-portal-header .rs-header-mobile-bar__title {
+body.rs-portal-header .rs-nav-brand__name.logo.rs-nav-brand__name--headline {
   font-family: var(--font-display) !important;
   font-weight: 800 !important;
   font-size: 14px !important;
@@ -316,6 +315,21 @@ body.rs-portal-header .rs-header-mobile-bar__title {
   text-transform: uppercase !important;
   color: var(--black) !important;
   text-shadow: none !important;
+}
+
+body.rs-portal-header .rs-header-mobile-bar__title {
+  font-family: 'Syne', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: clamp(0.95rem, 3.8vw, 1.35rem) !important;
+  letter-spacing: 0.04em !important;
+  line-height: 1.1 !important;
+  text-transform: uppercase !important;
+  color: #0a2a6e !important;
+  text-shadow: none !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 body.rs-portal-header .rs-ph-navdesk {
@@ -411,28 +425,33 @@ body.rs-portal-header .header-wrap .rs-header-tabstrip {
 }
 
 @media (max-width: 899.98px) {
-  /* Barre mobile + menu : même gabarit que rs-shopify-header.css (boutique) */
+  /* Barre mobile : logo gauche | titre centré | burger droit */
   body.rs-portal-header .rs-header-mobile-bar {
-    min-height: 80px !important;
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    align-items: center !important;
+    justify-content: unset !important;
+    min-height: 72px !important;
     height: auto !important;
     max-height: none !important;
-    padding: 8px max(10px, var(--rs-pad-x, 16px)) !important;
+    padding: 8px 16px !important;
     background: linear-gradient(180deg, #e8e8f0 0%, #ffffff 100%) !important;
     border-bottom: none !important;
-    align-items: center !important;
-    gap: clamp(14px, 4.5vw, 22px) !important;
-    justify-content: space-between !important;
+    gap: 8px !important;
   }
 
   body.rs-portal-header .rs-header-mobile-bar__brand.rs-ph-mbrand {
-    flex: 1 1 auto !important;
-    gap: 10px !important;
-    padding-right: 2px !important;
+    flex: 0 0 auto !important;
+    gap: 0 !important;
+    padding-right: 0 !important;
+    justify-self: start !important;
   }
 
   body.rs-portal-header .header-wrap .rs-header-mobile-bar__logo {
-    max-height: 64px !important;
-    max-width: 64px !important;
+    width: 48px !important;
+    height: 48px !important;
+    max-height: 48px !important;
+    max-width: 48px !important;
   }
 
   html.rs-header-drawer-open body.rs-portal-header .rs-header-mobile-bar .rs-header-burger {
@@ -440,12 +459,16 @@ body.rs-portal-header .header-wrap .rs-header-tabstrip {
     gap: 0 !important;
   }
 
-  html.rs-header-drawer-open body.rs-portal-header .rs-header-mobile-bar .rs-header-burger__line:first-child {
-    transform: translateY(11px) rotate(45deg);
+  html.rs-header-drawer-open body.rs-portal-header .rs-header-mobile-bar .rs-header-burger__line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
   }
 
-  html.rs-header-drawer-open body.rs-portal-header .rs-header-mobile-bar .rs-header-burger__line:last-child {
-    transform: translateY(-11px) rotate(-45deg);
+  html.rs-header-drawer-open body.rs-portal-header .rs-header-mobile-bar .rs-header-burger__line:nth-child(2) {
+    opacity: 0;
+  }
+
+  html.rs-header-drawer-open body.rs-portal-header .rs-header-mobile-bar .rs-header-burger__line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
   }
 }
 
