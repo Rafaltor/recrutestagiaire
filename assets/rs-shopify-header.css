@@ -1313,8 +1313,8 @@ html[data-rs-swipe="1"] main.mx-auto {
   }
 
   .header-wrap .container {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .header-wrap .rs-header-body > .container {

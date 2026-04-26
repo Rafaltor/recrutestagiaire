@@ -546,10 +546,20 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-s
   }
 }
 
-/* Mobile : un seul profil affiché */
+/* Mobile : un seul profil affiché + padding bloc profil supprimé */
 @media (max-width: 899.98px) {
   body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-stack > .rs-portail-home-best-cv:nth-child(n+2) {
     display: none !important;
+  }
+
+  /* Bloc meilleur profil : supprimer le padding externe de la cellule */
+  body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) {
+    padding: 0 !important;
+  }
+
+  /* Cartes produit : supprimer le padding de la cellule, garder uniquement celui de la carte interne */
+  body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-uni-grid > .rs-uni-cell {
+    padding: 0 !important;
   }
 }
 

@@ -108,6 +108,18 @@
       endif
       assign portal_lbl = section.settings.portal_label | default: 'Portail Candidat' | strip
     -%}
+
+    <div class="rs-hero-video__mobile-ctas">
+      <a class="rs-hero-video__mobile-cta rs-hero-video__mobile-cta--offres" href="{{ search_action }}">
+        Voir les offres
+      </a>
+      {%- if portal_lbl != blank -%}
+        <a class="rs-hero-video__mobile-cta rs-hero-video__mobile-cta--portail" href="{{ portal_href }}" rel="noopener noreferrer">
+          {{- portal_lbl | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+
     {%- if portal_lbl != blank -%}
       <div class="rs-hero-video__portal">
         <a class="rs-hero-video__portal-btn text-decoration-none" href="{{ portal_href }}" rel="noopener noreferrer">

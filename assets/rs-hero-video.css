@@ -366,3 +366,55 @@
     display: inline;
   }
 }
+
+/* Boutons mobiles sous la barre de recherche */
+.rs-hero-video__mobile-ctas {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .rs-hero-video__mobile-ctas {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 12px;
+    width: 100%;
+  }
+
+  .rs-hero-video__mobile-cta {
+    flex: 1 1 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    border-radius: 999px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    text-align: center;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+  }
+
+  .rs-hero-video__mobile-cta--offres {
+    background: #f472b6;
+    color: #fff !important;
+  }
+
+  .rs-hero-video__mobile-cta--offres:hover {
+    background: #db2777;
+  }
+
+  .rs-hero-video__mobile-cta--portail {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .rs-hero-video__mobile-cta--portail:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
