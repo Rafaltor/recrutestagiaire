@@ -1336,7 +1336,7 @@ html[data-rs-swipe="1"] main.mx-auto {
     box-sizing: border-box;
     width: 100%;
     margin: 0;
-    padding: 8px 16px;
+    padding: 0;
     border: none;
     background: transparent;
     transition: background 0.3s ease, box-shadow 0.3s ease;
@@ -1358,6 +1358,7 @@ html[data-rs-swipe="1"] main.mx-auto {
   }
 
   .rs-header-mobile-bar__logo {
+    position: inherit !important;
     display: block;
     width: 60px;
     height: 60px;

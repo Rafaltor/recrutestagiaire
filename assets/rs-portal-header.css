@@ -264,12 +264,13 @@ body.rs-portal-header .header-wrap .container {
 }
 
 body.rs-portal-header .header-wrap .rs-header-mobile-bar__logo {
+  position: inherit !important;
   display: block !important;
-  width: auto !important;
-  height: auto !important;
+  width: 60px !important;
+  height: 60px !important;
+  max-width: 60px !important;
+  max-height: 60px !important;
   object-fit: contain;
-  max-height: min(80px, 22vw) !important;
-  max-width: min(90px, 42vw) !important;
 }
 
 body.rs-portal-header .rs-ph-dot {
@@ -444,7 +445,7 @@ body.rs-portal-header .header-wrap .rs-header-tabstrip {
     min-height: 64px !important;
     height: auto !important;
     max-height: none !important;
-    padding: 8px 16px !important;
+    padding: 0 !important;
     background: transparent !important;
     border-bottom: none !important;
     gap: 8px !important;
@@ -474,6 +475,7 @@ body.rs-portal-header .header-wrap .rs-header-tabstrip {
   }
 
   body.rs-portal-header .header-wrap .rs-header-mobile-bar__logo {
+    position: inherit !important;
     width: 60px !important;
     height: 60px !important;
     max-height: 60px !important;
