@@ -283,6 +283,12 @@ body.rs-portal-header .rs-ph-dot {
 
 body.rs-portal-header .rs-ph-brandlink,
 body.rs-portal-header .rs-header-mobile-bar__brand.rs-ph-mbrand {
+  position: inherit !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
   display: inline-flex !important;
   align-items: center !important;
   align-self: center !important;
@@ -468,6 +474,12 @@ body.rs-portal-header .header-wrap .rs-header-tabstrip {
   }
 
   body.rs-portal-header .rs-header-mobile-bar__brand.rs-ph-mbrand {
+    position: inherit !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
     flex: 0 0 auto !important;
     gap: 0 !important;
     padding-right: 0 !important;

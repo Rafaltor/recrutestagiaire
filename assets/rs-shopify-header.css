@@ -1349,6 +1349,12 @@ html[data-rs-swipe="1"] main.mx-auto {
   }
 
   .rs-header-mobile-bar__brand {
+    position: inherit !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
     display: flex;
     align-items: center;
     justify-content: flex-start;
