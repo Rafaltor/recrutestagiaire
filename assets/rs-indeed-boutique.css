@@ -1314,26 +1314,22 @@ button.shopify-pc__banner__btn-manage-prefs:hover {
   }
 
   body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar {
-    position: relative !important;
-    justify-content: flex-end !important;
     align-items: center !important;
     min-height: 64px !important;
-    padding-top: 8px !important;
-    padding-bottom: 8px !important;
+    padding: 0 !important;
   }
 
   body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar__brand.rs-ph-mbrand {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    flex-direction: column !important;
+    position: inherit !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    flex-direction: row !important;
     align-items: center !important;
-    justify-content: center !important;
-    gap: 6px !important;
-    max-width: min(88vw, 320px) !important;
-    text-align: center !important;
-    pointer-events: auto !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+    max-width: none !important;
+    text-align: left !important;
   }
 
   body.rs-portal-header[data-rs-page='index'] .header-wrap .rs-header-mobile-bar__logo {
