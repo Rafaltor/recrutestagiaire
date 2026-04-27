@@ -132,20 +132,7 @@ body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__kicker {
   letter-spacing: 0.04em !important;
 }
 
-body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__link {
-  color: var(--rs-shop-accent) !important;
-  font-weight: 600 !important;
-}
-
-body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__link:hover {
-  color: var(--rs-shop-accent-hover) !important;
-  text-decoration: underline !important;
-}
-
-body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel__footer-link {
-  color: var(--rs-shop-accent) !important;
-  font-weight: 600 !important;
-}
+/* Liens panel / footer-link : pilotés dans rs-da-visual-polish.css (couche visuelle finale) */
 
 /* Lien vote sous les liens (bloc Recrutement) : rose + flèche */
 body[data-rs-page='index'] .section-home-unified-page .rs-pole-panel--service .rs-pole-panel__main > .rs-pole-panel__links + .rs-pole-panel__footer-link {
@@ -236,17 +223,7 @@ body[data-rs-page='index'] .section-home-unified-page .rs-hero-search-metro__cel
   border: 1px solid var(--rs-shop-gray-200) !important;
 }
 
-body[data-rs-page='index'] .section-home-unified-page .rs-hero-search-2010__btn-offres {
-  background: var(--rs-shop-accent) !important;
-  color: #ffffff !important;
-  border-color: var(--rs-shop-accent) !important;
-}
-
-body[data-rs-page='index'] .section-home-unified-page .rs-hero-search-2010__btn-offres:hover {
-  background: var(--rs-shop-accent-hover) !important;
-  border-color: var(--rs-shop-accent-hover) !important;
-  color: #ffffff !important;
-}
+/* Bouton offres 2010 : piloté dans rs-da-visual-polish.css (couche visuelle finale) */
 
 /* — Cartes produit inline — */
 body[data-rs-page='index'] .section-home-unified-page .rs-uni-inline-sponsored .rs-rail-ad,
@@ -588,14 +565,6 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-s
   body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-uni-cell--ad-flush .rs-rail-ad__img {
     max-height: min(200px, 52vw) !important;
     object-fit: contain !important;
-  }
-
-  /* Mobile : les deux blocs produit côte à côte, même taille, pleine largeur ensemble */
-  body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-uni-grid > .rs-uni-cell--ad-flush {
-    grid-column: span 6 !important;
-    width: auto !important;
-    max-width: none !important;
-    min-width: 0 !important;
   }
 }
 

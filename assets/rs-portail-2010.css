@@ -1478,59 +1478,13 @@ body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-hero__
   }
 }
 
-/* Page collection : zone image fond blanc (sans contrainte de taille — réglage « Hauteur zone photo » du thème) */
-body[data-rs-page='collection'] .section-main-collection .rs-offer-list-card__media {
-  background: #fff !important;
-}
-body[data-rs-page='collection'] .section-main-collection .rs-offer-list-card--responsive .rs-offer-list-card__split .rs-offer-list-card__media {
-  background: #fff !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-body[data-rs-page='collection'] .section-main-collection .rs-offer-list-card {
-  border: none !important;
-  box-shadow: none !important;
-  border-radius: 4px !important;
-}
-body[data-rs-page='collection'] .section-main-collection .rs-offer-list-card:hover {
-  border: 1px solid #f472b6 !important;
-  box-shadow: none !important;
-}
+/* Collection offer cards : piloté dans rs-paris-unified-pages.css (chargé après) */
 
 /* ============================================================
    Fiche produit — refonte charte (#EFEFEF, #F472B6, #0A0A0A)
    ============================================================ */
 
-/* Bandeau sous header */
-body[data-rs-page='product'] .rs-product-top-band {
-  background: #efefef !important;
-  border-bottom: 1px solid #e5e5e5 !important;
-  box-shadow: none !important;
-}
-body[data-rs-page='product'] .rs-product-top-band .btn-light-primary,
-body[data-rs-page='product'] .rs-product-top-band .btn.btn-light-primary {
-  background: #fff !important;
-  border: 1px solid #f472b6 !important;
-  color: #f472b6 !important;
-  border-radius: 4px !important;
-  box-shadow: none !important;
-}
-body[data-rs-page='product'] .rs-product-top-band .btn-light-primary:hover {
-  background: #fff5fa !important;
-  border-color: #f472b6 !important;
-  color: #db2777 !important;
-}
-body[data-rs-page='product'] .rs-product-top-band .rs-pro-mock__breadcrumb-top,
-body[data-rs-page='product'] .rs-product-top-band .rs-pro-mock__breadcrumb-top a,
-body[data-rs-page='product'] .rs-product-top-band .text-muted {
-  color: #f472b6 !important;
-}
-body[data-rs-page='product'] .rs-product-top-band .text-body {
-  color: #333 !important;
-}
-body[data-rs-page='product'] .rs-product-top-band .rs-pro-mock__breadcrumb-top a:hover {
-  color: #db2777 !important;
-}
+/* Product top band : piloté dans rs-paris-unified-pages.css (chargé après) */
 
 body[data-rs-page='product'] .rs-uni-page.pt-4.pb-5 {
   padding-top: var(--rs-da-gap) !important;
@@ -1659,46 +1613,9 @@ body[data-rs-page='product'] .rs-pro-mock__qty-label,
 body[data-rs-page='product'] .rs-pro-mock__price-sub {
   color: #f472b6 !important;
 }
-body[data-rs-page='product'] .rs-pro-mock__apply-btn {
-  background: #f472b6 !important;
-  border: 1px solid #f472b6 !important;
-  color: #fff !important;
-  border-radius: 4px !important;
-  box-shadow: none !important;
-  text-shadow: none !important;
-}
-body[data-rs-page='product'] .rs-pro-mock__apply-btn:hover {
-  background: #db2777 !important;
-  border-color: #db2777 !important;
-  filter: none !important;
-}
-body[data-rs-page='product'] .rs-pro-mock__save-btn {
-  background: #fff !important;
-  border: 2px solid #f472b6 !important;
-  color: #f472b6 !important;
-  border-radius: 4px !important;
-  box-shadow: none !important;
-}
-body[data-rs-page='product'] .rs-pro-mock__save-btn:hover {
-  background: #fff5fa !important;
-  color: #db2777 !important;
-  border-color: #db2777 !important;
-}
+/* Product CTA buttons : piloté dans rs-paris-unified-pages.css (chargé après) */
 
-/* Fiches métadonnées (contrat, dispo, département, matière) */
-body[data-rs-page='product'] .rs-pro-mock__meta-item {
-  background: #fafafa !important;
-  border: 1px solid #eee !important;
-  box-shadow: none !important;
-}
-body[data-rs-page='product'] .rs-pro-mock__meta-label {
-  color: #f472b6 !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-}
-body[data-rs-page='product'] .rs-pro-mock__meta-value {
-  color: #333 !important;
-}
+/* Product meta cards : piloté dans rs-paris-unified-pages.css (chargé après) */
 
 /* Sections missions / profil / avantages */
 body[data-rs-page='product'] .rs-pro-mock__section {
@@ -1707,20 +1624,7 @@ body[data-rs-page='product'] .rs-pro-mock__section {
   border-radius: var(--rs-da-radius) !important;
   box-shadow: none !important;
 }
-body[data-rs-page='product'] .rs-pro-mock__section-title {
-  color: #0a0a0a !important;
-  font-weight: 700 !important;
-  border-bottom: 2px solid #f472b6 !important;
-  padding-bottom: 8px !important;
-  margin-bottom: 10px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
-  font-size: 13px !important;
-}
-body[data-rs-page='product'] .rs-pro-mock__section-title::before {
-  content: none !important;
-  display: none !important;
-}
+/* Product section titles : piloté dans rs-paris-unified-pages.css (chargé après) */
 body[data-rs-page='product'] .rs-pro-mock__mf-body li::before,
 body[data-rs-page='product'] .rs-pro-mock__mf-body p::before {
   color: #f472b6 !important;
@@ -1769,7 +1673,3 @@ body[data-rs-page='product'] .rs-pro-mock__similar-title {
   border-bottom: 2px solid #f472b6 !important;
 }
 
-/* Bannière cookies & préférences Customer Privacy : charte dans rs-indeed-boutique.css (chargé après) */
-.shopify-pc__banner {
-  z-index: 2147483646 !important;
-}

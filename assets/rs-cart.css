@@ -1,0 +1,202 @@
+/* Recrute Stagiaire — Cart page (clean structure, no inline styles) */
+
+.rs-cart-hero {
+  background: var(--rs-gray);
+  border-bottom: 1px solid var(--rs-border);
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+.rs-cart-title {
+  margin: 0;
+  font-size: var(--rs-cart-title-size, 22px);
+  font-weight: var(--rs-cart-title-weight, 600);
+  font-family: "Syne", sans-serif;
+  color: var(--rs-black);
+  letter-spacing: -0.02em;
+}
+
+.rs-cart-count {
+  font-size: 13px;
+  color: #6c757d;
+  margin: 4px 0 0;
+}
+
+.rs-cart-section {
+  padding: var(--rs-cart-pad-top, 24px) 0 var(--rs-cart-pad-bottom, 48px);
+  background: #fff;
+}
+
+.rs-cart-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid var(--rs-border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.rs-cart-item__thumb {
+  width: var(--rs-cart-thumb-size, 72px);
+  height: var(--rs-cart-thumb-size, 72px);
+  flex-shrink: 0;
+  border-radius: var(--rs-cart-thumb-radius, 8px);
+  overflow: hidden;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+}
+
+.rs-cart-item__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rs-cart-item__title {
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rs-cart-item__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.rs-cart-item__variant {
+  font-size: 12px;
+  color: #6c757d;
+  margin-bottom: 4px;
+}
+
+.rs-cart-item__controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rs-cart-qty {
+  width: 90px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.rs-cart-qty .btn,
+.rs-cart-qty .input-group-text {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-color: var(--rs-border);
+  background: #fff;
+  color: var(--rs-black);
+}
+
+.rs-cart-item__remove {
+  font-size: 12px;
+  color: #dc3545;
+  text-decoration: none;
+}
+
+.rs-cart-item__price {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rs-cart-summary {
+  background: var(--rs-gray);
+  border: 1px solid var(--rs-border);
+  border-radius: var(--rs-cart-summary-radius, 8px);
+  padding: var(--rs-cart-summary-padding, 20px);
+  box-shadow: 0 10px 26px rgba(10, 10, 10, 0.06);
+}
+
+.rs-cart-summary__title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.rs-cart-summary__row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.rs-cart-summary__row--total {
+  font-size: 15px;
+  font-weight: 700;
+  border-top: 1px solid var(--rs-border);
+  padding-top: 12px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  color: var(--rs-black);
+}
+
+.rs-cart-btn-primary {
+  background: var(--rs-pink);
+  border-color: var(--rs-pink);
+  color: #fff;
+  font-weight: 700;
+}
+
+.rs-cart-btn-primary:hover {
+  background: #db2777;
+  border-color: #db2777;
+  color: #fff;
+}
+
+.rs-cart-btn-secondary {
+  border-color: var(--rs-border);
+  color: var(--rs-black);
+  background: #fff;
+}
+
+.rs-cart-btn-secondary:hover {
+  border-color: var(--rs-black);
+  background: var(--rs-gray);
+}
+
+.rs-cart-trust {
+  color: #6c757d;
+  text-align: center;
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+.rs-cart-empty {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.rs-cart-empty__icon {
+  color: #dee2e6;
+  line-height: 0;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.rs-cart-empty__title {
+  font-size: 18px;
+  color: #6c757d;
+  margin-bottom: 12px;
+}
+
+.rs-cart-empty__text {
+  font-size: 14px;
+  color: #adb5bd;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 991.98px) {
+  .rs-cart-item {
+    padding: 12px;
+  }
+
+  .rs-cart-item__price {
+    font-size: 13px;
+  }
+}

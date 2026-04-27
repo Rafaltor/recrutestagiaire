@@ -228,60 +228,6 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv {
   inset: auto !important;
 }
 
-/* Header — nav + ghost liens */
-body.rs-portal-header .rs-ph-navdesk a {
-  font-size: 14px !important;
-  font-weight: 500 !important;
-  color: var(--rs-black) !important;
-  text-decoration: none !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-}
-body.rs-portal-header .rs-ph-navdesk a:hover {
-  text-decoration: underline !important;
-  color: var(--rs-black) !important;
-}
-body.rs-portal-header .rs-ph-brandlink {
-  gap: 12px !important;
-}
-body.rs-portal-header:not([data-rs-page='index']) .rs-nav-brand__name--headline,
-body.rs-portal-header:not([data-rs-page='index']) .rs-header-mobile-bar__title {
-  animation: none !important;
-  background: none !important;
-  background-clip: unset !important;
-  -webkit-background-clip: unset !important;
-  -webkit-text-fill-color: var(--rs-black) !important;
-  color: var(--rs-black) !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.05em !important;
-  text-shadow: none !important;
-}
-body.rs-portal-header[data-rs-page='index'] .rs-nav-brand__name--headline,
-body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar__title {
-  animation: none !important;
-  background: none !important;
-  background-clip: unset !important;
-  -webkit-background-clip: unset !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.05em !important;
-}
-body.rs-portal-header .rs-banner-top__actions .rs-header-ghost-link {
-  color: var(--rs-muted) !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  padding: 6px 8px !important;
-  border-radius: 0 !important;
-  text-decoration: none !important;
-}
-body.rs-portal-header .rs-banner-top__actions .rs-header-ghost-link:hover {
-  color: var(--rs-black) !important;
-  text-decoration: underline !important;
-  background: transparent !important;
-}
-
 /* Hero job board */
 .rs-hero-jobboard {
   background: var(--rs-white);
@@ -1136,6 +1082,11 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   padding-bottom: clamp(56px, 8vw, 88px);
 }
 
+/* About : plus d'air entre les sections successives */
+.section-page-collectif-histoire .rs-collectif-section + .rs-collectif-section {
+  margin-top: clamp(20px, 4vw, 44px);
+}
+
 .section-page-collectif-histoire .rs-collectif-hero__media,
 .section-page-collectif-histoire .rs-collectif-vision__media {
   margin-top: 36px;
@@ -1216,7 +1167,6 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
 .shopify-pc__banner__dialog {
   max-width: min(640px, calc(100vw - 24px)) !important;
   margin: 0 auto !important;
-  padding: clamp(26px, 3.4vw, 38px) !important;
   border-radius: 18px !important;
   border: 1px solid rgba(15, 23, 42, 0.08) !important;
   background: rgba(255, 255, 255, 0.9) !important;
@@ -1228,18 +1178,6 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   color: var(--rs-black) !important;
   font-size: 14px !important;
   line-height: 1.7 !important;
-}
-
-/* Espace interne supplémentaire pour éviter tout effet "texte collé au bord" */
-.shopify-pc__banner__dialog .shopify-pc__banner__heading,
-.shopify-pc__banner__dialog h2,
-.shopify-pc__banner__dialog h3,
-.shopify-pc__banner__dialog p,
-.shopify-pc__banner__dialog span,
-.shopify-pc__banner__dialog a,
-.shopify-pc__banner__dialog button.shopify-pc__banner__link {
-  padding-inline: 4px !important;
-  box-sizing: border-box !important;
 }
 
 .shopify-pc__banner__dialog .shopify-pc__banner__heading,
@@ -1380,32 +1318,6 @@ button.shopify-pc__banner__btn-manage-prefs:hover {
   box-shadow: none !important;
 }
 
-@media (max-width: 640px) {
-  .shopify-pc__banner {
-    padding: max(14px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px))
-      max(16px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)) !important;
-  }
-
-  .shopify-pc__banner__dialog {
-    max-width: calc(100vw - 20px) !important;
-    padding: clamp(20px, 7vw, 28px) !important;
-  }
-
-  .shopify-pc__banner__btns {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 10px !important;
-    margin-top: 18px !important;
-    padding: 0 !important;
-    width: 100% !important;
-  }
-
-  .shopify-pc__banner__btns > button:not(.shopify-pc__banner__link) {
-    width: 100% !important;
-    justify-content: center !important;
-  }
-}
-
 /* Cookie banner — override final de spacing (desktop + mobile) */
 .shopify-pc__banner .shopify-pc__banner__dialog {
   padding: 0 !important;
@@ -1431,6 +1343,28 @@ button.shopify-pc__banner__btn-manage-prefs:hover {
 }
 
 @media (max-width: 640px) {
+  .shopify-pc__banner {
+    padding: max(14px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px))
+      max(16px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)) !important;
+  }
+
+  .shopify-pc__banner__dialog {
+    max-width: calc(100vw - 20px) !important;
+  }
+
+  .shopify-pc__banner__btns {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin-top: 18px !important;
+    width: 100% !important;
+  }
+
+  .shopify-pc__banner__btns > button:not(.shopify-pc__banner__link) {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
   .shopify-pc__banner .shopify-pc__banner__dialog > *,
   .shopify-pc__banner .shopify-pc__banner__dialog .shopify-pc__banner__content,
   .shopify-pc__banner .shopify-pc__banner__dialog .shopify-pc__banner__body,
@@ -1444,59 +1378,3 @@ button.shopify-pc__banner__btn-manage-prefs:hover {
   }
 }
 
-/* Accueil mobile : marque centrée, logo + « RECRUTE STAGIAIRE » plus visibles ; ticker légèrement plus lisible */
-@media (max-width: 899.98px) {
-  body.rs-portal-header .rs-ticker {
-    background: var(--rs-black) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
-  }
-  body.rs-portal-header .rs-ticker__group {
-    font-size: 12px !important;
-    padding-right: clamp(0.75rem, 3vw, 1.25rem) !important;
-  }
-
-  body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar {
-    align-items: center !important;
-    min-height: 64px !important;
-    padding: 0 !important;
-  }
-
-  body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar__brand.rs-ph-mbrand {
-    position: inherit !important;
-    left: auto !important;
-    top: auto !important;
-    transform: none !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 0 !important;
-    max-width: none !important;
-    text-align: left !important;
-  }
-
-  body.rs-portal-header[data-rs-page='index'] .header-wrap .rs-header-mobile-bar__logo {
-    max-height: 52px !important;
-    max-width: 52px !important;
-    width: 52px !important;
-    height: auto !important;
-  }
-
-  body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar .rs-header-mobile-bar__title {
-    font-size: clamp(13px, 3.8vw, 17px) !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.04em !important;
-    line-height: 1.15 !important;
-    text-align: center !important;
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    max-width: 100% !important;
-    -webkit-text-fill-color: inherit !important;
-  }
-
-  body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar .rs-header-burger-btn {
-    position: relative !important;
-    z-index: 3 !important;
-    flex-shrink: 0 !important;
-  }
-}

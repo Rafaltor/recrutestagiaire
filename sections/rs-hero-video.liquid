@@ -1,10 +1,10 @@
 {{ 'rs-hero-video.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  if collections['les-stagiaires-de-base'] != blank
-    assign search_action = collections['les-stagiaires-de-base'].url
+  if collections['mes-basiques-damour'] != blank
+    assign search_action = collections['mes-basiques-damour'].url
   else
-    assign search_action = '/collections/les-stagiaires-de-base'
+    assign search_action = '/collections/mes-basiques-damour'
   endif
   assign v_shopify = section.settings.background_video
   assign v_mp4 = section.settings.mp4_url | strip

@@ -369,6 +369,63 @@ body.rs-portal-header .rs-ph-navdesk a:focus-visible {
   color: var(--black);
 }
 
+/* ============================================================================
+   Header final overrides (migrés depuis rs-indeed-boutique.css pour éviter
+   la superposition multi-fichiers sur le header)
+   ============================================================================ */
+body.rs-portal-header .rs-ph-navdesk a {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #0a0a0a !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+body.rs-portal-header .rs-ph-navdesk a:hover {
+  text-decoration: underline !important;
+  color: #0a0a0a !important;
+}
+
+body.rs-portal-header .rs-ph-brandlink {
+  gap: 12px !important;
+}
+
+body.rs-portal-header .rs-nav-brand__name--headline,
+body.rs-portal-header .rs-header-mobile-bar__title {
+  animation: none !important;
+  background: none !important;
+  background-clip: unset !important;
+  -webkit-background-clip: unset !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+}
+
+body.rs-portal-header:not([data-rs-page='index']) .rs-nav-brand__name--headline,
+body.rs-portal-header:not([data-rs-page='index']) .rs-header-mobile-bar__title {
+  -webkit-text-fill-color: #0a0a0a !important;
+  color: #0a0a0a !important;
+  text-shadow: none !important;
+}
+
+body.rs-portal-header .rs-banner-top__actions .rs-header-ghost-link {
+  color: #6b6b6b !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 6px 8px !important;
+  border-radius: 0 !important;
+  text-decoration: none !important;
+}
+
+body.rs-portal-header .rs-banner-top__actions .rs-header-ghost-link:hover {
+  color: #0a0a0a !important;
+  text-decoration: underline !important;
+  background: transparent !important;
+}
+
 body.rs-portal-header .rs-ph-cta {
   display: none;
   align-items: center;
@@ -753,6 +810,61 @@ body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-heade
 }
 
 @media (max-width: 899.98px) {
+  body.rs-portal-header .rs-ticker {
+    background: var(--black) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  }
+
+  body.rs-portal-header .rs-ticker__group {
+    font-size: 12px !important;
+    padding-right: clamp(0.75rem, 3vw, 1.25rem) !important;
+  }
+
+  body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar {
+    align-items: center !important;
+    min-height: 64px !important;
+    padding: 0 !important;
+  }
+
+  body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar__brand.rs-ph-mbrand {
+    position: inherit !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+    max-width: none !important;
+    text-align: left !important;
+  }
+
+  body.rs-portal-header[data-rs-page='index'] .header-wrap .rs-header-mobile-bar__logo {
+    max-height: 52px !important;
+    max-width: 52px !important;
+    width: 52px !important;
+    height: auto !important;
+  }
+
+  body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar .rs-header-mobile-bar__title {
+    font-size: clamp(13px, 3.8vw, 17px) !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.04em !important;
+    line-height: 1.15 !important;
+    text-align: center !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-width: 100% !important;
+    -webkit-text-fill-color: inherit !important;
+  }
+
+  body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar .rs-header-burger-btn {
+    position: relative !important;
+    z-index: 3 !important;
+    flex-shrink: 0 !important;
+  }
+
   body.rs-portal-header[data-rs-page='index']
     .header-wrap.rs-header:not(.rs-header--scroll-solid)
     .rs-header-mobile-bar

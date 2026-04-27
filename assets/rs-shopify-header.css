@@ -1304,14 +1304,6 @@ html[data-rs-swipe="1"] main.mx-auto {
     min-height: 0;
   }
 
-  .header-wrap .rs-header-body:has(> .rs-header-logo-tile) > .container {
-    margin: 0;
-    max-width: none;
-    width: 100%;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
   .header-wrap .container {
     padding-left: 0 !important;
     padding-right: 0 !important;

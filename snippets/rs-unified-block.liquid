@@ -119,10 +119,10 @@
     {%- assign _hs_layout = b.layout_variant | default: 'panel' -%}
     {%- liquid
       assign _offres_btn_url = b.offres_btn_url | strip
-      if _offres_btn_url == blank and collections['les-stagiaires-de-base'] != blank
-        assign _offres_btn_url = collections['les-stagiaires-de-base'].url
+      if _offres_btn_url == blank and collections['mes-basiques-damour'] != blank
+        assign _offres_btn_url = collections['mes-basiques-damour'].url
       elsif _offres_btn_url == blank
-        assign _offres_btn_url = '/collections/les-stagiaires-de-base'
+        assign _offres_btn_url = '/collections/mes-basiques-damour'
       endif
     -%}
     <div class="rs-hero__search-strip-inner rs-uni-search-stack h-100 d-flex flex-column justify-content-center">
