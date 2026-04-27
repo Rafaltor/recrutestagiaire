@@ -1209,10 +1209,14 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   box-sizing: border-box !important;
 }
 
+.shopify-pc__banner__wrapper {
+  padding: 10px !important;
+}
+
 .shopify-pc__banner__dialog {
   max-width: min(640px, calc(100vw - 24px)) !important;
   margin: 0 auto !important;
-  padding: clamp(20px, 5vw, 34px) clamp(20px, 5vw, 34px) !important;
+  padding: clamp(26px, 3.4vw, 38px) !important;
   border-radius: 18px !important;
   border: 1px solid rgba(15, 23, 42, 0.08) !important;
   background: rgba(255, 255, 255, 0.9) !important;
@@ -1224,6 +1228,18 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   color: var(--rs-black) !important;
   font-size: 14px !important;
   line-height: 1.7 !important;
+}
+
+/* Espace interne supplémentaire pour éviter tout effet "texte collé au bord" */
+.shopify-pc__banner__dialog .shopify-pc__banner__heading,
+.shopify-pc__banner__dialog h2,
+.shopify-pc__banner__dialog h3,
+.shopify-pc__banner__dialog p,
+.shopify-pc__banner__dialog span,
+.shopify-pc__banner__dialog a,
+.shopify-pc__banner__dialog button.shopify-pc__banner__link {
+  padding-inline: 4px !important;
+  box-sizing: border-box !important;
 }
 
 .shopify-pc__banner__dialog .shopify-pc__banner__heading,
@@ -1270,6 +1286,10 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   gap: 12px !important;
   margin-top: 24px !important;
   align-items: center !important;
+  width: 100% !important;
+  padding: 14px 2px 2px !important;
+  box-sizing: border-box !important;
+  border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
 }
 
 .shopify-pc__banner__dialog button:not(.shopify-pc__banner__link) {
@@ -1277,7 +1297,8 @@ body[data-rs-page='index'] .section-home-unified-page .rs-editorial-column .rs-p
   font-size: 14px !important;
   font-weight: 600 !important;
   border-radius: 999px !important;
-  padding: 10px 20px !important;
+  padding: 12px 18px !important;
+  min-height: 44px !important;
   cursor: pointer !important;
   transition:
     background 0.18s ease,
@@ -1305,6 +1326,22 @@ button.shopify-pc__banner__btn-manage-prefs {
   background: var(--rs-white) !important;
   border: 1.5px solid var(--rs-border) !important;
   color: var(--rs-black) !important;
+}
+
+@media (min-width: 641px) {
+  .shopify-pc__banner__dialog {
+    max-width: min(760px, calc(100vw - 40px)) !important;
+  }
+
+  .shopify-pc__banner__btns {
+    justify-content: flex-end !important;
+    gap: 12px 14px !important;
+  }
+
+  .shopify-pc__banner__btns > button:not(.shopify-pc__banner__link) {
+    flex: 0 0 auto !important;
+    min-width: 160px !important;
+  }
 }
 
 button.shopify-pc__banner__btn-decline:hover,
@@ -1345,12 +1382,65 @@ button.shopify-pc__banner__btn-manage-prefs:hover {
 
 @media (max-width: 640px) {
   .shopify-pc__banner {
-    padding: max(16px, env(safe-area-inset-top, 0px)) max(14px, env(safe-area-inset-right, 0px))
-      max(18px, env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)) !important;
+    padding: max(14px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px))
+      max(16px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)) !important;
   }
 
   .shopify-pc__banner__dialog {
-    max-width: calc(100vw - 28px) !important;
+    max-width: calc(100vw - 20px) !important;
+    padding: clamp(20px, 7vw, 28px) !important;
+  }
+
+  .shopify-pc__banner__btns {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin-top: 18px !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .shopify-pc__banner__btns > button:not(.shopify-pc__banner__link) {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* Cookie banner — override final de spacing (desktop + mobile) */
+.shopify-pc__banner .shopify-pc__banner__dialog {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.shopify-pc__banner .shopify-pc__banner__dialog > * {
+  padding-left: 28px !important;
+  padding-right: 28px !important;
+  box-sizing: border-box !important;
+}
+
+.shopify-pc__banner .shopify-pc__banner__dialog .shopify-pc__banner__content,
+.shopify-pc__banner .shopify-pc__banner__dialog .shopify-pc__banner__body,
+.shopify-pc__banner .shopify-pc__banner__dialog .shopify-pc__banner__message {
+  padding-left: 28px !important;
+  padding-right: 28px !important;
+}
+
+.shopify-pc__banner .shopify-pc__banner__btns {
+  padding: 16px 28px 22px !important;
+  margin-top: 12px !important;
+}
+
+@media (max-width: 640px) {
+  .shopify-pc__banner .shopify-pc__banner__dialog > *,
+  .shopify-pc__banner .shopify-pc__banner__dialog .shopify-pc__banner__content,
+  .shopify-pc__banner .shopify-pc__banner__dialog .shopify-pc__banner__body,
+  .shopify-pc__banner .shopify-pc__banner__dialog .shopify-pc__banner__message {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+
+  .shopify-pc__banner .shopify-pc__banner__btns {
+    padding: 12px 18px 18px !important;
   }
 }
 
