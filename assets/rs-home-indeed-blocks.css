@@ -544,8 +544,12 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-s
   }
 }
 
-/* Mobile : padding bloc profil supprimé */
+/* Mobile : un seul meilleur profil affiché + padding bloc profil supprimé */
 @media (max-width: 899.98px) {
+  body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-stack > .rs-portail-home-best-cv:nth-child(n+2) {
+    display: none;
+  }
+
   /* Bloc meilleur profil : supprimer le padding externe de la cellule */
   body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) {
     padding: 0;
@@ -607,8 +611,10 @@ body[data-rs-page='index'] .rs-site-footer__title {
   color: var(--rs-shop-black);
   text-transform: none;
   letter-spacing: -0.01em;
-  font-size: var(--rs-ds-type-body);
+  font-size: 15px;
+  line-height: 1.2;
   font-weight: 700;
+  margin: 0 0 12px;
 }
 
 body[data-rs-page='index'] .rs-site-footer__title::before {

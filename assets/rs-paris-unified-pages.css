@@ -259,13 +259,15 @@ body.rs-paris-startup[data-rs-page='product'] .rs-product-top-band {
 
 body.rs-paris-startup[data-rs-page='product'] .rs-product-top-band .btn-light-primary,
 body.rs-paris-startup[data-rs-page='product'] .rs-product-top-band .btn.btn-light-primary {
-  background: var(--black);
-  border: 1px solid var(--black);
-  color: var(--white);
-  border-radius: var(--radius-pill);
+  background: var(--rs-color-brand) !important;
+  border: 1px solid var(--rs-color-brand) !important;
+  color: #ffffff !important;
+  border-radius: var(--radius-pill) !important;
   font-family: var(--font-body);
   font-weight: 500;
   padding: 8px 18px;
+  box-shadow: none !important;
+  text-shadow: none !important;
   transition:
     background 0.15s ease,
     transform 0.15s ease,
@@ -273,9 +275,9 @@ body.rs-paris-startup[data-rs-page='product'] .rs-product-top-band .btn.btn-ligh
 }
 
 body.rs-paris-startup[data-rs-page='product'] .rs-product-top-band .btn-light-primary:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--white);
+  background: var(--rs-color-brand-hover) !important;
+  border-color: var(--rs-color-brand-hover) !important;
+  color: #ffffff !important;
   transform: translateY(-1px);
 }
 

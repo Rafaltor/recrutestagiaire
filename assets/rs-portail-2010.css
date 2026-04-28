@@ -439,17 +439,17 @@ button[type='submit'].btn-primary {
 .rs-site-footer__title {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
-  font-size: 10px;
+  font-size: 15px;
   line-height: 1.2;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: #333;
   border-bottom: var(--rs-da-border-w) solid var(--rs-da-border);
-  padding-bottom: 6px;
-  margin: 0 0 8px;
+  padding-bottom: 8px;
+  margin: 0 0 12px;
 }
 .rs-site-footer__title::before {
   content: '';

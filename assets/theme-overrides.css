@@ -901,13 +901,16 @@ body.rs-nav-open .header-wrap .rs-subnav.rs-subnav--buttons {
 }
 
 .header-wrap .nav-brand .rs-nav-brand__name,
-.header-wrap .rs-nav-brand__name.logo {
+.header-wrap .rs-nav-brand__name.logo,
+.header-wrap .rs-nav-brand__name.rs-ph-brandlink-title,
+.header-wrap .rs-ph-brandlink-title,
+.header-wrap .rs-header-mobile-bar__title {
   color: var(--rs-pole-blue) !important;
   font-size: clamp(1.35rem, 4.2vw, 1.85rem) !important;
   font-weight: bold !important;
   letter-spacing: 0.02em;
   text-shadow: none;
-  font-family: var(--rs-font-display) !important;
+  font-family: 'Syne', ui-sans-serif, system-ui, sans-serif !important;
   display: inline-block !important;
 }
 
@@ -2235,22 +2238,20 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 }
 
 .btn-light-primary {
-  background: linear-gradient(180deg, var(--rs-logo-blue-pale) 0%, #dce8fc 100%) !important;
-  border: 2px outset #eef2ff !important;
-  color: var(--rs-logo-blue) !important;
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.9),
-    inset -1px -1px 0 rgba(0, 51, 140, 0.12) !important;
+  background: var(--rs-color-brand) !important;
+  border: none !important;
+  border-radius: 100px !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
 .btn-light-primary:hover,
 .btn-light-primary:focus,
 .btn-light-primary:active {
-  background: linear-gradient(to bottom, var(--rs-logo-blue-bright) 0%, var(--rs-logo-blue-mid) 100%) !important;
-  border: 2px outset #a8bdfc !important;
-  color: #fff !important;
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.35),
-    inset -1px -1px 0 rgba(0, 25, 70, 0.45) !important;
+  background: var(--rs-color-brand-hover) !important;
+  border: none !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
 }
 
 /* Badges */
