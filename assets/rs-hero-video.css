@@ -1,9 +1,9 @@
 /**
- * Hero vidéo plein écran — brand #f472b6 / hover #db2777
+ * Hero vidéo plein écran — brand var(--rs-color-brand) / hover var(--rs-color-brand-hover)
  */
 .rs-hero-video {
-  --rs-hero-brand: #f472b6;
-  --rs-hero-brand-hover: #db2777;
+  --rs-hero-brand: var(--rs-color-brand);
+  --rs-hero-brand-hover: var(--rs-color-brand-hover);
   position: relative;
   isolation: isolate;
   min-height: 100svh;
@@ -21,7 +21,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: #0a0a0a;
+  background: var(--rs-color-ink);
 }
 
 .rs-hero-video__el,
@@ -202,12 +202,12 @@
   border: 0;
   background: transparent;
   font-size: 15px;
-  color: #0a0a0a;
+  color: var(--rs-color-ink);
   outline: none;
 }
 
 .rs-hero-video__search input::placeholder {
-  color: #6b6b6b;
+  color: var(--rs-color-muted);
 }
 
 .rs-hero-video__search-btn {
@@ -398,12 +398,12 @@
   }
 
   .rs-hero-video__mobile-cta--offres {
-    background: #f472b6;
+    background: var(--rs-color-brand);
     color: #fff !important;
   }
 
   .rs-hero-video__mobile-cta--offres:hover {
-    background: #db2777;
+    background: var(--rs-color-brand-hover);
   }
 
   .rs-hero-video__mobile-cta--portail {

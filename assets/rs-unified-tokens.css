@@ -1,0 +1,91 @@
+/* RS Unified Design Tokens — source unique de vérité */
+:root {
+  /* Couleurs brand */
+  --rs-color-brand: #f472b6;
+  --rs-color-brand-hover: #db2777;
+  --rs-color-brand-pale: #f9a8d4;
+  --rs-color-brand-light: #fdf2f8;
+  --rs-color-brand-border: #fce7f3;
+
+  /* Couleurs neutres */
+  --rs-color-ink: #0a0a0a;
+  --rs-color-bg: #fafaf8;
+  --rs-color-surface: #ffffff;
+  --rs-color-border: #e8e8e4;
+  --rs-color-muted: #6b6b6b;
+  --rs-color-subtle: #f4f4f2;
+
+  /* Feedback */
+  --rs-color-green: #22c55e;
+  --rs-color-amber: #f59e0b;
+  --rs-color-red: #e11d48;
+
+  /* Typography */
+  --rs-font-display: "Syne", system-ui, sans-serif;
+  --rs-font-body: "Manrope", system-ui, sans-serif;
+  --rs-font-size-base: 15px;
+  --rs-line-height: 1.6;
+
+  /* Spacing */
+  --rs-space-x: 20px;
+  --rs-space-x-lg: 40px;
+  --rs-content-max: 1200px;
+
+  /* Radius */
+  --rs-radius-sm: 4px;
+  --rs-radius-md: 8px;
+  --rs-radius-lg: 12px;
+  --rs-radius-xl: 20px;
+  --rs-radius-pill: 100px;
+
+  /* Shadows */
+  --rs-shadow-card: 0 2px 16px rgba(0, 0, 0, 0.04);
+  --rs-shadow-card-hover: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+  /* Aliases legacy — pour compatibilité avec les fichiers rs-* existants */
+  /* Ne pas utiliser ces alias dans du nouveau code */
+  --rs-brand-pink: var(--rs-color-brand);
+  --rs-brand-ink: var(--rs-color-ink);
+  --rs-da-pink: var(--rs-color-brand);
+  --rs-da-pink-hover: var(--rs-color-brand-hover);
+  --rs-da-pink-top: var(--rs-color-brand-pale);
+  --rs-da-pink-border: var(--rs-color-brand-hover);
+  --rs-da-radius: var(--rs-radius-sm);
+  --rs-page-bg: var(--rs-color-bg);
+  --rs-block-bg: var(--rs-color-surface);
+  --rs-block-border: var(--rs-color-border);
+  --rs-gold-soft: var(--rs-color-brand-light);
+  --rs-logo-blue: var(--rs-color-ink);
+  --rs-pole-blue: var(--rs-color-ink);
+  --rs-eu-yellow: var(--rs-color-brand);
+  --rs-shop-accent: var(--rs-color-brand);
+  --rs-shop-accent-hover: var(--rs-color-brand-hover);
+  --accent: var(--rs-color-brand);
+  --black: var(--rs-color-ink);
+  --white: var(--rs-color-bg);
+
+  /* Aliases courts — compatibilité rs-* existants (anciennement rs-shop-tokens.css) */
+  --font-display: var(--rs-font-display);
+  --font-body: var(--rs-font-body);
+  --radius: var(--rs-radius-md);
+  --radius-lg: var(--rs-radius-xl);
+  --radius-pill: var(--rs-radius-pill);
+  --gray-100: var(--rs-color-subtle);
+  --gray-200: var(--rs-color-border);
+  --gray-400: #999990;
+  --gray-600: var(--rs-color-muted);
+  --rs-card-shadow-hover: var(--rs-shadow-card-hover);
+  --rs-section-y: 60px;
+  --rs-section-y-lg: 80px;
+  --rs-pad-x: var(--rs-space-x);
+  --rs-pad-x-lg: var(--rs-space-x-lg);
+
+  /* Synchronisation variables Shopify customizer → charte RS */
+  /* Écrase les valeurs du bloc <style> inline de theme.liquid */
+  --rs-primary: var(--rs-color-brand);
+  --rs-primary-hover: var(--rs-color-brand-hover);
+  --rs-secondary: var(--rs-color-muted);
+  --rs-text: var(--rs-color-ink);
+  --rs-body-bg: var(--rs-color-bg);
+  --rs-card-hover: var(--rs-color-brand);
+}

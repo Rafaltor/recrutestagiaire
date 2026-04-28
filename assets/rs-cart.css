@@ -144,8 +144,8 @@
 }
 
 .rs-cart-btn-primary:hover {
-  background: #db2777;
-  border-color: #db2777;
+  background: var(--rs-color-brand-hover);
+  border-color: var(--rs-color-brand-hover);
   color: #fff;
 }
 

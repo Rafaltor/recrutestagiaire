@@ -19,15 +19,15 @@ html.rs-theme-trust body {
 
 html.rs-theme-trust :root {
   --rs-da-page-bg: #f4f5f7;
-  --rs-da-block-bg: #ffffff;
+  --rs-da-block-bg: var(--rs-color-surface);
   --rs-da-border: #e8eaed;
   --rs-da-border-w: 1px;
   --rs-da-radius: 12px;
   --rs-da-pad: 16px;
   --rs-da-gap: 12px;
-  --rs-da-pink: #f472b6;
-  --rs-da-pink-hover: #db2777;
-  --rs-da-pink-border: #db2777;
+  --rs-da-pink: var(--rs-color-brand);
+  --rs-da-pink-hover: var(--rs-color-brand-hover);
+  --rs-da-pink-border: var(--rs-color-brand-hover);
   --rs-da-btn-gold-top: #f8fafc;
   --rs-da-btn-gold-bot: #e2e8f0;
   --rs-da-btn-gold-border: #cbd5e1;

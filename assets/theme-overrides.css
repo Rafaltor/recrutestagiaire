@@ -3,6 +3,17 @@
    DA portail ~2010 : bleu / jaune du logo RS (fichier rs-logo-eu.png)
    ============================================================ */
 
+body {
+  font-family: var(--rs-font-body);
+  font-size: var(--rs-font-size-base);
+  color: var(--rs-color-ink);
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--rs-font-display);
+  font-weight: 800;
+  color: var(--rs-color-ink);
+}
+
 /* ---- Couleurs extraites du logo (sphère bleue + ailes jaunes) ---- */
 :root {
   /* Palette logo (assets/rs-logo-eu.svg) */
@@ -67,7 +78,7 @@ html {
 }
 
 body {
-  font-family: "Arial", "Helvetica Neue", Helvetica, sans-serif;
+  font-family: var(--rs-font-body);
   font-size: 13px;
   color: #333;
   background: #e8e8e8;
@@ -79,7 +90,7 @@ a { color: var(--rs-logo-blue); text-decoration: none; }
 a:hover { text-decoration: underline; color: var(--rs-logo-blue-deep); }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Arial", "Helvetica Neue", Helvetica, sans-serif;
+  font-family: var(--rs-font-display);
   font-weight: bold;
   color: #333;
 }
@@ -114,10 +125,10 @@ body[data-rs-page='product'] .container {
  */
 @media (min-width: 992px) {
   body[data-rs-page='product'] {
-    overflow-x: visible !important;
+    overflow-x: visible;
   }
   body[data-rs-page='product'] main {
-    overflow-x: visible !important;
+    overflow-x: visible;
   }
 }
 
@@ -148,11 +159,11 @@ main > .shopify-section:first-child {
 
 /* Option thème : viewport large sur téléphone (layout type bureau, scroll vertical seulement) */
 html.rs-viewport-desktop {
-  overflow-x: hidden !important;
+  overflow-x: hidden;
   max-width: 100%;
 }
 html.rs-viewport-desktop body {
-  overflow-x: hidden !important;
+  overflow-x: hidden;
   max-width: 100%;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y pinch-zoom;
@@ -434,63 +445,63 @@ body[data-rs-page="index"] .header-wrap .rs-header-top-line {
 @media (max-width: 991.98px) {
   html.rs-viewport-desktop .header-wrap .rs-header-main-row,
   body.rs-viewport-desktop .header-wrap .rs-header-main-row {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    width: 100% !important;
-    padding: 6px 0 0 !important;
-    border-bottom: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    padding: 6px 0 0;
+    border-bottom: none;
     box-sizing: border-box;
   }
 
   html.rs-viewport-desktop .header-wrap .rs-header-top-line,
   body.rs-viewport-desktop .header-wrap .rs-header-top-line {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    width: 100% !important;
-    column-gap: 16px !important;
-    padding: 4px 0 8px !important;
-    border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.12) !important;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    column-gap: 16px;
+    padding: 4px 0 8px;
+    border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.12);
     box-sizing: border-box;
   }
 
   html.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand,
   body.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top.rs-header-pole-brand {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    width: auto !important;
-    max-width: 100% !important;
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
+    max-width: 100%;
     border-bottom: none;
-    padding: 0 !important;
+    padding: 0;
   }
 
   html.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top__actions,
   body.rs-viewport-desktop .header-wrap .rs-header-top-line .rs-banner-top__actions {
-    flex-shrink: 0 !important;
-    width: auto !important;
+    flex-shrink: 0;
+    width: auto;
     border-bottom: none;
-    padding: 0 !important;
+    padding: 0;
   }
 
   html.rs-viewport-desktop .header-wrap .rs-header-main-row .rs-banner-nav.rs-header-pole-tabs,
   body.rs-viewport-desktop .header-wrap .rs-header-main-row .rs-banner-nav.rs-header-pole-tabs {
-    width: 100% !important;
-    max-width: none !important;
-    padding: 0 !important;
+    width: 100%;
+    max-width: none;
+    padding: 0;
     border-radius: 0;
     box-sizing: border-box;
   }
 
   html.rs-viewport-desktop .header-wrap .rs-header-main-row .rs-subnav.rs-subnav--buttons,
   body.rs-viewport-desktop .header-wrap .rs-header-main-row .rs-subnav.rs-subnav--buttons {
-    width: 100% !important;
-    max-width: none !important;
-    min-width: 0 !important;
-    gap: 0 !important;
-    padding: 0 !important;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    gap: 0;
+    padding: 0;
     box-sizing: border-box;
   }
 }
@@ -896,7 +907,7 @@ body.rs-nav-open .header-wrap .rs-subnav.rs-subnav--buttons {
   font-weight: bold !important;
   letter-spacing: 0.02em;
   text-shadow: none;
-  font-family: "Arial", Helvetica, sans-serif !important;
+  font-family: var(--rs-font-display) !important;
   display: inline-block !important;
 }
 
@@ -1320,7 +1331,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   margin: 0 auto;
   padding: 0 0 1.5rem;
   box-sizing: border-box;
-  font-family: "Arial", "Helvetica Neue", Helvetica, sans-serif;
+  font-family: var(--rs-font-body);
 }
 @media (min-width: 992px) {
   .rs-pro-mock {
@@ -2108,7 +2119,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   padding: 6px 10px;
   background: #fff;
   color: #333;
-  font-family: "Arial", Helvetica, sans-serif;
+  font-family: var(--rs-font-body);
 }
 .form-control:focus { border-color: var(--rs-logo-blue); box-shadow: 0 0 0 2px rgba(var(--bs-primary-rgb), 0.15); outline: none; }
 .form-label { font-size: 12px; font-weight: bold; color: #444; margin-bottom: 4px; }
@@ -2118,7 +2129,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 .btn {
   font-size: 12px;
   font-weight: bold;
-  font-family: "Arial", Helvetica, sans-serif;
+  font-family: var(--rs-font-body);
 }
 
 /* Coins biseautés sur les 4 sommets (octogone régulier, hors fermeture / pilule / onglets) */
@@ -2364,7 +2375,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   padding: 14px 18px 12px;
   text-align: center;
   box-shadow: 5px 5px 0 rgba(0, 26, 110, 0.12);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--rs-font-body);
 }
 .rs-stat-kitsch__ribbon {
   display: inline-block;
@@ -2388,7 +2399,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   color: var(--rs-logo-blue-deep);
   vertical-align: -2px;
   margin-right: 2px;
-  font-family: "Arial Black", Arial, sans-serif;
+  font-family: var(--rs-font-display);
 }
 .rs-stat-kitsch__suffix {
   font-size: 16px;
@@ -2551,7 +2562,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   padding: 9px 12px;
   font-size: 12px;
   font-weight: 700;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--rs-font-body);
   cursor: default;
   border-radius: 3px;
   line-height: 1.2;
@@ -3140,7 +3151,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
     text-align: right;
     white-space: nowrap;
     color: #0f172a;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--rs-font-body);
     font-weight: 800;
     font-size: 14px;
   }
@@ -3708,7 +3719,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
     3px 3px 0 rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
   padding: 12px 12px 14px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--rs-font-body);
   text-align: center;
 }
 .rs-rail-ad--compact {
@@ -4482,7 +4493,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   width: max-content;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Trebuchet MS", "Lucida Grande", Arial, Helvetica, sans-serif;
+  font-family: var(--rs-font-body);
   font-weight: 800;
   font-size: 0.74rem;
   letter-spacing: 0.07em;

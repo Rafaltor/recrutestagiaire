@@ -61,43 +61,43 @@ body.rs-paris-startup .rs-ds-h2 {
 /* --- Boutons globaux (Bootstrap + thème) --- */
 body.rs-paris-startup .btn-primary,
 body.rs-paris-startup a.btn-primary {
-  background: var(--black) !important;
-  border-color: var(--black) !important;
-  color: var(--white) !important;
-  border-radius: var(--radius-pill) !important;
-  font-family: var(--font-body) !important;
-  font-weight: 500 !important;
-  font-size: 14px !important;
-  padding: 14px 28px !important;
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--white);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 14px 28px;
   transition:
     background 0.15s ease,
     border-color 0.15s ease,
-    transform 0.15s ease !important;
+    transform 0.15s ease;
 }
 
 body.rs-paris-startup .btn-primary:hover,
 body.rs-paris-startup a.btn-primary:hover {
-  background: var(--accent) !important;
-  border-color: var(--accent) !important;
-  color: var(--white) !important;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--white);
   transform: translateY(-1px);
 }
 
 body.rs-paris-startup .btn-outline-primary,
 body.rs-paris-startup .btn-outline-secondary {
-  border-radius: var(--radius-pill) !important;
-  border-width: 1.5px !important;
-  border-color: var(--gray-200) !important;
-  background: transparent !important;
-  color: var(--black) !important;
+  border-radius: var(--radius-pill);
+  border-width: 1.5px;
+  border-color: var(--gray-200);
+  background: transparent;
+  color: var(--black);
   transition:
     border-color 0.15s ease,
-    transform 0.15s ease !important;
+    transform 0.15s ease;
 }
 
 body.rs-paris-startup .btn-outline-primary:hover,
 body.rs-paris-startup .btn-outline-secondary:hover {
-  border-color: var(--black) !important;
+  border-color: var(--black);
   transform: translateY(-1px);
 }
 
@@ -107,13 +107,13 @@ body.rs-paris-startup .card:not(.border-0),
 body.rs-paris-startup main .rs-panel {
   position: relative;
   overflow: hidden;
-  background: var(--white) !important;
-  border: 1px solid var(--gray-200) !important;
-  border-radius: var(--radius-lg) !important;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
-    transform 0.2s ease !important;
+    transform 0.2s ease;
 }
 
 body.rs-paris-startup .jobgrid.JobhillShdaow::before,
@@ -135,8 +135,8 @@ body.rs-paris-startup main .rs-panel::before {
 body.rs-paris-startup .jobgrid.JobhillShdaow:hover,
 body.rs-paris-startup .card:not(.border-0):hover,
 body.rs-paris-startup main .rs-panel:hover {
-  border-color: var(--gray-400) !important;
-  box-shadow: var(--rs-card-shadow-hover) !important;
+  border-color: var(--gray-400);
+  box-shadow: var(--rs-card-shadow-hover);
   transform: translateY(-2px);
 }
 
@@ -149,7 +149,7 @@ body.rs-paris-startup main .rs-panel:hover::before {
 /* --- Layout : le hero reste pleine largeur ; le reste respire en bandes --- */
 /* Uniquement le contenu <main> : évite de plafonner le .container du header */
 body.rs-paris-startup main .container {
-  max-width: var(--rs-content-max) !important;
+  max-width: var(--rs-content-max);
 }
 
 /* Sections alternées (hors hero vidéo plein écran) */
@@ -175,19 +175,19 @@ body.rs-paris-startup main > .shopify-section:not(.section-rs-hero-runway):not(.
 
 body.rs-paris-startup main > .shopify-section.section-rs-hero-runway,
 body.rs-paris-startup main > .shopify-section.section-rs-hero-video {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  background: transparent !important;
+  padding-top: 0;
+  padding-bottom: 0;
+  background: transparent;
 }
 
 /* --- Tags / pills --- */
 body.rs-paris-startup .badge:not(.bg-danger):not(.bg-warning),
 body.rs-paris-startup .rs-pill {
-  background: var(--gray-100) !important;
-  color: var(--gray-600) !important;
-  border-radius: var(--radius-pill) !important;
-  font-size: 11px !important;
-  font-weight: 500 !important;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 500;
 }
 
 /* --- Stagger hero (accueil) : hérite des délais rs-hero-stagger --- */
@@ -197,6 +197,6 @@ body.rs-paris-startup[data-rs-page='index'] .rs-hero-stagger > * {
 
 /* --- Footer --- */
 body.rs-paris-startup .rs-site-footer {
-  background: var(--white) !important;
-  border-top: 1px solid var(--gray-200) !important;
+  background: var(--white);
+  border-top: 1px solid var(--gray-200);
 }
