@@ -5,7 +5,7 @@
 
 :root {
   /* Charte finale recrutestagiaire.eu */
-  --rs-da-page-bg: #efefef;
+  --rs-da-page-bg: #ffffff;
   --rs-da-block-bg: #ffffff;
   --rs-da-black: var(--rs-color-ink);
   --rs-da-border: #dddddd;
@@ -17,8 +17,8 @@
   --rs-da-btn-gold-top: #f5e6a8;
   --rs-da-btn-gold-bot: #d4af37;
   --rs-da-btn-gold-border: #a88620;
-  --rs-da-gap: 8px;
-  --rs-da-pad: 12px;
+  --rs-da-gap: 16px;
+  --rs-da-pad: 16px;
   --rs-da-radius: 4px;
 }
 
@@ -55,6 +55,10 @@ main {
 
 body[data-rs-page='product'] main {
   background: var(--rs-da-page-bg);
+}
+
+main > .shopify-section:not(:last-child) {
+  margin-bottom: 5px;
 }
 
 h1,
@@ -345,9 +349,9 @@ button[type='submit'].btn-primary {
 }
 
 .rs-rail-ad__cta--half {
-  background: linear-gradient(180deg, var(--rs-da-btn-gold-top) 0%, var(--rs-da-btn-gold-bot) 100%);
-  border: 1px solid var(--rs-da-btn-gold-border);
-  color: #222;
+  background: var(--rs-color-brand);
+  border: none;
+  color: #ffffff;
 }
 
 /* Image produit dans les rails : pas de cadre, image entière visible */
@@ -435,16 +439,17 @@ button[type='submit'].btn-primary {
 .rs-site-footer__title {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
-  font-size: 13px;
+  font-size: 10px;
+  line-height: 1.2;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: #333;
   border-bottom: var(--rs-da-border-w) solid var(--rs-da-border);
-  padding-bottom: 8px;
-  margin: 0 0 12px;
+  padding-bottom: 6px;
+  margin: 0 0 8px;
 }
 .rs-site-footer__title::before {
   content: '';

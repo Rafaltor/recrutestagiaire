@@ -395,10 +395,10 @@
 .rs-nav-brand__name.logo {
   color: var(--rs-pole-blue);
   font-size: clamp(1.35rem, 4.2vw, 1.85rem);
+  font-family: var(--rs-font-display);
   font-weight: bold;
   letter-spacing: 0.02em;
   text-shadow: none;
-  font-family: "Arial", Helvetica, sans-serif;
   display: inline-block;
 }
 

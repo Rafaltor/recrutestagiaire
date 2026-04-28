@@ -942,29 +942,25 @@ body.rs-nav-open .header-wrap .rs-subnav.rs-subnav--buttons {
 
 /* Bouton bleu type « Mon dossier » (header panier + CTA intro Voir les offres / Profils) */
 .rs-caf-btn-dossier.abt-btn {
-  background: linear-gradient(180deg, var(--rs-logo-blue-bright) 0%, var(--rs-pole-blue) 55%, var(--rs-pole-blue-dark) 100%) !important;
+  background: var(--rs-color-brand) !important;
   color: #fff !important;
   font-size: 12px !important;
   font-weight: bold !important;
   padding: 7px 16px !important;
-  border-radius: 0 !important;
-  border: 2px outset #a8bdfc !important;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.35),
-    inset -1px -1px 0 rgba(0, 25, 70, 0.45) !important;
+  border-radius: 100px !important;
+  border: none !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
 }
 
 .rs-caf-btn-dossier.abt-btn:hover,
 .rs-caf-btn-dossier.abt-btn:focus-visible {
-  background: linear-gradient(180deg, var(--rs-logo-blue-bright) 0%, var(--rs-logo-blue-mid) 100%) !important;
-  border: 2px outset #7a9fe8 !important;
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.28),
-    inset -1px -1px 0 rgba(0, 15, 50, 0.55) !important;
+  background: var(--rs-color-brand-hover) !important;
+  border: none !important;
+  box-shadow: none !important;
   text-decoration: none !important;
   color: #fff !important;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) !important;
+  text-shadow: none !important;
   transform: none;
 }
 
@@ -1116,7 +1112,7 @@ body.rs-nav-open .header-wrap .rs-subnav.rs-subnav--buttons {
 }
 
 .hero-header {
-  background: linear-gradient(to bottom, var(--rs-logo-blue) 0%, var(--rs-logo-blue-deep) 100%) !important;
+  background: #0a0a0a !important;
 }
 
 .hero-header:not(.rs-hero) {
@@ -1431,10 +1427,9 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
     grid-row: 1 / span 2;
     align-self: start;
     position: sticky;
-    top: 72px;
-    z-index: 2;
-    max-height: calc(100vh - 88px);
-    max-height: calc(100dvh - 88px);
+    top: calc(var(--rs-portal-header-h, 120px) + 20px);
+    z-index: 5;
+    max-height: calc(100dvh - var(--rs-portal-header-h, 120px) - 40px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -2155,30 +2150,27 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 }
 .btn-primary,
 #apply-filters {
-  background: linear-gradient(to bottom, var(--rs-logo-blue-bright) 0%, var(--rs-logo-blue-mid) 100%);
-  border: 2px outset #a8bdfc;
-  color: #fff !important;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.35),
-    inset -1px -1px 0 rgba(0, 25, 70, 0.45);
+  background: var(--rs-color-brand) !important;
+  border: none !important;
+  border-radius: 100px !important;
+  color: #ffffff !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  font-weight: 600 !important;
 }
 .btn-primary:hover,
 #apply-filters:hover {
-  background: linear-gradient(to bottom, var(--rs-logo-blue-mid) 0%, var(--rs-logo-blue-deep) 100%);
-  border: 2px outset #7a9fe8;
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.28),
-    inset -1px -1px 0 rgba(0, 15, 50, 0.55);
-  text-decoration: none;
+  background: var(--rs-color-brand-hover) !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
 }
 .btn-outline-primary {
-  border: 2px outset #eef2ff;
-  color: var(--rs-logo-blue);
-  background: linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%);
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.95),
-    inset -1px -1px 0 rgba(0, 51, 140, 0.1);
+  border: 1.5px solid var(--rs-color-ink) !important;
+  color: var(--rs-color-ink) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 100px !important;
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus,
@@ -2592,22 +2584,12 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 .btn-apply,
 .rs-rail-ad__cta:not(.rs-rail-ad__cta--disabled),
 .rs-rail-ad__cta--half:not(.rs-rail-ad__cta--disabled) {
-  color: var(--rs-logo-blue-deep) !important;
-  background: linear-gradient(
-    180deg,
-    #fffff8 0%,
-    #fff9e6 20%,
-    #fff4c4 33%,
-    #fff0a8 42%,
-    #ffe566 58%,
-    #f2ca38 78%,
-    #e6c040 100%
-  ) !important;
-  border: 2px outset #fff8dc !important;
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.95),
-    inset -1px -1px 0 rgba(100, 75, 0, 0.22) !important;
-  text-shadow: none;
+  color: #ffffff !important;
+  background: var(--rs-color-brand) !important;
+  border: none !important;
+  border-radius: 100px !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
 
 /* Jaunes : survol = jaune pâle un peu plus présent, uniforme */
@@ -2617,22 +2599,13 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 .btn-apply:hover,
 .rs-rail-ad__cta:not(.rs-rail-ad__cta--disabled):hover,
 .rs-btn-p--2:hover {
+  background: var(--rs-color-brand-hover) !important;
+  border: none !important;
+  box-shadow: none !important;
   filter: none !important;
-  background: linear-gradient(180deg, #fff8d8 0%, #fff0b8 35%, #ffe9a0 70%, #ffe28a 100%) !important;
-  border: 2px outset #fff8e8 !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.92),
-    inset 0 -1px 0 rgba(255, 210, 100, 0.28) !important;
-  color: var(--rs-logo-blue-deep) !important;
-  text-decoration: none;
+  color: #ffffff !important;
 }
 
-/* jobhill-style impose du blanc sur .btn-warning:hover|focus|active */
-.btn-warning:hover,
-.btn-warning:focus,
-.btn-warning:active {
-  color: var(--rs-logo-blue-deep) !important;
-}
 
 /* 3 — Radial large : jaune UE bien visible au centre */
 .rs-btn-p--3 {
@@ -3679,7 +3652,7 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
 }
 .rs-uni-rail {
   position: sticky;
-  top: 72px;
+  top: calc(var(--rs-portal-header-h, 120px) + 20px);
   z-index: 2;
   padding: 10px 6px 24px;
   overflow: visible;

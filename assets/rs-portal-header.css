@@ -87,7 +87,13 @@ body.rs-portal-header .header-wrap.rs-header {
 
 /* Réserve l’espace sous le header fixe (hauteur mesurée → --rs-portal-header-h dans header.liquid) */
 body.rs-portal-header > main {
-  padding-top: var(--rs-portal-header-h, 120px);
+  padding-top: calc(var(--rs-portal-header-h, 120px) + 12px);
+}
+
+/* Renfort collection + product : s'assure que le main reste sous le header fixe */
+body.rs-portal-header[data-rs-page='collection'] > main,
+body.rs-portal-header[data-rs-page='product'] > main {
+  padding-top: calc(var(--rs-portal-header-h, 130px) + 12px) !important;
 }
 
 body.rs-portal-header .header-wrap.rs-header--banner::before,
@@ -355,7 +361,7 @@ body.rs-portal-header .rs-ph-navdesk {
 
 body.rs-portal-header .rs-ph-navdesk a,
 body.rs-portal-header .rs-ph-navdesk a:visited {
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-size: 13px;
   font-weight: 400;
   color: var(--gray-600);
@@ -465,23 +471,24 @@ body.rs-portal-header .header-wrap .rs-banner-top__actions {
 
 body.rs-portal-header .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier.abt-btn,
 body.rs-portal-header .header-wrap .rs-banner-top__actions .rs-banner-top__account {
-  background: transparent;
-  border: 1.5px solid var(--gray-200);
-  color: var(--gray-600);
-  border-radius: var(--radius-pill);
-  clip-path: none;
-  box-shadow: none;
-  text-shadow: none;
-  font-family: var(--font-body);
+  background: var(--rs-color-ink) !important;
+  border: 1.5px solid var(--rs-color-ink) !important;
+  color: #ffffff !important;
+  border-radius: var(--radius-pill) !important;
+  clip-path: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif !important;
   font-size: 11px;
   font-weight: 500;
-  padding: 4px 10px;
+  padding: 6px 10px !important;
 }
 
 body.rs-portal-header .header-wrap .rs-banner-top__actions .rs-caf-btn-dossier.abt-btn:hover,
 body.rs-portal-header .header-wrap .rs-banner-top__actions .rs-banner-top__account:hover {
-  border-color: var(--black);
-  color: var(--black);
+  background: var(--rs-color-brand) !important;
+  border-color: var(--rs-color-brand) !important;
+  color: #ffffff !important;
   transform: translateY(-1px);
 }
 
@@ -887,4 +894,26 @@ body.rs-paris-startup.rs-portal-header .header-wrap.rs-header .rs-header-body > 
   width: 100%;
   margin-left: 0;
   margin-right: 0;
+}
+
+/* =========================================================
+ * Polices header — Syne pour la marque, Manrope pour les liens
+ * Contourne html.rs-theme-trust .header-wrap * { font-body !important }
+ * dans rs-trust-modern.css (spécificité + source order > trust-modern)
+ * ========================================================= */
+body.rs-portal-header .rs-header-mobile-bar__title,
+body.rs-portal-header .rs-nav-brand__name,
+body.rs-portal-header .rs-nav-brand__name.logo,
+body.rs-portal-header .rs-nav-brand__name.logo.rs-nav-brand__name--headline,
+body.rs-portal-header .rs-ph-brandlink-title,
+body.rs-portal-header .header-wrap .rs-nav-brand__name.logo,
+body.rs-portal-header .header-wrap .rs-nav-brand__name.logo.rs-nav-brand__name--headline {
+  font-family: 'Syne', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+body.rs-portal-header .rs-ph-navdesk a,
+body.rs-portal-header .rs-ph-navdesk a:visited,
+body.rs-portal-header .rs-ph-navdesk a:hover,
+body.rs-portal-header .rs-ph-navdesk a:focus-visible {
+  font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif !important;
 }

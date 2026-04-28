@@ -41,7 +41,6 @@ body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-uni-pa
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-uni-grid {
-  gap: var(--rs-ds-space-grid-gap);
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:not(.rs-uni-cell--blue-band):not(.rs-uni-cell--ad-flush) {
@@ -98,13 +97,31 @@ body[data-rs-page='index'] .section-home-unified-page .rs-stat-kitsch:hover {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }
 
-/* Bandeau « profil » type maquette (fond gris léger dans la cellule) */
+/* Bandeau « profil » type maquette (fond noir + texte blanc) */
 body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) {
-  background: var(--rs-shop-gray-100);
-  border: 1px solid var(--rs-shop-gray-200);
+  background: var(--rs-color-ink);
+  border: 1px solid var(--rs-color-ink);
   box-shadow: none;
   border-radius: var(--rs-ds-radius-card-lg);
   padding: clamp(1rem, 2.5vw, 1.35rem);
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) .rs-top-profile-api__block-title,
+body[data-rs-page='index'] .section-home-unified-page .rs-top-profile-api .rs-top-profile-api__block-title {
+  color: #ffffff !important;
+  border-bottom-color: var(--rs-color-brand) !important;
+}
+
+/* Chaîne de hauteur pour que chaque article noir fit la div parente */
+body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) .rs-top-profile-api,
+body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) .rs-top-profile-api__encart,
+body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) .rs-top-profile-api__mount,
+body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) .rs-top-profile-api__layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
 }
 
 /* — Pôles — */
@@ -326,6 +343,8 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv {
   flex-direction: column;
   gap: 1.25rem;
   width: 100%;
+  flex: 1 1 0;
+  min-height: 0;
   box-sizing: border-box;
   border-radius: 12px;
   background: var(--rs-color-ink);
@@ -507,28 +526,26 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-s
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   align-items: stretch;
 }
 
 @media (min-width: 900px) {
   body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-stack {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1rem 1.1rem;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 1rem;
   }
 
   body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-stack > .rs-portail-home-best-cv {
-    flex: 1 1 calc(50% - 0.55rem);
-    min-width: min(100%, 280px);
+    flex: 1 1 0;
+    min-width: 0;
   }
 }
 
-/* Mobile : un seul profil affiché + padding bloc profil supprimé */
+/* Mobile : padding bloc profil supprimé */
 @media (max-width: 899.98px) {
-  body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-stack > .rs-portail-home-best-cv:nth-child(n+2) {
-    display: none;
-  }
-
   /* Bloc meilleur profil : supprimer le padding externe de la cellule */
   body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) {
     padding: 0;

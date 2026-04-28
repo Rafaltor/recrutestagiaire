@@ -35,12 +35,8 @@ html.rs-theme-trust :root {
 
 html.rs-theme-trust body,
 html.rs-theme-trust main,
-html.rs-theme-trust main *,
-html.rs-theme-trust .header-wrap,
-html.rs-theme-trust .header-wrap *,
-html.rs-theme-trust footer.footer,
-html.rs-theme-trust footer.footer * {
-  font-family: var(--rs-trust-font-body, system-ui, -apple-system, 'Segoe UI', sans-serif) !important;
+html.rs-theme-trust footer.footer {
+  font-family: var(--rs-trust-font-body, system-ui, -apple-system, 'Segoe UI', sans-serif);
 }
 
 html.rs-theme-trust h1,
