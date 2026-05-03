@@ -618,9 +618,6 @@ a.rs-ind-job-row:hover {
 
 /* Colonne droite sticky */
 .rs-pro-mock__apply-card {
-  position: sticky;
-  top: calc(var(--rs-portal-header-h, 120px) + 20px);
-  z-index: 5;
   border: 1px solid var(--rs-border);
   border-radius: 12px;
   padding: 24px;

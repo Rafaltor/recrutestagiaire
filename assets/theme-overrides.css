@@ -1436,12 +1436,11 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
     grid-column: 2;
     grid-row: 1 / span 2;
     align-self: start;
-    position: sticky;
+    position: sticky !important;
     top: calc(var(--rs-portal-header-h, 120px) + 20px);
     z-index: 5;
-    max-height: calc(100dvh - var(--rs-portal-header-h, 120px) - 40px);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    max-height: none;
+    overflow: visible;
   }
 }
 

@@ -283,23 +283,21 @@
               '/profil/' +
                 encodeURIComponent(p.token != null && String(p.token) !== '' ? String(p.token) : String(p.id));
             var href = base.replace(/\/$/, '') + path;
-            var likes = typeof p.likes === 'number' ? p.likes : parseFloat(p.likes) || 0;
-            var rank =
-              p.rank_label ||
-              (typeof p.rank === 'number' ? 'N°' + p.rank + ' — cette semaine' : 'Profil en tête');
             var handle = p.handle || p.instagram || '—';
             var job = p.job_title || p.metier || '—';
             var nom = p.name && String(p.name).trim() ? String(p.name).trim() : '';
+            var prenom = p.first_name || p.prenom || '';
+            var nomFamille = p.last_name || p.nom || '';
+            var fullName = (String(prenom).trim() + ' ' + String(nomFamille).trim()).trim();
+            if (fullName === '') fullName = nom;
             var handleClean = String(handle).replace(/^@+/, '');
-            var hasName = nom !== '' && nom.replace(/^@+/, '').toLowerCase() !== handleClean.toLowerCase();
-            var lineName = hasName ? '<strong>' + esc(nom) + '</strong>' : '';
+            var hasName = fullName !== '' && fullName.replace(/^@+/, '').toLowerCase() !== handleClean.toLowerCase();
+            var lineName = hasName ? '<strong>' + esc(fullName) + '</strong>' : '';
             var lineAt = handle !== '—' ? '@' + esc(handleClean) : '';
             var bullets =
               bulletLine(lineName) +
               bulletLine(lineAt) +
-              bulletLine(esc(job)) +
-              bulletLine(esc(String(likes)) + ' likes') +
-              bulletLine(esc(rank));
+              bulletLine(esc(job));
             return (
               '<article class="rs-portail-home-best-cv">' +
               '<div class="rs-portail-home-best-cv__top">' +
