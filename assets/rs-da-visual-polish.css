@@ -94,6 +94,14 @@ body[data-rs-page='index'] .rs-site-footer__title::before {
   display: none;
 }
 
+body[data-rs-page='collection'] .rs-site-footer__title,
+body[data-rs-page='product'] .rs-site-footer__title {
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  margin: 0 0 10px;
+}
+
 body[data-rs-page='index'] .rs-site-footer__menu a {
   color: #555550;
 }

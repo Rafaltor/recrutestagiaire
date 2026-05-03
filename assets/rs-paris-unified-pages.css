@@ -376,26 +376,38 @@ body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__thumb.active {
 }
 
 body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__apply-btn {
-  background: var(--rs-color-brand);
-  border: 1px solid var(--rs-color-brand);
-  color: #ffffff;
-  border-radius: var(--radius-pill);
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 15px;
-  padding: 14px 28px;
-  box-shadow: none;
-  text-shadow: none;
+  background: var(--rs-color-brand) !important;
+  border: 1px solid var(--rs-color-brand) !important;
+  color: #ffffff !important;
+  border-radius: var(--radius-pill) !important;
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  padding: 14px 28px !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 52px !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.35rem !important;
   transition:
     background 0.15s ease,
     border-color 0.15s ease,
     transform 0.15s ease;
 }
 
-body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__apply-btn:hover {
-  background: var(--rs-color-brand-hover);
-  border-color: var(--rs-color-brand-hover);
-  color: #ffffff;
+body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__apply-btn:hover,
+body.rs-paris-startup[data-rs-page='product'] .rs-pro-mock__apply-btn:focus-visible {
+  background: var(--rs-color-brand-hover) !important;
+  border-color: var(--rs-color-brand-hover) !important;
+  color: #ffffff !important;
+  filter: none !important;
   transform: translateY(-1px);
 }
 

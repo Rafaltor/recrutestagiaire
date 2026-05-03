@@ -544,15 +544,33 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-s
   }
 }
 
-/* Mobile : un seul meilleur profil affiché + padding bloc profil supprimé */
+/* Mobile : un seul meilleur profil affiché + taille adaptée au contenu */
 @media (max-width: 899.98px) {
   body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-stack > .rs-portail-home-best-cv:nth-child(n+2) {
     display: none;
   }
 
-  /* Bloc meilleur profil : supprimer le padding externe de la cellule */
+  /* Cellule : padding interne pour que le fond noir ne touche pas les bords des cartes */
   body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) {
-    padding: 0;
+    padding: clamp(1rem, 4vw, 1.5rem);
+    height: auto;
+    min-height: 0;
+  }
+
+  /* Profil unique : ne pas étirer à 100% de hauteur, prendre la hauteur du contenu */
+  body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) .rs-top-profile-api,
+  body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) .rs-top-profile-api__encart,
+  body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) .rs-top-profile-api__mount,
+  body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) .rs-top-profile-api__layout {
+    flex: 0 0 auto;
+  }
+
+  body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-stack {
+    flex: 0 0 auto;
+  }
+
+  body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv {
+    flex: 0 0 auto;
   }
 
   /* Cartes produit : supprimer le padding de la cellule, garder uniquement celui de la carte interne */

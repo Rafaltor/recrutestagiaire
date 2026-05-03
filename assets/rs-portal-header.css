@@ -323,7 +323,7 @@ body.rs-portal-header .rs-ph-brandlink-title {
 body.rs-portal-header .rs-nav-brand__name.logo.rs-nav-brand__name--headline {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--black);
@@ -333,7 +333,7 @@ body.rs-portal-header .rs-nav-brand__name.logo.rs-nav-brand__name--headline {
 body.rs-portal-header .rs-header-mobile-bar__title {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: clamp(10px, 3.3vw, 17px);
+  font-size: clamp(15px, 4.2vw, 18px);
   letter-spacing: 0.04em;
   line-height: 1.1;
   text-transform: uppercase;
@@ -380,7 +380,7 @@ body.rs-portal-header .rs-ph-navdesk a:focus-visible {
    la superposition multi-fichiers sur le header)
    ============================================================================ */
 body.rs-portal-header .rs-ph-navdesk a {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   color: #0a0a0a;
   text-decoration: none;
@@ -403,7 +403,7 @@ body.rs-portal-header .rs-header-mobile-bar__title {
   background: none;
   background-clip: unset;
   -webkit-background-clip: unset;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.05em;
 }
 
@@ -479,7 +479,7 @@ body.rs-portal-header .header-wrap .rs-banner-top__actions .rs-banner-top__accou
   box-shadow: none !important;
   text-shadow: none !important;
   font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif !important;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
   padding: 6px 10px !important;
 }
@@ -854,7 +854,7 @@ body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-heade
   }
 
   body.rs-portal-header[data-rs-page='index'] .rs-header-mobile-bar .rs-header-mobile-bar__title {
-    font-size: clamp(13px, 3.8vw, 17px);
+    font-size: clamp(16px, 4.5vw, 19px);
     font-weight: 800;
     letter-spacing: 0.04em;
     line-height: 1.15;
@@ -894,26 +894,4 @@ body.rs-paris-startup.rs-portal-header .header-wrap.rs-header .rs-header-body > 
   width: 100%;
   margin-left: 0;
   margin-right: 0;
-}
-
-/* =========================================================
- * Polices header — Syne pour la marque, Manrope pour les liens
- * Contourne html.rs-theme-trust .header-wrap * { font-body !important }
- * dans rs-trust-modern.css (spécificité + source order > trust-modern)
- * ========================================================= */
-body.rs-portal-header .rs-header-mobile-bar__title,
-body.rs-portal-header .rs-nav-brand__name,
-body.rs-portal-header .rs-nav-brand__name.logo,
-body.rs-portal-header .rs-nav-brand__name.logo.rs-nav-brand__name--headline,
-body.rs-portal-header .rs-ph-brandlink-title,
-body.rs-portal-header .header-wrap .rs-nav-brand__name.logo,
-body.rs-portal-header .header-wrap .rs-nav-brand__name.logo.rs-nav-brand__name--headline {
-  font-family: 'Syne', ui-sans-serif, system-ui, sans-serif !important;
-}
-
-body.rs-portal-header .rs-ph-navdesk a,
-body.rs-portal-header .rs-ph-navdesk a:visited,
-body.rs-portal-header .rs-ph-navdesk a:hover,
-body.rs-portal-header .rs-ph-navdesk a:focus-visible {
-  font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif !important;
 }

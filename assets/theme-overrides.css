@@ -684,7 +684,7 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
   }
 
   .header-wrap .rs-nav-brand__name.logo {
-    font-size: clamp(1.35rem, 4.2vw, 1.85rem) !important;
+    font-size: clamp(0.95rem, 2.6vw, 1.25rem) !important;
   }
 
   .header-wrap .rs-subnav.rs-subnav--buttons {
@@ -741,7 +741,7 @@ body[data-rs-page="index"] .header-wrap .rs-subnav__trigger {
   }
 
   .header-wrap .rs-nav-brand__name.logo {
-    font-size: clamp(1.35rem, 4.2vw, 1.85rem) !important;
+    font-size: clamp(0.95rem, 2.6vw, 1.25rem) !important;
   }
 
   .header-wrap .rs-banner-nav.rs-header-pole-tabs {
@@ -901,16 +901,13 @@ body.rs-nav-open .header-wrap .rs-subnav.rs-subnav--buttons {
 }
 
 .header-wrap .nav-brand .rs-nav-brand__name,
-.header-wrap .rs-nav-brand__name.logo,
-.header-wrap .rs-nav-brand__name.rs-ph-brandlink-title,
-.header-wrap .rs-ph-brandlink-title,
-.header-wrap .rs-header-mobile-bar__title {
+.header-wrap .rs-nav-brand__name.logo {
   color: var(--rs-pole-blue) !important;
-  font-size: clamp(1.35rem, 4.2vw, 1.85rem) !important;
-  font-weight: bold !important;
+  font-size: clamp(0.95rem, 2.6vw, 1.25rem) !important;
+  font-weight: 800 !important;
   letter-spacing: 0.02em;
   text-shadow: none;
-  font-family: 'Syne', ui-sans-serif, system-ui, sans-serif !important;
+  font-family: var(--rs-font-display) !important;
   display: inline-block !important;
 }
 
