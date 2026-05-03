@@ -365,6 +365,11 @@
   .rs-btn-short {
     display: inline;
   }
+
+  /* Mobile : masquer le 3e bouton « Portail candidat » */
+  .rs-hero-video__portal {
+    display: none !important;
+  }
 }
 
 /* Boutons mobiles sous la barre de recherche */

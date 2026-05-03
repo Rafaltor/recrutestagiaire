@@ -168,46 +168,73 @@
 
 <script>
   (function () {
-    var _observed = new WeakSet();
+    var _attached = new WeakSet();
+    var _loaded = new WeakSet();
 
-    function rsPlayVideo(v) {
-      if (_observed.has(v) && !v.paused) return;
+    /* Force tous les attributs nécessaires à l'autoplay iOS / Android */
+    function rsPrepVideo(v) {
       v.muted = true;
       v.defaultMuted = true;
       v.setAttribute('muted', '');
       v.setAttribute('playsinline', '');
       v.setAttribute('webkit-playsinline', '');
       v.setAttribute('x5-playsinline', '');
+      v.setAttribute('x5-video-player-type', 'h5');
+      v.setAttribute('x5-video-player-fullscreen', 'false');
       if ('playsInline' in v) v.playsInline = true;
+      if ('disableRemotePlayback' in v) v.disableRemotePlayback = true;
       v.setAttribute('autoplay', '');
-      /* load() toujours : couvre src="" et <source> enfants */
-      try { v.load(); } catch (e) {}
-      var p = v.play();
-      if (p && typeof p.catch === 'function') {
-        p.catch(function () {
-          /* second essai après 300 ms (cas iOS strict) */
-          setTimeout(function () { try { v.play(); } catch (e) {} }, 300);
-        });
+      v.setAttribute('preload', 'auto');
+    }
+
+    function rsTryPlay(v) {
+      try {
+        var p = v.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch(function () {
+            /* iOS strict : retry court */
+            setTimeout(function () { try { v.play(); } catch (e) {} }, 200);
+            setTimeout(function () { try { v.play(); } catch (e) {} }, 800);
+          });
+        }
+      } catch (e) {}
+    }
+
+    function rsPlayVideo(v) {
+      rsPrepVideo(v);
+      /* load() une seule fois — sinon on interrompt la lecture en cours sur iOS */
+      if (!_loaded.has(v)) {
+        _loaded.add(v);
+        try { v.load(); } catch (e) {}
       }
+      rsTryPlay(v);
     }
 
     function rsAttach(v) {
-      if (_observed.has(v)) return;
-      _observed.add(v);
+      if (_attached.has(v)) return;
+      _attached.add(v);
+      rsPrepVideo(v);
+      /* Tente play() dès que le navigateur a assez de données */
+      v.addEventListener('canplay', function () { rsTryPlay(v); }, { once: true });
+      v.addEventListener('loadedmetadata', function () { rsTryPlay(v); }, { once: true });
       rsPlayVideo(v);
       if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (entries, obs) {
+        var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (e) {
-            if (e.isIntersecting) { rsPlayVideo(e.target); obs.unobserve(e.target); }
+            if (e.isIntersecting && e.target.paused) rsTryPlay(e.target);
           });
-        }, { threshold: 0.01 }).observe(v);
+        }, { threshold: 0.01 });
+        io.observe(v);
       }
     }
 
     function rsHeroVideoEnsurePlay() {
       var root = document.querySelector('.section-rs-hero-video');
       if (!root) return;
-      root.querySelectorAll('video').forEach(rsAttach);
+      root.querySelectorAll('video').forEach(function (v) {
+        if (!_attached.has(v)) rsAttach(v);
+        else if (v.paused) rsTryPlay(v);
+      });
     }
 
     rsHeroVideoEnsurePlay();
@@ -233,8 +260,16 @@
       }).observe(document.body, { childList: true, subtree: true });
     }
 
-    /* iOS : relance au premier toucher si le navigateur a bloqué l'autoplay */
-    document.addEventListener('touchstart', rsHeroVideoEnsurePlay, { once: true, passive: true });
+    /* iOS : relance au premier geste utilisateur si le navigateur bloque encore */
+    var unlock = function () {
+      var root = document.querySelector('.section-rs-hero-video');
+      if (root) root.querySelectorAll('video').forEach(rsTryPlay);
+    };
+    document.addEventListener('touchstart', unlock, { once: true, passive: true });
+    document.addEventListener('touchend', unlock, { once: true, passive: true });
+    document.addEventListener('click', unlock, { once: true });
+    document.addEventListener('scroll', unlock, { once: true, passive: true });
+
     document.addEventListener('shopify:section:load', function (ev) {
       if (ev.target && ev.target.querySelector && ev.target.querySelector('.rs-hero-video')) rsHeroVideoEnsurePlay();
     });

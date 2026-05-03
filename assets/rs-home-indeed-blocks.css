@@ -376,6 +376,12 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__
   padding-right: 0.35rem;
 }
 
+/* Sur-titre « Sortie du cycle » : masqué partout */
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__kicker,
+body[data-rs-page='index'] .section-home-unified-page .rs-top-profile-api__block-kicker {
+  display: none !important;
+}
+
 body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__kicker {
   margin: 0 0 0.35rem;
   font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
@@ -394,7 +400,7 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__
   font-weight: 800;
   line-height: 1.25;
   letter-spacing: -0.02em;
-  color: var(--rs-color-surface);
+  color: #ffffff !important;
   border: none;
   padding: 0;
 }
@@ -456,69 +462,68 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__
   }
 }
 
+/* Bullets info : agencement clair en colonne, alignement à gauche */
 body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__bullets {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
-  margin: 0 -0.2rem;
-  padding: 0 0.15rem 0.1rem;
-  font-size: 11px;
+  align-items: stretch;
+  gap: 0.55rem;
+  margin: 0.5rem 0 0;
+  padding: 0.85rem 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--font-body), 'Manrope', sans-serif;
+  font-size: 14px;
   font-weight: 400;
   line-height: 1.45;
-  color: var(--rs-color-border);
-}
-
-@media (min-width: 640px) {
-  body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__bullets {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    column-gap: 0.75rem;
-    row-gap: 0.35rem;
-    font-size: 13px;
-  }
-}
-
-@media (min-width: 900px) {
-  body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__bullets {
-    font-size: 15px;
-    column-gap: 1rem;
-  }
+  color: rgba(255, 255, 255, 0.78);
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__line {
-  display: inline-flex;
+  display: flex;
   width: 100%;
-  max-width: 100%;
   align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  text-align: center;
-}
-
-@media (min-width: 640px) {
-  body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__line {
-    width: auto;
-    max-width: none;
-    white-space: nowrap;
-  }
+  justify-content: flex-start;
+  gap: 0.55rem;
+  text-align: left;
+  white-space: normal;
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__dia {
   flex-shrink: 0;
   color: var(--rs-color-brand);
-  font-size: 0.65em;
+  font-size: 0.7em;
   line-height: 1;
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__line-text {
   min-width: 0;
+  flex: 1 1 auto;
+  overflow-wrap: anywhere;
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__line-text strong {
   font-weight: 700;
-  color: var(--rs-color-surface);
+  color: #ffffff;
+  font-size: 1.05em;
+}
+
+/* 1ère ligne (nom) : un peu plus grosse, sans diamant, séparateur visuel */
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__line:first-child {
+  font-size: 1.1em;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 0.25rem;
+}
+
+body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__line:first-child .rs-portail-home-best-cv__dia {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__bullets {
+    font-size: 15px;
+    gap: 0.6rem;
+  }
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-stack {
