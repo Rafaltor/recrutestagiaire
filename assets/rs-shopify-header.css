@@ -1562,7 +1562,7 @@ html[data-rs-swipe="1"] main.mx-auto {
     margin: 0 0 10px;
     padding: 0;
     background: #ffffff;
-    border: 1px solid #ddd;
+    border: none;
     border-radius: 2px;
     overflow: hidden;
   }

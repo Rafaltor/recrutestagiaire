@@ -1,19 +1,4 @@
-<!-- Fil d'ariane fiche poste -->
-<div class="rs-product-top-band py-3 border-bottom" {{ section.shopify_attributes }}>
-  <div class="container">
-    <nav class="rs-pro-mock__breadcrumb small" aria-label="Fil d'ariane">
-      <a href="{{ routes.all_products_collection_url }}">Toutes les offres</a>
-      {% if collection %}
-        <span class="text-muted"> › </span>
-        <a href="{{ collection.url }}">{{ collection.title | escape }}</a>
-      {% endif %}
-      <span class="text-muted"> › </span>
-      <span class="rs-pro-mock__breadcrumb-current">{{ product.title | escape }}</span>
-    </nav>
-  </div>
-</div>
-
-<section class="rs-uni-page rs-product-pole pt-4 pb-5">
+<section class="rs-uni-page rs-product-pole pt-4 pb-5" {{ section.shopify_attributes }}>
   <div class="container">
     {% render 'rs-product-page-mockup', product: product, section: section, collection: collection %}
   </div>
