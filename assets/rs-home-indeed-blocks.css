@@ -103,7 +103,7 @@ body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-p
   border: 1px solid var(--rs-color-ink);
   box-shadow: none;
   border-radius: var(--rs-ds-radius-card-lg);
-  padding: clamp(1rem, 2.5vw, 1.35rem);
+  padding: 1rem;
 }
 
 body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) .rs-top-profile-api__block-title,
@@ -122,6 +122,12 @@ body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-p
   flex: 1 1 auto;
   width: 100%;
   min-height: 0;
+}
+
+/* Bloc div du contenu injecté (__layout dans __mount) : retrait 8px sans doubler mount+layout */
+body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) .rs-top-profile-api__layout {
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 /* — Pôles — */
@@ -357,7 +363,7 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv {
 @media (min-width: 640px) {
   body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv {
     gap: 1.5rem;
-    padding: 1.75rem 1.75rem 1.85rem;
+    padding: 1rem;
     border-radius: 12px;
   }
 }
@@ -555,9 +561,9 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv-s
     display: none;
   }
 
-  /* Cellule : padding interne pour que le fond noir ne touche pas les bords des cartes */
+  /* Cellule : même padding que bureau (1rem) ; retrait interne 8px sur __layout */
   body[data-rs-page='index'] .section-home-unified-page .rs-uni-cell:has(.rs-top-profile-api) {
-    padding: clamp(1rem, 4vw, 1.5rem);
+    padding: 1rem;
     height: auto;
     min-height: 0;
   }
