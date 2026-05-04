@@ -118,7 +118,7 @@ body.rs-paris-startup[data-rs-page='index'] .section-home-unified-page .rs-uni-c
 /* -------------------------------------------------------------------------- */
 
 body.rs-paris-startup[data-rs-page='collection'] .section-main-collection.rs-uni-page.rs-collection-pole {
-  background: var(--gray-100);
+  background: var(--white);
   font-family: var(--font-body);
 }
 

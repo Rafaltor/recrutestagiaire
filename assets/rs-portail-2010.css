@@ -1388,7 +1388,7 @@ body[data-rs-page='index'] .shopify-section.section-home-unified-page .rs-hero__
 
 /* Zone liste : fond page (le inline section peut rester ; on harmonise si blanc pur) */
 .section-main-collection.rs-uni-page.rs-collection-pole {
-  background: var(--rs-da-page-bg);
+  background: #ffffff;
 }
 
 .section-main-collection .pagination .page-link {

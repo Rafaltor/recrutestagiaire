@@ -12,9 +12,9 @@
     "main": {
       "type": "main-collection",
       "settings": {
-        "collection_page_bg": "#f4f4f2",
+        "collection_page_bg": "#ffffff",
         "collection_strip_top": "#fafaf8",
-        "collection_strip_bot": "#f4f4f2",
+        "collection_strip_bot": "#ffffff",
         "collection_cell_border": "#e8e8e4",
         "title_size": 16,
         "title_weight": "600",

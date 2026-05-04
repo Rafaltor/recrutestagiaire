@@ -3,7 +3,7 @@
     "main": {
       "type": "main-product",
       "settings": {
-        "add_to_cart_text": "Postuler — Ajouter au dossier",
+        "add_to_cart_text": "Postuler - ajouter au panier",
         "free_shipping_text": "Livraison offerte dès 200 € de candidatures",
         "reassurance_default_1": "Poste disponible immédiatement",
         "reassurance_default_2": "Expédition sous 48h ouvrées",
