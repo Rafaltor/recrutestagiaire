@@ -123,32 +123,40 @@
         <div class="rs-header-main-row rs-header-main-row--desktop">
           <div class="rs-header-top-line">
             <div class="rs-banner-top rs-header-pole-brand rs-header-pole-title">
-              <a
-                class="nav-brand rs-nav-brand rs-nav-brand--title-row rs-ph-brandlink"
-                href="{{ routes.root_url }}">
+              <div class="nav-brand rs-nav-brand rs-nav-brand--title-row rs-ph-brandlink">
                 {%- if brand_image != blank -%}
-                  <img
-                    class="rs-ph-brandlink-logo"
-                    src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 560 }}{% endif %}"
-                    alt=""
-                    width="{{ brand_logo_max }}"
-                    height="{{ brand_logo_max }}"
-                    style="max-height: {{ brand_logo_max }}px; width: auto;"
-                    loading="eager"
-                    decoding="async">
+                  <a
+                    class="rs-ph-brandlink-logo-hit"
+                    href="{{ routes.root_url }}"
+                    aria-label="{{ shop.name | escape }} — Accueil">
+                    <img
+                      class="rs-ph-brandlink-logo"
+                      src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 560 }}{% endif %}"
+                      alt=""
+                      width="{{ brand_logo_max }}"
+                      height="{{ brand_logo_max }}"
+                      style="max-height: {{ brand_logo_max }}px; width: auto;"
+                      loading="eager"
+                      decoding="async">
+                  </a>
                 {%- endif -%}
                 {%- if section.settings.show_site_name -%}
-                  <span class="rs-nav-brand__name logo rs-nav-brand__name--headline rs-ph-brandlink-title">
-                    {%- if section.settings.site_title != blank -%}
-                      {{ section.settings.site_title | upcase }}
-                    {%- else -%}
-                      {{ shop.name | upcase }}
-                    {%- endif -%}
-                  </span>
+                  <a
+                    class="rs-ph-brandlink-title-hit text-decoration-none"
+                    href="{{ routes.root_url }}"
+                    aria-label="{{ shop.name | escape }} — Accueil">
+                    <span class="rs-nav-brand__name logo rs-nav-brand__name--headline rs-ph-brandlink-title">
+                      {%- if section.settings.site_title != blank -%}
+                        {{ section.settings.site_title | upcase }}
+                      {%- else -%}
+                        {{ shop.name | upcase }}
+                      {%- endif -%}
+                    </span>
+                  </a>
                 {%- else -%}
                   <span class="visually-hidden">{{ shop.name | escape }}</span>
                 {%- endif -%}
-              </a>
+              </div>
             </div>
 
             <nav class="rs-ph-navdesk" aria-label="Navigation principale">

@@ -1378,3 +1378,13 @@ button.shopify-pc__banner__btn-manage-prefs:hover {
   }
 }
 
+/* Ticker : mobile — ce fichier est chargé en dernier ; forcer une durée courte (évite overrides / cache) */
+@media (max-width: 899.98px) {
+  body.rs-portal-header {
+    --rs-ticker-marquee-duration: 14s !important;
+  }
+
+  body.rs-portal-header .header-wrap .rs-ticker__track {
+    animation: rsTickerMarquee 14s linear infinite !important;
+  }
+}
