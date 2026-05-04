@@ -245,7 +245,6 @@
       var url = wrap.getAttribute('data-rs-top-profile-api');
       var base = wrap.getAttribute('data-rs-portail-base') || 'https://portail.recrutestagiaire.eu';
       var fb = wrap.getAttribute('data-rs-top-profile-fallback') || 'Classement en cours...';
-      var btnLabel = wrap.getAttribute('data-rs-top-profile-btn-label') || 'Voir son profil →';
       var mount = wrap.querySelector('[data-rs-top-profile-mount]');
       if (!url || !mount) return;
       mount.innerHTML = '<p class="text-muted mb-0">' + esc(fb) + '</p>';
@@ -278,11 +277,6 @@
           var titleHtml = titleAttr !== '' ? esc(titleAttr) : titleDefault;
 
           function cardFromProfile(p) {
-            var path =
-              p.profile_url ||
-              '/profil/' +
-                encodeURIComponent(p.token != null && String(p.token) !== '' ? String(p.token) : String(p.id));
-            var href = base.replace(/\/$/, '') + path;
             var handle = p.handle || p.instagram || '—';
             var job = p.job_title || p.metier || '—';
             var nom = p.name && String(p.name).trim() ? String(p.name).trim() : '';
@@ -307,12 +301,7 @@
               '</p>' +
               '<h3 class="rs-portail-home-best-cv__h">' +
               titleHtml +
-              '</h3></div>' +
-              '<a class="rs-portail-home-best-cv__cta" href="' +
-              esc(href) +
-              '" rel="noopener noreferrer">' +
-              esc(btnLabel) +
-              '</a></div>' +
+              '</h3></div></div>' +
               '<div class="rs-portail-home-best-cv__bullets">' +
               bullets +
               '</div></article>'
