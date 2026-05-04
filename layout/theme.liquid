@@ -162,6 +162,10 @@
   {{ 'rs-da-visual-polish.css' | asset_url | stylesheet_tag }}
   {{ 'rs-indeed-boutique.css' | asset_url | stylesheet_tag }}
 
+  {%- comment -%}
+    SÉCURITÉ : custom_head_code est injecté brut — réservé aux admins de confiance uniquement.
+    Ne jamais y placer de scripts provenant de sources non vérifiées.
+  {%- endcomment -%}
   {% if settings.custom_head_code != blank %}
     {{ settings.custom_head_code }}
   {% endif %}
