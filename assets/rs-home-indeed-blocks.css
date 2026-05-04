@@ -414,12 +414,12 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 0.45rem 1.15rem;
+  min-height: 0;
+  padding: 0.3rem 1rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
   text-align: center;
   text-decoration: none;
   color: var(--rs-color-surface);
@@ -439,9 +439,9 @@ body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__
 
 @media (min-width: 640px) {
   body[data-rs-page='index'] .section-home-unified-page .rs-portail-home-best-cv__cta {
-    min-height: 48px;
-    padding: 0.55rem 1.35rem;
-    font-size: 0.875rem;
+    min-height: 0;
+    padding: 0.35rem 1.15rem;
+    font-size: 0.8rem;
   }
 }
 

@@ -130,15 +130,25 @@ body[data-rs-page='collection'] main {
 }
 
 /*
- * jobhill-style.css met overflow-x:hidden sur body — en Chrome ça casse position:sticky
- * pour la colonne « postuler ». Sur fiche produit desktop on rétablit le défilement racine.
+ * jobhill-style.css met `body { overflow-x: hidden !important }` — ça casse
+ * position:sticky partout. Sur fiche produit desktop on neutralise (avec !important
+ * pour gagner contre le rule jobhill) afin que la colonne « Postuler » colle.
  */
 @media (min-width: 992px) {
-  body[data-rs-page='product'] {
-    overflow-x: visible;
+  html:has(body[data-rs-page='product']) {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
   }
-  body[data-rs-page='product'] main {
-    overflow-x: visible;
+  body[data-rs-page='product'] {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+  }
+  body[data-rs-page='product'] main,
+  body[data-rs-page='product'] .rs-uni-page,
+  body[data-rs-page='product'] .rs-product-pole,
+  body[data-rs-page='product'] .rs-pro-mock,
+  body[data-rs-page='product'] .rs-pro-mock__layout {
+    overflow: visible !important;
   }
 }
 

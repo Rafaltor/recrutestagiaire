@@ -14226,7 +14226,7 @@ footer {
   font-size: 0.9rem;
   position: relative;
   background: var(--bs-body-bg);
-  padding: 4.5rem 0 !important;
+  padding: 0 !important;
 }
 footer .footer-widget {
   padding: 0px;
