@@ -937,6 +937,14 @@ body.rs-nav-open .header-wrap .rs-subnav.rs-subnav--buttons {
   }
 }
 
+/* Bureau : titre marque (RECRUTESTAGIAIRE) plus compact */
+@media (min-width: 992px) {
+  .header-wrap .nav-brand .rs-nav-brand__name,
+  .header-wrap .rs-nav-brand__name.logo {
+    font-size: 14px !important;
+  }
+}
+
 .rs-cart-badge {
   color: var(--rs-logo-blue-deep);
   background: linear-gradient(

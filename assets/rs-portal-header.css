@@ -323,7 +323,7 @@ body.rs-portal-header .rs-ph-brandlink-title {
 body.rs-portal-header .rs-nav-brand__name.logo.rs-nav-brand__name--headline {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--black);
@@ -344,6 +344,8 @@ body.rs-portal-header .rs-header-mobile-bar__title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 body.rs-portal-header .rs-ph-navdesk {
@@ -405,6 +407,12 @@ body.rs-portal-header .rs-header-mobile-bar__title {
   -webkit-background-clip: unset;
   font-weight: 800;
   letter-spacing: 0.05em;
+}
+
+body.rs-portal-header .rs-header-mobile-bar__title:focus-visible {
+  outline: 2px solid var(--accent, #f472b6);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 body.rs-portal-header:not([data-rs-page='index']) .rs-nav-brand__name--headline,
@@ -820,6 +828,10 @@ body.rs-portal-header[data-rs-page='index'] .header-wrap.rs-header:not(.rs-heade
   body.rs-portal-header .rs-ticker {
     background: var(--black);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  body.rs-portal-header .rs-ticker__track {
+    animation: rsTickerMarquee 22s linear infinite;
   }
 
   body.rs-portal-header .rs-ticker__group {
