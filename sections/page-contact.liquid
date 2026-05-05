@@ -28,14 +28,14 @@
           {%- if section.settings.email != blank -%}
             <li class="mb-2">
               <span class="fw-semibold text-dark">E-mail</span><br>
-              <a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>
+              <a href="mailto:{{ section.settings.email | escape }}">{{ section.settings.email | escape }}</a>
             </li>
           {%- endif -%}
           {%- if section.settings.instagram_url != blank -%}
             <li class="mb-2">
               <span class="fw-semibold text-dark">Instagram</span><br>
-              <a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener noreferrer">
-                {{ section.settings.instagram_label | default: section.settings.instagram_url }}
+              <a href="{{ section.settings.instagram_url | escape }}" target="_blank" rel="noopener noreferrer">
+                {{ section.settings.instagram_label | default: section.settings.instagram_url | escape }}
               </a>
             </li>
           {%- endif -%}
@@ -47,10 +47,10 @@
         </ul>
 
         <div class="mt-4 d-flex flex-wrap gap-2">
-          <a href="{{ rs_profils }}" class="btn btn-sm btn-outline-primary" target="_blank" rel="noopener noreferrer">
+          <a href="{{ rs_profils | escape }}" class="btn btn-sm btn-outline-primary" target="_blank" rel="noopener noreferrer">
             Portail — Profils
           </a>
-          <a href="{{ rs_depot }}" class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener noreferrer">
+          <a href="{{ rs_depot | escape }}" class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener noreferrer">
             Portail — Déposer
           </a>
         </div>

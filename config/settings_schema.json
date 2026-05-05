@@ -22,7 +22,8 @@
         "type": "text",
         "id": "rs_api_url_top_profile",
         "label": "API — Meilleur profil (classement)",
-        "default": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
+        "default": "",
+        "placeholder": "https://api.recrutestagiaire.eu/rs-airtable-proxy.php?action=profil_top",
         "info": "Ionos : …/rs-airtable-proxy.php?action=profil_top (ou …/api/profils/top/). Portail Next : https://portail.recrutestagiaire.eu/api/profils/top — renvoie profile.cv (PDF signé) pour le bloc d’accueil."
       }
     ]
@@ -167,7 +168,12 @@
     "name": "SEO & Analytics",
     "settings": [
       { "type": "text", "id": "meta_title_suffix", "label": "Suffixe des titres SEO", "default": "Recrute Stagiaire" },
-      { "type": "textarea", "id": "custom_head_code", "label": "Code personnalisé <head>", "info": "Google Analytics, pixels, etc." }
+      {
+        "type": "textarea",
+        "id": "custom_head_code",
+        "label": "⚠️ Code HEAD personnalisé (admins uniquement — risque XSS)",
+        "info": "Ne coller que du code vérifié. Tout script ici s'exécute sur toutes les pages pour tous les visiteurs."
+      }
     ]
   }
 ]
