@@ -147,9 +147,9 @@
               <dt>{{ s.label_price | default: 'Salaire' }}</dt>
               <dd>
                 {%- if cv.compare_at_price > cv.price -%}
-                  <span class="text-muted text-decoration-line-through me-1">{{ cv.compare_at_price | money }}</span>
+                  <span class="text-muted text-decoration-line-through me-1">{% render 'rs-money-fr', amount: cv.compare_at_price %}</span>
                 {%- endif -%}
-                <strong>{{ cv.price | money }}</strong>
+                <strong>{% render 'rs-money-fr', amount: cv.price %}</strong>
               </dd>
             </div>
           {%- endif -%}
@@ -182,9 +182,9 @@
               <span class="rs-offer-list-card__bank-k">{{ s.label_price | default: 'Salaire' }}</span>
               <span class="rs-offer-list-card__bank-v">
                 {%- if cv.compare_at_price > cv.price -%}
-                  <span class="text-decoration-line-through me-1" style="font-size:9px;color:#64748b;">{{ cv.compare_at_price | money }}</span>
+                  <span class="text-decoration-line-through me-1" style="font-size:9px;color:#64748b;">{% render 'rs-money-fr', amount: cv.compare_at_price %}</span>
                 {%- endif -%}
-                {{ cv.price | money }}
+                {% render 'rs-money-fr', amount: cv.price %}
               </span>
             </div>
           </div>

@@ -57,9 +57,9 @@
     {%- if ad_show_price -%}
       <div class="rs-rail-ad__price">
         {%- if v.compare_at_price > v.price -%}
-          <span class="rs-rail-ad__was">{{ v.compare_at_price | money }}</span>
+          <span class="rs-rail-ad__was">{% render 'rs-money-fr', amount: v.compare_at_price %}</span>
         {%- endif -%}
-        <strong>{{ v.price | money }}</strong>
+        <strong>{% render 'rs-money-fr', amount: v.price %}</strong>
       </div>
     {%- endif -%}
     {%- if p.type != blank -%}

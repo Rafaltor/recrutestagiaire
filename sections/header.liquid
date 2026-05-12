@@ -47,11 +47,14 @@
     assign brand_logo_max = 200
   endif
 
-  assign rs_boutique_url = '/collections/mes-basiques-damour'
-  if collections['mes-basiques-damour'] != blank
-    assign rs_boutique_url = collections['mes-basiques-damour'].url
-  elsif collections['les-stagiaires-de-base'] != blank
-    assign rs_boutique_url = collections['les-stagiaires-de-base'].url
+  assign rs_boutique_url = section.settings.boutique_link | default: '' | strip
+  if rs_boutique_url == blank
+    assign rs_boutique_url = '/collections/mes-basiques-damour'
+    if collections['mes-basiques-damour'] != blank
+      assign rs_boutique_url = collections['mes-basiques-damour'].url
+    elsif collections['les-stagiaires-de-base'] != blank
+      assign rs_boutique_url = collections['les-stagiaires-de-base'].url
+    endif
   endif
 %}
 {%- capture rs_ticker_phrases -%}<span class="rs-ticker__phrase rs-ticker__phrase--a">I <span class="rs-ticker__heart" aria-hidden="true">❤</span> STAGIAIRE</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--b">MES BASIQUES D'AMOUR</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--a">I <span class="rs-ticker__heart" aria-hidden="true">❤</span> STAGIAIRE</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--b">MES BASIQUES D'AMOUR</span><span class="rs-ticker__sep">✦</span>{%- endcapture -%}
@@ -474,6 +477,7 @@
     { "type": "checkbox", "id": "show_site_name", "label": "Afficher le nom du site", "default": true },
     { "type": "text", "id": "site_title", "label": "Titre personnalisé (optionnel)" },
     { "type": "header", "content": "Liens navigation (portail / pages)" },
+    { "type": "url", "id": "boutique_link", "label": "Boutique — URL (collection en vente)", "info": "Vide = collection « mes-basiques-damour », puis « les-stagiaires-de-base »." },
     { "type": "text", "id": "menu_cand_1_label", "label": "Portail candidats — libellé", "default": "Portail candidats" },
     { "type": "url", "id": "menu_cand_1_link", "label": "Portail candidats — URL (vide = portail.recrutestagiaire.eu)" },
     { "type": "text", "id": "menu_cand_3_label", "label": "Lien vote / swipe — libellé", "default": "Voter" },
