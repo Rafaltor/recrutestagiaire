@@ -56,8 +56,25 @@
       assign rs_boutique_url = collections['les-stagiaires-de-base'].url
     endif
   endif
+
+  if section.settings.site_title != blank
+    assign rs_brand_title = section.settings.site_title
+  else
+    assign rs_brand_title = shop.name
+  endif
+  assign rs_brand_title = rs_brand_title | strip | upcase
+  assign rs_brand_line_one = rs_brand_title
+  assign rs_brand_line_two = ''
+  assign rs_brand_parts = rs_brand_title | split: ' '
+  if rs_brand_parts.size > 1
+    assign rs_brand_line_one = rs_brand_parts[0]
+    assign rs_brand_line_two = rs_brand_parts[1]
+    for rs_brand_part in rs_brand_parts offset: 2
+      assign rs_brand_line_two = rs_brand_line_two | append: ' ' | append: rs_brand_part
+    endfor
+  endif
 %}
-{%- capture rs_ticker_phrases -%}<span class="rs-ticker__phrase rs-ticker__phrase--a">I <span class="rs-ticker__heart" aria-hidden="true">❤</span> STAGIAIRE</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--b">MES BASIQUES D'AMOUR</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--a">I <span class="rs-ticker__heart" aria-hidden="true">❤</span> STAGIAIRE</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--b">MES BASIQUES D'AMOUR</span><span class="rs-ticker__sep">✦</span>{%- endcapture -%}
+{%- capture rs_ticker_phrases -%}<span class="rs-ticker__phrase rs-ticker__phrase--a">I <span class="rs-ticker__heart" aria-hidden="true">❤</span> STAGIAIRE</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--b">MES BASIQUES D'AMOUR</span><span class="rs-ticker__sep">✦</span>{%- endcapture -%}
 <div
   class="header-wrap rs-header{% if section.settings.banner_image != blank %} rs-header--banner{% endif %}"
   {% if section.settings.banner_image != blank %}
@@ -106,10 +123,9 @@
             {%- endif -%}
           </a>
           <a class="rs-header-mobile-bar__title" href="{{ routes.root_url }}">
-            {%- if section.settings.site_title != blank -%}
-              {{ section.settings.site_title | upcase }}
-            {%- else -%}
-              {{ shop.name | upcase }}
+            <span class="rs-header-mobile-bar__title-line">{{ rs_brand_line_one | escape }}</span>
+            {%- if rs_brand_line_two != blank -%}
+              <span class="rs-header-mobile-bar__title-line">{{ rs_brand_line_two | escape }}</span>
             {%- endif -%}
           </a>
           <button
@@ -151,10 +167,9 @@
                 {%- if section.settings.show_site_name -%}
                   <span class="rs-ph-brandlink-title-hit">
                     <span class="rs-nav-brand__name logo rs-nav-brand__name--headline rs-ph-brandlink-title">
-                      {%- if section.settings.site_title != blank -%}
-                        {{ section.settings.site_title | upcase }}
-                      {%- else -%}
-                        {{ shop.name | upcase }}
+                      <span class="rs-ph-brandlink-title-line">{{ rs_brand_line_one | escape }}</span>
+                      {%- if rs_brand_line_two != blank -%}
+                        <span class="rs-ph-brandlink-title-line">{{ rs_brand_line_two | escape }}</span>
                       {%- endif -%}
                     </span>
                   </span>
@@ -417,7 +432,19 @@
       wrap.classList.toggle('rs-header-mobile-fixed--scrolled', y > 2);
     }
 
+    function syncTickerMarquee() {
+      var track = wrap.querySelector('.rs-ticker__track');
+      if (!track) return;
+      var group = track.querySelector('.rs-ticker__group');
+      if (!group) return;
+      var width = Math.round(group.getBoundingClientRect().width);
+      if (width > 0) {
+        track.style.setProperty('--rs-ticker-shift', width + 'px');
+      }
+    }
+
     function sync() {
+      syncTickerMarquee();
       updateMobileMainOffset();
       onWindowScroll();
     }
@@ -438,8 +465,12 @@
 
     if (typeof ResizeObserver !== 'undefined') {
       try {
-        var ro = new ResizeObserver(updateMobileMainOffset);
+        var ro = new ResizeObserver(sync);
         ro.observe(wrap);
+        var tickerTrack = wrap.querySelector('.rs-ticker__track');
+        if (tickerTrack) {
+          ro.observe(tickerTrack);
+        }
       } catch (e) {}
     }
   })();
