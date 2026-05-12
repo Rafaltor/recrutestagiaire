@@ -89,13 +89,18 @@
           <path d="M15.2 15.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
         </svg>
       </span>
+      {%- assign search_ph = section.settings.search_placeholder | strip -%}
       <input
         type="search"
         name="q"
         value="{{ search.terms | escape }}"
-        placeholder="{{ section.settings.search_placeholder | escape }}"
-        autocomplete="off"
-        aria-label="{{ section.settings.search_placeholder | escape }}">
+        {% if search_ph != blank %}
+          placeholder="{{ search_ph | escape }}"
+          aria-label="{{ search_ph | escape }}"
+        {% else %}
+          aria-label="Rechercher"
+        {% endif %}
+        autocomplete="off">
       <a class="rs-hero-video__search-btn" href="{{ search_action }}">
         <span class="rs-btn-full">Voir les offres</span><span class="rs-btn-short" aria-hidden="true">→</span>
       </a>
@@ -348,7 +353,7 @@
       "type": "text",
       "id": "search_placeholder",
       "label": "Placeholder recherche",
-      "default": "Cherche un poste..."
+      "default": ""
     },
     {
       "type": "text",

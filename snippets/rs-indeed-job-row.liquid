@@ -3,7 +3,7 @@
 {%- endcomment -%}
 {%- assign cv = product.selected_or_first_available_variant -%}
 {%- assign coll = collection | default: collections.all -%}
-{%- assign role_line = product.type | default: 'Stagiaire' -%}
+{%- assign role_line = product.type | strip -%}
 {%- assign mtxt = product.metafields.custom.missions | metafield_text | default: '' | strip -%}
 {%- if mtxt == blank -%}
   {%- assign mtxt = product.description | strip_html | truncate: 200 -%}
@@ -39,7 +39,9 @@
     <a href="{{ product.url }}" class="text-decoration-none text-reset">
       <h2 class="rs-ind-job-row__title">{{ product.title | escape }}</h2>
     </a>
-    <p class="rs-ind-job-row__role">{{ role_line | escape }}</p>
+    {%- if role_line != blank and role_line != 'Stagiaire' and role_line != 'stagiaire' -%}
+      <p class="rs-ind-job-row__role">{{ role_line | escape }}</p>
+    {%- endif -%}
     <p class="rs-ind-job-row__company">Recrute Stagiaire · Paris, France</p>
     <div class="rs-ind-job-row__tags">
       {%- if coll != blank and coll.title != blank -%}
@@ -73,7 +75,7 @@
     </div>
   </div>
   <div class="rs-ind-job-row__side">
-    <div class="rs-ind-job-row__salary">Salaire : {{ cv.price | money }}</div>
+    <div class="rs-ind-job-row__salary">Salaire : {% render 'rs-money-fr', amount: cv.price %}</div>
     <div class="rs-ind-job-row__avail {{ avail_class }}">{{ avail_label }}</div>
     <a class="rs-btn--primary rs-ind-job-row__cta text-decoration-none" href="{{ product.url }}">Postuler →</a>
   </div>
