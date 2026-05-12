@@ -123,10 +123,7 @@
             {%- endif -%}
           </a>
           <a class="rs-header-mobile-bar__title" href="{{ routes.root_url }}">
-            <span class="rs-header-mobile-bar__title-line">{{ rs_brand_line_one | escape }}</span>
-            {%- if rs_brand_line_two != blank -%}
-              <span class="rs-header-mobile-bar__title-line">{{ rs_brand_line_two | escape }}</span>
-            {%- endif -%}
+            {{ rs_brand_line_one | escape }}{%- if rs_brand_line_two != blank -%}<br class="rs-brand-title-break" aria-hidden="true"> {{ rs_brand_line_two | escape }}{%- endif -%}
           </a>
           <button
             type="button"
@@ -167,10 +164,7 @@
                 {%- if section.settings.show_site_name -%}
                   <span class="rs-ph-brandlink-title-hit">
                     <span class="rs-nav-brand__name logo rs-nav-brand__name--headline rs-ph-brandlink-title">
-                      <span class="rs-ph-brandlink-title-line">{{ rs_brand_line_one | escape }}</span>
-                      {%- if rs_brand_line_two != blank -%}
-                        <span class="rs-ph-brandlink-title-line">{{ rs_brand_line_two | escape }}</span>
-                      {%- endif -%}
+                      {{ rs_brand_line_one | escape }}{%- if rs_brand_line_two != blank -%}<br class="rs-brand-title-break" aria-hidden="true"> {{ rs_brand_line_two | escape }}{%- endif -%}
                     </span>
                   </span>
                 {%- else -%}
