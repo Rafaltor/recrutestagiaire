@@ -73,6 +73,11 @@ body.rs-portal-header .rs-ticker__sep {
   font-weight: 600;
 }
 
+body.rs-portal-header .rs-ticker__heart {
+  color: #ef4444;
+  font-weight: 700;
+}
+
 /* En-tête fixe en haut de l’écran (scroll / swipe) */
 body.rs-portal-header .header-wrap.rs-header {
   position: fixed;

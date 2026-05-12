@@ -46,8 +46,15 @@
   if brand_logo_max > 200
     assign brand_logo_max = 200
   endif
+
+  assign rs_boutique_url = '/collections/mes-basiques-damour'
+  if collections['mes-basiques-damour'] != blank
+    assign rs_boutique_url = collections['mes-basiques-damour'].url
+  elsif collections['les-stagiaires-de-base'] != blank
+    assign rs_boutique_url = collections['les-stagiaires-de-base'].url
+  endif
 %}
-{%- capture rs_ticker_phrases -%}<span class="rs-ticker__phrase rs-ticker__phrase--a">CANDIDATURE OUVERTE</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--b">DÉPOSE TON CV</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--a">SWIPE LES PROFILS</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--b">REJOINS LE COLLECTIF</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--a">LES MEILLEURS FINISSENT SUR LE PACKAGING</span><span class="rs-ticker__sep">✦</span>{%- endcapture -%}
+{%- capture rs_ticker_phrases -%}<span class="rs-ticker__phrase rs-ticker__phrase--a">I <span class="rs-ticker__heart" aria-hidden="true">❤</span> STAGIAIRE</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--b">MES BASIQUES D'AMOUR</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--a">I <span class="rs-ticker__heart" aria-hidden="true">❤</span> STAGIAIRE</span><span class="rs-ticker__sep">✦</span><span class="rs-ticker__phrase rs-ticker__phrase--b">MES BASIQUES D'AMOUR</span><span class="rs-ticker__sep">✦</span>{%- endcapture -%}
 <div
   class="header-wrap rs-header{% if section.settings.banner_image != blank %} rs-header--banner{% endif %}"
   {% if section.settings.banner_image != blank %}
@@ -157,7 +164,7 @@
             </div>
 
             <nav class="rs-ph-navdesk" aria-label="Navigation principale">
-              <a href="{{ routes.root_url }}">Boutique</a>
+              <a href="{{ rs_boutique_url }}">Boutique</a>
               <a href="{{ c1 }}" rel="noopener noreferrer">{{ nav_portail_lbl | escape }}</a>
               <a href="{{ c3 }}" rel="noopener noreferrer">{{ nav_vote_lbl | escape }}</a>
               <a href="{{ k1 }}">Le collectif</a>
@@ -212,7 +219,7 @@
       <nav class="rs-header-drawer__nav" aria-label="Navigation principale">
         <div class="rs-header-drawer__section">
           <div class="rs-header-drawer__sublinks">
-            <a href="{{ routes.root_url }}">Boutique</a>
+            <a href="{{ rs_boutique_url }}">Boutique</a>
             <a href="{{ c1 }}" rel="noopener noreferrer">{{ nav_portail_lbl | escape }}</a>
             <a href="{{ c3 }}" rel="noopener noreferrer">{{ nav_vote_lbl | escape }}</a>
             <a href="{{ k1 }}">Le collectif</a>
