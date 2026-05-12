@@ -123,12 +123,12 @@
         <div class="rs-header-main-row rs-header-main-row--desktop">
           <div class="rs-header-top-line">
             <div class="rs-banner-top rs-header-pole-brand rs-header-pole-title">
-              <div class="nav-brand rs-nav-brand rs-nav-brand--title-row rs-ph-brandlink">
+              <a
+                class="nav-brand rs-nav-brand rs-nav-brand--title-row rs-ph-brandlink text-decoration-none"
+                href="{{ routes.root_url }}"
+                aria-label="{{ shop.name | escape }} — Accueil">
                 {%- if brand_image != blank -%}
-                  <a
-                    class="rs-ph-brandlink-logo-hit"
-                    href="{{ routes.root_url }}"
-                    aria-label="{{ shop.name | escape }} — Accueil">
+                  <span class="rs-ph-brandlink-logo-hit">
                     <img
                       class="rs-ph-brandlink-logo"
                       src="{% if brand_image_is_asset %}{{ brand_image | asset_url }}{% else %}{{ brand_image | image_url: width: 560 }}{% endif %}"
@@ -138,13 +138,10 @@
                       style="max-height: {{ brand_logo_max }}px; width: auto;"
                       loading="eager"
                       decoding="async">
-                  </a>
+                  </span>
                 {%- endif -%}
                 {%- if section.settings.show_site_name -%}
-                  <a
-                    class="rs-ph-brandlink-title-hit text-decoration-none"
-                    href="{{ routes.root_url }}"
-                    aria-label="{{ shop.name | escape }} — Accueil">
+                  <span class="rs-ph-brandlink-title-hit">
                     <span class="rs-nav-brand__name logo rs-nav-brand__name--headline rs-ph-brandlink-title">
                       {%- if section.settings.site_title != blank -%}
                         {{ section.settings.site_title | upcase }}
@@ -152,11 +149,11 @@
                         {{ shop.name | upcase }}
                       {%- endif -%}
                     </span>
-                  </a>
+                  </span>
                 {%- else -%}
                   <span class="visually-hidden">{{ shop.name | escape }}</span>
                 {%- endif -%}
-              </div>
+              </a>
             </div>
 
             <nav class="rs-ph-navdesk" aria-label="Navigation principale">
@@ -171,7 +168,7 @@
                 Déposer mon CV
               </a>
               <a href="{{ routes.cart_url }}" class="rs-header-ghost-link abt-btn rs-caf-btn-dossier rs-banner-top__cart d-inline-flex align-items-center gap-2 text-decoration-none text-nowrap" aria-label="{{ cart_lbl | escape }}">
-                {% render 'icon-folder-dossier', w: 16, h: 16 %}
+                {% render 'icon-cart', w: 16, h: 16 %}
                 <span class="rs-caf-btn-dossier__label">
                   <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--full">{{ cart_lbl }}</span>
                   <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--short" aria-hidden="true">Dossier</span>
@@ -232,7 +229,7 @@
             href="{{ routes.cart_url }}"
             class="rs-header-ghost-link abt-btn rs-caf-btn-dossier rs-banner-top__cart rs-header-drawer__caf-btn d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none text-nowrap"
             aria-label="{{ cart_lbl | escape }}">
-            {% render 'icon-folder-dossier', w: 16, h: 16 %}
+            {% render 'icon-cart', w: 16, h: 16 %}
             <span class="rs-caf-btn-dossier__label">
               <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--full">{{ cart_lbl }}</span>
               <span class="rs-caf-btn-dossier__text rs-caf-btn-dossier__text--short" aria-hidden="true">Dossier</span>

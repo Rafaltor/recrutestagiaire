@@ -141,6 +141,10 @@
     {%- assign rs_avail_meta = 'Indisponible' -%}
   {%- endif -%}
 {%- endif -%}
+{%- assign rs_avail_meta_norm = rs_avail_meta | strip | downcase -%}
+{%- if rs_avail_meta_norm == 'tbd' -%}
+  {%- assign rs_avail_meta = 'Immédiate' -%}
+{%- endif -%}
 {%- assign rs_contract_meta = rs_contract -%}
 {%- if rs_contract_meta == blank -%}
   {%- assign rs_contract_meta = '—' -%}
@@ -173,7 +177,7 @@
         {%- assign rs_tag_pill_n = 0 -%}
         {% for tag in product.tags %}
           {% assign tag_h = tag | handle %}
-          {% unless tag_h == 'edition-limitee' or tag_h == 'edition-limited' %}
+          {% unless tag_h == 'edition-limitee' or tag_h == 'edition-limited' or tag_h == 'stagiaire' %}
             {% if rs_tag_pill_n < 8 %}
               <span class="rs-pro-mock__tag">{{ tag }}</span>
               {% assign rs_tag_pill_n = rs_tag_pill_n | plus: 1 %}
@@ -280,7 +284,12 @@
       {% if product.description != blank %}
         <div class="rs-pro-mock__section">
           <div class="rs-pro-mock__section-title">{{ section.settings.description_title | default: 'Description du poste' }}</div>
-          <div class="rs-pro-mock__mf-body rs-pro-mock__mf-body--desc">{{ product.description }}</div>
+          {%- capture _rs_desc_html -%}{{ product.description }}{%- endcapture -%}
+          <div class="rs-pro-mock__mf-body rs-pro-mock__mf-body--desc">
+            {{ _rs_desc_html
+              | replace: 'Fabriqué en France, pensé pour durer', ''
+              | replace: 'Fabriqué en France, pense pour durer', '' }}
+          </div>
         </div>
       {% endif %}
 
@@ -306,23 +315,10 @@
 
               <div class="rs-pro-mock__price-block">
                 <div class="rs-pro-mock__price-label">{{ section.settings.price_label | default: 'Rémunération du poste' }}</div>
-                <div class="rs-pro-mock__price" id="rs-pro-price">{{ cv.price | money }}</div>
+                <div class="rs-pro-mock__price" id="rs-pro-price">{% render 'rs-money-fr', amount: cv.price %}</div>
                 {% if section.settings.free_shipping_text != blank %}
                   <div class="rs-pro-mock__price-sub">{{ section.settings.free_shipping_text }}</div>
                 {% endif %}
-              </div>
-
-              <div class="rs-pro-mock__ind-divider" aria-hidden="true"></div>
-
-              <div class="rs-pro-mock__info-stack">
-                <div>
-                  <div class="rs-pro-mock__info-line-label">AVANTAGES EN NATURE</div>
-                  <div class="rs-pro-mock__info-line-value">{{ rs_matiere | escape }}</div>
-                </div>
-                <div>
-                  <div class="rs-pro-mock__info-line-label">LIEU DE TRAVAIL</div>
-                  <div class="rs-pro-mock__info-line-value">{{ rs_loc | escape }} — Expédition nationale</div>
-                </div>
               </div>
 
               <div class="rs-pro-mock__ind-divider" aria-hidden="true"></div>
@@ -340,11 +336,12 @@
                   {% endif %}
                   <div class="rs-pro-mock__size-grid" role="group" aria-label="{{ product.options.first | escape }}">
                     {% for variant in product.variants %}
+                      {%- capture _variant_money -%}{% render 'rs-money-fr', amount: variant.price %}{%- endcapture -%}
                       <button
                         type="button"
                         class="rs-pro-mock__size-btn variant-select{% if variant == cv %} active{% endif %}{% unless variant.available %} unavail{% endunless %}"
                         data-id="{{ variant.id }}"
-                        data-money="{{ variant.price | money }}"
+                        data-money="{{ _variant_money | strip }}"
                         aria-pressed="{% if variant == cv %}true{% else %}false{% endif %}"
                         {% unless variant.available %}disabled{% endunless %}>
                         {%- if product.options.size == 1 -%}
@@ -378,32 +375,44 @@
               {% if rs_has_re %}
                 <div class="rs-pro-mock__delivery-info">
                   {% if rs_d1 != blank %}
-                    <div class="rs-pro-mock__delivery-row">
-                      <span class="rs-pro-mock__dot"></span>
-                      <span>{{ rs_d1 }}</span>
-                    </div>
+                    {%- assign _rs_d1_l = rs_d1 | downcase -%}
+                    {% unless _rs_d1_l contains 'fabriqu' and _rs_d1_l contains 'france' %}
+                      <div class="rs-pro-mock__delivery-row">
+                        <span class="rs-pro-mock__dot"></span>
+                        <span>{{ rs_d1 }}</span>
+                      </div>
+                    {% endunless %}
                   {% endif %}
                   {% if rs_d2 != blank %}
-                    <div class="rs-pro-mock__delivery-row">
-                      <span class="rs-pro-mock__dot"></span>
-                      <span>{{ rs_d2 }}</span>
-                    </div>
+                    {%- assign _rs_d2_l = rs_d2 | downcase -%}
+                    {% unless _rs_d2_l contains 'fabriqu' and _rs_d2_l contains 'france' %}
+                      <div class="rs-pro-mock__delivery-row">
+                        <span class="rs-pro-mock__dot"></span>
+                        <span>{{ rs_d2 }}</span>
+                      </div>
+                    {% endunless %}
                   {% endif %}
                   {% if rs_d3 != blank %}
-                    <div class="rs-pro-mock__delivery-row">
-                      <span class="rs-pro-mock__dot"></span>
-                      <span>{{ rs_d3 }}</span>
-                    </div>
+                    {%- assign _rs_d3_l = rs_d3 | downcase -%}
+                    {% unless _rs_d3_l contains 'fabriqu' and _rs_d3_l contains 'france' %}
+                      <div class="rs-pro-mock__delivery-row">
+                        <span class="rs-pro-mock__dot"></span>
+                        <span>{{ rs_d3 }}</span>
+                      </div>
+                    {% endunless %}
                   {% endif %}
                   {% if rs_reassurance_block != blank %}
                     {% assign _re_lines = rs_reassurance_block | newline_to_br | split: '<br />' %}
                     {% for _re_piece in _re_lines %}
                       {% assign _re_piece = _re_piece | strip %}
+                      {%- assign _re_piece_l = _re_piece | downcase -%}
                       {% if _re_piece != blank %}
-                        <div class="rs-pro-mock__delivery-row">
-                          <span class="rs-pro-mock__dot"></span>
-                          <span>{{ _re_piece }}</span>
-                        </div>
+                        {% unless _re_piece_l contains 'fabriqu' and _re_piece_l contains 'france' %}
+                          <div class="rs-pro-mock__delivery-row">
+                            <span class="rs-pro-mock__dot"></span>
+                            <span>{{ _re_piece }}</span>
+                          </div>
+                        {% endunless %}
                       {% endif %}
                     {% endfor %}
                   {% endif %}

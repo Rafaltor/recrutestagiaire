@@ -1,0 +1,5 @@
+{%- comment -%}
+  Montant EUR : symbole après le montant (ex. 60,00 €).
+  Paramètre : amount (prix en centimes).
+{%- endcomment -%}
+{{- amount | money_without_currency | strip -}}&nbsp;€
