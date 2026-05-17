@@ -92,11 +92,14 @@
                       {% if form.errors contains 'email' %}
                         aria-invalid="true"
                       {% endif %}>
-                    <button type="submit" class="rs-hero-video__search-btn">
-                      <span class="rs-btn-full">{{ section.settings.submit_label | default: 'REJOINDRE' | escape }}</span>
-                      <span class="rs-btn-short" aria-hidden="true">→</span>
+                    <button
+                      type="submit"
+                      class="rs-hero-video__search-btn rs-landing-search-btn--arrow"
+                      aria-label="{{ section.settings.submit_label | default: 'REJOINDRE' | escape }}">
+                      <span aria-hidden="true">→</span>
                     </button>
                   </div>
+                  <p class="rs-landing-drop-tagline">DROP1- I LOVE STAGIAIRE</p>
                 {%- endif -%}
               {%- endform -%}
             </div>
@@ -512,18 +515,33 @@
       0 0 0 1px rgba(0, 0, 0, 0.08);
   }
 
+  .rs-landing-overlay__waitlist .rs-landing-search-btn--arrow {
+    min-width: 44px;
+    padding: 12px 16px !important;
+    font-size: 20px !important;
+    line-height: 1;
+  }
+
   .rs-landing-overlay__waitlist .rs-hero-video__search-btn:hover,
   .rs-landing-overlay__waitlist .rs-hero-video__search-btn:focus-visible {
     background: var(--rs-color-brand-hover, #db2777) !important;
     color: #fff !important;
   }
 
-  .rs-landing-overlay__waitlist .rs-btn-full {
-    display: inline !important;
-  }
-
-  .rs-landing-overlay__waitlist .rs-btn-short {
-    display: none !important;
+  .rs-landing-drop-tagline {
+    margin: 14px 0 0;
+    padding: 0;
+    font-family: var(--font-display), var(--rs-font-display), 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(13px, 3.8vw, 17px);
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+    text-shadow:
+      0 0 14px rgba(0, 0, 0, 0.45),
+      0 1px 3px rgba(0, 0, 0, 0.4);
   }
 
   .rs-landing-overlay__form-inner {
