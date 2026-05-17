@@ -1,7 +1,10 @@
 {%- liquid
   assign bg = section.settings.background_image
   assign portal_url = section.settings.portal_url | default: 'https://portail.recrutestagiaire.eu'
-  assign lookbook_url = section.settings.lookbook_url | default: 'https://recrutestagiaire.myportfolio.com/abcdrs'
+  assign lookbook_url = section.settings.lookbook_url
+  if lookbook_url == blank
+    assign lookbook_url = 'https://recrutestagiaire.myportfolio.com/abcdrs'
+  endif
   assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
 -%}
 
@@ -516,9 +519,9 @@
   }
 
   .rs-landing-overlay__waitlist .rs-landing-search-btn--arrow {
-    min-width: 44px;
-    padding: 12px 16px !important;
-    font-size: 20px !important;
+    min-width: 40px;
+    padding: 12px 14px !important;
+    font-size: 15px !important;
     line-height: 1;
   }
 
