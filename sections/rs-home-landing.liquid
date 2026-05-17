@@ -5,8 +5,6 @@
   assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
 -%}
 
-{{ 'rs-hero-video.css' | asset_url | stylesheet_tag }}
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
@@ -39,34 +37,12 @@
   {%- endif -%}
 
   <div class="rs-landing-overlay">
-    {%- if settings.logo != blank -%}
-      {{
-        settings.logo
-        | image_url: width: 160
-        | image_tag:
-          class: 'rs-landing-overlay__logo',
-          alt: shop.name,
-          width: 80,
-          height: 80,
-          loading: 'eager'
-      }}
-    {%- else -%}
-      <img
-        class="rs-landing-overlay__logo"
-        src="{{ 'rs-logo-eu.png' | asset_url }}"
-        alt="{{ shop.name | escape }}"
-        width="80"
-        height="80"
-        loading="eager"
-        decoding="async">
-    {%- endif -%}
-
     <div class="rs-landing-overlay__form">
-      <div class="rs-hero-video__content rs-landing-overlay__waitlist">
+      <div class="rs-landing-waitlist">
         {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-landing-overlay__form-inner' -%}
           <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
           {%- if form.posted_successfully? -%}
-            <p class="rs-hero-video__subtitle rs-landing-overlay__success" role="status">
+            <p class="rs-landing-overlay__success" role="status">
               {{ section.settings.success_message | default: 'Tu es sur la liste.' | escape }}
             </p>
           {%- else -%}
@@ -74,22 +50,16 @@
               <p class="rs-landing-overlay__error" role="alert">{{ form.errors | default_errors }}</p>
             {%- endif -%}
 
-            <div class="rs-hero-video__badge">
-              <span class="rs-hero-video__badge-dot"></span>
+            <div class="rs-landing-waitlist__badge">
+              <span class="rs-landing-waitlist__badge-dot" aria-hidden="true"></span>
               <span>{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</span>
             </div>
 
-            <div class="rs-hero-video__search">
-              <span class="rs-hero-video__search-icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <circle cx="10.5" cy="10.5" r="6.25" stroke="currentColor" stroke-width="2" fill="none"/>
-                  <path d="M15.2 15.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
-                </svg>
-              </span>
+            <div class="rs-landing-email-field">
               <label class="visually-hidden" for="rs-waitlist-email">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</label>
               <input
                 id="rs-waitlist-email"
-                class="rs-hero-video__search-input"
+                class="rs-landing-email-input"
                 type="email"
                 name="contact[email]"
                 value="{{ form.email }}"
@@ -99,10 +69,7 @@
                 {% if form.errors contains 'email' %}
                   aria-invalid="true"
                 {% endif %}>
-              <button type="submit" class="rs-hero-video__search-btn">
-                <span class="rs-btn-full">{{ section.settings.submit_label | default: 'REJOINDRE' | escape }}</span>
-                <span class="rs-btn-short" aria-hidden="true">→</span>
-              </button>
+              <button type="submit" class="rs-landing-email-submit">REJOINDRE</button>
             </div>
           {%- endif -%}
         {%- endform -%}
@@ -110,12 +77,8 @@
     </div>
 
     <div class="rs-landing-overlay__ctas">
-      <a class="rs-landing-overlay__cta" href="{{ portal_url }}" rel="noopener noreferrer">
-        {{ section.settings.portal_label | default: 'LE PORTAIL →' | escape }}
-      </a>
-      <a class="rs-landing-overlay__cta" href="{{ lookbook_url }}">
-        {{ section.settings.lookbook_label | default: 'LOOKBOOK ABCDRS →' | escape }}
-      </a>
+      <a class="rs-landing-overlay__cta" href="{{ portal_url }}" rel="noopener noreferrer">LE PORTAIL →</a>
+      <a class="rs-landing-overlay__cta" href="{{ lookbook_url }}">LOOKBOOK ABCDRS →</a>
     </div>
   </div>
 </section>
@@ -275,29 +238,42 @@
     }
   }
 
-  /* Wallpaper draggable — spec jeu vidéo */
   .rs-landing-bg {
     position: fixed;
     top: 0;
     left: 0;
-    width: 250%;
-    height: 100%;
+    width: 250vw;
+    height: 100vh;
     height: 100dvh;
     object-fit: cover;
-    cursor: grab;
     user-select: none;
     -webkit-user-select: none;
     -webkit-user-drag: none;
     will-change: transform;
     transform: translateX(0px);
     z-index: 0;
+    pointer-events: none;
   }
 
-  .rs-landing-bg.dragging {
+  body.rs-home-landing-active {
+    cursor: grab;
+  }
+
+  body.rs-home-landing-active.rs-home-landing-dragging {
     cursor: grabbing;
+    overflow: hidden;
+    touch-action: none;
   }
 
-  /* Contenu fixe à l'écran — ne suit pas le wallpaper */
+  body.rs-home-landing-active a,
+  body.rs-home-landing-active button,
+  body.rs-home-landing-active input,
+  body.rs-home-landing-active textarea,
+  body.rs-home-landing-active select,
+  body.rs-home-landing-active label {
+    cursor: auto;
+  }
+
   .rs-landing-overlay {
     position: fixed;
     inset: 0;
@@ -305,18 +281,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: calc(var(--rs-portal-header-h, 72px) + 16px) 20px calc(24px + env(safe-area-inset-bottom, 0px));
     pointer-events: none;
     box-sizing: border-box;
-  }
-
-  .rs-landing-overlay__logo {
-    height: 80px;
-    width: auto;
-    object-fit: contain;
-    pointer-events: auto;
-    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.35));
   }
 
   .rs-landing-overlay__form {
@@ -329,43 +297,95 @@
     pointer-events: none;
   }
 
-  .rs-landing-overlay__waitlist.rs-hero-video__content {
-    position: relative;
+  .rs-landing-waitlist {
     width: 100%;
-    max-width: 100%;
-    padding: 0;
-    margin: 0;
-    transform: none;
     text-align: center;
     pointer-events: auto;
   }
 
-  .rs-landing-overlay__waitlist .rs-hero-video__badge {
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 12px;
+  .rs-landing-waitlist__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px 8px 10px;
+    margin: 0 auto 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #fff;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
-  .rs-landing-overlay__waitlist .rs-hero-video__search {
-    margin-bottom: 0;
+  .rs-landing-waitlist__badge-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #f472b6;
+    flex-shrink: 0;
+  }
+
+  .rs-landing-email-field {
+    display: flex;
+    align-items: stretch;
     width: 100%;
-    max-width: 100%;
+    min-height: 48px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    overflow: hidden;
+    box-sizing: border-box;
   }
 
-  .rs-landing-overlay__waitlist .rs-hero-video__search input[type='email'],
-  .rs-landing-overlay__waitlist .rs-hero-video__search-input {
+  .rs-landing-email-input {
     flex: 1 1 auto;
     min-width: 0;
-    height: 100%;
+    margin: 0;
+    padding: 12px 8px 12px 16px;
     border: 0;
     background: transparent;
+    color: #fff;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     font-size: 15px;
-    color: var(--rs-color-ink);
+    line-height: 1.2;
     outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
   }
 
-  .rs-landing-overlay__waitlist .rs-hero-video__search input[type='email']::placeholder {
-    color: var(--rs-color-muted);
+  .rs-landing-email-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    opacity: 1;
+  }
+
+  .rs-landing-email-submit {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0 16px;
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    background: #fff;
+    color: #0a0a0a;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+
+  .rs-landing-email-submit:hover {
+    opacity: 0.92;
   }
 
   .rs-landing-overlay__form-inner {
@@ -376,6 +396,8 @@
   .rs-landing-overlay__success {
     margin: 0;
     color: #fff;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-size: 15px;
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
   }
 
@@ -395,9 +417,10 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    width: 100%;
-    max-width: 360px;
+    width: auto;
+    max-width: none;
     pointer-events: none;
+    flex-shrink: 0;
   }
 
   @media (min-width: 768px) {
@@ -412,8 +435,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 28px;
-    border-radius: 999px;
+    width: auto;
+    padding: 12px 24px;
+    border-radius: 6px;
     border: none;
     background: #f472b6;
     color: #fff;
@@ -433,11 +457,6 @@
     color: #fff;
     opacity: 0.95;
   }
-
-  body.rs-home-landing-active.rs-home-landing-dragging {
-    overflow: hidden;
-    touch-action: none;
-  }
 </style>
 
 <script>
@@ -455,7 +474,6 @@
     var isDragging = false;
     var startX = 0;
     var currentX = 0;
-    var lastX = 0;
 
     function getMaxDrag() {
       return -(bg.offsetWidth - window.innerWidth);
@@ -486,10 +504,14 @@
       mobileTitle.textContent = heading;
     }
 
+    function isInteractive(target) {
+      if (!target) return false;
+      return !!target.closest('input, button, a, textarea, select, label');
+    }
+
     function onDragStart(clientX) {
       isDragging = true;
       startX = clientX - currentX;
-      bg.classList.add('dragging');
       document.body.classList.add('rs-home-landing-dragging');
     }
 
@@ -498,26 +520,17 @@
       var newX = clientX - startX;
       newX = clampX(newX);
       currentX = newX;
-      lastX = newX;
       applyTransform();
     }
 
     function onDragEnd() {
       if (!isDragging) return;
       isDragging = false;
-      lastX = currentX;
-      bg.classList.remove('dragging');
       document.body.classList.remove('rs-home-landing-dragging');
     }
 
-    function isOverlayInteractive(target) {
-      if (!target) return false;
-      return !!target.closest('.rs-landing-overlay a, .rs-landing-overlay button, .rs-landing-overlay input, .rs-landing-overlay label, .rs-landing-overlay textarea, .rs-landing-overlay select');
-    }
-
-    /* Desktop */
-    bg.addEventListener('mousedown', function (e) {
-      if (isOverlayInteractive(e.target)) return;
+    window.addEventListener('mousedown', function (e) {
+      if (isInteractive(e.target)) return;
       e.preventDefault();
       onDragStart(e.clientX);
     });
@@ -532,11 +545,10 @@
       onDragEnd();
     });
 
-    /* Mobile */
-    bg.addEventListener(
+    window.addEventListener(
       'touchstart',
       function (e) {
-        if (isOverlayInteractive(e.target)) return;
+        if (isInteractive(e.target)) return;
         if (!e.touches || !e.touches.length) return;
         onDragStart(e.touches[0].clientX);
       },
