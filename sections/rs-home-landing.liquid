@@ -102,6 +102,23 @@
     min-height: 100dvh;
   }
 
+  @media (max-width: 767.98px) {
+    html.rs-home-landing-active,
+    body.rs-home-landing-active {
+      overflow: hidden !important;
+      height: 100% !important;
+      width: 100% !important;
+      position: fixed !important;
+      inset: 0 !important;
+      overscroll-behavior: none !important;
+      touch-action: none;
+    }
+
+    body.rs-home-landing-active.rs-home-landing-panning {
+      touch-action: none;
+    }
+  }
+
   body.rs-home-landing-active .rs-site-footer,
   body.rs-home-landing-active footer.footer {
     display: none !important;
@@ -304,6 +321,19 @@
     margin: 0;
     transform: none;
     text-align: center;
+    pointer-events: none;
+  }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__search {
+    pointer-events: none;
+  }
+
+  .rs-landing-overlay__waitlist input,
+  .rs-landing-overlay__waitlist button,
+  .rs-landing-overlay__waitlist label,
+  .rs-landing-overlay__waitlist a,
+  .rs-landing-overlay__waitlist textarea,
+  .rs-landing-overlay__waitlist select {
     pointer-events: auto;
   }
 
@@ -414,24 +444,44 @@
     var bg = section.querySelector('.rs-landing-bg');
     if (!bg) return;
 
+    document.documentElement.classList.add('rs-home-landing-active');
     document.body.classList.add('rs-home-landing-active');
 
     var heading = section.getAttribute('data-rs-heading') || 'RECRUTE STAGIAIRE';
 
-    var touchStartX = 0;
+    var isPanning = false;
+    var panOriginX = 0;
     var touchCurrentX = 0;
 
+    function isMobile() {
+      return window.innerWidth < 768;
+    }
+
     function getMaxDrag() {
-      if (window.innerWidth >= 768) return 0;
+      if (!isMobile()) return 0;
       return -(bg.offsetWidth - window.innerWidth);
     }
 
+    function applyWallpaperX(x) {
+      touchCurrentX = x;
+      bg.style.transform = 'translateX(' + x + 'px)';
+    }
+
     function resetDesktopBg() {
-      if (window.innerWidth >= 768) {
+      if (!isMobile()) {
+        isPanning = false;
         touchCurrentX = 0;
-        touchStartX = 0;
+        panOriginX = 0;
+        document.body.classList.remove('rs-home-landing-panning');
         bg.style.transform = 'translateX(0px)';
       }
+    }
+
+    function isInteractive(target) {
+      if (!target) return false;
+      return !!target.closest(
+        'a, button, input, textarea, select, label, [contenteditable="true"]'
+      );
     }
 
     function setupHeaderTitle() {
@@ -450,34 +500,53 @@
       mobileTitle.textContent = heading;
     }
 
-    document.addEventListener('touchstart', function(e) {
-      var target = e.target;
-      if (target.closest('a, button, input, label')) return;
-      touchStartX = e.touches[0].clientX - touchCurrentX;
-    }, { passive: true });
+    document.addEventListener(
+      'touchstart',
+      function (e) {
+        if (!isMobile()) return;
+        if (!e.touches || e.touches.length !== 1) return;
+        if (isInteractive(e.target)) return;
 
-    document.addEventListener('touchmove', function(e) {
-      var target = e.target;
-      if (target.closest('a, button, input, label')) return;
-      var newX = e.touches[0].clientX - touchStartX;
-      var max = getMaxDrag();
-      newX = Math.min(0, Math.max(max, newX));
-      touchCurrentX = newX;
-      bg.style.transform = 'translateX(' + newX + 'px)';
-    }, { passive: false });
+        isPanning = true;
+        panOriginX = e.touches[0].clientX - touchCurrentX;
+        document.body.classList.add('rs-home-landing-panning');
+      },
+      { passive: true, capture: true }
+    );
 
-    document.addEventListener('touchend', function() {
-      touchStartX = touchCurrentX;
-    }, { passive: true });
+    document.addEventListener(
+      'touchmove',
+      function (e) {
+        if (!isMobile() || !isPanning) return;
+        if (!e.touches || e.touches.length !== 1) return;
+
+        e.preventDefault();
+
+        var newX = e.touches[0].clientX - panOriginX;
+        var max = getMaxDrag();
+        newX = Math.min(0, Math.max(max, newX));
+        applyWallpaperX(newX);
+      },
+      { passive: false, capture: true }
+    );
+
+    function endPan() {
+      if (!isPanning) return;
+      isPanning = false;
+      panOriginX = touchCurrentX;
+      document.body.classList.remove('rs-home-landing-panning');
+    }
+
+    document.addEventListener('touchend', endPan, { passive: true, capture: true });
+    document.addEventListener('touchcancel', endPan, { passive: true, capture: true });
 
     window.addEventListener('resize', function () {
-      if (window.innerWidth >= 768) {
+      if (!isMobile()) {
         resetDesktopBg();
         return;
       }
       var max = getMaxDrag();
-      touchCurrentX = Math.min(0, Math.max(max, touchCurrentX));
-      bg.style.transform = 'translateX(' + touchCurrentX + 'px)';
+      applyWallpaperX(Math.min(0, Math.max(max, touchCurrentX)));
     });
 
     setupHeaderTitle();
@@ -485,13 +554,12 @@
     resetDesktopBg();
 
     bg.addEventListener('load', function () {
-      if (window.innerWidth >= 768) {
+      if (!isMobile()) {
         resetDesktopBg();
         return;
       }
       var max = getMaxDrag();
-      touchCurrentX = Math.min(0, Math.max(max, touchCurrentX));
-      bg.style.transform = 'translateX(' + touchCurrentX + 'px)';
+      applyWallpaperX(Math.min(0, Math.max(max, touchCurrentX)));
     });
 
     document.addEventListener('shopify:section:load', function (ev) {
