@@ -70,6 +70,8 @@
           "show_site_name": true,
           "site_title": "",
           "boutique_link": "shopify://collections/mes-basiques-damour",
+          "menu_grillz_label": "Grillz",
+          "menu_grillz_link": "shopify://pages/grillz",
           "nav_offres_label": "Offres",
           "menu_offres_1_label": "Lookbook collection ABCDRS",
           "menu_offres_1_link": "",

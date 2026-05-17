@@ -57,6 +57,12 @@
     endif
   endif
 
+  assign rs_grillz_url = section.settings.menu_grillz_link | default: '' | strip
+  if rs_grillz_url == blank
+    assign rs_grillz_url = '/pages/grillz'
+  endif
+  assign nav_grillz_lbl = section.settings.menu_grillz_label | default: 'Grillz' | strip
+
   if section.settings.site_title != blank
     assign rs_brand_title = section.settings.site_title
   else
@@ -175,6 +181,7 @@
 
             <nav class="rs-ph-navdesk" aria-label="Navigation principale">
               <a href="{{ rs_boutique_url }}">Boutique</a>
+              <a href="{{ rs_grillz_url }}">{{ nav_grillz_lbl | escape }}</a>
               <a href="{{ c1 }}" rel="noopener noreferrer">{{ nav_portail_lbl | escape }}</a>
               <a href="{{ c3 }}" rel="noopener noreferrer">{{ nav_vote_lbl | escape }}</a>
               <a href="{{ k1 }}">Le collectif</a>
@@ -230,6 +237,7 @@
         <div class="rs-header-drawer__section">
           <div class="rs-header-drawer__sublinks">
             <a href="{{ rs_boutique_url }}">Boutique</a>
+            <a href="{{ rs_grillz_url }}">{{ nav_grillz_lbl | escape }}</a>
             <a href="{{ c1 }}" rel="noopener noreferrer">{{ nav_portail_lbl | escape }}</a>
             <a href="{{ c3 }}" rel="noopener noreferrer">{{ nav_vote_lbl | escape }}</a>
             <a href="{{ k1 }}">Le collectif</a>
@@ -501,6 +509,8 @@
     { "type": "text", "id": "site_title", "label": "Titre personnalisé (optionnel)" },
     { "type": "header", "content": "Liens navigation (portail / pages)" },
     { "type": "url", "id": "boutique_link", "label": "Boutique — URL (collection en vente)", "info": "Vide = collection « mes-basiques-damour », puis « les-stagiaires-de-base »." },
+    { "type": "text", "id": "menu_grillz_label", "label": "Grillz — libellé", "default": "Grillz" },
+    { "type": "url", "id": "menu_grillz_link", "label": "Grillz — URL (vide = /pages/grillz)" },
     { "type": "text", "id": "menu_cand_1_label", "label": "Portail candidats — libellé", "default": "Portail candidats" },
     { "type": "url", "id": "menu_cand_1_link", "label": "Portail candidats — URL (vide = portail.recrutestagiaire.eu)" },
     { "type": "text", "id": "menu_cand_3_label", "label": "Lien vote / swipe — libellé", "default": "Voter" },

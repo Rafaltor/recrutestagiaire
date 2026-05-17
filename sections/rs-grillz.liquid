@@ -1,0 +1,749 @@
+{%- liquid
+  assign calendly_url = section.settings.calendly_url | default: 'https://calendly.com/bolvirg-recrutestagiaire/30min' | strip
+  assign boutique_url = section.settings.boutique_url | default: '' | strip
+  if boutique_url == blank
+    assign boutique_url = '/collections/mes-basiques-damour'
+    if collections['mes-basiques-damour'] != blank
+      assign boutique_url = collections['mes-basiques-damour'].url
+    elsif collections['les-stagiaires-de-base'] != blank
+      assign boutique_url = collections['les-stagiaires-de-base'].url
+    endif
+  endif
+-%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<div class="rs-grillz-page" id="rs-grillz-page" {{ section.shopify_attributes }}>
+  {%- comment -%} SECTION 1 — HERO {%- endcomment -%}
+  <section class="rs-grillz-hero" aria-labelledby="rs-grillz-hero-title">
+    <div class="rs-grillz-hero__inner">
+      <span class="rs-grillz-hero__badge">
+        {{ section.settings.hero_badge | default: 'FABRICATION MAISON — PARIS' | escape }}
+      </span>
+      <h1 class="rs-grillz-hero__title" id="rs-grillz-hero-title">
+        {{ section.settings.hero_title | default: 'GRILLZ' | escape }}
+      </h1>
+      <p class="rs-grillz-hero__subtitle">
+        {{ section.settings.hero_subtitle | default: 'Sur mesure. En argent ou en or. Fabriqués à Paris.' | escape }}
+      </p>
+    </div>
+  </section>
+
+  {%- comment -%} SECTION 2 — TARIFS {%- endcomment -%}
+  <section class="rs-grillz-section rs-grillz-offers" aria-labelledby="rs-grillz-offers-title">
+    <div class="rs-grillz-container">
+      <h2 class="rs-grillz-section__title" id="rs-grillz-offers-title">
+        {{ section.settings.offers_title | default: 'LES OFFRES' | escape }}
+      </h2>
+      <div class="rs-grillz-offers__grid">
+        <article class="rs-grillz-card">
+          <h3 class="rs-grillz-card__name">{{ section.settings.offer_1_name | default: 'DENT UNIQUE' | escape }}</h3>
+          <p class="rs-grillz-card__price">{{ section.settings.offer_1_price | default: '60 €' | escape }}</p>
+          <p class="rs-grillz-card__desc">
+            {{ section.settings.offer_1_desc | default: 'Une dent. Argent ou or. Pose à Paris ou kit postal.' | escape }}
+          </p>
+          <a href="#rs-grillz-calendly" class="rs-grillz-btn rs-grillz-card__btn">
+            {{ section.settings.cta_label | default: 'PRENDRE RDV' | escape }}
+          </a>
+        </article>
+
+        <article class="rs-grillz-card rs-grillz-card--popular">
+          <span class="rs-grillz-card__ribbon">
+            {{ section.settings.offer_2_badge | default: 'LE PLUS DEMANDÉ' | escape }}
+          </span>
+          <p class="rs-grillz-card__popular-label">★ {{ section.settings.offer_2_popular | default: 'POPULAIRE' | escape }}</p>
+          <h3 class="rs-grillz-card__name">{{ section.settings.offer_2_name | default: 'DENTIER DU BAS' | escape }}</h3>
+          <p class="rs-grillz-card__price">{{ section.settings.offer_2_price | default: '320 €' | escape }}</p>
+          <p class="rs-grillz-card__desc">
+            {{ section.settings.offer_2_desc | default: 'Les dents du bas. Argent ou or. Sur mesure.' | escape }}
+          </p>
+          <a href="#rs-grillz-calendly" class="rs-grillz-btn rs-grillz-card__btn">
+            {{ section.settings.cta_label | default: 'PRENDRE RDV' | escape }}
+          </a>
+        </article>
+
+        <article class="rs-grillz-card">
+          <h3 class="rs-grillz-card__name">{{ section.settings.offer_3_name | default: 'FULL GRILLZ' | escape }}</h3>
+          <p class="rs-grillz-card__price">{{ section.settings.offer_3_price | default: '640 €' | escape }}</p>
+          <p class="rs-grillz-card__desc">
+            {{ section.settings.offer_3_desc | default: 'Haut et bas. Le pack complet. Argent ou or.' | escape }}
+          </p>
+          <a href="#rs-grillz-calendly" class="rs-grillz-btn rs-grillz-card__btn">
+            {{ section.settings.cta_label | default: 'PRENDRE RDV' | escape }}
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} SECTION 3 — CUSTOM {%- endcomment -%}
+  <section class="rs-grillz-section rs-grillz-custom" aria-labelledby="rs-grillz-custom-title">
+    <div class="rs-grillz-container">
+      <div class="rs-grillz-custom__box">
+        <h2 class="rs-grillz-custom__title" id="rs-grillz-custom-title">
+          {{ section.settings.custom_title | default: 'CUSTOM 3D' | escape }}
+        </h2>
+        <p class="rs-grillz-custom__text">
+          {{ section.settings.custom_text | default: 'Nos grillz sont modélisés en 3D. Forme unique, gravure, design sur mesure — dis-nous ce que tu veux.' | escape }}
+        </p>
+        <button
+          type="button"
+          class="rs-grillz-btn rs-grillz-custom__btn"
+          data-rs-grillz-calendly-popup
+          aria-label="{{ section.settings.custom_btn | default: 'DISCUTER MON PROJET' | escape }}">
+          {{ section.settings.custom_btn | default: 'DISCUTER MON PROJET' | escape }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} SECTION 4 — PROCESS {%- endcomment -%}
+  <section class="rs-grillz-section rs-grillz-process" aria-labelledby="rs-grillz-process-title">
+    <div class="rs-grillz-container">
+      <h2 class="rs-grillz-section__title" id="rs-grillz-process-title">
+        {{ section.settings.process_title | default: 'LE PROCESS' | escape }}
+      </h2>
+      <ol class="rs-grillz-process__steps">
+        <li class="rs-grillz-step">
+          <span class="rs-grillz-step__num" aria-hidden="true">01</span>
+          <h3 class="rs-grillz-step__title">{{ section.settings.step_1_title | default: 'CHOISIS TON OFFRE' | escape }}</h3>
+          <p class="rs-grillz-step__text">
+            {{ section.settings.step_1_text | default: 'Dent unique, dentier ou full grillz — argent ou or.' | escape }}
+          </p>
+        </li>
+        <li class="rs-grillz-step">
+          <span class="rs-grillz-step__num" aria-hidden="true">02</span>
+          <h3 class="rs-grillz-step__title">{{ section.settings.step_2_title | default: "PRISE D'EMPREINTE" | escape }}</h3>
+          <p class="rs-grillz-step__text">
+            {{ section.settings.step_2_text | default: 'RDV à Paris ou kit postal gratuit envoyé partout en France.' | escape }}
+          </p>
+        </li>
+        <li class="rs-grillz-step">
+          <span class="rs-grillz-step__num" aria-hidden="true">03</span>
+          <h3 class="rs-grillz-step__title">{{ section.settings.step_3_title | default: 'LIVRAISON' | escape }}</h3>
+          <p class="rs-grillz-step__text">
+            {{ section.settings.step_3_text | default: 'Tes grillz fabriqués à Paris, livrés chez toi.' | escape }}
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  {%- comment -%} SECTION 5 — CALENDLY {%- endcomment -%}
+  <section class="rs-grillz-section rs-grillz-calendly" id="rs-grillz-calendly" aria-labelledby="rs-grillz-calendly-title">
+    <div class="rs-grillz-container">
+      <h2 class="rs-grillz-calendly__title" id="rs-grillz-calendly-title">
+        {{ section.settings.calendly_title | default: 'PRENDRE RENDEZ-VOUS' | escape }}
+      </h2>
+      <p class="rs-grillz-calendly__subtitle">
+        {{ section.settings.calendly_subtitle | default: 'RDV à Paris ou kit postal gratuit.' | escape }}
+      </p>
+      <div class="rs-grillz-calendly__embed">
+        <div
+          class="calendly-inline-widget"
+          data-url="{{ calendly_url }}"
+          style="min-width:320px;height:700px;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="rs-grillz-footer">
+    <div class="rs-grillz-container">
+      <a href="{{ boutique_url }}" class="rs-grillz-footer__link">← Retour à la boutique</a>
+    </div>
+  </footer>
+</div>
+
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+<script>
+  (function () {
+    var calendlyUrl = {{ calendly_url | json }};
+    var page = document.getElementById('rs-grillz-page');
+    if (!page) return;
+
+    function openCalendlyPopup() {
+      if (window.Calendly && typeof window.Calendly.initPopupWidget === 'function') {
+        window.Calendly.initPopupWidget({ url: calendlyUrl });
+        return true;
+      }
+      return false;
+    }
+
+    page.querySelectorAll('[data-rs-grillz-calendly-popup]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!openCalendlyPopup()) {
+          var attempts = 0;
+          var timer = window.setInterval(function () {
+            attempts += 1;
+            if (openCalendlyPopup() || attempts > 40) {
+              window.clearInterval(timer);
+            }
+          }, 100);
+        }
+      });
+    });
+
+    page.querySelectorAll('a[href="#rs-grillz-calendly"]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        var target = document.getElementById('rs-grillz-calendly');
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  })();
+</script>
+
+{% style %}
+  body.rs-grillz-active,
+  body.rs-grillz-active > main {
+    background: #0a0a0a;
+  }
+
+  .rs-grillz-page {
+    --rs-grillz-bg: #0a0a0a;
+    --rs-grillz-card: #111111;
+    --rs-grillz-card-alt: #1a1a1a;
+    --rs-grillz-border: #333333;
+    --rs-grillz-accent: #f472b6;
+    --rs-grillz-text: #ffffff;
+    --rs-grillz-muted: #888888;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    background: var(--rs-grillz-bg);
+    color: var(--rs-grillz-text);
+  }
+
+  .rs-grillz-container {
+    width: min(1120px, 100%);
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* HERO */
+  .rs-grillz-hero {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--rs-grillz-bg);
+    text-align: center;
+    padding: 80px 20px 48px;
+  }
+
+  .rs-grillz-hero__inner {
+    max-width: 720px;
+  }
+
+  .rs-grillz-hero__badge {
+    display: inline-block;
+    margin-bottom: 24px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    background: var(--rs-grillz-accent);
+    color: #0a0a0a;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .rs-grillz-hero__title {
+    margin: 0 0 20px;
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--rs-grillz-text);
+  }
+
+  .rs-grillz-hero__subtitle {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--rs-grillz-accent);
+    white-space: pre-line;
+  }
+
+  @media (min-width: 768px) {
+    .rs-grillz-hero__title {
+      font-size: 96px;
+    }
+  }
+
+  /* SECTIONS */
+  .rs-grillz-section {
+    padding: 64px 0;
+  }
+
+  .rs-grillz-section__title {
+    margin: 0 0 32px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rs-grillz-text);
+    text-align: center;
+  }
+
+  /* OFFERS */
+  .rs-grillz-offers__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media (min-width: 900px) {
+    .rs-grillz-offers__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .rs-grillz-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    border-radius: 8px;
+    border: 1px solid var(--rs-grillz-border);
+    background: var(--rs-grillz-card);
+  }
+
+  .rs-grillz-card--popular {
+    border-color: var(--rs-grillz-accent);
+    box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.25);
+  }
+
+  .rs-grillz-card__ribbon {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: var(--rs-grillz-accent);
+    color: #0a0a0a;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .rs-grillz-card__popular-label {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--rs-grillz-accent);
+    letter-spacing: 0.08em;
+  }
+
+  .rs-grillz-card__name {
+    margin: 0 0 12px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rs-grillz-text);
+  }
+
+  .rs-grillz-card__price {
+    margin: 0 0 12px;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--rs-grillz-text);
+  }
+
+  .rs-grillz-card__desc {
+    margin: 0 0 24px;
+    flex: 1 1 auto;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--rs-grillz-muted);
+  }
+
+  .rs-grillz-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--rs-grillz-accent);
+    color: #fff !important;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none !important;
+    cursor: pointer;
+    transition: background 0.2s ease, opacity 0.2s ease;
+  }
+
+  .rs-grillz-btn:hover,
+  .rs-grillz-btn:focus-visible {
+    background: #db2777;
+    color: #fff !important;
+    text-decoration: none !important;
+  }
+
+  .rs-grillz-card__btn {
+    margin-top: auto;
+  }
+
+  /* CUSTOM */
+  .rs-grillz-custom__box {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--rs-grillz-border);
+    background: var(--rs-grillz-card);
+    text-align: center;
+  }
+
+  .rs-grillz-custom__title {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--rs-grillz-text);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .rs-grillz-custom__text {
+    margin: 0 0 24px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--rs-grillz-muted);
+    white-space: pre-line;
+  }
+
+  .rs-grillz-custom__btn {
+    width: auto;
+    min-width: min(100%, 280px);
+  }
+
+  /* PROCESS */
+  .rs-grillz-process__steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 768px) {
+    .rs-grillz-process__steps {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+  }
+
+  .rs-grillz-step {
+    text-align: center;
+  }
+
+  .rs-grillz-step__num {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--rs-grillz-accent);
+    letter-spacing: -0.02em;
+  }
+
+  .rs-grillz-step__title {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rs-grillz-text);
+  }
+
+  .rs-grillz-step__text {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--rs-grillz-muted);
+    white-space: pre-line;
+  }
+
+  /* CALENDLY */
+  .rs-grillz-calendly__title {
+    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--rs-grillz-text);
+  }
+
+  .rs-grillz-calendly__subtitle {
+    margin: 0 0 28px;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    color: var(--rs-grillz-muted);
+  }
+
+  .rs-grillz-calendly__embed {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--rs-grillz-border);
+    background: var(--rs-grillz-card-alt);
+  }
+
+  .rs-grillz-calendly__embed .calendly-inline-widget {
+    width: 100%;
+    min-width: 320px;
+  }
+
+  /* FOOTER */
+  .rs-grillz-footer {
+    padding: 32px 0 64px;
+    text-align: center;
+  }
+
+  .rs-grillz-footer__link {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--rs-grillz-accent) !important;
+    text-decoration: none !important;
+  }
+
+  .rs-grillz-footer__link:hover,
+  .rs-grillz-footer__link:focus-visible {
+    color: #db2777 !important;
+    text-decoration: underline !important;
+  }
+{% endstyle %}
+
+<script>
+  document.documentElement.classList.add('rs-grillz-active');
+  document.body.classList.add('rs-grillz-active');
+</script>
+
+{% schema %}
+{
+  "name": "Page Grillz",
+  "tag": "section",
+  "class": "section-rs-grillz",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_badge",
+      "label": "Badge",
+      "default": "FABRICATION MAISON — PARIS"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Titre",
+      "default": "GRILLZ"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Sous-titre",
+      "default": "Sur mesure. En argent ou en or.\nFabriqués à Paris."
+    },
+    {
+      "type": "header",
+      "content": "Offres"
+    },
+    {
+      "type": "text",
+      "id": "offers_title",
+      "label": "Titre section",
+      "default": "LES OFFRES"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Libellé bouton RDV",
+      "default": "PRENDRE RDV"
+    },
+    {
+      "type": "text",
+      "id": "offer_1_name",
+      "label": "Offre 1 — nom",
+      "default": "DENT UNIQUE"
+    },
+    {
+      "type": "text",
+      "id": "offer_1_price",
+      "label": "Offre 1 — prix",
+      "default": "60 €"
+    },
+    {
+      "type": "textarea",
+      "id": "offer_1_desc",
+      "label": "Offre 1 — description",
+      "default": "Une dent. Argent ou or. Pose à Paris ou kit postal."
+    },
+    {
+      "type": "text",
+      "id": "offer_2_popular",
+      "label": "Offre 2 — label populaire",
+      "default": "POPULAIRE"
+    },
+    {
+      "type": "text",
+      "id": "offer_2_badge",
+      "label": "Offre 2 — badge",
+      "default": "LE PLUS DEMANDÉ"
+    },
+    {
+      "type": "text",
+      "id": "offer_2_name",
+      "label": "Offre 2 — nom",
+      "default": "DENTIER DU BAS"
+    },
+    {
+      "type": "text",
+      "id": "offer_2_price",
+      "label": "Offre 2 — prix",
+      "default": "320 €"
+    },
+    {
+      "type": "textarea",
+      "id": "offer_2_desc",
+      "label": "Offre 2 — description",
+      "default": "Les dents du bas. Argent ou or. Sur mesure."
+    },
+    {
+      "type": "text",
+      "id": "offer_3_name",
+      "label": "Offre 3 — nom",
+      "default": "FULL GRILLZ"
+    },
+    {
+      "type": "text",
+      "id": "offer_3_price",
+      "label": "Offre 3 — prix",
+      "default": "640 €"
+    },
+    {
+      "type": "textarea",
+      "id": "offer_3_desc",
+      "label": "Offre 3 — description",
+      "default": "Haut et bas. Le pack complet. Argent ou or."
+    },
+    {
+      "type": "header",
+      "content": "Custom 3D"
+    },
+    {
+      "type": "text",
+      "id": "custom_title",
+      "label": "Titre",
+      "default": "CUSTOM 3D"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_text",
+      "label": "Texte",
+      "default": "Nos grillz sont modélisés en 3D. Forme unique, gravure, design sur mesure — dis-nous ce que tu veux."
+    },
+    {
+      "type": "text",
+      "id": "custom_btn",
+      "label": "Bouton",
+      "default": "DISCUTER MON PROJET"
+    },
+    {
+      "type": "header",
+      "content": "Process"
+    },
+    {
+      "type": "text",
+      "id": "process_title",
+      "label": "Titre",
+      "default": "LE PROCESS"
+    },
+    {
+      "type": "text",
+      "id": "step_1_title",
+      "label": "Étape 1 — titre",
+      "default": "CHOISIS TON OFFRE"
+    },
+    {
+      "type": "textarea",
+      "id": "step_1_text",
+      "label": "Étape 1 — texte",
+      "default": "Dent unique, dentier ou full grillz — argent ou or."
+    },
+    {
+      "type": "text",
+      "id": "step_2_title",
+      "label": "Étape 2 — titre",
+      "default": "PRISE D'EMPREINTE"
+    },
+    {
+      "type": "textarea",
+      "id": "step_2_text",
+      "label": "Étape 2 — texte",
+      "default": "RDV à Paris ou kit postal gratuit envoyé partout en France."
+    },
+    {
+      "type": "text",
+      "id": "step_3_title",
+      "label": "Étape 3 — titre",
+      "default": "LIVRAISON"
+    },
+    {
+      "type": "textarea",
+      "id": "step_3_text",
+      "label": "Étape 3 — texte",
+      "default": "Tes grillz fabriqués à Paris, livrés chez toi."
+    },
+    {
+      "type": "header",
+      "content": "Calendly"
+    },
+    {
+      "type": "text",
+      "id": "calendly_title",
+      "label": "Titre",
+      "default": "PRENDRE RENDEZ-VOUS"
+    },
+    {
+      "type": "text",
+      "id": "calendly_subtitle",
+      "label": "Sous-titre",
+      "default": "RDV à Paris ou kit postal gratuit."
+    },
+    {
+      "type": "text",
+      "id": "calendly_url",
+      "label": "URL Calendly",
+      "default": "https://calendly.com/bolvirg-recrutestagiaire/30min"
+    },
+    {
+      "type": "url",
+      "id": "boutique_url",
+      "label": "Lien retour boutique",
+      "info": "Vide = collection mes-basiques-damour"
+    }
+  ],
+  "presets": [{ "name": "Page Grillz" }]
+}
+{% endschema %}
