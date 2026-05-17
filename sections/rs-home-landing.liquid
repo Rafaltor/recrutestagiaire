@@ -2,6 +2,7 @@
   assign bg = section.settings.background_image
   assign portal_url = section.settings.portal_url | default: 'https://portail.recrutestagiaire.eu'
   assign lookbook_url = section.settings.lookbook_url | default: 'https://recrutestagiaire.eu/collections/abcdrs'
+  assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
 -%}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,8 +12,12 @@
 <section
   class="rs-home-landing shopify-section section-rs-home-landing"
   id="shopify-section-{{ section.id }}"
+  data-rs-heading="{{ heading_text | escape }}"
   {{ section.shopify_attributes }}>
-  <div class="rs-home-landing__bg-wrap" aria-hidden="true">
+  <div
+    class="rs-home-landing__bg-wrap"
+    data-rs-home-bg-wrap
+    aria-hidden="true">
     {%- if bg != blank -%}
       {{
         bg
@@ -27,6 +32,7 @@
     {%- else -%}
       <img
         class="rs-home-landing__bg"
+        data-rs-home-bg
         src="{{ 'pagedacceuil.jpg' | asset_url }}"
         alt=""
         width="2400"
@@ -37,30 +43,6 @@
   </div>
 
   <div class="rs-home-landing__content">
-    {%- if settings.logo != blank -%}
-      {{
-        settings.logo
-        | image_url: width: 160
-        | image_tag:
-          class: 'rs-home-landing__logo',
-          alt: shop.name,
-          width: 80,
-          height: 80,
-          loading: 'eager'
-      }}
-    {%- else -%}
-      <img
-        class="rs-home-landing__logo"
-        src="{{ 'rs-logo-eu.png' | asset_url }}"
-        alt="{{ shop.name | escape }}"
-        width="80"
-        height="80"
-        loading="eager"
-        decoding="async">
-    {%- endif -%}
-
-    <h1 class="rs-home-landing__title">{{ section.settings.heading | default: 'RECRUTE STAGIAIRE' | escape }}</h1>
-
     <div class="rs-home-landing__form-wrap">
       {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-home-landing__form' -%}
         <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
@@ -109,18 +91,101 @@
     padding: 0;
   }
 
-  body[data-rs-page='index'] .rs-site-footer,
-  body[data-rs-page='index'] footer.footer {
+  body.rs-home-landing-active .rs-site-footer,
+  body.rs-home-landing-active footer.footer {
     display: none !important;
   }
 
-  body[data-rs-page='index'] .rs-header-mobile-bar__menu-btn,
-  body[data-rs-page='index'] .rs-header-burger-btn,
-  body[data-rs-page='index'] #rs-header-mobile-menu-btn {
+  body.rs-home-landing-active .rs-header-mobile-bar__menu-btn,
+  body.rs-home-landing-active .rs-header-burger-btn,
+  body.rs-home-landing-active #rs-header-mobile-menu-btn {
     display: none !important;
   }
 
-  body.rs-portal-header[data-rs-page='index'] main > .shopify-section.section-rs-home-landing:first-child {
+  body.rs-home-landing-active .rs-ticker,
+  body.rs-home-landing-active .rs-header-kitsch-pop,
+  body.rs-home-landing-active .rs-ph-navdesk,
+  body.rs-home-landing-active .rs-banner-top__actions,
+  body.rs-home-landing-active .rs-header-mobile-bar__title,
+  body.rs-home-landing-active .rs-ph-brandlink-title,
+  body.rs-home-landing-active .rs-ph-brandlink-title-hit {
+    display: none !important;
+  }
+
+  body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-two-tier,
+  body.rs-home-landing-active .header-wrap.rs-header.rs-header--scroll-solid .rs-header-two-tier {
+    background: transparent !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: none !important;
+  }
+
+  body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ticker {
+    display: none !important;
+  }
+
+  @media (min-width: 768px) {
+    body.rs-home-landing-active .rs-header-top-line {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      width: 100%;
+      gap: 1rem;
+    }
+
+    body.rs-home-landing-active .rs-header-pole-brand.rs-banner-top {
+      grid-column: 1;
+      justify-self: start;
+    }
+
+    body.rs-home-landing-active .rs-home-header-title {
+      grid-column: 2;
+      justify-self: center;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 1.2;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-align: center;
+      white-space: nowrap;
+      text-shadow:
+        0 0 14px rgba(0, 0, 0, 0.5),
+        0 1px 3px rgba(0, 0, 0, 0.45);
+      pointer-events: none;
+    }
+
+    body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-home-header-title {
+      color: #fff;
+      -webkit-text-fill-color: #fff;
+    }
+
+    body.rs-home-landing-active .header-wrap.rs-header.rs-header--scroll-solid .rs-home-header-title {
+      color: var(--accent, #f472b6);
+      -webkit-text-fill-color: var(--accent, #f472b6);
+      text-shadow: none;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    body.rs-home-landing-active .rs-home-header-title {
+      display: none !important;
+    }
+
+    body.rs-home-landing-active .rs-header-mobile-bar {
+      justify-content: flex-start;
+    }
+
+    body.rs-home-landing-active .rs-header-mobile-bar__brand {
+      margin-right: auto;
+    }
+  }
+
+  body.rs-portal-header.rs-home-landing-active main > .shopify-section.section-rs-home-landing:first-child {
     margin-top: calc(-1 * var(--rs-portal-header-h, 140px));
     position: relative;
     z-index: 0;
@@ -132,6 +197,11 @@
     min-height: 100dvh;
     overflow: hidden;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    touch-action: pan-y;
+  }
+
+  .rs-home-landing.rs-home-landing--panning {
+    touch-action: none;
   }
 
   .rs-home-landing__bg-wrap {
@@ -139,29 +209,41 @@
     inset: 0;
     overflow: hidden;
     z-index: 0;
+    cursor: default;
+  }
+
+  .rs-home-landing--mobile-pan .rs-home-landing__bg-wrap {
+    cursor: grab;
+  }
+
+  .rs-home-landing--mobile-pan.rs-home-landing--panning .rs-home-landing__bg-wrap {
+    cursor: grabbing;
   }
 
   .rs-home-landing__bg {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 150%;
     height: 100%;
     min-height: 100%;
+    max-width: none;
     object-fit: cover;
     object-position: center center;
     transform: translate(-50%, -50%);
-    animation: rs-home-parallax-pan 48s linear infinite;
     will-change: transform;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
   }
 
-  @keyframes rs-home-parallax-pan {
-    0% {
-      transform: translate(-50%, -50%) translateX(12.5%);
-    }
-    100% {
-      transform: translate(-50%, -50%) translateX(-12.5%);
-    }
+  .rs-home-landing--desktop-fit .rs-home-landing__bg {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .rs-home-landing--mobile-pan .rs-home-landing__bg {
+    width: 150%;
+    min-width: 150%;
   }
 
   .rs-home-landing__content {
@@ -175,31 +257,16 @@
     gap: 1.25rem;
     padding: calc(var(--rs-portal-header-h, 120px) + 1.5rem) 1.25rem 2.5rem;
     text-align: center;
+    pointer-events: none;
   }
 
-  .rs-home-landing__logo {
-    height: 80px;
-    width: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.35));
-  }
-
-  .rs-home-landing__title {
-    margin: 0;
-    color: #fff;
-    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 1.15;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
-  }
-
-  @media (min-width: 768px) {
-    .rs-home-landing__title {
-      font-size: 40px;
-    }
+  .rs-home-landing__content a,
+  .rs-home-landing__content button,
+  .rs-home-landing__content input,
+  .rs-home-landing__content label,
+  .rs-home-landing__content .rs-home-landing__form,
+  .rs-home-landing__content .rs-home-landing__form-wrap {
+    pointer-events: auto;
   }
 
   .rs-home-landing__form-wrap {
@@ -320,28 +387,202 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px;
-    border-radius: 4px;
-    border: 1px solid #fff;
-    background: transparent;
+    padding: 12px 28px;
+    border-radius: 6px;
+    border: none;
+    background: #f472b6;
     color: #fff;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    font-weight: 600;
-    font-size: 11px;
-    letter-spacing: 0.04em;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.03em;
     text-decoration: none;
     text-transform: uppercase;
     white-space: nowrap;
-    transition:
-      background 0.18s ease,
-      color 0.18s ease;
+    transition: opacity 0.18s ease, transform 0.18s ease;
   }
 
   .rs-home-landing__cta:hover {
-    background: rgba(255, 255, 255, 0.12);
+    opacity: 0.92;
     color: #fff;
+    transform: translateY(-1px);
   }
 </style>
+
+<script>
+  (function () {
+    var section = document.querySelector('.rs-home-landing');
+    if (!section) return;
+
+    var MOBILE_MQ = '(max-width: 767.98px)';
+    var bgWrap = section.querySelector('[data-rs-home-bg-wrap]');
+    var bg = section.querySelector('.rs-home-landing__bg');
+    if (!bgWrap || !bg) return;
+
+    document.body.classList.add('rs-home-landing-active');
+
+    var heading = section.getAttribute('data-rs-heading') || 'RECRUTE STAGIAIRE';
+    var offsetX = 0;
+    var dragging = false;
+    var pointerId = null;
+    var startX = 0;
+    var startOffset = 0;
+    var mobileMq = window.matchMedia(MOBILE_MQ);
+
+    function isMobile() {
+      return mobileMq.matches;
+    }
+
+    function setupHeaderTitle() {
+      var topLine = document.querySelector('.header-wrap .rs-header-top-line');
+      if (!topLine || topLine.querySelector('.rs-home-header-title')) return;
+
+      var title = document.createElement('p');
+      title.className = 'rs-home-header-title';
+      title.textContent = heading;
+      topLine.appendChild(title);
+    }
+
+    function getMaxOffset() {
+      var wrapW = bgWrap.clientWidth;
+      var imgW = bg.getBoundingClientRect().width;
+      return Math.max(0, (imgW - wrapW) / 2);
+    }
+
+    function clampOffset() {
+      var max = getMaxOffset();
+      if (offsetX > max) offsetX = max;
+      if (offsetX < -max) offsetX = -max;
+    }
+
+    function applyTransform() {
+      clampOffset();
+      bg.style.transform = 'translate(calc(-50% + ' + offsetX + 'px), -50%)';
+    }
+
+    function setMode() {
+      var mobile = isMobile();
+      section.classList.toggle('rs-home-landing--mobile-pan', mobile);
+      section.classList.toggle('rs-home-landing--desktop-fit', !mobile);
+
+      if (!mobile) {
+        offsetX = 0;
+        dragging = false;
+        section.classList.remove('rs-home-landing--panning');
+        bg.style.transform = 'translate(-50%, -50%)';
+      } else {
+        applyTransform();
+      }
+    }
+
+    function isInteractiveTarget(el) {
+      if (!el || !section.contains(el)) return false;
+      return !!el.closest('a, button, input, label, textarea, select, .rs-home-landing__form');
+    }
+
+    function onPointerDown(e) {
+      if (!isMobile() || isInteractiveTarget(e.target)) return;
+
+      dragging = true;
+      pointerId = e.pointerId != null ? e.pointerId : 'touch';
+      startX = e.clientX != null ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+      startOffset = offsetX;
+      section.classList.add('rs-home-landing--panning');
+
+      if (section.setPointerCapture && e.pointerId != null) {
+        try {
+          section.setPointerCapture(e.pointerId);
+        } catch (err) {}
+      }
+    }
+
+    function onPointerMove(e) {
+      if (!dragging || !isMobile()) return;
+      if (e.pointerId != null && pointerId != null && e.pointerId !== pointerId) return;
+
+      var x = e.clientX != null ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : startX);
+      offsetX = startOffset + (x - startX);
+      applyTransform();
+    }
+
+    function onPointerUp(e) {
+      if (!dragging) return;
+      if (e.pointerId != null && pointerId != null && e.pointerId !== pointerId) return;
+
+      dragging = false;
+      pointerId = null;
+      section.classList.remove('rs-home-landing--panning');
+      clampOffset();
+      applyTransform();
+
+      if (section.releasePointerCapture && e.pointerId != null) {
+        try {
+          section.releasePointerCapture(e.pointerId);
+        } catch (err) {}
+      }
+    }
+
+    setupHeaderTitle();
+    setMode();
+
+    section.addEventListener('pointerdown', onPointerDown, { passive: true });
+    section.addEventListener('pointermove', onPointerMove, { passive: true });
+    section.addEventListener('pointerup', onPointerUp);
+    section.addEventListener('pointercancel', onPointerUp);
+
+    section.addEventListener(
+      'touchstart',
+      function (e) {
+        if (!isMobile() || isInteractiveTarget(e.target)) return;
+        onPointerDown({
+          clientX: e.touches[0].clientX,
+          touches: e.touches
+        });
+      },
+      { passive: true }
+    );
+
+    section.addEventListener(
+      'touchmove',
+      function (e) {
+        if (!dragging) return;
+        e.preventDefault();
+        onPointerMove({
+          clientX: e.touches[0].clientX,
+          touches: e.touches
+        });
+      },
+      { passive: false }
+    );
+
+    section.addEventListener('touchend', onPointerUp);
+    section.addEventListener('touchcancel', onPointerUp);
+
+    if (typeof mobileMq.addEventListener === 'function') {
+      mobileMq.addEventListener('change', setMode);
+    } else if (typeof mobileMq.addListener === 'function') {
+      mobileMq.addListener(setMode);
+    }
+
+    window.addEventListener('resize', function () {
+      setMode();
+      if (isMobile()) applyTransform();
+    });
+
+    if (bg.complete) {
+      setMode();
+    } else {
+      bg.addEventListener('load', setMode, { once: true });
+    }
+
+    document.addEventListener('shopify:section:load', function (ev) {
+      if (ev.target && ev.target.contains && ev.target.contains(section)) {
+        setupHeaderTitle();
+        setMode();
+      }
+    });
+  })();
+</script>
 
 {% schema %}
 {
@@ -358,7 +599,7 @@
     {
       "type": "text",
       "id": "heading",
-      "label": "Titre",
+      "label": "Titre header (desktop)",
       "default": "RECRUTE STAGIAIRE"
     },
     {
