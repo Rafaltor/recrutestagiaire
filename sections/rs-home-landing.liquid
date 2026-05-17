@@ -69,7 +69,7 @@
 
                   <div class="rs-hero-video__badge">
                     <span class="rs-hero-video__badge-dot"></span>
-                    <span>{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</span>
+                    <span>{{ section.settings.form_label | default: 'accés anticipé drop' | escape }}</span>
                   </div>
 
                   <div class="rs-hero-video__search">
@@ -79,7 +79,7 @@
                         <path d="M15.2 15.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
                       </svg>
                     </span>
-                    <label class="visually-hidden" for="rs-waitlist-email">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</label>
+                    <label class="visually-hidden" for="rs-waitlist-email">{{ section.settings.form_label | default: 'accés anticipé drop' | escape }}</label>
                     <input
                       id="rs-waitlist-email"
                       class="rs-hero-video__search-input"
@@ -393,14 +393,14 @@
   }
 
   .rs-landing-hotspot--portal {
-    left: 40%;
+    left: 20%;
     top: 50%;
     transform: translate(-50%, -50%);
   }
 
   .rs-landing-hotspot--form {
     left: 50%;
-    top: 38%;
+    top: 50%;
     transform: translate(-50%, -50%);
     width: min(360px, 88vw);
     max-width: 360px;
@@ -461,6 +461,15 @@
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 12px;
+    color: #0a0a0a;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__badge span {
+    color: #0a0a0a;
   }
 
   .rs-landing-overlay__waitlist .rs-hero-video__search {
@@ -811,7 +820,7 @@
       "type": "text",
       "id": "form_label",
       "label": "Label formulaire",
-      "default": "REJOINS LA LISTE"
+      "default": "accés anticipé drop"
     },
     {
       "type": "text",
