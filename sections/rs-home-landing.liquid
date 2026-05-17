@@ -471,21 +471,11 @@
 
     var heading = section.getAttribute('data-rs-heading') || 'RECRUTE STAGIAIRE';
 
-    var isDragging = false;
-    var startX = 0;
-    var currentX = 0;
+    var touchStartX = 0;
+    var touchCurrentX = 0;
 
     function getMaxDrag() {
       return -(bg.offsetWidth - window.innerWidth);
-    }
-
-    function clampX(x) {
-      var maxDrag = getMaxDrag();
-      return Math.min(0, Math.max(maxDrag, x));
-    }
-
-    function applyTransform() {
-      bg.style.transform = 'translateX(' + currentX + 'px)';
     }
 
     function setupHeaderTitle() {
@@ -504,87 +494,39 @@
       mobileTitle.textContent = heading;
     }
 
-    function isInteractive(target) {
-      if (!target) return false;
-      return !!target.closest('input, button, a, textarea, select, label');
-    }
+    document.addEventListener('touchstart', function(e) {
+      var target = e.target;
+      if (target.closest('a, button, input, label')) return;
+      touchStartX = e.touches[0].clientX - touchCurrentX;
+    }, { passive: true });
 
-    function onDragStart(clientX) {
-      isDragging = true;
-      startX = clientX - currentX;
-      document.body.classList.add('rs-home-landing-dragging');
-    }
+    document.addEventListener('touchmove', function(e) {
+      var target = e.target;
+      if (target.closest('a, button, input, label')) return;
+      var newX = e.touches[0].clientX - touchStartX;
+      var max = getMaxDrag();
+      newX = Math.min(0, Math.max(max, newX));
+      touchCurrentX = newX;
+      bg.style.transform = 'translateX(' + newX + 'px)';
+    }, { passive: false });
 
-    function onDragMove(clientX) {
-      if (!isDragging) return;
-      var newX = clientX - startX;
-      newX = clampX(newX);
-      currentX = newX;
-      applyTransform();
-    }
-
-    function onDragEnd() {
-      if (!isDragging) return;
-      isDragging = false;
-      document.body.classList.remove('rs-home-landing-dragging');
-    }
-
-    window.addEventListener('mousedown', function (e) {
-      if (isInteractive(e.target)) return;
-      e.preventDefault();
-      onDragStart(e.clientX);
-    });
-
-    window.addEventListener('mousemove', function (e) {
-      if (!isDragging) return;
-      e.preventDefault();
-      onDragMove(e.clientX);
-    });
-
-    window.addEventListener('mouseup', function () {
-      onDragEnd();
-    });
-
-    window.addEventListener(
-      'touchstart',
-      function (e) {
-        if (isInteractive(e.target)) return;
-        if (!e.touches || !e.touches.length) return;
-        onDragStart(e.touches[0].clientX);
-      },
-      { passive: true }
-    );
-
-    window.addEventListener(
-      'touchmove',
-      function (e) {
-        if (!isDragging) return;
-        if (!e.touches || !e.touches.length) return;
-        e.preventDefault();
-        onDragMove(e.touches[0].clientX);
-      },
-      { passive: false }
-    );
-
-    window.addEventListener('touchend', function () {
-      onDragEnd();
-    });
-
-    window.addEventListener('touchcancel', function () {
-      onDragEnd();
-    });
+    document.addEventListener('touchend', function() {
+      touchStartX = touchCurrentX;
+    }, { passive: true });
 
     window.addEventListener('resize', function () {
-      currentX = clampX(currentX);
-      applyTransform();
+      var max = getMaxDrag();
+      touchCurrentX = Math.min(0, Math.max(max, touchCurrentX));
+      bg.style.transform = 'translateX(' + touchCurrentX + 'px)';
     });
 
     setupHeaderTitle();
     normalizeMobileHeaderTitle();
 
     bg.addEventListener('load', function () {
-      currentX = clampX(currentX);
-      applyTransform();
+      var max = getMaxDrag();
+      touchCurrentX = Math.min(0, Math.max(max, touchCurrentX));
+      bg.style.transform = 'translateX(' + touchCurrentX + 'px)';
     });
 
     document.addEventListener('shopify:section:load', function (ev) {
