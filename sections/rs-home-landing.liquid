@@ -16,6 +16,8 @@
   id="shopify-section-{{ section.id }}"
   data-rs-heading="{{ heading_text | escape }}"
   {{ section.shopify_attributes }}>
+  <div class="rs-landing-scroller" data-rs-scroller tabindex="-1" aria-hidden="true">
+    <div class="rs-landing-scroller__track" data-rs-track>
   {%- if bg != blank -%}
     {{
       bg
@@ -38,12 +40,10 @@
       decoding="async">
   {%- endif -%}
 
-  <div
-    class="rs-landing-pan-zone"
-    data-rs-pan-zone
-    aria-hidden="true"></div>
+    </div>
+  </div>
 
-  <div class="rs-landing-overlay">
+  <div class="rs-landing-overlay" data-rs-ui>
     <div class="rs-landing-overlay__form">
       <div class="rs-hero-video__content rs-landing-overlay__waitlist">
         {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-landing-overlay__form-inner' -%}
@@ -282,46 +282,68 @@
     }
   }
 
-  .rs-landing-bg {
+  /* Canvas panoramique — scroll horizontal natif (style drakerelated.com) */
+  .rs-landing-scroller {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 250vw;
-    max-width: none;
-    height: 100vh;
+    inset: 0;
+    z-index: 0;
+    pointer-events: auto;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .rs-landing-scroller::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .rs-landing-scroller__track {
+    height: 100%;
+    height: 100dvh;
+  }
+
+  .rs-landing-bg {
+    display: block;
+    width: 100%;
+    max-width: none !important;
+    height: 100%;
     height: 100dvh;
     object-fit: cover;
+    object-position: center center;
     user-select: none;
     -webkit-user-select: none;
     -webkit-user-drag: none;
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-    z-index: 0;
     pointer-events: none;
   }
 
-  /* Zone tactile plein écran — entre le wallpaper et l’overlay UI */
-  .rs-landing-pan-zone {
-    display: none;
-  }
-
   @media (max-width: 767.98px) {
-    .rs-landing-pan-zone {
-      display: block;
-      position: fixed;
-      inset: 0;
-      z-index: 5;
-      touch-action: none;
-      -webkit-user-select: none;
-      user-select: none;
-      background: transparent;
+    .rs-landing-scroller {
+      overflow-x: auto;
+      overflow-y: hidden;
+      touch-action: pan-x;
+      overscroll-behavior-x: contain;
+      overscroll-behavior-y: none;
+    }
+
+    .rs-landing-scroller__track {
+      width: 250vw;
+      min-width: 250vw;
     }
   }
 
   @media (min-width: 768px) {
-    .rs-landing-bg {
+    .rs-landing-scroller {
+      overflow: hidden;
+      touch-action: auto;
+    }
+
+    .rs-landing-scroller__track {
       width: 100vw;
-      transform: translate3d(0, 0, 0) !important;
+      min-width: 100vw;
     }
   }
 
@@ -474,9 +496,9 @@
     var section = document.querySelector('.rs-home-landing');
     if (!section) return;
 
-    var bg = section.querySelector('.rs-landing-bg');
-    var panZone = section.querySelector('[data-rs-pan-zone]');
-    if (!bg || !panZone) return;
+    var scroller = section.querySelector('[data-rs-scroller]');
+    var track = section.querySelector('[data-rs-track]');
+    if (!scroller || !track) return;
 
     document.documentElement.classList.add('rs-home-landing-active');
     document.body.classList.add('rs-home-landing-active');
@@ -484,35 +506,31 @@
     var heading = section.getAttribute('data-rs-heading') || 'RECRUTE STAGIAIRE';
     var mobileMq = window.matchMedia('(max-width: 767.98px)');
 
-    var touchCurrentX = 0;
-    var panOriginX = 0;
-    var isPanning = false;
+    var drag = {
+      active: false,
+      startX: 0,
+      startY: 0,
+      startScroll: 0,
+      lock: null
+    };
 
     function isMobile() {
       return mobileMq.matches;
     }
 
-    function getMaxDrag() {
-      var maxScroll = bg.offsetWidth - window.innerWidth;
-      return maxScroll > 0 ? -maxScroll : 0;
+    function isUI(target) {
+      if (!target) return false;
+      return !!target.closest(
+        '[data-rs-ui] a, [data-rs-ui] button, [data-rs-ui] input, [data-rs-ui] textarea, [data-rs-ui] select, [data-rs-ui] label'
+      );
     }
 
-    function clampX(x) {
-      var max = getMaxDrag();
-      return Math.min(0, Math.max(max, x));
+    function maxScrollLeft() {
+      return Math.max(0, scroller.scrollWidth - scroller.clientWidth);
     }
 
-    function applyWallpaperX(x) {
-      touchCurrentX = clampX(x);
-      bg.style.transform = 'translate3d(' + touchCurrentX + 'px, 0, 0)';
-    }
-
-    function resetDesktopBg() {
-      if (isMobile()) return;
-      isPanning = false;
-      touchCurrentX = 0;
-      panOriginX = 0;
-      bg.style.transform = 'translate3d(0, 0, 0)';
+    function clampScroll(x) {
+      return Math.min(maxScrollLeft(), Math.max(0, x));
     }
 
     function setupHeaderTitle() {
@@ -531,65 +549,100 @@
       mobileTitle.textContent = heading;
     }
 
-    function onPanStart(clientX) {
-      isPanning = true;
-      panOriginX = clientX - touchCurrentX;
+    function resetDesktopScroll() {
+      if (isMobile()) return;
+      scroller.scrollLeft = 0;
     }
 
-    function onPanMove(clientX) {
-      if (!isPanning) return;
-      applyWallpaperX(clientX - panOriginX);
+    function onTouchStart(e) {
+      if (!isMobile() || !e.touches || e.touches.length !== 1) return;
+      if (isUI(e.target)) return;
+
+      drag.lock = null;
+
+      if (e.target.closest('[data-rs-scroller]')) {
+        drag.active = false;
+        return;
+      }
+
+      var t = e.touches[0];
+      drag.active = true;
+      drag.startX = t.clientX;
+      drag.startY = t.clientY;
+      drag.startScroll = scroller.scrollLeft;
     }
 
-    function onPanEnd() {
-      isPanning = false;
+    function onTouchMove(e) {
+      if (!isMobile() || !drag.active || !e.touches || e.touches.length !== 1) return;
+
+      var t = e.touches[0];
+      var dx = t.clientX - drag.startX;
+      var adx = Math.abs(dx);
+      var ady = Math.abs(t.clientY - drag.startY);
+
+      if (drag.lock === null && (adx > 6 || ady > 6)) {
+        drag.lock = adx > ady ? 'x' : 'y';
+      }
+
+      if (drag.lock === 'y') {
+        drag.active = false;
+        return;
+      }
+
+      if (drag.lock === 'x') {
+        e.preventDefault();
+        scroller.scrollLeft = clampScroll(drag.startScroll - dx);
+      }
     }
 
-    panZone.addEventListener(
+    function onTouchEnd() {
+      drag.active = false;
+      drag.lock = null;
+    }
+
+    document.addEventListener(
       'touchstart',
       function (e) {
         if (!isMobile() || !e.touches || e.touches.length !== 1) return;
-        onPanStart(e.touches[0].clientX);
+        if (isUI(e.target)) return;
+        if (e.target.closest('.header-wrap')) return;
+        onTouchStart(e);
       },
-      { passive: true }
+      { passive: true, capture: true }
     );
 
-    panZone.addEventListener(
+    document.addEventListener(
       'touchmove',
       function (e) {
-        if (!isMobile() || !isPanning || !e.touches || e.touches.length !== 1) return;
-        e.preventDefault();
-        onPanMove(e.touches[0].clientX);
+        onTouchMove(e);
       },
-      { passive: false }
+      { passive: false, capture: true }
     );
 
-    panZone.addEventListener('touchend', onPanEnd, { passive: true });
-    panZone.addEventListener('touchcancel', onPanEnd, { passive: true });
+    document.addEventListener('touchend', onTouchEnd, { passive: true, capture: true });
+    document.addEventListener('touchcancel', onTouchEnd, { passive: true, capture: true });
 
     window.addEventListener('resize', function () {
-      if (!isMobile()) {
-        resetDesktopBg();
-        return;
-      }
-      applyWallpaperX(touchCurrentX);
+      scroller.scrollLeft = clampScroll(scroller.scrollLeft);
+      resetDesktopScroll();
     });
 
     if (typeof mobileMq.addEventListener === 'function') {
-      mobileMq.addEventListener('change', function () {
-        if (!isMobile()) resetDesktopBg();
-        else applyWallpaperX(touchCurrentX);
-      });
+      mobileMq.addEventListener('change', resetDesktopScroll);
     }
 
     setupHeaderTitle();
     normalizeMobileHeaderTitle();
-    resetDesktopBg();
+    resetDesktopScroll();
 
-    if (bg.complete) applyWallpaperX(touchCurrentX);
-    bg.addEventListener('load', function () {
-      applyWallpaperX(touchCurrentX);
-    });
+    var bg = section.querySelector('.rs-landing-bg');
+    if (bg) {
+      var onBgReady = function () {
+        scroller.scrollLeft = clampScroll(scroller.scrollLeft);
+      };
+      if (bg.complete) onBgReady();
+      bg.addEventListener('load', onBgReady);
+    }
 
     document.addEventListener('shopify:section:load', function (ev) {
       if (ev.target && ev.target.contains && ev.target.contains(section)) {
