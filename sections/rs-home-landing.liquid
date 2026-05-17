@@ -16,87 +16,95 @@
   id="shopify-section-{{ section.id }}"
   data-rs-heading="{{ heading_text | escape }}"
   {{ section.shopify_attributes }}>
-  <div class="rs-landing-scroller" data-rs-scroller tabindex="-1" aria-hidden="true">
+  <div class="rs-landing-scroller" data-rs-scroller tabindex="-1">
     <div class="rs-landing-scroller__track" data-rs-track>
-  {%- if bg != blank -%}
-    {{
-      bg
-      | image_url: width: 3840
-      | image_tag:
-        class: 'rs-landing-bg',
-        widths: '750, 1100, 1500, 1920, 2400, 3200, 3840',
-        sizes: '250vw',
-        loading: 'eager',
-        alt: ''
-    }}
-  {%- else -%}
-    <img
-      class="rs-landing-bg"
-      src="{{ 'pagedacceuil .jpg' | asset_url }}"
-      alt=""
-      width="2400"
-      height="1600"
-      loading="eager"
-      decoding="async">
-  {%- endif -%}
+      <div class="rs-landing-scene">
+        {%- if bg != blank -%}
+          {{
+            bg
+            | image_url: width: 3840
+            | image_tag:
+              class: 'rs-landing-bg',
+              widths: '750, 1100, 1500, 1920, 2400, 3200, 3840',
+              sizes: '250vw',
+              loading: 'eager',
+              alt: ''
+          }}
+        {%- else -%}
+          <img
+            class="rs-landing-bg"
+            src="{{ 'pagedacceuil .jpg' | asset_url }}"
+            alt=""
+            width="2400"
+            height="1600"
+            loading="eager"
+            decoding="async">
+        {%- endif -%}
 
-    </div>
-  </div>
+        <div class="rs-landing-hotspots" data-rs-ui>
+          <a
+            class="rs-landing-hotspot rs-landing-hotspot--portal rs-landing-overlay__cta"
+            href="{{ portal_url }}"
+            rel="noopener noreferrer">
+            LE PORTAIL →
+          </a>
 
-  <div class="rs-landing-overlay" data-rs-ui>
-    <div class="rs-landing-overlay__form">
-      <div class="rs-hero-video__content rs-landing-overlay__waitlist">
-        {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-landing-overlay__form-inner' -%}
-          <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
-          {%- if form.posted_successfully? -%}
-            <p class="rs-hero-video__subtitle rs-landing-overlay__success" role="status">
-              {{ section.settings.success_message | default: 'Tu es sur la liste.' | escape }}
-            </p>
-          {%- else -%}
-            {%- if form.errors -%}
-              <p class="rs-landing-overlay__error" role="alert">{{ form.errors | default_errors }}</p>
-            {%- endif -%}
+          <div class="rs-landing-hotspot rs-landing-hotspot--form">
+            <div class="rs-hero-video__content rs-landing-overlay__waitlist">
+              {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-landing-overlay__form-inner' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
+                {%- if form.posted_successfully? -%}
+                  <p class="rs-hero-video__subtitle rs-landing-overlay__success" role="status">
+                    {{ section.settings.success_message | default: 'Tu es sur la liste.' | escape }}
+                  </p>
+                {%- else -%}
+                  {%- if form.errors -%}
+                    <p class="rs-landing-overlay__error" role="alert">{{ form.errors | default_errors }}</p>
+                  {%- endif -%}
 
-            <div class="rs-hero-video__badge">
-              <span class="rs-hero-video__badge-dot"></span>
-              <span>{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</span>
+                  <div class="rs-hero-video__badge">
+                    <span class="rs-hero-video__badge-dot"></span>
+                    <span>{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</span>
+                  </div>
+
+                  <div class="rs-hero-video__search">
+                    <span class="rs-hero-video__search-icon" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="10.5" cy="10.5" r="6.25" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path d="M15.2 15.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+                      </svg>
+                    </span>
+                    <label class="visually-hidden" for="rs-waitlist-email">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</label>
+                    <input
+                      id="rs-waitlist-email"
+                      class="rs-hero-video__search-input"
+                      type="email"
+                      name="contact[email]"
+                      value="{{ form.email }}"
+                      placeholder="{{ section.settings.email_placeholder | default: 'ton@email.com' | escape }}"
+                      autocomplete="email"
+                      required
+                      {% if form.errors contains 'email' %}
+                        aria-invalid="true"
+                      {% endif %}>
+                    <button type="submit" class="rs-hero-video__search-btn">
+                      <span class="rs-btn-full">{{ section.settings.submit_label | default: 'REJOINDRE' | escape }}</span>
+                      <span class="rs-btn-short" aria-hidden="true">→</span>
+                    </button>
+                  </div>
+                {%- endif -%}
+              {%- endform -%}
             </div>
+          </div>
 
-            <div class="rs-hero-video__search">
-              <span class="rs-hero-video__search-icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <circle cx="10.5" cy="10.5" r="6.25" stroke="currentColor" stroke-width="2" fill="none"/>
-                  <path d="M15.2 15.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
-                </svg>
-              </span>
-              <label class="visually-hidden" for="rs-waitlist-email">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</label>
-              <input
-                id="rs-waitlist-email"
-                class="rs-hero-video__search-input"
-                type="email"
-                name="contact[email]"
-                value="{{ form.email }}"
-                placeholder="{{ section.settings.email_placeholder | default: 'ton@email.com' | escape }}"
-                autocomplete="email"
-                required
-                {% if form.errors contains 'email' %}
-                  aria-invalid="true"
-                {% endif %}>
-              <button type="submit" class="rs-hero-video__search-btn">
-                <span class="rs-btn-full">{{ section.settings.submit_label | default: 'REJOINDRE' | escape }}</span>
-                <span class="rs-btn-short" aria-hidden="true">→</span>
-              </button>
-            </div>
-          {%- endif -%}
-        {%- endform -%}
+          <a class="rs-landing-hotspot rs-landing-hotspot--lookbook rs-landing-overlay__cta" href="{{ lookbook_url }}">
+            LOOKBOOK ABCDRS →
+          </a>
+        </div>
       </div>
     </div>
-
-    <div class="rs-landing-overlay__ctas">
-      <a class="rs-landing-overlay__cta" href="{{ portal_url }}" rel="noopener noreferrer">LE PORTAIL →</a>
-      <a class="rs-landing-overlay__cta" href="{{ lookbook_url }}">LOOKBOOK ABCDRS →</a>
-    </div>
   </div>
+
 </section>
 
 <style>
@@ -326,22 +334,84 @@
   }
 
   .rs-landing-scroller__track {
+    position: relative;
+    height: 100%;
+    height: 100dvh;
+  }
+
+  .rs-landing-scene {
+    position: relative;
+    width: 100%;
     height: 100%;
     height: 100dvh;
   }
 
   .rs-landing-bg {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
     max-width: none !important;
     height: 100%;
-    height: 100dvh;
     object-fit: cover;
     object-position: center center;
     user-select: none;
     -webkit-user-select: none;
     -webkit-user-drag: none;
     pointer-events: none;
+  }
+
+  /* Hotspots accrochés au wallpaper — bougent avec le slide */
+  .rs-landing-hotspots {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .rs-landing-hotspots * {
+    pointer-events: none;
+  }
+
+  .rs-landing-hotspots a,
+  .rs-landing-hotspots button,
+  .rs-landing-hotspots input,
+  .rs-landing-hotspots label,
+  .rs-landing-hotspots textarea,
+  .rs-landing-hotspots select {
+    pointer-events: auto;
+  }
+
+  .rs-landing-hotspot {
+    position: absolute;
+    z-index: 1;
+  }
+
+  .rs-landing-hotspot--portal {
+    left: 20%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .rs-landing-hotspot--form {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(360px, 88vw);
+    max-width: 360px;
+  }
+
+  .rs-landing-hotspot--lookbook {
+    right: 20%;
+    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(50%);
+  }
+
+  @media (min-width: 768px) {
+    .rs-landing-hotspot--form {
+      width: min(400px, 36vw);
+      max-width: 400px;
+    }
   }
 
   @media (max-width: 767.98px) {
@@ -369,42 +439,6 @@
       width: 100vw;
       min-width: 100vw;
     }
-  }
-
-  .rs-landing-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    padding: calc(var(--rs-portal-header-h, 72px) + 16px) 20px calc(24px + env(safe-area-inset-bottom, 0px));
-    pointer-events: none;
-    box-sizing: border-box;
-  }
-
-  .rs-landing-overlay * {
-    pointer-events: none;
-  }
-
-  .rs-landing-overlay a,
-  .rs-landing-overlay button,
-  .rs-landing-overlay input,
-  .rs-landing-overlay label,
-  .rs-landing-overlay textarea,
-  .rs-landing-overlay select {
-    pointer-events: auto;
-  }
-
-  .rs-landing-overlay__form {
-    width: 100%;
-    max-width: 360px;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
   }
 
   .rs-landing-overlay__waitlist.rs-hero-video__content {
@@ -498,25 +532,6 @@
     background: rgba(80, 0, 0, 0.35);
     border: 1px solid rgba(255, 120, 120, 0.35);
     text-align: center;
-  }
-
-  .rs-landing-overlay__ctas {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    width: auto;
-    max-width: none;
-    pointer-events: none;
-    flex-shrink: 0;
-  }
-
-  @media (min-width: 768px) {
-    .rs-landing-overlay__ctas {
-      flex-direction: row;
-      justify-content: center;
-      gap: 12px;
-    }
   }
 
   .rs-landing-overlay__cta {
