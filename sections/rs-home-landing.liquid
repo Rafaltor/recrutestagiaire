@@ -5,6 +5,8 @@
   assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
 -%}
 
+{{ 'rs-hero-video.css' | asset_url | stylesheet_tag }}
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
@@ -14,73 +16,78 @@
   id="shopify-section-{{ section.id }}"
   data-rs-heading="{{ heading_text | escape }}"
   {{ section.shopify_attributes }}>
-  <div
-    class="rs-home-landing__bg-wrap"
-    data-rs-home-bg-wrap
-    aria-hidden="true">
-    {%- if bg != blank -%}
-      {{
-        bg
-        | image_url: width: 3840
-        | image_tag:
-          class: 'rs-home-landing__bg',
-          widths: '750, 1100, 1500, 1920, 2400, 3200, 3840',
-          sizes: '150vw',
-          loading: 'eager',
-          alt: ''
-      }}
-    {%- else -%}
-      <img
-        class="rs-home-landing__bg"
-        data-rs-home-bg
-        src="{{ 'pagedacceuil.jpg' | asset_url }}"
-        alt=""
-        width="2400"
-        height="1600"
-        loading="eager"
-        decoding="async">
-    {%- endif -%}
-  </div>
-
-  <div class="rs-home-landing__content">
-    <div class="rs-home-landing__form-wrap">
-      {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-home-landing__form' -%}
-        <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
-        {%- if form.posted_successfully? -%}
-          <p class="rs-home-landing__success" role="status">{{ section.settings.success_message | default: 'Tu es sur la liste.' | escape }}</p>
+  <div class="rs-home-landing__viewport" data-rs-home-viewport>
+    <div class="rs-home-landing__scene" data-rs-home-scene>
+      <div class="rs-home-landing__media" aria-hidden="true">
+        {%- if bg != blank -%}
+          {{
+            bg
+            | image_url: width: 3840
+            | image_tag:
+              class: 'rs-home-landing__bg',
+              widths: '750, 1100, 1500, 1920, 2400, 3200, 3840',
+              sizes: '100vw',
+              loading: 'eager',
+              alt: ''
+          }}
         {%- else -%}
-          {%- if form.errors -%}
-            <p class="rs-home-landing__error" role="alert">{{ form.errors | default_errors }}</p>
-          {%- endif -%}
-          <label class="rs-home-landing__label" for="rs-waitlist-email">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</label>
-          <div class="rs-home-landing__fields">
-            <input
-              id="rs-waitlist-email"
-              class="rs-home-landing__input"
-              type="email"
-              name="contact[email]"
-              value="{{ form.email }}"
-              placeholder="{{ section.settings.email_placeholder | default: 'ton@email.com' | escape }}"
-              autocomplete="email"
-              required
-              {% if form.errors contains 'email' %}
-                aria-invalid="true"
-              {% endif %}>
-            <button type="submit" class="rs-home-landing__submit">
-              {{ section.settings.submit_label | default: 'REJOINDRE' | escape }}
-            </button>
-          </div>
+          <img
+            class="rs-home-landing__bg"
+            data-rs-home-bg
+            src="{{ 'pagedacceuil.jpg' | asset_url }}"
+            alt=""
+            width="2400"
+            height="1600"
+            loading="eager"
+            decoding="async">
         {%- endif -%}
-      {%- endform -%}
-    </div>
+      </div>
 
-    <div class="rs-home-landing__ctas">
-      <a class="rs-home-landing__cta rs-btn--primary text-decoration-none" href="{{ portal_url }}" rel="noopener noreferrer">
-        {{ section.settings.portal_label | default: 'LE PORTAIL →' | escape }}
-      </a>
-      <a class="rs-home-landing__cta rs-btn--primary text-decoration-none" href="{{ lookbook_url }}">
-        {{ section.settings.lookbook_label | default: 'LOOKBOOK ABCDRS →' | escape }}
-      </a>
+      <div class="rs-home-landing__scene-ui">
+        <a
+          class="rs-home-landing__hotspot rs-home-landing__hotspot--portal rs-btn--primary text-decoration-none"
+          href="{{ portal_url }}"
+          rel="noopener noreferrer">
+          {{ section.settings.portal_label | default: 'LE PORTAIL →' | escape }}
+        </a>
+
+        <div class="rs-home-landing__hotspot rs-home-landing__hotspot--form">
+          {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-home-landing__form' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
+            {%- if form.posted_successfully? -%}
+              <p class="rs-home-landing__success" role="status">{{ section.settings.success_message | default: 'Tu es sur la liste.' | escape }}</p>
+            {%- else -%}
+              {%- if form.errors -%}
+                <p class="rs-home-landing__error" role="alert">{{ form.errors | default_errors }}</p>
+              {%- endif -%}
+              <p class="rs-home-landing__form-kicker">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</p>
+              <div class="rs-hero-video__search rs-home-landing__waitlist-bar">
+                <label class="visually-hidden" for="rs-waitlist-email">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</label>
+                <input
+                  id="rs-waitlist-email"
+                  class="rs-home-landing__waitlist-input"
+                  type="email"
+                  name="contact[email]"
+                  value="{{ form.email }}"
+                  placeholder="{{ section.settings.email_placeholder | default: 'ton@email.com' | escape }}"
+                  autocomplete="email"
+                  required
+                  {% if form.errors contains 'email' %}
+                    aria-invalid="true"
+                  {% endif %}>
+                <button type="submit" class="rs-hero-video__search-btn">
+                  <span class="rs-btn-full">{{ section.settings.submit_label | default: 'REJOINDRE' | escape }}</span>
+                  <span class="rs-btn-short" aria-hidden="true">→</span>
+                </button>
+              </div>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+
+        <a class="rs-home-landing__hotspot rs-home-landing__hotspot--lookbook rs-btn--primary text-decoration-none" href="{{ lookbook_url }}">
+          {{ section.settings.lookbook_label | default: 'LOOKBOOK ABCDRS →' | escape }}
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -106,7 +113,6 @@
   body.rs-home-landing-active .rs-header-kitsch-pop,
   body.rs-home-landing-active .rs-ph-navdesk,
   body.rs-home-landing-active .rs-banner-top__actions,
-  body.rs-home-landing-active .rs-header-mobile-bar__title,
   body.rs-home-landing-active .rs-ph-brandlink-title,
   body.rs-home-landing-active .rs-ph-brandlink-title-hit,
   body.rs-home-landing-active .rs-nav-brand__name.logo {
@@ -116,6 +122,42 @@
   @media (min-width: 768px) {
     body.rs-home-landing-active .rs-header-mobile-bar {
       display: none !important;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    body.rs-home-landing-active .rs-header-mobile-bar {
+      display: grid !important;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 8px;
+      min-height: 64px;
+      padding: 0 12px;
+    }
+
+    body.rs-home-landing-active .rs-header-mobile-bar__title {
+      display: block !important;
+      visibility: visible !important;
+      width: auto !important;
+      height: auto !important;
+      position: static !important;
+      justify-self: center;
+      text-align: center;
+      font-family: var(--font-display), var(--rs-font-display), 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(10px, 3.3vw, 17px);
+      letter-spacing: 0.045em;
+      line-height: 1.15;
+      text-transform: uppercase;
+      pointer-events: auto;
+    }
+
+    body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-mobile-bar__title {
+      color: #fff;
+      -webkit-text-fill-color: #fff;
+      text-shadow:
+        0 0 14px rgba(0, 0, 0, 0.5),
+        0 1px 3px rgba(0, 0, 0, 0.45);
     }
   }
 
@@ -152,11 +194,11 @@
       margin: 0;
       padding: 0;
       color: #fff;
-      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-      font-weight: 700;
+      font-family: var(--font-display), var(--rs-font-display), 'Syne', sans-serif;
+      font-weight: 800;
       font-size: 14px;
       line-height: 1.2;
-      letter-spacing: 3px;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       text-align: center;
       white-space: nowrap;
@@ -175,36 +217,6 @@
       color: var(--accent, #f472b6);
       -webkit-text-fill-color: var(--accent, #f472b6);
       text-shadow: none;
-    }
-  }
-
-  @media (max-width: 767.98px) {
-    body.rs-home-landing-active .rs-home-header-title {
-      display: none !important;
-    }
-
-    body.rs-home-landing-active .rs-header-mobile-bar {
-      display: flex !important;
-      grid-template-columns: none !important;
-      justify-content: flex-start;
-      align-items: center;
-      gap: 0;
-      min-height: 64px;
-      padding: 0 12px;
-    }
-
-    body.rs-home-landing-active .rs-header-mobile-bar__title {
-      display: none !important;
-      visibility: hidden !important;
-      width: 0 !important;
-      height: 0 !important;
-      overflow: hidden !important;
-      position: absolute !important;
-      pointer-events: none !important;
-    }
-
-    body.rs-home-landing-active .rs-header-mobile-bar__brand {
-      margin-right: 0;
     }
   }
 
@@ -227,193 +239,161 @@
     touch-action: none;
   }
 
-  .rs-home-landing__bg-wrap {
+  .rs-home-landing__viewport {
     position: absolute;
     inset: 0;
     overflow: hidden;
     z-index: 0;
-    cursor: default;
-    transform: none;
   }
 
-  .rs-home-landing--mobile-pan .rs-home-landing__bg-wrap {
+  .rs-home-landing--mobile-pan .rs-home-landing__viewport {
     cursor: grab;
   }
 
-  .rs-home-landing--mobile-pan.rs-home-landing--panning .rs-home-landing__bg-wrap {
+  .rs-home-landing--mobile-pan.rs-home-landing--panning .rs-home-landing__viewport {
     cursor: grabbing;
   }
 
-  .rs-home-landing__bg {
+  .rs-home-landing__scene {
     position: absolute;
-    top: 50%;
+    top: 0;
     left: 50%;
     height: 100%;
-    min-height: 100%;
-    max-width: none;
+    width: 100%;
+    will-change: transform;
+  }
+
+  .rs-home-landing__media,
+  .rs-home-landing__scene-ui {
+    position: absolute;
+    inset: 0;
+  }
+
+  .rs-home-landing__bg {
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: center center;
-    transform: translate(-50%, -50%);
-    will-change: transform;
     user-select: none;
     -webkit-user-drag: none;
     pointer-events: none;
   }
 
-  .rs-home-landing--desktop-fit .rs-home-landing__bg {
-    width: 100%;
-    min-width: 100%;
-  }
-
-  .rs-home-landing--mobile-pan .rs-home-landing__bg {
-    width: 150%;
-    min-width: 150%;
-  }
-
-  .rs-home-landing__content {
-    position: fixed;
-    inset: 0;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1.25rem;
-    padding: calc(var(--rs-portal-header-h, 120px) + 1.5rem) 1.25rem 2.5rem;
-    text-align: center;
+  .rs-home-landing__scene-ui {
     pointer-events: none;
-    transform: none !important;
-    will-change: auto;
+    z-index: 1;
   }
 
-  .rs-home-landing__content a,
-  .rs-home-landing__content button,
-  .rs-home-landing__content input,
-  .rs-home-landing__content label,
-  .rs-home-landing__content .rs-home-landing__form,
-  .rs-home-landing__content .rs-home-landing__form-wrap {
+  .rs-home-landing__hotspot {
+    position: absolute;
     pointer-events: auto;
+    z-index: 2;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 13px;
+    white-space: nowrap;
   }
 
-  .rs-home-landing__form-wrap {
-    width: 100%;
+  .rs-home-landing__hotspot--portal {
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .rs-home-landing__hotspot--form {
+    left: 50%;
+    top: 54%;
+    transform: translate(-50%, -50%);
+    width: min(280px, 86vw);
     max-width: 360px;
-    margin-top: 0.25rem;
+  }
+
+  .rs-home-landing__hotspot--lookbook {
+    right: 5%;
+    bottom: 10%;
+    left: auto;
+    top: auto;
+    transform: none;
+  }
+
+  @media (min-width: 768px) {
+    .rs-home-landing__hotspot--form {
+      width: 360px;
+    }
+
+    .rs-home-landing__hotspot--portal {
+      left: 8%;
+    }
+
+    .rs-home-landing__hotspot--lookbook {
+      right: 8%;
+      bottom: 12%;
+    }
   }
 
   .rs-home-landing__form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.65rem;
     width: 100%;
+    margin: 0;
   }
 
-  .rs-home-landing__label {
-    display: block;
-    margin: 0;
+  .rs-home-landing__form-kicker {
+    margin: 0 0 10px;
     color: #fff;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     font-weight: 500;
     font-size: 11px;
     letter-spacing: 2px;
     text-transform: uppercase;
+    text-align: center;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
   }
 
-  .rs-home-landing__fields {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.65rem;
-    width: min(280px, 100%);
-  }
-
-  @media (min-width: 768px) {
-    .rs-home-landing__fields {
-      width: 360px;
-    }
-  }
-
-  .rs-home-landing__input {
+  .rs-home-landing__waitlist-bar {
+    margin-bottom: 0;
     width: 100%;
-    box-sizing: border-box;
-    padding: 12px 16px;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.15);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    color: #fff;
-    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    font-size: 14px;
+    max-width: 100%;
+  }
+
+  .rs-home-landing__waitlist-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    font-size: 15px;
+    color: var(--rs-color-ink, #0a0a0a);
     outline: none;
   }
 
-  .rs-home-landing__input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  .rs-home-landing__input:focus-visible {
-    border-color: rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
-  }
-
-  .rs-home-landing__submit {
-    align-self: center;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 4px;
-    background: #fff;
-    color: #0a0a0a;
-    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: opacity 0.18s ease;
-  }
-
-  .rs-home-landing__submit:hover {
-    opacity: 0.92;
+  .rs-home-landing__waitlist-input::placeholder {
+    color: var(--rs-color-muted, #6b7280);
   }
 
   .rs-home-landing__success,
   .rs-home-landing__error {
     margin: 0;
-    color: #fff;
+    padding: 14px 16px;
+    border-radius: 12px;
+    text-align: center;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     font-size: 14px;
-    letter-spacing: 0.02em;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .rs-home-landing__success {
+    color: #fff;
+    background: rgba(10, 10, 10, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.22);
   }
 
   .rs-home-landing__error {
     color: #ffb4b4;
+    background: rgba(80, 0, 0, 0.35);
+    border: 1px solid rgba(255, 120, 120, 0.35);
     font-size: 12px;
-  }
-
-  .rs-home-landing__ctas {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: auto;
-    padding-top: 1.5rem;
-  }
-
-  @media (min-width: 768px) {
-    .rs-home-landing__ctas {
-      flex-direction: row;
-      justify-content: center;
-      gap: 1rem;
-    }
-  }
-
-  .rs-home-landing__cta.rs-btn--primary {
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-size: 13px;
-    white-space: nowrap;
+    margin-bottom: 8px;
   }
 </style>
 
@@ -423,9 +403,10 @@
     if (!section) return;
 
     var MOBILE_MQ = '(max-width: 767.98px)';
-    var bgWrap = section.querySelector('[data-rs-home-bg-wrap]');
+    var viewport = section.querySelector('[data-rs-home-viewport]');
+    var scene = section.querySelector('[data-rs-home-scene]');
     var bg = section.querySelector('.rs-home-landing__bg');
-    if (!bgWrap || !bg) return;
+    if (!viewport || !scene || !bg) return;
 
     document.body.classList.add('rs-home-landing-active');
 
@@ -451,10 +432,14 @@
       topLine.appendChild(title);
     }
 
+    function getSceneWidth() {
+      return scene.offsetWidth || viewport.clientWidth;
+    }
+
     function getMaxOffset() {
-      var wrapW = bgWrap.clientWidth;
-      var imgW = bg.getBoundingClientRect().width;
-      return Math.max(0, (imgW - wrapW) / 2);
+      var vw = viewport.clientWidth;
+      var sceneW = getSceneWidth();
+      return Math.max(0, (sceneW - vw) / 2);
     }
 
     function clampOffset() {
@@ -465,27 +450,43 @@
 
     function applyTransform() {
       clampOffset();
-      bg.style.transform = 'translate(calc(-50% + ' + offsetX + 'px), -50%)';
+      scene.style.transform = 'translateX(calc(-50% + ' + offsetX + 'px))';
+    }
+
+    function updateSceneSize() {
+      var vw = viewport.clientWidth;
+      var vh = viewport.clientHeight || window.innerHeight;
+
+      if (!isMobile()) {
+        scene.style.width = vw + 'px';
+        offsetX = 0;
+        applyTransform();
+        return;
+      }
+
+      var nw = bg.naturalWidth;
+      var nh = bg.naturalHeight;
+      if (!nw || !nh) {
+        nw = 2400;
+        nh = 1600;
+      }
+
+      var coverW = vh * (nw / nh);
+      var sceneW = Math.max(vw * 1.5, coverW);
+      scene.style.width = Math.ceil(sceneW) + 'px';
+      clampOffset();
+      applyTransform();
     }
 
     function setMode() {
       var mobile = isMobile();
       section.classList.toggle('rs-home-landing--mobile-pan', mobile);
-      section.classList.toggle('rs-home-landing--desktop-fit', !mobile);
-
-      if (!mobile) {
-        offsetX = 0;
-        dragging = false;
-        section.classList.remove('rs-home-landing--panning');
-        bg.style.transform = 'translate(-50%, -50%)';
-      } else {
-        applyTransform();
-      }
+      updateSceneSize();
     }
 
     function isInteractiveTarget(el) {
       if (!el || !section.contains(el)) return false;
-      return !!el.closest('a, button, input, label, textarea, select, .rs-home-landing__form');
+      return !!el.closest('a, button, input, label, textarea, select, form, .rs-home-landing__hotspot');
     }
 
     function onPointerDown(e) {
@@ -497,9 +498,9 @@
       startOffset = offsetX;
       section.classList.add('rs-home-landing--panning');
 
-      if (section.setPointerCapture && e.pointerId != null) {
+      if (viewport.setPointerCapture && e.pointerId != null) {
         try {
-          section.setPointerCapture(e.pointerId);
+          viewport.setPointerCapture(e.pointerId);
         } catch (err) {}
       }
     }
@@ -523,9 +524,9 @@
       clampOffset();
       applyTransform();
 
-      if (section.releasePointerCapture && e.pointerId != null) {
+      if (viewport.releasePointerCapture && e.pointerId != null) {
         try {
-          section.releasePointerCapture(e.pointerId);
+          viewport.releasePointerCapture(e.pointerId);
         } catch (err) {}
       }
     }
@@ -533,38 +534,32 @@
     setupHeaderTitle();
     setMode();
 
-    section.addEventListener('pointerdown', onPointerDown, { passive: true });
-    section.addEventListener('pointermove', onPointerMove, { passive: true });
-    section.addEventListener('pointerup', onPointerUp);
-    section.addEventListener('pointercancel', onPointerUp);
+    viewport.addEventListener('pointerdown', onPointerDown, { passive: true });
+    viewport.addEventListener('pointermove', onPointerMove, { passive: true });
+    viewport.addEventListener('pointerup', onPointerUp);
+    viewport.addEventListener('pointercancel', onPointerUp);
 
-    section.addEventListener(
+    viewport.addEventListener(
       'touchstart',
       function (e) {
         if (!isMobile() || isInteractiveTarget(e.target)) return;
-        onPointerDown({
-          clientX: e.touches[0].clientX,
-          touches: e.touches
-        });
+        onPointerDown({ clientX: e.touches[0].clientX, pointerId: e.touches[0].identifier });
       },
       { passive: true }
     );
 
-    section.addEventListener(
+    viewport.addEventListener(
       'touchmove',
       function (e) {
         if (!dragging) return;
         e.preventDefault();
-        onPointerMove({
-          clientX: e.touches[0].clientX,
-          touches: e.touches
-        });
+        onPointerMove({ clientX: e.touches[0].clientX, pointerId: e.touches[0].identifier });
       },
       { passive: false }
     );
 
-    section.addEventListener('touchend', onPointerUp);
-    section.addEventListener('touchcancel', onPointerUp);
+    viewport.addEventListener('touchend', onPointerUp);
+    viewport.addEventListener('touchcancel', onPointerUp);
 
     if (typeof mobileMq.addEventListener === 'function') {
       mobileMq.addEventListener('change', setMode);
@@ -572,10 +567,7 @@
       mobileMq.addListener(setMode);
     }
 
-    window.addEventListener('resize', function () {
-      setMode();
-      if (isMobile()) applyTransform();
-    });
+    window.addEventListener('resize', setMode);
 
     if (bg.complete) {
       setMode();
