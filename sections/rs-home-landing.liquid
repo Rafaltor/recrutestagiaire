@@ -577,25 +577,28 @@
     width: auto;
     padding: 6px 14px;
     border-radius: 999px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    background: rgba(0, 0, 0, 0.35);
     color: #fff !important;
     font-family: var(--font-display), var(--rs-font-display), 'Syne', sans-serif;
     font-weight: 800;
-    font-size: 13px;
-    letter-spacing: 0.04em;
+    font-size: clamp(12px, 3.45vw, 14.5px);
+    letter-spacing: 0.14em;
     text-decoration: none;
     text-transform: uppercase;
     white-space: nowrap;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
   }
 
   .rs-landing-overlay__cta:hover,
   .rs-landing-overlay__cta:focus-visible {
-    background: var(--rs-color-brand, #f472b6);
-    border-color: var(--rs-color-brand, #f472b6);
+    background: rgba(0, 0, 0, 0.52);
+    border-color: rgba(255, 255, 255, 0.85);
     color: #fff !important;
   }
 </style>
