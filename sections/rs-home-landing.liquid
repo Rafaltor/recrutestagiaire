@@ -1,7 +1,7 @@
 {%- liquid
   assign bg = section.settings.background_image
   assign portal_url = section.settings.portal_url | default: 'https://portail.recrutestagiaire.eu'
-  assign lookbook_url = section.settings.lookbook_url | default: 'https://recrutestagiaire.eu/collections/abcdrs'
+  assign lookbook_url = section.settings.lookbook_url | default: 'https://recrutestagiaire.myportfolio.com/abcdrs'
   assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
 -%}
 
@@ -207,7 +207,7 @@
       color: #fff;
       font-family: var(--font-display), var(--rs-font-display), 'Syne', sans-serif;
       font-weight: 800;
-      font-size: 14px;
+      font-size: 18px;
       line-height: 1.2;
       letter-spacing: 0.04em;
       text-transform: uppercase;
@@ -402,9 +402,10 @@
   }
 
   .rs-landing-hotspot--lookbook {
+    top: 80%;
     right: 20%;
-    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
-    transform: translateX(50%);
+    bottom: auto;
+    transform: translate(50%, -50%);
   }
 
   @media (min-width: 768px) {
@@ -541,8 +542,8 @@
     width: auto;
     padding: 12px 28px;
     border-radius: 999px;
-    border: none;
-    background: var(--rs-color-brand, #f472b6);
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    background: transparent;
     color: #fff !important;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     font-weight: 700;
@@ -551,13 +552,16 @@
     text-decoration: none;
     text-transform: uppercase;
     white-space: nowrap;
-    transition: background 0.15s ease, opacity 0.15s ease;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
 
-  .rs-landing-overlay__cta:hover {
-    background: var(--rs-color-brand-hover, #db2777);
+  .rs-landing-overlay__cta:hover,
+  .rs-landing-overlay__cta:focus-visible {
+    background: var(--rs-color-brand, #f472b6);
+    border-color: var(--rs-color-brand, #f472b6);
     color: #fff !important;
-    opacity: 0.95;
   }
 </style>
 
@@ -841,7 +845,8 @@
     {
       "type": "url",
       "id": "lookbook_url",
-      "label": "URL lookbook"
+      "label": "URL lookbook",
+      "info": "Défaut : https://recrutestagiaire.myportfolio.com/abcdrs"
     }
   ],
   "presets": [
