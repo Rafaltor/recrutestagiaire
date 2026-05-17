@@ -38,6 +38,11 @@
       decoding="async">
   {%- endif -%}
 
+  <div
+    class="rs-landing-pan-zone"
+    data-rs-pan-zone
+    aria-hidden="true"></div>
+
   <div class="rs-landing-overlay">
     <div class="rs-landing-overlay__form">
       <div class="rs-hero-video__content rs-landing-overlay__waitlist">
@@ -105,17 +110,21 @@
   @media (max-width: 767.98px) {
     html.rs-home-landing-active,
     body.rs-home-landing-active {
-      overflow: hidden !important;
-      height: 100% !important;
-      width: 100% !important;
-      position: fixed !important;
-      inset: 0 !important;
-      overscroll-behavior: none !important;
-      touch-action: none;
+      overflow: hidden;
+      height: 100%;
+      overscroll-behavior: none;
     }
 
-    body.rs-home-landing-active.rs-home-landing-panning {
-      touch-action: none;
+    body.rs-home-landing-active > main {
+      overflow: hidden;
+      min-height: 100dvh;
+      height: 100dvh;
+    }
+
+    .section-rs-home-landing {
+      overflow: hidden;
+      height: 100dvh;
+      max-height: 100dvh;
     }
   }
 
@@ -141,7 +150,14 @@
   }
 
   body.rs-home-landing-active .header-wrap.rs-header {
-    z-index: 20 !important;
+    z-index: 100 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
 
   body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-two-tier,
@@ -271,6 +287,7 @@
     top: 0;
     left: 0;
     width: 250vw;
+    max-width: none;
     height: 100vh;
     height: 100dvh;
     object-fit: cover;
@@ -278,15 +295,33 @@
     -webkit-user-select: none;
     -webkit-user-drag: none;
     will-change: transform;
-    transform: translateX(0px);
+    transform: translate3d(0, 0, 0);
     z-index: 0;
     pointer-events: none;
+  }
+
+  /* Zone tactile plein écran — entre le wallpaper et l’overlay UI */
+  .rs-landing-pan-zone {
+    display: none;
+  }
+
+  @media (max-width: 767.98px) {
+    .rs-landing-pan-zone {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+      background: transparent;
+    }
   }
 
   @media (min-width: 768px) {
     .rs-landing-bg {
       width: 100vw;
-      transform: translateX(0) !important;
+      transform: translate3d(0, 0, 0) !important;
     }
   }
 
@@ -301,6 +336,19 @@
     padding: calc(var(--rs-portal-header-h, 72px) + 16px) 20px calc(24px + env(safe-area-inset-bottom, 0px));
     pointer-events: none;
     box-sizing: border-box;
+  }
+
+  .rs-landing-overlay * {
+    pointer-events: none;
+  }
+
+  .rs-landing-overlay a,
+  .rs-landing-overlay button,
+  .rs-landing-overlay input,
+  .rs-landing-overlay label,
+  .rs-landing-overlay textarea,
+  .rs-landing-overlay select {
+    pointer-events: auto;
   }
 
   .rs-landing-overlay__form {
@@ -321,20 +369,6 @@
     margin: 0;
     transform: none;
     text-align: center;
-    pointer-events: none;
-  }
-
-  .rs-landing-overlay__waitlist .rs-hero-video__search {
-    pointer-events: none;
-  }
-
-  .rs-landing-overlay__waitlist input,
-  .rs-landing-overlay__waitlist button,
-  .rs-landing-overlay__waitlist label,
-  .rs-landing-overlay__waitlist a,
-  .rs-landing-overlay__waitlist textarea,
-  .rs-landing-overlay__waitlist select {
-    pointer-events: auto;
   }
 
   .rs-landing-overlay__waitlist .rs-hero-video__badge {
@@ -425,7 +459,6 @@
     text-decoration: none;
     text-transform: uppercase;
     white-space: nowrap;
-    pointer-events: auto;
     transition: background 0.15s ease, opacity 0.15s ease;
   }
 
@@ -442,46 +475,44 @@
     if (!section) return;
 
     var bg = section.querySelector('.rs-landing-bg');
-    if (!bg) return;
+    var panZone = section.querySelector('[data-rs-pan-zone]');
+    if (!bg || !panZone) return;
 
     document.documentElement.classList.add('rs-home-landing-active');
     document.body.classList.add('rs-home-landing-active');
 
     var heading = section.getAttribute('data-rs-heading') || 'RECRUTE STAGIAIRE';
+    var mobileMq = window.matchMedia('(max-width: 767.98px)');
 
-    var isPanning = false;
-    var panOriginX = 0;
     var touchCurrentX = 0;
+    var panOriginX = 0;
+    var isPanning = false;
 
     function isMobile() {
-      return window.innerWidth < 768;
+      return mobileMq.matches;
     }
 
     function getMaxDrag() {
-      if (!isMobile()) return 0;
-      return -(bg.offsetWidth - window.innerWidth);
+      var maxScroll = bg.offsetWidth - window.innerWidth;
+      return maxScroll > 0 ? -maxScroll : 0;
+    }
+
+    function clampX(x) {
+      var max = getMaxDrag();
+      return Math.min(0, Math.max(max, x));
     }
 
     function applyWallpaperX(x) {
-      touchCurrentX = x;
-      bg.style.transform = 'translateX(' + x + 'px)';
+      touchCurrentX = clampX(x);
+      bg.style.transform = 'translate3d(' + touchCurrentX + 'px, 0, 0)';
     }
 
     function resetDesktopBg() {
-      if (!isMobile()) {
-        isPanning = false;
-        touchCurrentX = 0;
-        panOriginX = 0;
-        document.body.classList.remove('rs-home-landing-panning');
-        bg.style.transform = 'translateX(0px)';
-      }
-    }
-
-    function isInteractive(target) {
-      if (!target) return false;
-      return !!target.closest(
-        'a, button, input, textarea, select, label, [contenteditable="true"]'
-      );
+      if (isMobile()) return;
+      isPanning = false;
+      touchCurrentX = 0;
+      panOriginX = 0;
+      bg.style.transform = 'translate3d(0, 0, 0)';
     }
 
     function setupHeaderTitle() {
@@ -500,66 +531,64 @@
       mobileTitle.textContent = heading;
     }
 
-    document.addEventListener(
-      'touchstart',
-      function (e) {
-        if (!isMobile()) return;
-        if (!e.touches || e.touches.length !== 1) return;
-        if (isInteractive(e.target)) return;
-
-        isPanning = true;
-        panOriginX = e.touches[0].clientX - touchCurrentX;
-        document.body.classList.add('rs-home-landing-panning');
-      },
-      { passive: true, capture: true }
-    );
-
-    document.addEventListener(
-      'touchmove',
-      function (e) {
-        if (!isMobile() || !isPanning) return;
-        if (!e.touches || e.touches.length !== 1) return;
-
-        e.preventDefault();
-
-        var newX = e.touches[0].clientX - panOriginX;
-        var max = getMaxDrag();
-        newX = Math.min(0, Math.max(max, newX));
-        applyWallpaperX(newX);
-      },
-      { passive: false, capture: true }
-    );
-
-    function endPan() {
-      if (!isPanning) return;
-      isPanning = false;
-      panOriginX = touchCurrentX;
-      document.body.classList.remove('rs-home-landing-panning');
+    function onPanStart(clientX) {
+      isPanning = true;
+      panOriginX = clientX - touchCurrentX;
     }
 
-    document.addEventListener('touchend', endPan, { passive: true, capture: true });
-    document.addEventListener('touchcancel', endPan, { passive: true, capture: true });
+    function onPanMove(clientX) {
+      if (!isPanning) return;
+      applyWallpaperX(clientX - panOriginX);
+    }
+
+    function onPanEnd() {
+      isPanning = false;
+    }
+
+    panZone.addEventListener(
+      'touchstart',
+      function (e) {
+        if (!isMobile() || !e.touches || e.touches.length !== 1) return;
+        onPanStart(e.touches[0].clientX);
+      },
+      { passive: true }
+    );
+
+    panZone.addEventListener(
+      'touchmove',
+      function (e) {
+        if (!isMobile() || !isPanning || !e.touches || e.touches.length !== 1) return;
+        e.preventDefault();
+        onPanMove(e.touches[0].clientX);
+      },
+      { passive: false }
+    );
+
+    panZone.addEventListener('touchend', onPanEnd, { passive: true });
+    panZone.addEventListener('touchcancel', onPanEnd, { passive: true });
 
     window.addEventListener('resize', function () {
       if (!isMobile()) {
         resetDesktopBg();
         return;
       }
-      var max = getMaxDrag();
-      applyWallpaperX(Math.min(0, Math.max(max, touchCurrentX)));
+      applyWallpaperX(touchCurrentX);
     });
+
+    if (typeof mobileMq.addEventListener === 'function') {
+      mobileMq.addEventListener('change', function () {
+        if (!isMobile()) resetDesktopBg();
+        else applyWallpaperX(touchCurrentX);
+      });
+    }
 
     setupHeaderTitle();
     normalizeMobileHeaderTitle();
     resetDesktopBg();
 
+    if (bg.complete) applyWallpaperX(touchCurrentX);
     bg.addEventListener('load', function () {
-      if (!isMobile()) {
-        resetDesktopBg();
-        return;
-      }
-      var max = getMaxDrag();
-      applyWallpaperX(Math.min(0, Math.max(max, touchCurrentX)));
+      applyWallpaperX(touchCurrentX);
     });
 
     document.addEventListener('shopify:section:load', function (ev) {
