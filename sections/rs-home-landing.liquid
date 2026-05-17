@@ -282,6 +282,30 @@
     }
   }
 
+  /* Header toujours lisible sur l’accueil (clavier / scroll-solid) */
+  body.rs-home-landing-active .header-wrap.rs-header .rs-header-mobile-bar__title,
+  body.rs-home-landing-active .header-wrap.rs-header .rs-home-header-title {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    text-shadow:
+      0 0 14px rgba(0, 0, 0, 0.55),
+      0 1px 3px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  body.rs-home-landing-active .header-wrap.rs-header .rs-header-mobile-bar__logo,
+  body.rs-home-landing-active .header-wrap.rs-header .rs-ph-brandlink-logo {
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45)) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  body.rs-home-landing-active.rs-home-landing-input-focus .header-wrap.rs-header {
+    z-index: 10000 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) !important;
+  }
+
   /* Canvas panoramique — scroll horizontal natif (style drakerelated.com) */
   .rs-landing-scroller {
     position: fixed;
@@ -412,13 +436,44 @@
     height: 100%;
     border: 0;
     background: transparent;
-    font-size: 15px;
+    font-size: 16px;
     color: var(--rs-color-ink);
     outline: none;
   }
 
   .rs-landing-overlay__waitlist .rs-hero-video__search input[type='email']::placeholder {
     color: var(--rs-color-muted);
+  }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__search-btn {
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding: 12px 22px !important;
+    border-radius: 999px !important;
+    border: 2px solid #fff !important;
+    background: var(--rs-color-brand, #f472b6) !important;
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow:
+      0 4px 18px rgba(244, 114, 182, 0.65),
+      0 0 0 1px rgba(0, 0, 0, 0.08);
+  }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__search-btn:hover,
+  .rs-landing-overlay__waitlist .rs-hero-video__search-btn:focus-visible {
+    background: var(--rs-color-brand-hover, #db2777) !important;
+    color: #fff !important;
+  }
+
+  .rs-landing-overlay__waitlist .rs-btn-full {
+    display: inline !important;
+  }
+
+  .rs-landing-overlay__waitlist .rs-btn-short {
+    display: none !important;
   }
 
   .rs-landing-overlay__form-inner {
@@ -634,6 +689,62 @@
     setupHeaderTitle();
     normalizeMobileHeaderTitle();
     resetDesktopScroll();
+
+    var emailInput = section.querySelector('#rs-waitlist-email');
+    var headerWrap = document.querySelector('.header-wrap.rs-header');
+
+    function resetWindowScroll() {
+      window.scrollTo(0, 0);
+      if (document.documentElement.scrollTop) document.documentElement.scrollTop = 0;
+      if (document.body.scrollTop) document.body.scrollTop = 0;
+    }
+
+    function stabilizeHeader() {
+      if (!headerWrap) return;
+      headerWrap.classList.remove('rs-header--scroll-solid');
+      headerWrap.classList.remove('rs-header-mobile-fixed--scrolled');
+    }
+
+    function onFormFocus() {
+      document.body.classList.add('rs-home-landing-input-focus');
+      stabilizeHeader();
+      resetWindowScroll();
+    }
+
+    function onFormBlur() {
+      document.body.classList.remove('rs-home-landing-input-focus');
+      stabilizeHeader();
+      resetWindowScroll();
+    }
+
+    if (emailInput) {
+      emailInput.addEventListener('focus', onFormFocus);
+      emailInput.addEventListener('blur', function () {
+        setTimeout(onFormBlur, 80);
+      });
+    }
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (!document.body.classList.contains('rs-home-landing-input-focus')) return;
+        resetWindowScroll();
+        stabilizeHeader();
+      },
+      { passive: true }
+    );
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener(
+        'resize',
+        function () {
+          if (!document.body.classList.contains('rs-home-landing-input-focus')) return;
+          resetWindowScroll();
+          stabilizeHeader();
+        },
+        { passive: true }
+      );
+    }
 
     var bg = section.querySelector('.rs-landing-bg');
     if (bg) {
