@@ -16,95 +16,106 @@
   id="shopify-section-{{ section.id }}"
   data-rs-heading="{{ heading_text | escape }}"
   {{ section.shopify_attributes }}>
-  <div class="rs-home-landing__viewport" data-rs-home-viewport>
-    <div class="rs-home-landing__scene" data-rs-home-scene>
-      <div class="rs-home-landing__media" aria-hidden="true">
-        {%- if bg != blank -%}
-          {{
-            bg
-            | image_url: width: 3840
-            | image_tag:
-              class: 'rs-home-landing__bg',
-              widths: '750, 1100, 1500, 1920, 2400, 3200, 3840',
-              sizes: '100vw',
-              loading: 'eager',
-              alt: ''
-          }}
-        {%- else -%}
-          <img
-            class="rs-home-landing__bg"
-            data-rs-home-bg
-            src="{{ 'pagedacceuil.jpg' | asset_url }}"
-            alt=""
-            width="2400"
-            height="1600"
-            loading="eager"
-            decoding="async">
-        {%- endif -%}
+  {%- if bg != blank -%}
+    {{
+      bg
+      | image_url: width: 3840
+      | image_tag:
+        class: 'rs-landing-bg',
+        widths: '750, 1100, 1500, 1920, 2400, 3200, 3840',
+        sizes: '250vw',
+        loading: 'eager',
+        alt: ''
+    }}
+  {%- else -%}
+    <img
+      class="rs-landing-bg"
+      src="{{ 'pagedacceuil .jpg' | asset_url }}"
+      alt=""
+      width="2400"
+      height="1600"
+      loading="eager"
+      decoding="async">
+  {%- endif -%}
+
+  <div class="rs-landing-overlay">
+    {%- if settings.logo != blank -%}
+      {{
+        settings.logo
+        | image_url: width: 160
+        | image_tag:
+          class: 'rs-landing-overlay__logo',
+          alt: shop.name,
+          width: 80,
+          height: 80,
+          loading: 'eager'
+      }}
+    {%- else -%}
+      <img
+        class="rs-landing-overlay__logo"
+        src="{{ 'rs-logo-eu.png' | asset_url }}"
+        alt="{{ shop.name | escape }}"
+        width="80"
+        height="80"
+        loading="eager"
+        decoding="async">
+    {%- endif -%}
+
+    <div class="rs-landing-overlay__form">
+      <div class="rs-hero-video__content rs-landing-overlay__waitlist">
+        {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-landing-overlay__form-inner' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
+          {%- if form.posted_successfully? -%}
+            <p class="rs-hero-video__subtitle rs-landing-overlay__success" role="status">
+              {{ section.settings.success_message | default: 'Tu es sur la liste.' | escape }}
+            </p>
+          {%- else -%}
+            {%- if form.errors -%}
+              <p class="rs-landing-overlay__error" role="alert">{{ form.errors | default_errors }}</p>
+            {%- endif -%}
+
+            <div class="rs-hero-video__badge">
+              <span class="rs-hero-video__badge-dot"></span>
+              <span>{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</span>
+            </div>
+
+            <div class="rs-hero-video__search">
+              <span class="rs-hero-video__search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="10.5" cy="10.5" r="6.25" stroke="currentColor" stroke-width="2" fill="none"/>
+                  <path d="M15.2 15.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+                </svg>
+              </span>
+              <label class="visually-hidden" for="rs-waitlist-email">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</label>
+              <input
+                id="rs-waitlist-email"
+                class="rs-hero-video__search-input"
+                type="email"
+                name="contact[email]"
+                value="{{ form.email }}"
+                placeholder="{{ section.settings.email_placeholder | default: 'ton@email.com' | escape }}"
+                autocomplete="email"
+                required
+                {% if form.errors contains 'email' %}
+                  aria-invalid="true"
+                {% endif %}>
+              <button type="submit" class="rs-hero-video__search-btn">
+                <span class="rs-btn-full">{{ section.settings.submit_label | default: 'REJOINDRE' | escape }}</span>
+                <span class="rs-btn-short" aria-hidden="true">→</span>
+              </button>
+            </div>
+          {%- endif -%}
+        {%- endform -%}
       </div>
+    </div>
 
-      <div class="rs-home-landing__pan-layer" data-rs-home-pan aria-hidden="true"></div>
-
-      <div class="rs-home-landing__scene-ui">
-        <a
-          class="rs-home-landing__hotspot rs-home-landing__hotspot--portal rs-btn--primary text-decoration-none"
-          href="{{ portal_url }}"
-          rel="noopener noreferrer">
-          {{ section.settings.portal_label | default: 'LE PORTAIL →' | escape }}
-        </a>
-
-        <div class="rs-home-landing__hotspot rs-home-landing__hotspot--form">
-          <div class="rs-hero-video__content rs-home-landing__waitlist-panel">
-            {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-home-landing__form' -%}
-              <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
-              {%- if form.posted_successfully? -%}
-                <p class="rs-hero-video__subtitle rs-home-landing__waitlist-success" role="status">
-                  {{ section.settings.success_message | default: 'Tu es sur la liste.' | escape }}
-                </p>
-              {%- else -%}
-                {%- if form.errors -%}
-                  <p class="rs-home-landing__waitlist-error" role="alert">{{ form.errors | default_errors }}</p>
-                {%- endif -%}
-
-                <div class="rs-hero-video__badge">
-                  <span class="rs-hero-video__badge-dot"></span>
-                  <span>{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</span>
-                </div>
-
-                <div class="rs-hero-video__search">
-                  <span class="rs-hero-video__search-icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <circle cx="10.5" cy="10.5" r="6.25" stroke="currentColor" stroke-width="2" fill="none"/>
-                      <path d="M15.2 15.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
-                    </svg>
-                  </span>
-                  <label class="visually-hidden" for="rs-waitlist-email">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</label>
-                  <input
-                    id="rs-waitlist-email"
-                    class="rs-hero-video__search-input"
-                    type="email"
-                    name="contact[email]"
-                    value="{{ form.email }}"
-                    placeholder="{{ section.settings.email_placeholder | default: 'ton@email.com' | escape }}"
-                    autocomplete="email"
-                    required
-                    {% if form.errors contains 'email' %}
-                      aria-invalid="true"
-                    {% endif %}>
-                  <button type="submit" class="rs-hero-video__search-btn">
-                    <span class="rs-btn-full">{{ section.settings.submit_label | default: 'REJOINDRE' | escape }}</span>
-                    <span class="rs-btn-short" aria-hidden="true">→</span>
-                  </button>
-                </div>
-              {%- endif -%}
-            {%- endform -%}
-          </div>
-        </div>
-
-        <a class="rs-home-landing__hotspot rs-home-landing__hotspot--lookbook rs-btn--primary text-decoration-none" href="{{ lookbook_url }}">
-          {{ section.settings.lookbook_label | default: 'LOOKBOOK ABCDRS →' | escape }}
-        </a>
-      </div>
+    <div class="rs-landing-overlay__ctas">
+      <a class="rs-landing-overlay__cta" href="{{ portal_url }}" rel="noopener noreferrer">
+        {{ section.settings.portal_label | default: 'LE PORTAIL →' | escape }}
+      </a>
+      <a class="rs-landing-overlay__cta" href="{{ lookbook_url }}">
+        {{ section.settings.lookbook_label | default: 'LOOKBOOK ABCDRS →' | escape }}
+      </a>
     </div>
   </div>
 </section>
@@ -113,6 +124,8 @@
   .section-rs-home-landing {
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   body.rs-home-landing-active .rs-site-footer,
@@ -136,65 +149,8 @@
     display: none !important;
   }
 
-  @media (min-width: 768px) {
-    body.rs-home-landing-active .rs-header-mobile-bar {
-      display: none !important;
-    }
-  }
-
-  @media (max-width: 767.98px) {
-    body.rs-home-landing-active .rs-header-mobile-bar {
-      display: grid !important;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 0;
-      min-height: 64px;
-      padding: 0 12px;
-      position: relative;
-    }
-
-    body.rs-home-landing-active .rs-header-mobile-bar__brand {
-      grid-column: 1;
-      justify-self: start;
-      z-index: 2;
-    }
-
-    body.rs-home-landing-active .rs-header-mobile-bar__title {
-      display: block !important;
-      visibility: visible !important;
-      width: max-content !important;
-      max-width: calc(100% - 96px) !important;
-      height: auto !important;
-      position: absolute !important;
-      left: 50% !important;
-      top: 50% !important;
-      transform: translate(-50%, -50%) !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      text-align: center !important;
-      justify-self: center;
-      font-family: var(--font-display), var(--rs-font-display), 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(11px, 3.4vw, 17px);
-      letter-spacing: 0.045em;
-      line-height: 1.15;
-      text-transform: uppercase;
-      pointer-events: auto;
-      z-index: 3;
-      white-space: nowrap;
-    }
-
-    body.rs-home-landing-active .rs-header-mobile-bar__title .rs-brand-title-break {
-      display: none;
-    }
-
-    body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-mobile-bar__title {
-      color: #fff;
-      -webkit-text-fill-color: #fff;
-      text-shadow:
-        0 0 14px rgba(0, 0, 0, 0.5),
-        0 1px 3px rgba(0, 0, 0, 0.45);
-    }
+  body.rs-home-landing-active .header-wrap.rs-header {
+    z-index: 20 !important;
   }
 
   body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-two-tier,
@@ -211,6 +167,10 @@
   }
 
   @media (min-width: 768px) {
+    body.rs-home-landing-active .rs-header-mobile-bar {
+      display: none !important;
+    }
+
     body.rs-home-landing-active .rs-header-top-line {
       display: grid !important;
       grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -254,189 +214,146 @@
       -webkit-text-fill-color: var(--accent, #f472b6);
       text-shadow: none;
     }
+
+    body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ph-brandlink-logo {
+      filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+    }
   }
 
-  body.rs-portal-header.rs-home-landing-active main > .shopify-section.section-rs-home-landing:first-child {
-    margin-top: calc(-1 * var(--rs-portal-header-h, 140px));
-    position: relative;
-    z-index: 0;
+  @media (max-width: 767.98px) {
+    body.rs-home-landing-active .rs-header-mobile-bar {
+      display: grid !important;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      min-height: 64px;
+      padding: 0 12px;
+      position: relative;
+    }
+
+    body.rs-home-landing-active .rs-header-mobile-bar__brand {
+      grid-column: 1;
+      justify-self: start;
+      z-index: 2;
+    }
+
+    body.rs-home-landing-active .rs-header-mobile-bar__title {
+      display: block !important;
+      visibility: visible !important;
+      position: absolute !important;
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      width: max-content !important;
+      max-width: calc(100% - 96px) !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      text-align: center !important;
+      font-family: var(--font-display), var(--rs-font-display), 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(11px, 3.4vw, 17px);
+      letter-spacing: 0.045em;
+      line-height: 1.15;
+      text-transform: uppercase;
+      white-space: nowrap;
+      z-index: 3;
+    }
+
+    body.rs-home-landing-active .rs-header-mobile-bar__title .rs-brand-title-break {
+      display: none;
+    }
+
+    body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-mobile-bar__title {
+      color: #fff;
+      -webkit-text-fill-color: #fff;
+      text-shadow:
+        0 0 14px rgba(0, 0, 0, 0.5),
+        0 1px 3px rgba(0, 0, 0, 0.45);
+    }
+
+    body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-mobile-bar__logo {
+      filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+    }
   }
 
-  .rs-home-landing {
-    position: relative;
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow: hidden;
-    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  }
-
-  .rs-home-landing--mobile-pan {
-    touch-action: none;
-    overscroll-behavior: none;
-  }
-
-  .rs-home-landing--mobile-pan.rs-home-landing--panning {
-    touch-action: none;
-    overscroll-behavior: none;
-  }
-
-  .rs-home-landing--mobile-pan .rs-home-landing__viewport {
-    overscroll-behavior: none;
-  }
-
-  .rs-home-landing__viewport {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    z-index: 0;
-  }
-
-  .rs-home-landing__pan-layer {
-    display: none;
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    touch-action: none;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
-  .rs-home-landing--mobile-pan .rs-home-landing__pan-layer {
-    display: block;
+  /* Wallpaper draggable — spec jeu vidéo */
+  .rs-landing-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250%;
+    height: 100%;
+    height: 100dvh;
+    object-fit: cover;
     cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    will-change: transform;
+    transform: translateX(0px);
+    z-index: 0;
   }
 
-  .rs-home-landing--mobile-pan.rs-home-landing--panning .rs-home-landing__pan-layer {
+  .rs-landing-bg.dragging {
     cursor: grabbing;
   }
 
-  .rs-home-landing__scene {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    will-change: transform;
-  }
-
-  .rs-home-landing__media {
-    position: absolute;
+  /* Contenu fixe à l'écran — ne suit pas le wallpaper */
+  .rs-landing-overlay {
+    position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .rs-home-landing__bg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
-    user-select: none;
-    -webkit-user-drag: none;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: calc(var(--rs-portal-header-h, 72px) + 16px) 20px calc(24px + env(safe-area-inset-bottom, 0px));
     pointer-events: none;
+    box-sizing: border-box;
   }
 
-  /* Calque UI = même repère que le wallpaper (scène panoramique) */
-  .rs-home-landing__scene-ui {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .rs-home-landing__hotspot {
-    position: absolute;
-    pointer-events: none;
-    z-index: 2;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-size: 13px;
-    margin: 0;
-  }
-
-  .rs-home-landing__hotspot a,
-  .rs-home-landing__hotspot button,
-  .rs-home-landing__hotspot input,
-  .rs-home-landing__hotspot label,
-  .rs-home-landing__hotspot .rs-hero-video__search,
-  .rs-home-landing__hotspot .rs-hero-video__content,
-  .rs-home-landing__hotspot form {
+  .rs-landing-overlay__logo {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
     pointer-events: auto;
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.35));
   }
 
-  /* Coordonnées % du wallpaper — portail gauche / milieu */
-  .rs-home-landing__hotspot--portal {
-    left: 6%;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  /* Formulaire : centre wallpaper, un peu sous le milieu */
-  .rs-home-landing__hotspot--form {
-    left: 50%;
-    top: 58%;
-    transform: translate(-50%, -50%);
-    width: min(280px, 72%);
+  .rs-landing-overlay__form {
+    width: 100%;
     max-width: 360px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
   }
 
-  /* Lookbook : bas droite du wallpaper */
-  .rs-home-landing__hotspot--lookbook {
-    left: 94%;
-    top: 90%;
-    transform: translate(-50%, -50%);
-    white-space: nowrap;
-  }
-
-  @media (min-width: 768px) {
-    .rs-home-landing__hotspot--form {
-      width: 360px;
-    }
-
-    .rs-home-landing__hotspot--portal {
-      left: 8%;
-      top: 50%;
-    }
-
-    .rs-home-landing__hotspot--lookbook {
-      left: 92%;
-      top: 88%;
-    }
-  }
-
-  /* Module hero vidéo (index.backup) — waiting list */
-  .rs-home-landing__waitlist-panel.rs-hero-video__content {
+  .rs-landing-overlay__waitlist.rs-hero-video__content {
     position: relative;
-    z-index: auto;
     width: 100%;
     max-width: 100%;
     padding: 0;
     margin: 0;
     transform: none;
-    overflow: visible;
     text-align: center;
+    pointer-events: auto;
   }
 
-  .rs-home-landing__waitlist-panel .rs-hero-video__badge {
+  .rs-landing-overlay__waitlist .rs-hero-video__badge {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 12px;
   }
 
-  .rs-home-landing__waitlist-panel .rs-hero-video__search {
-    margin-left: auto;
-    margin-right: auto;
+  .rs-landing-overlay__waitlist .rs-hero-video__search {
     margin-bottom: 0;
     width: 100%;
     max-width: 100%;
   }
 
-  .rs-home-landing__waitlist-panel .rs-hero-video__search input[type='email'],
-  .rs-home-landing__waitlist-panel .rs-hero-video__search-input {
+  .rs-landing-overlay__waitlist .rs-hero-video__search input[type='email'],
+  .rs-landing-overlay__waitlist .rs-hero-video__search-input {
     flex: 1 1 auto;
     min-width: 0;
     height: 100%;
@@ -447,23 +364,22 @@
     outline: none;
   }
 
-  .rs-home-landing__waitlist-panel .rs-hero-video__search input[type='email']::placeholder {
+  .rs-landing-overlay__waitlist .rs-hero-video__search input[type='email']::placeholder {
     color: var(--rs-color-muted);
   }
 
-  .rs-home-landing__form {
+  .rs-landing-overlay__form-inner {
     width: 100%;
     margin: 0;
   }
 
-  .rs-home-landing__waitlist-success {
+  .rs-landing-overlay__success {
     margin: 0;
-    text-align: center;
     color: #fff;
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
   }
 
-  .rs-home-landing__waitlist-error {
+  .rs-landing-overlay__error {
     margin: 0 0 10px;
     padding: 8px 12px;
     border-radius: 8px;
@@ -473,6 +389,55 @@
     border: 1px solid rgba(255, 120, 120, 0.35);
     text-align: center;
   }
+
+  .rs-landing-overlay__ctas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 360px;
+    pointer-events: none;
+  }
+
+  @media (min-width: 768px) {
+    .rs-landing-overlay__ctas {
+      flex-direction: row;
+      justify-content: center;
+      gap: 12px;
+    }
+  }
+
+  .rs-landing-overlay__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    border-radius: 999px;
+    border: none;
+    background: #f472b6;
+    color: #fff;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    pointer-events: auto;
+    transition: background 0.15s ease, opacity 0.15s ease;
+  }
+
+  .rs-landing-overlay__cta:hover {
+    background: #db2777;
+    color: #fff;
+    opacity: 0.95;
+  }
+
+  body.rs-home-landing-active.rs-home-landing-dragging {
+    overflow: hidden;
+    touch-action: none;
+  }
 </style>
 
 <script>
@@ -480,25 +445,29 @@
     var section = document.querySelector('.rs-home-landing');
     if (!section) return;
 
-    var MOBILE_MQ = '(max-width: 767.98px)';
-    var viewport = section.querySelector('[data-rs-home-viewport]');
-    var scene = section.querySelector('[data-rs-home-scene]');
-    var panLayer = section.querySelector('[data-rs-home-pan]');
-    var bg = section.querySelector('.rs-home-landing__bg');
-    if (!viewport || !scene || !panLayer || !bg) return;
+    var bg = section.querySelector('.rs-landing-bg');
+    if (!bg) return;
 
     document.body.classList.add('rs-home-landing-active');
 
     var heading = section.getAttribute('data-rs-heading') || 'RECRUTE STAGIAIRE';
-    var panX = 0;
-    var dragging = false;
-    var activePointer = null;
-    var startX = 0;
-    var startPanX = 0;
-    var mobileMq = window.matchMedia(MOBILE_MQ);
 
-    function isMobile() {
-      return mobileMq.matches;
+    var isDragging = false;
+    var startX = 0;
+    var currentX = 0;
+    var lastX = 0;
+
+    function getMaxDrag() {
+      return -(bg.offsetWidth - window.innerWidth);
+    }
+
+    function clampX(x) {
+      var maxDrag = getMaxDrag();
+      return Math.min(0, Math.max(maxDrag, x));
+    }
+
+    function applyTransform() {
+      bg.style.transform = 'translateX(' + currentX + 'px)';
     }
 
     function setupHeaderTitle() {
@@ -517,134 +486,99 @@
       mobileTitle.textContent = heading;
     }
 
-    function getViewportWidth() {
-      return viewport.clientWidth || window.innerWidth;
+    function onDragStart(clientX) {
+      isDragging = true;
+      startX = clientX - currentX;
+      bg.classList.add('dragging');
+      document.body.classList.add('rs-home-landing-dragging');
     }
 
-    function getSceneWidth() {
-      return scene.offsetWidth || getViewportWidth();
+    function onDragMove(clientX) {
+      if (!isDragging) return;
+      var newX = clientX - startX;
+      newX = clampX(newX);
+      currentX = newX;
+      lastX = newX;
+      applyTransform();
     }
 
-    function getPanBounds() {
-      var vw = getViewportWidth();
-      var sceneW = getSceneWidth();
-      var minX = Math.min(0, vw - sceneW);
-      return { min: minX, max: 0 };
+    function onDragEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      lastX = currentX;
+      bg.classList.remove('dragging');
+      document.body.classList.remove('rs-home-landing-dragging');
     }
 
-    function clampPan() {
-      var bounds = getPanBounds();
-      if (panX < bounds.min) panX = bounds.min;
-      if (panX > bounds.max) panX = bounds.max;
+    function isOverlayInteractive(target) {
+      if (!target) return false;
+      return !!target.closest('.rs-landing-overlay a, .rs-landing-overlay button, .rs-landing-overlay input, .rs-landing-overlay label, .rs-landing-overlay textarea, .rs-landing-overlay select');
     }
 
-    function applyScenePosition() {
-      clampPan();
-      scene.style.transform = 'translate3d(' + panX + 'px, 0, 0)';
-    }
-
-    function centerScene() {
-      var vw = getViewportWidth();
-      var sceneW = getSceneWidth();
-      panX = (vw - sceneW) / 2;
-      applyScenePosition();
-    }
-
-    function updateSceneSize() {
-      var vw = getViewportWidth();
-      var vh = viewport.clientHeight || window.innerHeight;
-
-      if (!isMobile()) {
-        scene.style.width = vw + 'px';
-        panX = 0;
-        scene.style.transform = 'translate3d(0, 0, 0)';
-        return;
-      }
-
-      var nw = bg.naturalWidth;
-      var nh = bg.naturalHeight;
-      if (!nw || !nh) {
-        nw = 2400;
-        nh = 1600;
-      }
-
-      var coverW = vh * (nw / nh);
-      var sceneW = Math.max(vw * 1.75, coverW);
-      scene.style.width = Math.ceil(sceneW) + 'px';
-      centerScene();
-    }
-
-    function setMode() {
-      var mobile = isMobile();
-      section.classList.toggle('rs-home-landing--mobile-pan', mobile);
-      updateSceneSize();
-    }
-
-    function onPanStart(e) {
-      if (!isMobile() || dragging) return;
-      dragging = true;
-      activePointer = e.pointerId;
-      startX = e.clientX;
-      startPanX = panX;
-      section.classList.add('rs-home-landing--panning');
-      if (panLayer.setPointerCapture) {
-        try {
-          panLayer.setPointerCapture(e.pointerId);
-        } catch (err) {}
-      }
-    }
-
-    function onPanMove(e) {
-      if (!dragging || !isMobile()) return;
-      if (e.pointerId !== activePointer) return;
+    /* Desktop */
+    bg.addEventListener('mousedown', function (e) {
+      if (isOverlayInteractive(e.target)) return;
       e.preventDefault();
-      panX = startPanX + (e.clientX - startX);
-      applyScenePosition();
-    }
+      onDragStart(e.clientX);
+    });
 
-    function onPanEnd(e) {
-      if (!dragging) return;
-      if (e && e.pointerId !== activePointer) return;
-      dragging = false;
-      activePointer = null;
-      section.classList.remove('rs-home-landing--panning');
-      clampPan();
-      applyScenePosition();
-      if (panLayer.releasePointerCapture && e) {
-        try {
-          panLayer.releasePointerCapture(e.pointerId);
-        } catch (err) {}
-      }
-    }
+    window.addEventListener('mousemove', function (e) {
+      if (!isDragging) return;
+      e.preventDefault();
+      onDragMove(e.clientX);
+    });
+
+    window.addEventListener('mouseup', function () {
+      onDragEnd();
+    });
+
+    /* Mobile */
+    bg.addEventListener(
+      'touchstart',
+      function (e) {
+        if (isOverlayInteractive(e.target)) return;
+        if (!e.touches || !e.touches.length) return;
+        onDragStart(e.touches[0].clientX);
+      },
+      { passive: true }
+    );
+
+    window.addEventListener(
+      'touchmove',
+      function (e) {
+        if (!isDragging) return;
+        if (!e.touches || !e.touches.length) return;
+        e.preventDefault();
+        onDragMove(e.touches[0].clientX);
+      },
+      { passive: false }
+    );
+
+    window.addEventListener('touchend', function () {
+      onDragEnd();
+    });
+
+    window.addEventListener('touchcancel', function () {
+      onDragEnd();
+    });
+
+    window.addEventListener('resize', function () {
+      currentX = clampX(currentX);
+      applyTransform();
+    });
 
     setupHeaderTitle();
     normalizeMobileHeaderTitle();
-    setMode();
 
-    panLayer.addEventListener('pointerdown', onPanStart, { passive: false });
-    panLayer.addEventListener('pointermove', onPanMove, { passive: false });
-    panLayer.addEventListener('pointerup', onPanEnd);
-    panLayer.addEventListener('pointercancel', onPanEnd);
-    panLayer.addEventListener('lostpointercapture', onPanEnd);
-
-    if (typeof mobileMq.addEventListener === 'function') {
-      mobileMq.addEventListener('change', setMode);
-    } else if (typeof mobileMq.addListener === 'function') {
-      mobileMq.addListener(setMode);
-    }
-
-    window.addEventListener('resize', setMode);
-
-    if (bg.complete) {
-      setMode();
-    }
-    bg.addEventListener('load', setMode);
+    bg.addEventListener('load', function () {
+      currentX = clampX(currentX);
+      applyTransform();
+    });
 
     document.addEventListener('shopify:section:load', function (ev) {
       if (ev.target && ev.target.contains && ev.target.contains(section)) {
         setupHeaderTitle();
         normalizeMobileHeaderTitle();
-        setMode();
       }
     });
   })();
@@ -659,13 +593,13 @@
     {
       "type": "image_picker",
       "id": "background_image",
-      "label": "Image de fond (parallax)",
-      "info": "Uploader pagedacceuil.jpg dans Fichiers Shopify, puis sélectionner ici. Sinon : asset theme pagedacceuil.jpg."
+      "label": "Image de fond (wallpaper)",
+      "info": "Uploader pagedacceuil.jpg dans Fichiers Shopify. Sinon : asset theme pagedacceuil.jpg."
     },
     {
       "type": "text",
       "id": "heading",
-      "label": "Titre header (desktop)",
+      "label": "Titre header",
       "default": "RECRUTE STAGIAIRE"
     },
     {
