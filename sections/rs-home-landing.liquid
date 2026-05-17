@@ -46,7 +46,7 @@
             class="rs-landing-hotspot rs-landing-hotspot--portal rs-landing-overlay__cta"
             href="{{ portal_url }}"
             rel="noopener noreferrer">
-            LE PORTAIL →
+            ← LE PORTAIL
           </a>
 
           <div class="rs-landing-hotspot rs-landing-hotspot--form">
@@ -57,6 +57,11 @@
                   <p class="rs-hero-video__subtitle rs-landing-overlay__success" role="status">
                     {{ section.settings.success_message | default: 'Tu es sur la liste.' | escape }}
                   </p>
+                  <script>
+                    window.setTimeout(function () {
+                      window.location.replace({{ portal_url | json }});
+                    }, 1400);
+                  </script>
                 {%- else -%}
                   {%- if form.errors -%}
                     <p class="rs-landing-overlay__error" role="alert">{{ form.errors | default_errors }}</p>
@@ -388,7 +393,7 @@
   }
 
   .rs-landing-hotspot--portal {
-    left: 20%;
+    left: 25%;
     top: 50%;
     transform: translate(-50%, -50%);
   }
@@ -462,6 +467,7 @@
     margin-bottom: 0;
     width: 100%;
     max-width: 100%;
+    border-radius: 18px;
   }
 
   .rs-landing-overlay__waitlist .rs-hero-video__search input[type='email'],
@@ -829,7 +835,7 @@
       "type": "text",
       "id": "portal_label",
       "label": "Bouton portail",
-      "default": "LE PORTAIL →"
+      "default": "← LE PORTAIL"
     },
     {
       "type": "url",
