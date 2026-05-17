@@ -41,9 +41,11 @@
             loading="eager"
             decoding="async">
         {%- endif -%}
-      </div>
+      </motion.div>
 
-      <div class="rs-home-landing__scene-ui">
+      <motion.div class="rs-home-landing__pan-layer" data-rs-home-pan aria-hidden="true"></motion.div>
+
+      <motion.div class="rs-home-landing__scene-ui">
         <a
           class="rs-home-landing__hotspot rs-home-landing__hotspot--portal rs-btn--primary text-decoration-none"
           href="{{ portal_url }}"
@@ -52,36 +54,51 @@
         </a>
 
         <div class="rs-home-landing__hotspot rs-home-landing__hotspot--form">
-          {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-home-landing__form' -%}
-            <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
-            {%- if form.posted_successfully? -%}
-              <p class="rs-home-landing__success" role="status">{{ section.settings.success_message | default: 'Tu es sur la liste.' | escape }}</p>
-            {%- else -%}
-              {%- if form.errors -%}
-                <p class="rs-home-landing__error" role="alert">{{ form.errors | default_errors }}</p>
+          <div class="rs-hero-video__content rs-home-landing__waitlist-panel">
+            {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-home-landing__form' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
+              {%- if form.posted_successfully? -%}
+                <p class="rs-hero-video__subtitle rs-home-landing__waitlist-success" role="status">
+                  {{ section.settings.success_message | default: 'Tu es sur la liste.' | escape }}
+                </p>
+              {%- else -%}
+                {%- if form.errors -%}
+                  <p class="rs-home-landing__waitlist-error" role="alert">{{ form.errors | default_errors }}</p>
+                {%- endif -%}
+
+                <div class="rs-hero-video__badge">
+                  <span class="rs-hero-video__badge-dot"></span>
+                  <span>{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</span>
+                </div>
+
+                <div class="rs-hero-video__search">
+                  <span class="rs-hero-video__search-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <circle cx="10.5" cy="10.5" r="6.25" stroke="currentColor" stroke-width="2" fill="none"/>
+                      <path d="M15.2 15.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+                    </svg>
+                  </span>
+                  <label class="visually-hidden" for="rs-waitlist-email">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</label>
+                  <input
+                    id="rs-waitlist-email"
+                    class="rs-hero-video__search-input"
+                    type="email"
+                    name="contact[email]"
+                    value="{{ form.email }}"
+                    placeholder="{{ section.settings.email_placeholder | default: 'ton@email.com' | escape }}"
+                    autocomplete="email"
+                    required
+                    {% if form.errors contains 'email' %}
+                      aria-invalid="true"
+                    {% endif %}>
+                  <button type="submit" class="rs-hero-video__search-btn">
+                    <span class="rs-btn-full">{{ section.settings.submit_label | default: 'REJOINDRE' | escape }}</span>
+                    <span class="rs-btn-short" aria-hidden="true">→</span>
+                  </button>
+                </div>
               {%- endif -%}
-              <p class="rs-home-landing__form-kicker">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</p>
-              <div class="rs-hero-video__search rs-home-landing__waitlist-bar">
-                <label class="visually-hidden" for="rs-waitlist-email">{{ section.settings.form_label | default: 'REJOINS LA LISTE' | escape }}</label>
-                <input
-                  id="rs-waitlist-email"
-                  class="rs-home-landing__waitlist-input"
-                  type="email"
-                  name="contact[email]"
-                  value="{{ form.email }}"
-                  placeholder="{{ section.settings.email_placeholder | default: 'ton@email.com' | escape }}"
-                  autocomplete="email"
-                  required
-                  {% if form.errors contains 'email' %}
-                    aria-invalid="true"
-                  {% endif %}>
-                <button type="submit" class="rs-hero-video__search-btn">
-                  <span class="rs-btn-full">{{ section.settings.submit_label | default: 'REJOINDRE' | escape }}</span>
-                  <span class="rs-btn-short" aria-hidden="true">→</span>
-                </button>
-              </div>
-            {%- endif -%}
-          {%- endform -%}
+            {%- endform -%}
+          </div>
         </div>
 
         <a class="rs-home-landing__hotspot rs-home-landing__hotspot--lookbook rs-btn--primary text-decoration-none" href="{{ lookbook_url }}">
@@ -332,6 +349,7 @@
   .rs-home-landing__hotspot input,
   .rs-home-landing__hotspot label,
   .rs-home-landing__hotspot .rs-hero-video__search,
+  .rs-home-landing__hotspot .rs-hero-video__content,
   .rs-home-landing__hotspot form {
     pointer-events: auto;
   }
@@ -376,68 +394,70 @@
     }
   }
 
-  .rs-home-landing__form {
+  /* Module hero vidéo (index.backup) — waiting list */
+  .rs-home-landing__waitlist-panel.rs-hero-video__content {
+    position: relative;
+    z-index: auto;
     width: 100%;
+    max-width: 100%;
+    padding: 0;
     margin: 0;
-  }
-
-  .rs-home-landing__form-kicker {
-    margin: 0 0 10px;
-    color: #fff;
-    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    font-weight: 500;
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    transform: none;
+    overflow: visible;
     text-align: center;
-    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
   }
 
-  .rs-home-landing__waitlist-bar {
+  .rs-home-landing__waitlist-panel .rs-hero-video__badge {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 12px;
+  }
+
+  .rs-home-landing__waitlist-panel .rs-hero-video__search {
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: 0;
     width: 100%;
     max-width: 100%;
   }
 
-  .rs-home-landing__waitlist-input {
+  .rs-home-landing__waitlist-panel .rs-hero-video__search input[type='email'],
+  .rs-home-landing__waitlist-panel .rs-hero-video__search-input {
     flex: 1 1 auto;
     min-width: 0;
     height: 100%;
     border: 0;
     background: transparent;
     font-size: 15px;
-    color: var(--rs-color-ink, #0a0a0a);
+    color: var(--rs-color-ink);
     outline: none;
   }
 
-  .rs-home-landing__waitlist-input::placeholder {
-    color: var(--rs-color-muted, #6b7280);
+  .rs-home-landing__waitlist-panel .rs-hero-video__search input[type='email']::placeholder {
+    color: var(--rs-color-muted);
   }
 
-  .rs-home-landing__success,
-  .rs-home-landing__error {
+  .rs-home-landing__form {
+    width: 100%;
     margin: 0;
-    padding: 14px 16px;
-    border-radius: 12px;
+  }
+
+  .rs-home-landing__waitlist-success {
+    margin: 0;
     text-align: center;
-    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    font-size: 14px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-
-  .rs-home-landing__success {
     color: #fff;
-    background: rgba(10, 10, 10, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
   }
 
-  .rs-home-landing__error {
+  .rs-home-landing__waitlist-error {
+    margin: 0 0 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
     color: #ffb4b4;
     background: rgba(80, 0, 0, 0.35);
     border: 1px solid rgba(255, 120, 120, 0.35);
-    font-size: 12px;
-    margin-bottom: 8px;
+    text-align: center;
   }
 </style>
 
