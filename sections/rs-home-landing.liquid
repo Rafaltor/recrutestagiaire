@@ -41,11 +41,11 @@
             loading="eager"
             decoding="async">
         {%- endif -%}
-      </motion.div>
+      </div>
 
-      <motion.div class="rs-home-landing__pan-layer" data-rs-home-pan aria-hidden="true"></motion.div>
+      <div class="rs-home-landing__pan-layer" data-rs-home-pan aria-hidden="true"></div>
 
-      <motion.div class="rs-home-landing__scene-ui">
+      <div class="rs-home-landing__scene-ui">
         <a
           class="rs-home-landing__hotspot rs-home-landing__hotspot--portal rs-btn--primary text-decoration-none"
           href="{{ portal_url }}"
@@ -272,10 +272,16 @@
 
   .rs-home-landing--mobile-pan {
     touch-action: none;
+    overscroll-behavior: none;
   }
 
   .rs-home-landing--mobile-pan.rs-home-landing--panning {
     touch-action: none;
+    overscroll-behavior: none;
+  }
+
+  .rs-home-landing--mobile-pan .rs-home-landing__viewport {
+    overscroll-behavior: none;
   }
 
   .rs-home-landing__viewport {
@@ -283,17 +289,25 @@
     inset: 0;
     overflow: hidden;
     z-index: 0;
-    touch-action: pan-y;
   }
 
-  .rs-home-landing--mobile-pan .rs-home-landing__viewport {
+  .rs-home-landing__pan-layer {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .rs-home-landing--mobile-pan .rs-home-landing__pan-layer {
+    display: block;
     cursor: grab;
-    touch-action: none;
   }
 
-  .rs-home-landing--mobile-pan.rs-home-landing--panning .rs-home-landing__viewport {
+  .rs-home-landing--mobile-pan.rs-home-landing--panning .rs-home-landing__pan-layer {
     cursor: grabbing;
-    touch-action: none;
   }
 
   .rs-home-landing__scene {
@@ -331,7 +345,7 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 1;
+    z-index: 2;
   }
 
   .rs-home-landing__hotspot {
@@ -469,8 +483,9 @@
     var MOBILE_MQ = '(max-width: 767.98px)';
     var viewport = section.querySelector('[data-rs-home-viewport]');
     var scene = section.querySelector('[data-rs-home-scene]');
+    var panLayer = section.querySelector('[data-rs-home-pan]');
     var bg = section.querySelector('.rs-home-landing__bg');
-    if (!viewport || !scene || !bg) return;
+    if (!viewport || !scene || !panLayer || !bg) return;
 
     document.body.classList.add('rs-home-landing-active');
 
@@ -553,8 +568,8 @@
         nh = 1600;
       }
 
-      var ratioW = vh * (nw / nh);
-      var sceneW = Math.max(vw * 1.65, ratioW);
+      var coverW = vh * (nw / nh);
+      var sceneW = Math.max(vw * 1.75, coverW);
       scene.style.width = Math.ceil(sceneW) + 'px';
       centerScene();
     }
@@ -565,98 +580,52 @@
       updateSceneSize();
     }
 
-    function isInteractiveTarget(el) {
-      if (!el || !section.contains(el)) return false;
-      return !!el.closest('a, button, input, label, textarea, select');
-    }
-
-    function onPanStart(clientX, id) {
+    function onPanStart(e) {
       if (!isMobile() || dragging) return;
       dragging = true;
-      activePointer = id != null ? id : 'mouse';
-      startX = clientX;
+      activePointer = e.pointerId;
+      startX = e.clientX;
       startPanX = panX;
       section.classList.add('rs-home-landing--panning');
+      if (panLayer.setPointerCapture) {
+        try {
+          panLayer.setPointerCapture(e.pointerId);
+        } catch (err) {}
+      }
     }
 
-    function onPanMove(clientX, id) {
+    function onPanMove(e) {
       if (!dragging || !isMobile()) return;
-      if (id != null && activePointer != null && id !== activePointer) return;
-      panX = startPanX + (clientX - startX);
+      if (e.pointerId !== activePointer) return;
+      e.preventDefault();
+      panX = startPanX + (e.clientX - startX);
       applyScenePosition();
     }
 
-    function onPanEnd(id) {
+    function onPanEnd(e) {
       if (!dragging) return;
-      if (id != null && activePointer != null && id !== activePointer) return;
+      if (e && e.pointerId !== activePointer) return;
       dragging = false;
       activePointer = null;
       section.classList.remove('rs-home-landing--panning');
       clampPan();
       applyScenePosition();
+      if (panLayer.releasePointerCapture && e) {
+        try {
+          panLayer.releasePointerCapture(e.pointerId);
+        } catch (err) {}
+      }
     }
 
     setupHeaderTitle();
     normalizeMobileHeaderTitle();
     setMode();
 
-    section.addEventListener(
-      'touchstart',
-      function (e) {
-        if (!isMobile() || !e.touches || !e.touches.length) return;
-        if (isInteractiveTarget(e.target)) return;
-        onPanStart(e.touches[0].clientX, e.touches[0].identifier);
-      },
-      { passive: true }
-    );
-
-    section.addEventListener(
-      'touchmove',
-      function (e) {
-        if (!dragging || !e.touches || !e.touches.length) return;
-        e.preventDefault();
-        onPanMove(e.touches[0].clientX, e.touches[0].identifier);
-      },
-      { passive: false }
-    );
-
-    section.addEventListener('touchend', function (e) {
-      onPanEnd(activePointer);
-    });
-
-    section.addEventListener('touchcancel', function () {
-      onPanEnd(activePointer);
-    });
-
-    viewport.addEventListener(
-      'pointerdown',
-      function (e) {
-        if (!isMobile() || e.pointerType === 'touch') return;
-        if (isInteractiveTarget(e.target)) return;
-        onPanStart(e.clientX, e.pointerId);
-        if (viewport.setPointerCapture) {
-          try {
-            viewport.setPointerCapture(e.pointerId);
-          } catch (err) {}
-        }
-      },
-      { passive: true }
-    );
-
-    viewport.addEventListener('pointermove', function (e) {
-      if (e.pointerType === 'touch') return;
-      onPanMove(e.clientX, e.pointerId);
-    });
-
-    viewport.addEventListener('pointerup', function (e) {
-      if (e.pointerType === 'touch') return;
-      onPanEnd(e.pointerId);
-    });
-
-    viewport.addEventListener('pointercancel', function (e) {
-      if (e.pointerType === 'touch') return;
-      onPanEnd(e.pointerId);
-    });
+    panLayer.addEventListener('pointerdown', onPanStart, { passive: false });
+    panLayer.addEventListener('pointermove', onPanMove, { passive: false });
+    panLayer.addEventListener('pointerup', onPanEnd);
+    panLayer.addEventListener('pointercancel', onPanEnd);
+    panLayer.addEventListener('lostpointercapture', onPanEnd);
 
     if (typeof mobileMq.addEventListener === 'function') {
       mobileMq.addEventListener('change', setMode);
@@ -668,9 +637,8 @@
 
     if (bg.complete) {
       setMode();
-    } else {
-      bg.addEventListener('load', setMode, { once: true });
     }
+    bg.addEventListener('load', setMode);
 
     document.addEventListener('shopify:section:load', function (ev) {
       if (ev.target && ev.target.contains && ev.target.contains(section)) {
