@@ -128,28 +128,47 @@
   @media (max-width: 767.98px) {
     body.rs-home-landing-active .rs-header-mobile-bar {
       display: grid !important;
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 8px;
+      gap: 0;
       min-height: 64px;
       padding: 0 12px;
+      position: relative;
+    }
+
+    body.rs-home-landing-active .rs-header-mobile-bar__brand {
+      grid-column: 1;
+      justify-self: start;
+      z-index: 2;
     }
 
     body.rs-home-landing-active .rs-header-mobile-bar__title {
       display: block !important;
       visibility: visible !important;
-      width: auto !important;
+      width: max-content !important;
+      max-width: calc(100% - 96px) !important;
       height: auto !important;
-      position: static !important;
+      position: absolute !important;
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      text-align: center !important;
       justify-self: center;
-      text-align: center;
       font-family: var(--font-display), var(--rs-font-display), 'Syne', sans-serif;
       font-weight: 800;
-      font-size: clamp(10px, 3.3vw, 17px);
+      font-size: clamp(11px, 3.4vw, 17px);
       letter-spacing: 0.045em;
       line-height: 1.15;
       text-transform: uppercase;
       pointer-events: auto;
+      z-index: 3;
+      white-space: nowrap;
+    }
+
+    body.rs-home-landing-active .rs-header-mobile-bar__title .rs-brand-title-break {
+      display: none;
     }
 
     body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-mobile-bar__title {
@@ -232,10 +251,13 @@
     min-height: 100dvh;
     overflow: hidden;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    touch-action: pan-y;
   }
 
-  .rs-home-landing.rs-home-landing--panning {
+  .rs-home-landing--mobile-pan {
+    touch-action: none;
+  }
+
+  .rs-home-landing--mobile-pan.rs-home-landing--panning {
     touch-action: none;
   }
 
@@ -244,29 +266,33 @@
     inset: 0;
     overflow: hidden;
     z-index: 0;
+    touch-action: pan-y;
   }
 
   .rs-home-landing--mobile-pan .rs-home-landing__viewport {
     cursor: grab;
+    touch-action: none;
   }
 
   .rs-home-landing--mobile-pan.rs-home-landing--panning .rs-home-landing__viewport {
     cursor: grabbing;
+    touch-action: none;
   }
 
   .rs-home-landing__scene {
     position: absolute;
     top: 0;
-    left: 50%;
+    left: 0;
     height: 100%;
     width: 100%;
     will-change: transform;
   }
 
-  .rs-home-landing__media,
-  .rs-home-landing__scene-ui {
+  .rs-home-landing__media {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .rs-home-landing__bg {
@@ -280,41 +306,58 @@
     pointer-events: none;
   }
 
+  /* Calque UI = même repère que le wallpaper (scène panoramique) */
   .rs-home-landing__scene-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     z-index: 1;
   }
 
   .rs-home-landing__hotspot {
     position: absolute;
-    pointer-events: auto;
+    pointer-events: none;
     z-index: 2;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     font-size: 13px;
-    white-space: nowrap;
+    margin: 0;
   }
 
+  .rs-home-landing__hotspot a,
+  .rs-home-landing__hotspot button,
+  .rs-home-landing__hotspot input,
+  .rs-home-landing__hotspot label,
+  .rs-home-landing__hotspot .rs-hero-video__search,
+  .rs-home-landing__hotspot form {
+    pointer-events: auto;
+  }
+
+  /* Coordonnées % du wallpaper — portail gauche / milieu */
   .rs-home-landing__hotspot--portal {
-    left: 5%;
+    left: 6%;
     top: 50%;
     transform: translateY(-50%);
   }
 
+  /* Formulaire : centre wallpaper, un peu sous le milieu */
   .rs-home-landing__hotspot--form {
     left: 50%;
-    top: 54%;
+    top: 58%;
     transform: translate(-50%, -50%);
-    width: min(280px, 86vw);
+    width: min(280px, 72%);
     max-width: 360px;
   }
 
+  /* Lookbook : bas droite du wallpaper */
   .rs-home-landing__hotspot--lookbook {
-    right: 5%;
-    bottom: 10%;
-    left: auto;
-    top: auto;
-    transform: none;
+    left: 94%;
+    top: 90%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
   }
 
   @media (min-width: 768px) {
@@ -324,11 +367,12 @@
 
     .rs-home-landing__hotspot--portal {
       left: 8%;
+      top: 50%;
     }
 
     .rs-home-landing__hotspot--lookbook {
-      right: 8%;
-      bottom: 12%;
+      left: 92%;
+      top: 88%;
     }
   }
 
@@ -411,11 +455,11 @@
     document.body.classList.add('rs-home-landing-active');
 
     var heading = section.getAttribute('data-rs-heading') || 'RECRUTE STAGIAIRE';
-    var offsetX = 0;
+    var panX = 0;
     var dragging = false;
-    var pointerId = null;
+    var activePointer = null;
     var startX = 0;
-    var startOffset = 0;
+    var startPanX = 0;
     var mobileMq = window.matchMedia(MOBILE_MQ);
 
     function isMobile() {
@@ -432,35 +476,53 @@
       topLine.appendChild(title);
     }
 
+    function normalizeMobileHeaderTitle() {
+      var mobileTitle = document.querySelector('.rs-header-mobile-bar__title');
+      if (!mobileTitle) return;
+      mobileTitle.textContent = heading;
+    }
+
+    function getViewportWidth() {
+      return viewport.clientWidth || window.innerWidth;
+    }
+
     function getSceneWidth() {
-      return scene.offsetWidth || viewport.clientWidth;
+      return scene.offsetWidth || getViewportWidth();
     }
 
-    function getMaxOffset() {
-      var vw = viewport.clientWidth;
+    function getPanBounds() {
+      var vw = getViewportWidth();
       var sceneW = getSceneWidth();
-      return Math.max(0, (sceneW - vw) / 2);
+      var minX = Math.min(0, vw - sceneW);
+      return { min: minX, max: 0 };
     }
 
-    function clampOffset() {
-      var max = getMaxOffset();
-      if (offsetX > max) offsetX = max;
-      if (offsetX < -max) offsetX = -max;
+    function clampPan() {
+      var bounds = getPanBounds();
+      if (panX < bounds.min) panX = bounds.min;
+      if (panX > bounds.max) panX = bounds.max;
     }
 
-    function applyTransform() {
-      clampOffset();
-      scene.style.transform = 'translateX(calc(-50% + ' + offsetX + 'px))';
+    function applyScenePosition() {
+      clampPan();
+      scene.style.transform = 'translate3d(' + panX + 'px, 0, 0)';
+    }
+
+    function centerScene() {
+      var vw = getViewportWidth();
+      var sceneW = getSceneWidth();
+      panX = (vw - sceneW) / 2;
+      applyScenePosition();
     }
 
     function updateSceneSize() {
-      var vw = viewport.clientWidth;
+      var vw = getViewportWidth();
       var vh = viewport.clientHeight || window.innerHeight;
 
       if (!isMobile()) {
         scene.style.width = vw + 'px';
-        offsetX = 0;
-        applyTransform();
+        panX = 0;
+        scene.style.transform = 'translate3d(0, 0, 0)';
         return;
       }
 
@@ -471,11 +533,10 @@
         nh = 1600;
       }
 
-      var coverW = vh * (nw / nh);
-      var sceneW = Math.max(vw * 1.5, coverW);
+      var ratioW = vh * (nw / nh);
+      var sceneW = Math.max(vw * 1.65, ratioW);
       scene.style.width = Math.ceil(sceneW) + 'px';
-      clampOffset();
-      applyTransform();
+      centerScene();
     }
 
     function setMode() {
@@ -486,80 +547,96 @@
 
     function isInteractiveTarget(el) {
       if (!el || !section.contains(el)) return false;
-      return !!el.closest('a, button, input, label, textarea, select, form, .rs-home-landing__hotspot');
+      return !!el.closest('a, button, input, label, textarea, select');
     }
 
-    function onPointerDown(e) {
-      if (!isMobile() || isInteractiveTarget(e.target)) return;
-
+    function onPanStart(clientX, id) {
+      if (!isMobile() || dragging) return;
       dragging = true;
-      pointerId = e.pointerId != null ? e.pointerId : 'touch';
-      startX = e.clientX != null ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-      startOffset = offsetX;
+      activePointer = id != null ? id : 'mouse';
+      startX = clientX;
+      startPanX = panX;
       section.classList.add('rs-home-landing--panning');
-
-      if (viewport.setPointerCapture && e.pointerId != null) {
-        try {
-          viewport.setPointerCapture(e.pointerId);
-        } catch (err) {}
-      }
     }
 
-    function onPointerMove(e) {
+    function onPanMove(clientX, id) {
       if (!dragging || !isMobile()) return;
-      if (e.pointerId != null && pointerId != null && e.pointerId !== pointerId) return;
-
-      var x = e.clientX != null ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : startX);
-      offsetX = startOffset + (x - startX);
-      applyTransform();
+      if (id != null && activePointer != null && id !== activePointer) return;
+      panX = startPanX + (clientX - startX);
+      applyScenePosition();
     }
 
-    function onPointerUp(e) {
+    function onPanEnd(id) {
       if (!dragging) return;
-      if (e.pointerId != null && pointerId != null && e.pointerId !== pointerId) return;
-
+      if (id != null && activePointer != null && id !== activePointer) return;
       dragging = false;
-      pointerId = null;
+      activePointer = null;
       section.classList.remove('rs-home-landing--panning');
-      clampOffset();
-      applyTransform();
-
-      if (viewport.releasePointerCapture && e.pointerId != null) {
-        try {
-          viewport.releasePointerCapture(e.pointerId);
-        } catch (err) {}
-      }
+      clampPan();
+      applyScenePosition();
     }
 
     setupHeaderTitle();
+    normalizeMobileHeaderTitle();
     setMode();
 
-    viewport.addEventListener('pointerdown', onPointerDown, { passive: true });
-    viewport.addEventListener('pointermove', onPointerMove, { passive: true });
-    viewport.addEventListener('pointerup', onPointerUp);
-    viewport.addEventListener('pointercancel', onPointerUp);
-
-    viewport.addEventListener(
+    section.addEventListener(
       'touchstart',
       function (e) {
-        if (!isMobile() || isInteractiveTarget(e.target)) return;
-        onPointerDown({ clientX: e.touches[0].clientX, pointerId: e.touches[0].identifier });
+        if (!isMobile() || !e.touches || !e.touches.length) return;
+        if (isInteractiveTarget(e.target)) return;
+        onPanStart(e.touches[0].clientX, e.touches[0].identifier);
       },
       { passive: true }
     );
 
-    viewport.addEventListener(
+    section.addEventListener(
       'touchmove',
       function (e) {
-        if (!dragging) return;
+        if (!dragging || !e.touches || !e.touches.length) return;
         e.preventDefault();
-        onPointerMove({ clientX: e.touches[0].clientX, pointerId: e.touches[0].identifier });
+        onPanMove(e.touches[0].clientX, e.touches[0].identifier);
       },
       { passive: false }
     );
 
-    viewport.addEventListener('touchend', onPointerUp);
-    viewport.addEventListener('touchcancel', onPointerUp);
+    section.addEventListener('touchend', function (e) {
+      onPanEnd(activePointer);
+    });
+
+    section.addEventListener('touchcancel', function () {
+      onPanEnd(activePointer);
+    });
+
+    viewport.addEventListener(
+      'pointerdown',
+      function (e) {
+        if (!isMobile() || e.pointerType === 'touch') return;
+        if (isInteractiveTarget(e.target)) return;
+        onPanStart(e.clientX, e.pointerId);
+        if (viewport.setPointerCapture) {
+          try {
+            viewport.setPointerCapture(e.pointerId);
+          } catch (err) {}
+        }
+      },
+      { passive: true }
+    );
+
+    viewport.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch') return;
+      onPanMove(e.clientX, e.pointerId);
+    });
+
+    viewport.addEventListener('pointerup', function (e) {
+      if (e.pointerType === 'touch') return;
+      onPanEnd(e.pointerId);
+    });
+
+    viewport.addEventListener('pointercancel', function (e) {
+      if (e.pointerType === 'touch') return;
+      onPanEnd(e.pointerId);
+    });
 
     if (typeof mobileMq.addEventListener === 'function') {
       mobileMq.addEventListener('change', setMode);
@@ -578,6 +655,7 @@
     document.addEventListener('shopify:section:load', function (ev) {
       if (ev.target && ev.target.contains && ev.target.contains(section)) {
         setupHeaderTitle();
+        normalizeMobileHeaderTitle();
         setMode();
       }
     });
