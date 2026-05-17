@@ -75,10 +75,10 @@
     </div>
 
     <div class="rs-home-landing__ctas">
-      <a class="rs-home-landing__cta" href="{{ portal_url }}" rel="noopener noreferrer">
+      <a class="rs-home-landing__cta rs-btn--primary text-decoration-none" href="{{ portal_url }}" rel="noopener noreferrer">
         {{ section.settings.portal_label | default: 'LE PORTAIL →' | escape }}
       </a>
-      <a class="rs-home-landing__cta" href="{{ lookbook_url }}">
+      <a class="rs-home-landing__cta rs-btn--primary text-decoration-none" href="{{ lookbook_url }}">
         {{ section.settings.lookbook_label | default: 'LOOKBOOK ABCDRS →' | escape }}
       </a>
     </div>
@@ -108,8 +108,15 @@
   body.rs-home-landing-active .rs-banner-top__actions,
   body.rs-home-landing-active .rs-header-mobile-bar__title,
   body.rs-home-landing-active .rs-ph-brandlink-title,
-  body.rs-home-landing-active .rs-ph-brandlink-title-hit {
+  body.rs-home-landing-active .rs-ph-brandlink-title-hit,
+  body.rs-home-landing-active .rs-nav-brand__name.logo {
     display: none !important;
+  }
+
+  @media (min-width: 768px) {
+    body.rs-home-landing-active .rs-header-mobile-bar {
+      display: none !important;
+    }
   }
 
   body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-two-tier,
@@ -177,11 +184,27 @@
     }
 
     body.rs-home-landing-active .rs-header-mobile-bar {
+      display: flex !important;
+      grid-template-columns: none !important;
       justify-content: flex-start;
+      align-items: center;
+      gap: 0;
+      min-height: 64px;
+      padding: 0 12px;
+    }
+
+    body.rs-home-landing-active .rs-header-mobile-bar__title {
+      display: none !important;
+      visibility: hidden !important;
+      width: 0 !important;
+      height: 0 !important;
+      overflow: hidden !important;
+      position: absolute !important;
+      pointer-events: none !important;
     }
 
     body.rs-home-landing-active .rs-header-mobile-bar__brand {
-      margin-right: auto;
+      margin-right: 0;
     }
   }
 
@@ -210,6 +233,7 @@
     overflow: hidden;
     z-index: 0;
     cursor: default;
+    transform: none;
   }
 
   .rs-home-landing--mobile-pan .rs-home-landing__bg-wrap {
@@ -247,9 +271,9 @@
   }
 
   .rs-home-landing__content {
-    position: absolute;
+    position: fixed;
     inset: 0;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -258,6 +282,8 @@
     padding: calc(var(--rs-portal-header-h, 120px) + 1.5rem) 1.25rem 2.5rem;
     text-align: center;
     pointer-events: none;
+    transform: none !important;
+    will-change: auto;
   }
 
   .rs-home-landing__content a,
@@ -383,29 +409,11 @@
     }
   }
 
-  .rs-home-landing__cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 28px;
-    border-radius: 6px;
-    border: none;
-    background: #f472b6;
-    color: #fff;
-    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.03em;
-    text-decoration: none;
+  .rs-home-landing__cta.rs-btn--primary {
     text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 13px;
     white-space: nowrap;
-    transition: opacity 0.18s ease, transform 0.18s ease;
-  }
-
-  .rs-home-landing__cta:hover {
-    opacity: 0.92;
-    color: #fff;
-    transform: translateY(-1px);
   }
 </style>
 
