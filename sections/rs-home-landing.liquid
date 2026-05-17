@@ -576,8 +576,12 @@
   }
 
   .rs-landing-drop-tagline {
-    margin: 14px 0 0;
+    margin: 14px auto 0;
     padding: 0;
+    width: max-content;
+    max-width: none;
+    white-space: nowrap;
+    overflow: visible;
     font-family: var(--font-display), var(--rs-font-display), 'Syne', sans-serif;
     font-weight: 800;
     font-size: clamp(13px, 3.8vw, 17px);
@@ -589,6 +593,11 @@
     text-shadow:
       0 0 14px rgba(0, 0, 0, 0.45),
       0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  .rs-landing-hotspot--form,
+  .rs-landing-overlay__waitlist {
+    overflow: visible;
   }
 
   .rs-landing-overlay__form-inner {
