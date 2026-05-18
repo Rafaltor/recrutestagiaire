@@ -712,13 +712,6 @@
     }
   }
 
-  @media (max-width: 767.98px) {
-    .rs-grillz-kit-overlay {
-      display: none !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-    }
-  }
 </style>
 
 <script>
@@ -1011,12 +1004,6 @@
         }
 
         kitBtn.addEventListener('click', function (e) {
-          if (isMobileOverlay()) {
-            e.preventDefault();
-            e.stopPropagation();
-            openExternal(kitUrl);
-            return;
-          }
           openKitOverlay(e);
         });
 
