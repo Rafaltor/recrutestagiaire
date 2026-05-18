@@ -55,8 +55,7 @@
           <div class="rs-landing-hotspot rs-grillz-hotspot--rdv">
             <button
               type="button"
-              class="rs-landing-overlay__cta"
-              data-rs-grillz-calendly
+              class="rs-landing-overlay__cta rs-grillz-rdv-btn"
               aria-label="{{ section.settings.rdv_label | default: 'PRENDRE RENDEZ-VOUS' | escape }}">
               {{ section.settings.rdv_label | default: 'PRENDRE RENDEZ-VOUS' | escape }}
             </button>
@@ -74,9 +73,25 @@
       </div>
     </div>
   </div>
+  <div
+    class="rs-grillz-overlay"
+    style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;">
+    <div style="position:relative;width:90vw;max-width:480px;border-radius:12px;overflow:hidden;background:#fff;">
+      <button
+        type="button"
+        class="rs-grillz-overlay__close"
+        style="position:absolute;top:12px;right:16px;z-index:10;background:none;border:none;font-size:20px;cursor:pointer;"
+        aria-label="Fermer">✕</button>
+      <iframe
+        src="https://cal.com/recrutestagiaire-avpmen/grillz?embed=true"
+        width="100%"
+        height="600"
+        frameborder="0"
+        title="Prendre rendez-vous grillz">
+      </iframe>
+    </div>
+  </div>
 </section>
-
-<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 
 <style>
   .section-rs-grillz-landing {
@@ -461,7 +476,6 @@
     document.body.classList.add('rs-home-landing-active', 'rs-grillz-landing-active');
 
     var heading = section.getAttribute('data-rs-heading') || 'RECRUTE STAGIAIRE';
-    var calendlyUrl = section.getAttribute('data-rs-calendly') || '';
     var mobileMq = window.matchMedia('(max-width: 767.98px)');
 
     var drag = {
@@ -508,28 +522,6 @@
       if (isMobile()) return;
       scroller.scrollLeft = 0;
     }
-
-    function openCalendly() {
-      if (window.Calendly && typeof window.Calendly.initPopupWidget === 'function') {
-        window.Calendly.initPopupWidget({ url: calendlyUrl });
-        return true;
-      }
-      return false;
-    }
-
-    section.querySelectorAll('[data-rs-grillz-calendly]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        if (!openCalendly()) {
-          var attempts = 0;
-          var timer = window.setInterval(function () {
-            attempts += 1;
-            if (openCalendly() || attempts > 40) {
-              window.clearInterval(timer);
-            }
-          }, 100);
-        }
-      });
-    });
 
     function onTouchStart(e) {
       if (!isMobile() || !e.touches || e.touches.length !== 1) return;
@@ -621,6 +613,35 @@
       }
     });
   })();
+</script>
+
+<script>
+  const btn = document.querySelector('.rs-grillz-rdv-btn');
+  const overlay = document.querySelector('.rs-grillz-overlay');
+  const close = document.querySelector('.rs-grillz-overlay__close');
+
+  if (btn && overlay && close) {
+    btn.addEventListener('click', () => {
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+    close.addEventListener('click', () => {
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    });
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    });
+  }
 </script>
 
 {% schema %}
