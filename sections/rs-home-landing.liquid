@@ -120,6 +120,10 @@
     </div>
   </div>
 
+  <div class="rs-landing-swipe-hint" id="rs-landing-swipe-hint" aria-hidden="true">
+    <p class="rs-landing-swipe-hint__text">{{ section.settings.swipe_hint | default: 'Glisse pour explorer' | escape }}</p>
+    <span class="rs-landing-swipe-hint__arrows" aria-hidden="true">← →</span>
+  </div>
 </section>
 
 <style>
@@ -666,6 +670,67 @@
     color: #fff !important;
     text-decoration: none !important;
   }
+
+  .rs-landing-swipe-hint {
+    position: fixed;
+    left: 50%;
+    bottom: 18%;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    font-family: var(--rs-font-body), var(--font-body), 'Manrope', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 8px);
+    transition:
+      opacity 0.35s ease,
+      visibility 0.35s ease,
+      transform 0.35s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .rs-landing-swipe-hint.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+
+  .rs-landing-swipe-hint__arrows {
+    font-family: var(--rs-font-display), var(--font-display), 'Syne', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    animation: rs-swipe-hint-pulse 1s ease-in-out infinite alternate;
+  }
+
+  @keyframes rs-swipe-hint-pulse {
+    from {
+      opacity: 0.55;
+      transform: translateX(-3px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(3px);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .rs-landing-swipe-hint {
+      display: none !important;
+    }
+  }
 </style>
 
 <script>
@@ -886,6 +951,32 @@
         normalizeMobileHeaderTitle();
       }
     });
+
+    function initSwipeHint() {
+      var hint = section.querySelector('#rs-landing-swipe-hint');
+      if (!hint || !isMobile()) return;
+
+      var dismissed = false;
+
+      function dismissHint() {
+        if (dismissed) return;
+        dismissed = true;
+        hint.classList.remove('is-visible');
+        hint.setAttribute('aria-hidden', 'true');
+      }
+
+      window.setTimeout(function () {
+        if (!isMobile() || dismissed) return;
+        hint.classList.add('is-visible');
+        hint.setAttribute('aria-hidden', 'false');
+        window.setTimeout(dismissHint, 2000);
+      }, 400);
+
+      scroller.addEventListener('scroll', dismissHint, { passive: true, once: true });
+      document.addEventListener('touchstart', dismissHint, { passive: true, once: true });
+    }
+
+    initSwipeHint();
   })();
 </script>
 
@@ -953,6 +1044,12 @@
       "id": "grillz_url",
       "label": "URL page grillz",
       "info": "Vide = /pages/grillz"
+    },
+    {
+      "type": "text",
+      "id": "swipe_hint",
+      "label": "Indication swipe (mobile, 2 s)",
+      "default": "Glisse pour explorer"
     }
   ],
   "presets": [

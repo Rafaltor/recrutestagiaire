@@ -6,6 +6,11 @@
   if cal_booking_url == blank
     assign cal_booking_url = 'https://cal.com/' | append: cal_link
   endif
+  if cal_booking_url contains '?'
+    assign cal_embed_url = cal_booking_url | append: '&embed=true'
+  else
+    assign cal_embed_url = cal_booking_url | append: '?embed=true'
+  endif
   assign home_url = routes.root_url
   assign kit_url = section.settings.kit_url | default: '' | strip
   if kit_url == blank
@@ -72,9 +77,9 @@
       </div>
     </div>
   </div>
-  <div class="rs-grillz-overlay" id="rs-grillz-overlay" aria-hidden="true">
+  <div class="rs-grillz-overlay rs-grillz-overlay--rdv" id="rs-grillz-overlay" aria-hidden="true">
     <div
-      class="rs-grillz-overlay__panel"
+      class="rs-grillz-overlay__panel rs-grillz-overlay__panel--cal"
       role="dialog"
       aria-modal="true"
       aria-label="Prendre rendez-vous">
@@ -84,28 +89,24 @@
         {{ section.settings.overlay_kicker | default: 'PRENDRE RENDEZ-VOUS' | escape }}
       </p>
 
-      <p class="rs-grillz-overlay__text">
-        {{ section.settings.overlay_text | default: 'RDV à Paris ou kit postal gratuit partout en France.' | escape }}
-      </p>
-
-      <a
-        class="rs-grillz-overlay__cta"
-        href="{{ cal_booking_url }}"
-        target="_blank"
-        rel="noopener noreferrer">
-        {{ section.settings.overlay_cta | default: 'CHOISIR MON CRÉNEAU →' | escape }}
-      </a>
+      <div class="rs-grillz-cal-embed">
+        <iframe
+          class="rs-grillz-cal-embed__frame"
+          title="Calendrier de réservation"
+          data-src="{{ cal_embed_url | escape }}"
+          loading="lazy"
+          allow="payment *; clipboard-write"
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
     </div>
   </div>
 
   <div class="rs-grillz-kit-overlay" id="rs-grillz-kit-overlay" aria-hidden="true">
     <div
-      class="rs-grillz-overlay__panel rs-grillz-kit-overlay__panel rs-grillz-kit-overlay__panel--era2010"
+      class="rs-grillz-overlay__panel rs-grillz-kit-overlay__panel rs-grillz-kit-overlay__panel--light"
       role="dialog"
       aria-modal="true"
       aria-label="Kit postal empreinte">
-      <span class="rs-grillz-kit-overlay__deco rs-grillz-kit-overlay__deco--tl" aria-hidden="true">◆</span>
-      <span class="rs-grillz-kit-overlay__deco rs-grillz-kit-overlay__deco--br" aria-hidden="true">◆</span>
       <button type="button" class="rs-grillz-overlay__close rs-grillz-kit-close" aria-label="Fermer">✕</button>
 
       <p class="rs-grillz-overlay__kicker rs-grillz-kit-overlay__kicker">
@@ -627,121 +628,95 @@
     overflow: hidden !important;
   }
 
-  /* Overlay kit — DA années 2010 (même palette RS) */
-  .rs-grillz-kit-overlay__panel--era2010 {
-    width: min(92vw, 400px);
-    max-width: 400px;
+  /* Overlay RDV — calendrier (mobile) */
+  .rs-grillz-overlay__panel--cal {
+    display: flex;
+    flex-direction: column;
+    width: min(96vw, 440px);
+    max-width: 440px;
+    max-height: min(92dvh, 720px);
+    padding: 16px 16px 12px;
+    overflow: hidden;
+  }
+
+  .rs-grillz-overlay__panel--cal .rs-grillz-overlay__kicker {
+    flex-shrink: 0;
+    margin-bottom: 12px;
+  }
+
+  .rs-grillz-cal-embed {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    border-radius: var(--rs-radius-md, 8px);
+    background: #fff;
+  }
+
+  .rs-grillz-cal-embed__frame {
+    display: block;
+    width: 100%;
+    height: min(72dvh, 580px);
+    min-height: 420px;
+    border: 0;
+    background: #fff;
+  }
+
+  /* Overlay kit — fond clair (desktop) */
+  .rs-grillz-kit-overlay__panel--light {
+    width: min(90vw, 420px);
+    max-width: 420px;
     padding: 28px 24px 24px;
-    border: 4px solid var(--rs-color-brand, #f472b6);
-    border-radius: 2px;
-    background-color: var(--rs-color-ink, #0a0a0a);
-    background-image:
-      repeating-linear-gradient(
-        -45deg,
-        rgba(244, 114, 182, 0.07) 0,
-        rgba(244, 114, 182, 0.07) 2px,
-        transparent 2px,
-        transparent 10px
-      ),
-      linear-gradient(180deg, rgba(244, 114, 182, 0.12) 0%, transparent 42%);
-    box-shadow:
-      6px 6px 0 rgba(244, 114, 182, 0.55),
-      12px 12px 0 rgba(0, 0, 0, 0.4);
-    transform: rotate(-0.6deg);
+    border: 1px solid var(--rs-color-border, #e8e8e4);
+    border-radius: var(--rs-radius-lg, 12px);
+    background: var(--rs-color-bg, #fff);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12);
   }
 
-  .rs-grillz-kit-overlay__panel--era2010::before {
-    content: '';
-    position: absolute;
-    inset: 10px;
-    border: 1px dashed rgba(249, 168, 212, 0.45);
-    pointer-events: none;
+  .rs-grillz-kit-overlay__panel--light .rs-grillz-overlay__close {
+    color: var(--rs-color-muted, #6b6b6b);
   }
 
-  .rs-grillz-kit-overlay__deco {
-    position: absolute;
-    color: var(--rs-color-brand-pale, #f9a8d4);
-    font-size: 14px;
-    line-height: 1;
-    text-shadow: 0 0 8px rgba(244, 114, 182, 0.65);
-    pointer-events: none;
-  }
-
-  .rs-grillz-kit-overlay__deco--tl {
-    top: 14px;
-    left: 14px;
-  }
-
-  .rs-grillz-kit-overlay__deco--br {
-    right: 14px;
-    bottom: 14px;
-  }
-
-  .rs-grillz-kit-overlay__kicker {
-    margin-bottom: 14px;
-    font-size: 12px;
-    letter-spacing: 0.22em;
-    text-shadow:
-      0 0 12px rgba(244, 114, 182, 0.55),
-      0 1px 0 rgba(0, 0, 0, 0.8);
-  }
-
-  .rs-grillz-kit-overlay__panel--era2010 .rs-grillz-overlay__body {
-    margin-bottom: 20px;
-    font-size: 13px;
-    line-height: 1.75;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.65);
-  }
-
-  .rs-grillz-kit-overlay__panel--era2010 .rs-grillz-overlay__body strong {
-    display: inline-block;
-    margin-top: 4px;
-    padding: 2px 8px;
-    border: 1px solid rgba(244, 114, 182, 0.55);
-    background: rgba(244, 114, 182, 0.14);
-    color: var(--rs-color-brand-pale, #f9a8d4);
+  .rs-grillz-kit-overlay__panel--light .rs-grillz-overlay__kicker {
+    margin-bottom: 12px;
     text-shadow: none;
   }
 
+  .rs-grillz-kit-overlay__panel--light .rs-grillz-overlay__body {
+    margin-bottom: 22px;
+    color: var(--rs-color-ink, #0a0a0a);
+    text-shadow: none;
+  }
+
+  .rs-grillz-kit-overlay__panel--light .rs-grillz-overlay__body strong {
+    color: var(--rs-color-brand-hover, #db2777);
+    font-weight: 700;
+  }
+
   a.rs-grillz-kit-overlay__cta {
-    padding: 13px 28px;
-    border: 2px solid rgba(255, 255, 255, 0.9);
-    border-radius: 3px;
-    background: linear-gradient(
-      180deg,
-      var(--rs-color-brand-pale, #f9a8d4) 0%,
-      var(--rs-color-brand, #f472b6) 48%,
-      var(--rs-color-brand-hover, #db2777) 100%
-    );
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.45),
-      0 4px 14px rgba(244, 114, 182, 0.45);
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+    padding: 12px 28px;
+    border-radius: var(--rs-radius-md, 8px);
+    background: var(--rs-color-brand, #f472b6);
+    box-shadow: none;
+    text-shadow: none;
   }
 
   a.rs-grillz-kit-overlay__cta:hover,
   a.rs-grillz-kit-overlay__cta:focus-visible {
-    background: linear-gradient(
-      180deg,
-      #fce7f3 0%,
-      var(--rs-color-brand-pale, #f9a8d4) 40%,
-      var(--rs-color-brand-hover, #db2777) 100%
-    );
+    background: var(--rs-color-brand-hover, #db2777);
     color: var(--rs-color-bg, #fff) !important;
   }
 
-  .rs-grillz-kit-overlay__panel--era2010 .rs-grillz-overlay__close {
-    top: 10px;
-    right: 12px;
-    color: var(--rs-color-brand-pale, #f9a8d4);
-    font-weight: 700;
-    text-shadow: 0 0 6px rgba(244, 114, 182, 0.5);
+  @media (min-width: 768px) {
+    .rs-grillz-overlay--rdv {
+      display: none !important;
+    }
   }
 
-  @media (min-width: 768px) {
-    .rs-grillz-overlay,
+  @media (max-width: 767.98px) {
     .rs-grillz-kit-overlay {
       display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
     }
   }
 </style>
@@ -955,11 +930,20 @@
         var close = overlay.querySelector('.rs-grillz-overlay__close');
         var panel = overlay.querySelector('.rs-grillz-overlay__panel');
 
+        function ensureCalEmbed() {
+          var iframe = overlay.querySelector('.rs-grillz-cal-embed__frame');
+          if (!iframe || iframe.getAttribute('src')) return;
+          var src = iframe.getAttribute('data-src') || calUrl;
+          if (!src) return;
+          iframe.setAttribute('src', src);
+        }
+
         function openOverlay(e) {
           if (e) {
             e.preventDefault();
             e.stopPropagation();
           }
+          ensureCalEmbed();
           overlay.classList.add('is-open');
           overlay.setAttribute('aria-hidden', 'false');
           lockScroll();
@@ -1027,7 +1011,7 @@
         }
 
         kitBtn.addEventListener('click', function (e) {
-          if (!isMobileOverlay()) {
+          if (isMobileOverlay()) {
             e.preventDefault();
             e.stopPropagation();
             openExternal(kitUrl);
