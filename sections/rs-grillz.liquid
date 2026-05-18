@@ -73,14 +73,13 @@
       </div>
     </div>
   </div>
-  <div class="rs-grillz-overlay" id="rs-grillz-overlay" hidden aria-hidden="true">
+  <div class="rs-grillz-overlay" id="rs-grillz-overlay" aria-hidden="true">
     <div class="rs-grillz-overlay__panel" role="dialog" aria-modal="true" aria-label="Prendre rendez-vous">
       <button type="button" class="rs-grillz-overlay__close" aria-label="Fermer">✕</button>
       <iframe
         class="rs-grillz-overlay__frame"
-        src="https://cal.com/recrutestagiaire-avpmen/grillz?embed=true"
-        title="Prendre rendez-vous grillz"
-        loading="lazy">
+        data-src="https://cal.com/recrutestagiaire-avpmen/grillz?embed=true"
+        title="Prendre rendez-vous grillz">
       </iframe>
     </div>
   </div>
@@ -461,33 +460,38 @@
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 10050;
+    z-index: 2147483000;
     align-items: center;
     justify-content: center;
-    padding: 0;
+    padding: 16px;
     background: rgba(0, 0, 0, 0.85);
     box-sizing: border-box;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
   }
 
   .rs-grillz-overlay.is-open {
-    display: flex;
-  }
-
-  .rs-grillz-overlay[hidden] {
-    display: none !important;
+    display: flex !important;
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
   }
 
   .rs-grillz-overlay__panel {
     position: relative;
     display: flex;
     flex-direction: column;
-    width: min(480px, 92vw);
-    height: min(680px, 88vh);
-    max-height: 88vh;
+    width: min(520px, 100%);
+    height: min(720px, calc(100vh - 32px));
+    height: min(720px, calc(100dvh - 32px));
+    min-height: 520px;
+    max-height: calc(100dvh - 32px);
     border-radius: 12px;
     overflow: hidden;
     background: #fff;
     box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+    pointer-events: auto;
   }
 
   .rs-grillz-overlay__close {
@@ -514,11 +518,17 @@
   .rs-grillz-overlay__frame {
     flex: 1 1 auto;
     width: 100%;
-    min-height: 0;
+    min-height: 480px;
     height: 100%;
     border: 0;
     display: block;
     background: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .rs-grillz-overlay__panel {
+      width: min(520px, calc(100vw - 48px));
+    }
   }
 
   @media (max-width: 767.98px) {
@@ -700,54 +710,85 @@
 
 <script>
   (function () {
-    var btn = document.querySelector('.rs-grillz-rdv-btn');
-    var overlay = document.getElementById('rs-grillz-overlay');
-    if (!btn || !overlay) return;
+    function initGrillzOverlay() {
+      var section = document.querySelector('.rs-grillz-landing');
+      var btn = section ? section.querySelector('.rs-grillz-rdv-btn') : null;
+      var overlay = document.getElementById('rs-grillz-overlay');
+      if (!btn || !overlay) return;
+      if (overlay.dataset.rsGrillzInit === '1') return;
+      overlay.dataset.rsGrillzInit = '1';
 
-    var close = overlay.querySelector('.rs-grillz-overlay__close');
-    var panel = overlay.querySelector('.rs-grillz-overlay__panel');
+      var close = overlay.querySelector('.rs-grillz-overlay__close');
+      var panel = overlay.querySelector('.rs-grillz-overlay__panel');
+      var frame = overlay.querySelector('.rs-grillz-overlay__frame');
 
-    if (overlay.parentElement !== document.body) {
-      document.body.appendChild(overlay);
-    }
-
-    function openOverlay() {
-      overlay.hidden = false;
-      overlay.setAttribute('aria-hidden', 'false');
-      overlay.classList.add('is-open');
-      document.documentElement.classList.add('rs-grillz-overlay-open');
-      document.body.classList.add('rs-grillz-overlay-open');
-    }
-
-    function closeOverlay() {
-      overlay.classList.remove('is-open');
-      overlay.hidden = true;
-      overlay.setAttribute('aria-hidden', 'true');
-      document.documentElement.classList.remove('rs-grillz-overlay-open');
-      document.body.classList.remove('rs-grillz-overlay-open');
-    }
-
-    btn.addEventListener('click', openOverlay);
-
-    if (close) {
-      close.addEventListener('click', closeOverlay);
-    }
-
-    overlay.addEventListener('click', function (e) {
-      if (e.target === overlay) {
-        closeOverlay();
+      if (overlay.parentElement !== document.body) {
+        document.body.appendChild(overlay);
       }
-    });
 
-    if (panel) {
-      panel.addEventListener('click', function (e) {
-        e.stopPropagation();
+      function loadFrame() {
+        if (!frame || frame.src) return;
+        var src = frame.getAttribute('data-src');
+        if (src) frame.src = src;
+      }
+
+      function openOverlay(e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        loadFrame();
+        overlay.classList.add('is-open');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.documentElement.classList.add('rs-grillz-overlay-open');
+        document.body.classList.add('rs-grillz-overlay-open');
+      }
+
+      function closeOverlay(e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.documentElement.classList.remove('rs-grillz-overlay-open');
+        document.body.classList.remove('rs-grillz-overlay-open');
+      }
+
+      btn.addEventListener('click', openOverlay);
+
+      if (close) {
+        close.addEventListener('click', closeOverlay);
+      }
+
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) {
+          closeOverlay(e);
+        }
+      });
+
+      if (panel) {
+        panel.addEventListener('click', function (e) {
+          e.stopPropagation();
+        });
+      }
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay.classList.contains('is-open')) {
+          closeOverlay();
+        }
       });
     }
 
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && overlay.classList.contains('is-open')) {
-        closeOverlay();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGrillzOverlay);
+    } else {
+      initGrillzOverlay();
+    }
+
+    document.addEventListener('shopify:section:load', function (ev) {
+      if (ev.target && ev.target.querySelector && ev.target.querySelector('.rs-grillz-landing')) {
+        initGrillzOverlay();
       }
     });
   })();
