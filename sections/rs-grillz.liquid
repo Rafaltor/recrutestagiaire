@@ -509,9 +509,38 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
     background: #fff;
+  }
+
+  .rs-grillz-overlay__cal.is-loading::after {
+    content: 'Chargement…';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-size: 14px;
+    color: #888;
+    background: #fff;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .rs-grillz-overlay__cal.is-ready::after {
+    display: none;
+  }
+
+  .rs-grillz-overlay__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #fff;
+    z-index: 2;
   }
 
   @media (max-width: 767.98px) {
@@ -705,83 +734,115 @@
       var panel = overlay.querySelector('.rs-grillz-overlay__panel');
       var calHost = document.getElementById('rs-grillz-cal-inline');
       var calLink = {{ cal_link | json }};
+      var calEmbedUrl = 'https://cal.com/' + calLink + '?embed=true';
+      var preloadWrap = null;
+      var calFrame = null;
+      var openToken = 0;
 
       if (overlay.parentElement !== document.body) {
         document.body.appendChild(overlay);
       }
 
-      function bootCalScript() {
-        if (window.Cal && window.Cal.loaded) return;
-        (function (C, A, L) {
-          var push = function (a, ar) {
-            a.q.push(ar);
-          };
-          var doc = C.document;
-          C.Cal =
-            C.Cal ||
-            function () {
-              var cal = C.Cal;
-              var args = arguments;
-              if (!cal.loaded) {
-                cal.ns = {};
-                cal.q = cal.q || [];
-                doc.head.appendChild(doc.createElement('script')).src = A;
-                cal.loaded = true;
-              }
-              if (args[0] === L) {
-                var api = function () {
-                  push(api, arguments);
-                };
-                var ns = args[1];
-                api.q = api.q || [];
-                if (typeof ns === 'string') {
-                  cal.ns[ns] = cal.ns[ns] || api;
-                  push(cal.ns[ns], args);
-                  push(cal, ['initNamespace', ns]);
-                } else {
-                  push(cal, args);
-                }
-                return;
-              }
-              push(cal, args);
-            };
-        })(window, 'https://app.cal.com/embed/embed.js', 'init');
+      function ensurePreloadWrap() {
+        if (preloadWrap) return;
+        preloadWrap = document.createElement('div');
+        preloadWrap.id = 'rs-grillz-cal-preload';
+        preloadWrap.setAttribute('aria-hidden', 'true');
+        preloadWrap.style.cssText =
+          'position:fixed;left:0;top:0;width:520px;height:680px;opacity:0;visibility:hidden;pointer-events:none;z-index:-1;overflow:hidden;';
+        document.body.appendChild(preloadWrap);
       }
 
-      function mountCalEmbed() {
+      function createCalFrame() {
+        var frame = document.createElement('iframe');
+        frame.className = 'rs-grillz-overlay__frame';
+        frame.title = 'Prendre rendez-vous grillz';
+        frame.setAttribute('allow', 'clipboard-write');
+        frame.style.cssText = 'display:block;width:520px;height:680px;border:0;';
+        frame.addEventListener(
+          'load',
+          function () {
+            frame.dataset.rsLoaded = '1';
+            if (calHost) {
+              calHost.classList.remove('is-loading');
+              calHost.classList.add('is-ready');
+            }
+            window.dispatchEvent(new Event('resize'));
+          },
+          { once: true }
+        );
+        frame.src = calEmbedUrl;
+        return frame;
+      }
+
+      function startPreload() {
+        ensurePreloadWrap();
+        if (calFrame) return;
+        calFrame = createCalFrame();
+        preloadWrap.appendChild(calFrame);
+      }
+
+      function syncFrameSize() {
+        if (!calFrame || !panel) return;
+        var rect = panel.getBoundingClientRect();
+        var w = Math.max(Math.round(rect.width), 320);
+        var h = Math.max(Math.round(rect.height), 480);
+        calFrame.style.width = w + 'px';
+        calFrame.style.height = h + 'px';
+      }
+
+      function attachFrameToPanel() {
         if (!calHost || !panel) return;
 
-        bootCalScript();
+        if (!calFrame) {
+          startPreload();
+        }
 
-        function renderInline() {
-          if (!window.Cal) return;
-          calHost.innerHTML = '';
-          window.Cal('init', { origin: 'https://cal.com' });
-          window.Cal('inline', {
-            elementOrSelector: '#rs-grillz-cal-inline',
-            calLink: calLink,
-            layout: 'month_view'
-          });
+        calHost.classList.add('is-loading');
+        calHost.classList.remove('is-ready');
+        calHost.innerHTML = '';
+        calFrame.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;display:block;';
+        calHost.appendChild(calFrame);
+        syncFrameSize();
+
+        if (calFrame.dataset.rsLoaded === '1') {
+          calHost.classList.remove('is-loading');
+          calHost.classList.add('is-ready');
           window.setTimeout(function () {
             window.dispatchEvent(new Event('resize'));
-          }, 300);
+          }, 50);
         }
+      }
 
-        if (calHost.childElementCount > 0) {
-          return;
-        }
+      function detachFrameToPreload() {
+        if (!calFrame || !preloadWrap) return;
+        calFrame.style.cssText = 'display:block;width:520px;height:680px;border:0;';
+        preloadWrap.appendChild(calFrame);
+      }
 
-        var tries = 0;
-        var timer = window.setInterval(function () {
-          tries += 1;
-          if (window.Cal) {
-            window.clearInterval(timer);
-            renderInline();
-          }
-          if (tries > 60) {
-            window.clearInterval(timer);
-          }
-        }, 50);
+      function mountVisibleFrame() {
+        var token = openToken;
+
+        requestAnimationFrame(function () {
+          if (token !== openToken) return;
+          requestAnimationFrame(function () {
+            if (token !== openToken) return;
+            attachFrameToPanel();
+
+            if (calFrame && calFrame.dataset.rsLoaded !== '1') {
+              window.setTimeout(function () {
+                if (token !== openToken || !calFrame) return;
+                if (calFrame.dataset.rsLoaded === '1') return;
+                var fresh = createCalFrame();
+                if (calFrame.parentNode) {
+                  calFrame.parentNode.removeChild(calFrame);
+                }
+                calFrame = fresh;
+                attachFrameToPanel();
+              }, 600);
+            }
+          });
+        });
       }
 
       function openOverlay(e) {
@@ -789,16 +850,13 @@
           e.preventDefault();
           e.stopPropagation();
         }
+        openToken += 1;
         overlay.classList.add('is-open');
         overlay.setAttribute('aria-hidden', 'false');
         document.documentElement.classList.add('rs-grillz-overlay-open');
         document.body.classList.add('rs-grillz-overlay-open');
-
         void overlay.offsetHeight;
-
-        window.setTimeout(function () {
-          mountCalEmbed();
-        }, 200);
+        mountVisibleFrame();
       }
 
       function closeOverlay(e) {
@@ -806,11 +864,19 @@
           e.preventDefault();
           e.stopPropagation();
         }
+        openToken += 1;
         overlay.classList.remove('is-open');
         overlay.setAttribute('aria-hidden', 'true');
         document.documentElement.classList.remove('rs-grillz-overlay-open');
         document.body.classList.remove('rs-grillz-overlay-open');
+        if (calHost) {
+          calHost.innerHTML = '';
+          calHost.classList.remove('is-loading', 'is-ready');
+        }
+        detachFrameToPreload();
       }
+
+      window.setTimeout(startPreload, 600);
 
       btn.addEventListener('click', openOverlay);
 
