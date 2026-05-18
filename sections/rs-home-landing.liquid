@@ -120,8 +120,11 @@
     </div>
   </div>
 
-  <div class="rs-landing-swipe-hint" id="rs-landing-swipe-hint" aria-hidden="true">
-    <p class="rs-landing-swipe-hint__text">{{ section.settings.swipe_hint | default: 'Glisse pour explorer' | escape }}</p>
+  <div
+    class="rs-landing-swipe-hint"
+    id="rs-landing-swipe-hint"
+    aria-hidden="true"
+    aria-label="{{ section.settings.swipe_hint | default: 'Glisse pour explorer' | escape }}">
     <span class="rs-landing-swipe-hint__arrows" aria-hidden="true">← →</span>
   </div>
 </section>
@@ -677,19 +680,13 @@
     bottom: max(18%, calc(12px + env(safe-area-inset-bottom, 0px)));
     z-index: 150;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 10px 16px;
+    justify-content: center;
+    padding: 10px 14px;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.35);
     background: rgba(0, 0, 0, 0.45);
     color: #fff;
-    font-family: var(--rs-font-body), var(--font-body), 'Manrope', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     pointer-events: none;
     opacity: 0;
     visibility: hidden;
@@ -710,8 +707,10 @@
 
   .rs-landing-swipe-hint__arrows {
     font-family: var(--rs-font-display), var(--font-display), 'Syne', sans-serif;
-    font-size: 14px;
-    letter-spacing: 0.2em;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.28em;
     animation: rs-swipe-hint-pulse 1s ease-in-out infinite alternate;
   }
 
