@@ -1,6 +1,6 @@
 {%- liquid
   assign bg = section.settings.background_image
-  assign heading_text = section.settings.heading | default: 'GRILLZ'
+  assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
   assign calendly_url = section.settings.calendly_url | default: 'https://calendly.com/bolvirg-recrutestagiaire/30min' | strip
   assign home_url = routes.root_url
   assign kit_url = section.settings.kit_url | default: '' | strip
@@ -139,13 +139,34 @@
     pointer-events: auto !important;
   }
 
-  body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-two-tier,
-  body.rs-home-landing-active .header-wrap.rs-header.rs-header--scroll-solid .rs-header-two-tier {
+  body.rs-home-landing-active.rs-grillz-landing-active .header-wrap.rs-header .rs-header-two-tier,
+  body.rs-home-landing-active.rs-grillz-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-two-tier,
+  body.rs-home-landing-active.rs-grillz-landing-active .header-wrap.rs-header.rs-header--scroll-solid .rs-header-two-tier {
     background: transparent !important;
+    background-color: transparent !important;
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
-    border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+    border-bottom: none !important;
+    border-bottom-color: transparent !important;
     box-shadow: none !important;
+  }
+
+  body.rs-home-landing-active.rs-grillz-landing-active .header-wrap.rs-header,
+  body.rs-home-landing-active.rs-grillz-landing-active .header-wrap.rs-header.rs-header--scroll-solid {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  body.rs-home-landing-active.rs-grillz-landing-active .header-wrap.rs-header .rs-header-mobile-bar,
+  body.rs-home-landing-active.rs-grillz-landing-active .header-wrap.rs-header.rs-header--scroll-solid .rs-header-mobile-bar {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  body.rs-home-landing-active.rs-grillz-landing-active .header-wrap.rs-header .rs-header-two-tier::before,
+  body.rs-home-landing-active.rs-grillz-landing-active .header-wrap.rs-header .rs-header-two-tier::after {
+    display: none !important;
   }
 
   body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-ticker {
@@ -345,21 +366,21 @@
   }
 
   .rs-grillz-landing .rs-grillz-hotspot--atelier {
-    left: 20%;
+    left: 10%;
     top: 50%;
     transform: translate(-50%, -50%);
   }
 
   .rs-grillz-landing .rs-grillz-hotspot--rdv {
-    left: 50%;
-    top: 50%;
+    left: 42%;
+    top: 55%;
     transform: translate(-50%, -50%);
   }
 
   .rs-grillz-landing .rs-grillz-hotspot--kit {
-    right: 20%;
+    right: 30%;
     left: auto;
-    top: 50%;
+    top: 65%;
     transform: translate(50%, -50%);
   }
 
@@ -436,10 +457,10 @@
     var scroller = section.querySelector('[data-rs-scroller]');
     if (!scroller) return;
 
-    document.documentElement.classList.add('rs-home-landing-active');
-    document.body.classList.add('rs-home-landing-active');
+    document.documentElement.classList.add('rs-home-landing-active', 'rs-grillz-landing-active');
+    document.body.classList.add('rs-home-landing-active', 'rs-grillz-landing-active');
 
-    var heading = section.getAttribute('data-rs-heading') || 'GRILLZ';
+    var heading = section.getAttribute('data-rs-heading') || 'RECRUTE STAGIAIRE';
     var calendlyUrl = section.getAttribute('data-rs-calendly') || '';
     var mobileMq = window.matchMedia('(max-width: 767.98px)');
 
@@ -618,7 +639,7 @@
       "type": "text",
       "id": "heading",
       "label": "Titre header",
-      "default": "GRILLZ"
+      "default": "RECRUTE STAGIAIRE"
     },
     {
       "type": "text",

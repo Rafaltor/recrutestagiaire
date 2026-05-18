@@ -49,7 +49,7 @@
             class="rs-landing-hotspot rs-landing-hotspot--portal rs-landing-overlay__cta"
             href="{{ portal_url }}"
             rel="noopener noreferrer">
-            ← LE PORTAIL
+            {{ section.settings.portal_label | default: '← LE BUREAU' | escape }}
           </a>
 
           <div class="rs-landing-hotspot rs-landing-hotspot--form">
@@ -923,7 +923,7 @@
       "type": "text",
       "id": "portal_label",
       "label": "Bouton portail",
-      "default": "← LE PORTAIL"
+      "default": "← LE BUREAU"
     },
     {
       "type": "url",
