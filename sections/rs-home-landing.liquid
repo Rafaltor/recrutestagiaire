@@ -1,9 +1,13 @@
 {%- liquid
   assign bg = section.settings.background_image
   assign portal_url = section.settings.portal_url | default: 'https://portail.recrutestagiaire.eu'
-  assign lookbook_url = section.settings.lookbook_url
-  if lookbook_url == blank
-    assign lookbook_url = 'https://recrutestagiaire.myportfolio.com/abcdrs'
+  assign grillz_url = section.settings.grillz_url | default: '' | strip
+  if grillz_url == blank
+    if pages.grillz != blank
+      assign grillz_url = pages.grillz.url
+    else
+      assign grillz_url = '/pages/grillz'
+    endif
   endif
   assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
 -%}
@@ -108,8 +112,8 @@
             </div>
           </div>
 
-          <a class="rs-landing-hotspot rs-landing-hotspot--lookbook rs-landing-overlay__cta" href="{{ lookbook_url }}">
-            LOOKBOOK ABCDRS →
+          <a class="rs-landing-hotspot rs-landing-hotspot--grillz rs-landing-overlay__cta" href="{{ grillz_url }}">
+            {{ section.settings.grillz_label | default: 'LE CABINET: GRILLZ' | escape }}
           </a>
         </div>
       </div>
@@ -412,7 +416,7 @@
     max-width: 320px;
   }
 
-  .rs-landing-hotspot--lookbook {
+  .rs-landing-hotspot--grillz {
     top: 80%;
     right: 20%;
     bottom: auto;
@@ -438,6 +442,11 @@
     .rs-landing-scroller__track {
       width: 250vw;
       min-width: 250vw;
+    }
+
+    .rs-landing-bg {
+      object-fit: cover;
+      object-position: center center;
     }
   }
 
@@ -624,7 +633,7 @@
     text-align: center;
   }
 
-  /* Boutons pilule — portail / lookbook */
+  /* Boutons pilule — portail / cabinet grillz */
   .rs-home-landing a.rs-landing-overlay__cta {
     display: inline-flex;
     align-items: center;
@@ -717,8 +726,12 @@
       mobileTitle.textContent = heading;
     }
 
-    function resetDesktopScroll() {
-      if (isMobile()) return;
+    function syncPanScroll() {
+      if (isMobile()) {
+        var max = maxScrollLeft();
+        scroller.scrollLeft = max > 0 ? max / 2 : 0;
+        return;
+      }
       scroller.scrollLeft = 0;
     }
 
@@ -791,17 +804,16 @@
     document.addEventListener('touchcancel', onTouchEnd, { passive: true, capture: true });
 
     window.addEventListener('resize', function () {
-      scroller.scrollLeft = clampScroll(scroller.scrollLeft);
-      resetDesktopScroll();
+      syncPanScroll();
     });
 
     if (typeof mobileMq.addEventListener === 'function') {
-      mobileMq.addEventListener('change', resetDesktopScroll);
+      mobileMq.addEventListener('change', syncPanScroll);
     }
 
     setupHeaderTitle();
     normalizeMobileHeaderTitle();
-    resetDesktopScroll();
+    syncPanScroll();
 
     var emailInput = section.querySelector('#rs-waitlist-email');
     var headerWrap = document.querySelector('.header-wrap.rs-header');
@@ -862,7 +874,7 @@
     var bg = section.querySelector('.rs-landing-bg');
     if (bg) {
       var onBgReady = function () {
-        scroller.scrollLeft = clampScroll(scroller.scrollLeft);
+        syncPanScroll();
       };
       if (bg.complete) onBgReady();
       bg.addEventListener('load', onBgReady);
@@ -932,15 +944,15 @@
     },
     {
       "type": "text",
-      "id": "lookbook_label",
-      "label": "Bouton lookbook",
-      "default": "LOOKBOOK ABCDRS →"
+      "id": "grillz_label",
+      "label": "Bouton cabinet grillz",
+      "default": "LE CABINET: GRILLZ"
     },
     {
       "type": "url",
-      "id": "lookbook_url",
-      "label": "URL lookbook",
-      "info": "Défaut : https://recrutestagiaire.myportfolio.com/abcdrs"
+      "id": "grillz_url",
+      "label": "URL page grillz",
+      "info": "Vide = /pages/grillz"
     }
   ],
   "presets": [

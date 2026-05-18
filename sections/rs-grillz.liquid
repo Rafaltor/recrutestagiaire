@@ -14,10 +14,6 @@
   endif
 -%}
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
-
 <section
   class="rs-grillz-landing rs-home-landing shopify-section section-rs-grillz-landing"
   id="shopify-section-{{ section.id }}"
@@ -56,30 +52,20 @@
           </a>
 
           <div class="rs-landing-hotspot rs-grillz-hotspot--rdv">
-            <div class="rs-grillz-hotspot--rdv__stack">
-              <button
-                type="button"
-                class="rs-landing-overlay__cta rs-grillz-rdv-btn"
-                aria-label="{{ section.settings.rdv_label | default: 'PRENDRE RENDEZ-VOUS' | escape }}">
-                {{ section.settings.rdv_label | default: 'PRENDRE RENDEZ-VOUS' | escape }}
-              </button>
-              <button
-                type="button"
-                class="rs-grillz-kit-btn"
-                style="background:transparent;border:1px solid rgba(255,255,255,0.4);color:white;font-family:'Inter',sans-serif;font-weight:600;font-size:12px;padding:10px 24px;border-radius:6px;cursor:pointer;margin-top:10px;letter-spacing:1px;">
-                {{ section.settings.kit_postal_btn_label | default: '📦 KIT POSTAL — PAS DE PARIS ?' | escape }}
-              </button>
-            </div>
+            <button
+              type="button"
+              class="rs-landing-overlay__cta rs-grillz-rdv-btn"
+              aria-label="{{ section.settings.rdv_label | default: 'PRENDRE RENDEZ-VOUS' | escape }}">
+              {{ section.settings.rdv_label | default: 'PRENDRE RENDEZ-VOUS' | escape }}
+            </button>
           </div>
 
-          <a
-            class="rs-landing-hotspot rs-grillz-hotspot--kit rs-landing-overlay__cta"
-            href="{{ kit_url }}"
-            {% if kit_url contains 'http' %}
-              target="_blank" rel="noopener noreferrer"
-            {% endif %}>
-            {{ section.settings.kit_label | default: 'ENVOIE KIT GRILLZ' | escape }}
-          </a>
+          <button
+            type="button"
+            class="rs-landing-hotspot rs-grillz-hotspot--kit rs-landing-overlay__cta rs-grillz-kit-btn"
+            aria-label="{{ section.settings.kit_label | default: 'KIT POSTAL EMPREINTE' | escape }}">
+            {{ section.settings.kit_label | default: 'KIT POSTAL EMPREINTE' | escape }}
+          </button>
         </div>
       </div>
     </div>
@@ -89,27 +75,22 @@
       class="rs-grillz-overlay__panel"
       role="dialog"
       aria-modal="true"
-      aria-label="Prendre rendez-vous"
-      style="position:relative;width:90vw;max-width:480px;border-radius:12px;overflow:hidden;background:#0A0A0A;padding:32px;text-align:center;">
-      <button
-        type="button"
-        class="rs-grillz-overlay__close"
-        style="position:absolute;top:12px;right:16px;z-index:10;background:none;border:none;color:white;font-size:20px;cursor:pointer;"
-        aria-label="Fermer">✕</button>
+      aria-label="Prendre rendez-vous">
+      <button type="button" class="rs-grillz-overlay__close" aria-label="Fermer">✕</button>
 
-      <p style="color:#F472B6;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin:0 0 8px;">
+      <p class="rs-grillz-overlay__kicker">
         {{ section.settings.overlay_kicker | default: 'PRENDRE RENDEZ-VOUS' | escape }}
       </p>
 
-      <p style="color:white;font-family:'Inter',sans-serif;font-size:14px;margin:0 0 24px;line-height:1.5;">
+      <p class="rs-grillz-overlay__text">
         {{ section.settings.overlay_text | default: 'RDV à Paris ou kit postal gratuit partout en France.' | escape }}
       </p>
 
       <a
+        class="rs-grillz-overlay__cta"
         href="{{ cal_booking_url }}"
         target="_blank"
-        rel="noopener noreferrer"
-        style="display:inline-block;background:#F472B6;color:white;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;padding:14px 32px;border-radius:6px;text-decoration:none;">
+        rel="noopener noreferrer">
         {{ section.settings.overlay_cta | default: 'CHOISIR MON CRÉNEAU →' | escape }}
       </a>
     </div>
@@ -117,40 +98,38 @@
 
   <div class="rs-grillz-kit-overlay" id="rs-grillz-kit-overlay" aria-hidden="true">
     <div
-      class="rs-grillz-kit-overlay__panel"
+      class="rs-grillz-overlay__panel rs-grillz-kit-overlay__panel"
       role="dialog"
       aria-modal="true"
-      aria-label="Kit postal"
-      style="position:relative;width:85vw;max-width:380px;background:#f5e6c8;border:3px solid #8B6914;border-radius:4px;padding:32px 28px;font-family:'Courier New',monospace;box-shadow:4px 4px 0px #8B6914,8px 8px 0px rgba(0,0,0,0.3);text-align:center;">
-      <button
-        type="button"
-        class="rs-grillz-kit-close"
-        style="position:absolute;top:8px;right:12px;background:none;border:none;font-size:18px;cursor:pointer;color:#8B6914;"
-        aria-label="Fermer">✕</button>
+      aria-label="Kit postal empreinte">
+      <button type="button" class="rs-grillz-overlay__close rs-grillz-kit-close" aria-label="Fermer">✕</button>
 
-      <p style="font-size:11px;color:#8B6914;letter-spacing:2px;text-transform:uppercase;margin:0 0 16px;">
-        {{ section.settings.kit_overlay_kicker | default: '✦ KIT POSTAL ✦' | escape }}
+      <p class="rs-grillz-overlay__kicker">
+        {{ section.settings.kit_overlay_kicker | default: 'KIT POSTAL EMPREINTE' | escape }}
       </p>
 
-      <div style="font-size:14px;color:#3d2b00;line-height:1.8;margin:0 0 20px;">
+      <div class="rs-grillz-overlay__text rs-grillz-overlay__body">
         {%- if section.settings.kit_overlay_body != blank -%}
           {{ section.settings.kit_overlay_body }}
         {%- else -%}
-          T'es pas sur Paris ?<br><br>
-          On t'envoie un kit de prise d'empreinte chez toi.<br><br>
-          Tu fais tes empreintes,<br>
-          tu nous les renvoies,<br>
-          on fabrique tes grillz à Paris.<br><br>
-          <strong>+30 € sur le tarif choisi.</strong>
+          <p>T'es pas sur Paris ?</p>
+          <p>On t'envoie un kit de prise d'empreinte chez toi.</p>
+          <p>
+            Tu fais tes empreintes,<br>
+            tu nous les renvoies,<br>
+            on fabrique tes grillz à Paris.
+          </p>
+          <p><strong>+30 € sur le tarif choisi.</strong></p>
         {%- endif -%}
       </div>
 
       <a
-        href="{{ cal_booking_url }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        style="display:inline-block;background:#8B6914;color:#f5e6c8;font-family:'Courier New',monospace;font-weight:700;font-size:12px;padding:12px 24px;border:2px solid #3d2b00;text-decoration:none;letter-spacing:1px;">
-        {{ section.settings.kit_overlay_cta | default: '[ COMMANDER LE KIT ]' | escape }}
+        class="rs-grillz-overlay__cta"
+        href="{{ kit_url }}"
+        {% if kit_url contains 'http' %}
+          target="_blank" rel="noopener noreferrer"
+        {% endif %}>
+        {{ section.settings.kit_overlay_cta | default: 'COMMANDER LE KIT →' | escape }}
       </a>
     </div>
   </div>
@@ -455,16 +434,6 @@
     transform: translate(-50%, -50%);
   }
 
-  .rs-grillz-landing .rs-grillz-hotspot--rdv__stack {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .rs-grillz-landing .rs-grillz-kit-btn {
-    white-space: nowrap;
-  }
-
   .rs-grillz-landing .rs-grillz-hotspot--kit {
     right: 30%;
     left: auto;
@@ -484,6 +453,11 @@
     .rs-grillz-landing .rs-landing-scroller__track {
       width: 250vw;
       min-width: 250vw;
+    }
+
+    .rs-grillz-landing .rs-landing-bg {
+      object-fit: cover;
+      object-position: center center;
     }
   }
 
@@ -510,7 +484,7 @@
     border: 1px solid rgba(255, 255, 255, 0.45);
     background: rgba(0, 0, 0, 0.35);
     color: #fff !important;
-    font-family: 'Syne', sans-serif;
+    font-family: var(--rs-font-display), var(--font-display), 'Syne', sans-serif;
     font-weight: 600;
     font-size: clamp(12px, 3.45vw, 14.5px);
     letter-spacing: 0.14em;
@@ -536,8 +510,9 @@
     text-decoration: none !important;
   }
 
-  /* Overlay Cal.com */
-  .rs-grillz-overlay {
+  /* Overlays modales (RDV + kit postal) */
+  .rs-grillz-overlay,
+  .rs-grillz-kit-overlay {
     display: flex;
     position: fixed;
     inset: 0;
@@ -545,48 +520,107 @@
     align-items: center;
     justify-content: center;
     padding: 16px;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(10, 10, 10, 0.88);
     box-sizing: border-box;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
   }
 
-  .rs-grillz-overlay.is-open {
+  .rs-grillz-kit-overlay {
+    z-index: 2147483001;
+  }
+
+  .rs-grillz-overlay.is-open,
+  .rs-grillz-kit-overlay.is-open {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
   }
 
   .rs-grillz-overlay__panel {
+    position: relative;
+    width: min(90vw, 480px);
+    max-width: 480px;
+    padding: 32px;
+    border-radius: var(--rs-radius-lg, 12px);
+    background: var(--rs-color-ink, #0a0a0a);
+    text-align: center;
     box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
   }
 
-  @media (max-width: 767.98px) {
-    .rs-grillz-overlay__panel {
-      width: min(90vw, 480px) !important;
-    }
+  .rs-grillz-overlay__close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    z-index: 10;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--rs-color-bg, #fff);
+    font-family: var(--rs-font-body), var(--font-body), 'Manrope', sans-serif;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .rs-grillz-overlay__kicker {
+    margin: 0 0 8px;
+    color: var(--rs-color-brand, #f472b6);
+    font-family: var(--rs-font-display), var(--font-display), 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .rs-grillz-overlay__text,
+  .rs-grillz-overlay__body {
+    margin: 0 0 24px;
+    color: var(--rs-color-bg, #fff);
+    font-family: var(--rs-font-body), var(--font-body), 'Manrope', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .rs-grillz-overlay__body p {
+    margin: 0 0 12px;
+  }
+
+  .rs-grillz-overlay__body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .rs-grillz-overlay__body strong {
+    color: var(--rs-color-brand-pale, #f9a8d4);
+    font-weight: 700;
+  }
+
+  a.rs-grillz-overlay__cta {
+    display: inline-block;
+    padding: 14px 32px;
+    border-radius: var(--rs-radius-md, 8px);
+    background: var(--rs-color-brand, #f472b6);
+    color: var(--rs-color-bg, #fff) !important;
+    font-family: var(--rs-font-display), var(--font-display), 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    transition: background 0.2s ease;
+  }
+
+  a.rs-grillz-overlay__cta:hover,
+  a.rs-grillz-overlay__cta:focus-visible {
+    background: var(--rs-color-brand-hover, #db2777);
+    color: var(--rs-color-bg, #fff) !important;
   }
 
   html.rs-grillz-overlay-open,
   body.rs-grillz-overlay-open {
     overflow: hidden !important;
-  }
-
-  .rs-grillz-kit-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 2147483001;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    background: rgba(0, 0, 0, 0.85);
-    box-sizing: border-box;
-  }
-
-  .rs-grillz-kit-overlay.is-open {
-    display: flex !important;
   }
 </style>
 
@@ -644,8 +678,12 @@
       mobileTitle.textContent = heading;
     }
 
-    function resetDesktopScroll() {
-      if (isMobile()) return;
+    function syncPanScroll() {
+      if (isMobile()) {
+        var max = maxScrollLeft();
+        scroller.scrollLeft = max > 0 ? max / 2 : 0;
+        return;
+      }
       scroller.scrollLeft = 0;
     }
 
@@ -711,22 +749,21 @@
     document.addEventListener('touchcancel', onTouchEnd, { passive: true, capture: true });
 
     window.addEventListener('resize', function () {
-      scroller.scrollLeft = clampScroll(scroller.scrollLeft);
-      resetDesktopScroll();
+      syncPanScroll();
     });
 
     if (typeof mobileMq.addEventListener === 'function') {
-      mobileMq.addEventListener('change', resetDesktopScroll);
+      mobileMq.addEventListener('change', syncPanScroll);
     }
 
     setupHeaderTitle();
     normalizeMobileHeaderTitle();
-    resetDesktopScroll();
+    syncPanScroll();
 
     var bg = section.querySelector('.rs-landing-bg');
     if (bg) {
       var onBgReady = function () {
-        scroller.scrollLeft = clampScroll(scroller.scrollLeft);
+        syncPanScroll();
       };
       if (bg.complete) onBgReady();
       bg.addEventListener('load', onBgReady);
@@ -751,7 +788,7 @@
 
       var btn = section.querySelector('.rs-grillz-rdv-btn');
       var overlay = document.getElementById('rs-grillz-overlay');
-      var kitBtn = section.querySelector('.rs-grillz-kit-btn');
+      var kitBtn = section.querySelector('.rs-grillz-hotspot--kit.rs-grillz-kit-btn');
       var kitOverlay = document.getElementById('rs-grillz-kit-overlay');
 
       if (overlay && overlay.parentElement !== document.body) {
@@ -820,7 +857,7 @@
 
       if (kitBtn && kitOverlay) {
         var kitClose = kitOverlay.querySelector('.rs-grillz-kit-close');
-        var kitPanel = kitOverlay.querySelector('.rs-grillz-kit-overlay__panel');
+        var kitPanel = kitOverlay.querySelector('.rs-grillz-overlay__panel');
 
         function openKitOverlay(e) {
           if (e) {
@@ -954,15 +991,9 @@
     },
     {
       "type": "text",
-      "id": "kit_postal_btn_label",
-      "label": "Bouton kit postal (sous RDV)",
-      "default": "📦 KIT POSTAL — PAS DE PARIS ?"
-    },
-    {
-      "type": "text",
       "id": "kit_overlay_kicker",
       "label": "Overlay kit — surtitre",
-      "default": "✦ KIT POSTAL ✦"
+      "default": "KIT POSTAL EMPREINTE"
     },
     {
       "type": "html",
@@ -974,13 +1005,13 @@
       "type": "text",
       "id": "kit_overlay_cta",
       "label": "Overlay kit — bouton",
-      "default": "[ COMMANDER LE KIT ]"
+      "default": "COMMANDER LE KIT →"
     },
     {
       "type": "text",
       "id": "kit_label",
-      "label": "Bouton kit (droite)",
-      "default": "ENVOIE KIT GRILLZ"
+      "label": "Bouton kit postal (droite)",
+      "default": "KIT POSTAL EMPREINTE"
     },
     {
       "type": "url",

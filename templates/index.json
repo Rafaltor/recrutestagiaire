@@ -20,8 +20,8 @@
         "success_message": "Tu es sur la liste.",
         "portal_label": "← LE BUREAU",
         "portal_url": "https://portail.recrutestagiaire.eu",
-        "lookbook_label": "LOOKBOOK ABCDRS →",
-        "lookbook_url": "https://recrutestagiaire.myportfolio.com/abcdrs"
+        "grillz_label": "LE CABINET: GRILLZ",
+        "grillz_url": "shopify://pages/grillz"
       }
     }
   },
