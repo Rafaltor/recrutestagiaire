@@ -466,32 +466,22 @@
     padding: 16px;
     background: rgba(0, 0, 0, 0.85);
     box-sizing: border-box;
-    pointer-events: none;
-    visibility: hidden;
-    opacity: 0;
   }
 
   .rs-grillz-overlay.is-open {
     display: flex !important;
-    pointer-events: auto;
-    visibility: visible;
-    opacity: 1;
   }
 
   .rs-grillz-overlay__panel {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    width: min(520px, 100%);
-    height: min(720px, calc(100vh - 32px));
-    height: min(720px, calc(100dvh - 32px));
-    min-height: 520px;
+    width: min(520px, calc(100vw - 48px));
+    height: 680px;
     max-height: calc(100dvh - 32px);
     border-radius: 12px;
     overflow: hidden;
     background: #fff;
     box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
-    pointer-events: auto;
+    transform: translateZ(0);
   }
 
   .rs-grillz-overlay__close {
@@ -516,19 +506,13 @@
   }
 
   .rs-grillz-overlay__frame {
-    flex: 1 1 auto;
+    position: absolute;
+    inset: 0;
     width: 100%;
-    min-height: 480px;
     height: 100%;
     border: 0;
     display: block;
     background: #fff;
-  }
-
-  @media (min-width: 768px) {
-    .rs-grillz-overlay__panel {
-      width: min(520px, calc(100vw - 48px));
-    }
   }
 
   @media (max-width: 767.98px) {
@@ -727,7 +711,15 @@
       }
 
       function loadFrame() {
-        if (!frame || frame.src) return;
+        if (!frame || !panel) return;
+        var panelHeight = panel.getBoundingClientRect().height;
+        if (panelHeight < 1) {
+          panelHeight = Math.min(680, window.innerHeight - 32);
+        }
+        frame.style.width = '100%';
+        frame.style.height = panelHeight + 'px';
+
+        if (frame.src) return;
         var src = frame.getAttribute('data-src');
         if (src) frame.src = src;
       }
@@ -737,11 +729,18 @@
           e.preventDefault();
           e.stopPropagation();
         }
-        loadFrame();
         overlay.classList.add('is-open');
         overlay.setAttribute('aria-hidden', 'false');
         document.documentElement.classList.add('rs-grillz-overlay-open');
         document.body.classList.add('rs-grillz-overlay-open');
+
+        void overlay.offsetHeight;
+
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            loadFrame();
+          });
+        });
       }
 
       function closeOverlay(e) {
