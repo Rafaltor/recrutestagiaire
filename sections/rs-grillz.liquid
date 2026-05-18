@@ -18,6 +18,8 @@
   class="rs-grillz-landing rs-home-landing shopify-section section-rs-grillz-landing"
   id="shopify-section-{{ section.id }}"
   data-rs-heading="{{ heading_text | escape }}"
+  data-rs-cal-url="{{ cal_booking_url | escape }}"
+  data-rs-kit-url="{{ kit_url | escape }}"
   {{ section.shopify_attributes }}>
   <div class="rs-landing-scroller" data-rs-scroller tabindex="-1">
     <div class="rs-landing-scroller__track" data-rs-track>
@@ -98,13 +100,15 @@
 
   <div class="rs-grillz-kit-overlay" id="rs-grillz-kit-overlay" aria-hidden="true">
     <div
-      class="rs-grillz-overlay__panel rs-grillz-kit-overlay__panel"
+      class="rs-grillz-overlay__panel rs-grillz-kit-overlay__panel rs-grillz-kit-overlay__panel--era2010"
       role="dialog"
       aria-modal="true"
       aria-label="Kit postal empreinte">
+      <span class="rs-grillz-kit-overlay__deco rs-grillz-kit-overlay__deco--tl" aria-hidden="true">◆</span>
+      <span class="rs-grillz-kit-overlay__deco rs-grillz-kit-overlay__deco--br" aria-hidden="true">◆</span>
       <button type="button" class="rs-grillz-overlay__close rs-grillz-kit-close" aria-label="Fermer">✕</button>
 
-      <p class="rs-grillz-overlay__kicker">
+      <p class="rs-grillz-overlay__kicker rs-grillz-kit-overlay__kicker">
         {{ section.settings.kit_overlay_kicker | default: 'KIT POSTAL EMPREINTE' | escape }}
       </p>
 
@@ -124,7 +128,7 @@
       </div>
 
       <a
-        class="rs-grillz-overlay__cta"
+        class="rs-grillz-overlay__cta rs-grillz-kit-overlay__cta"
         href="{{ kit_url }}"
         {% if kit_url contains 'http' %}
           target="_blank" rel="noopener noreferrer"
@@ -622,6 +626,124 @@
   body.rs-grillz-overlay-open {
     overflow: hidden !important;
   }
+
+  /* Overlay kit — DA années 2010 (même palette RS) */
+  .rs-grillz-kit-overlay__panel--era2010 {
+    width: min(92vw, 400px);
+    max-width: 400px;
+    padding: 28px 24px 24px;
+    border: 4px solid var(--rs-color-brand, #f472b6);
+    border-radius: 2px;
+    background-color: var(--rs-color-ink, #0a0a0a);
+    background-image:
+      repeating-linear-gradient(
+        -45deg,
+        rgba(244, 114, 182, 0.07) 0,
+        rgba(244, 114, 182, 0.07) 2px,
+        transparent 2px,
+        transparent 10px
+      ),
+      linear-gradient(180deg, rgba(244, 114, 182, 0.12) 0%, transparent 42%);
+    box-shadow:
+      6px 6px 0 rgba(244, 114, 182, 0.55),
+      12px 12px 0 rgba(0, 0, 0, 0.4);
+    transform: rotate(-0.6deg);
+  }
+
+  .rs-grillz-kit-overlay__panel--era2010::before {
+    content: '';
+    position: absolute;
+    inset: 10px;
+    border: 1px dashed rgba(249, 168, 212, 0.45);
+    pointer-events: none;
+  }
+
+  .rs-grillz-kit-overlay__deco {
+    position: absolute;
+    color: var(--rs-color-brand-pale, #f9a8d4);
+    font-size: 14px;
+    line-height: 1;
+    text-shadow: 0 0 8px rgba(244, 114, 182, 0.65);
+    pointer-events: none;
+  }
+
+  .rs-grillz-kit-overlay__deco--tl {
+    top: 14px;
+    left: 14px;
+  }
+
+  .rs-grillz-kit-overlay__deco--br {
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .rs-grillz-kit-overlay__kicker {
+    margin-bottom: 14px;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-shadow:
+      0 0 12px rgba(244, 114, 182, 0.55),
+      0 1px 0 rgba(0, 0, 0, 0.8);
+  }
+
+  .rs-grillz-kit-overlay__panel--era2010 .rs-grillz-overlay__body {
+    margin-bottom: 20px;
+    font-size: 13px;
+    line-height: 1.75;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.65);
+  }
+
+  .rs-grillz-kit-overlay__panel--era2010 .rs-grillz-overlay__body strong {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 8px;
+    border: 1px solid rgba(244, 114, 182, 0.55);
+    background: rgba(244, 114, 182, 0.14);
+    color: var(--rs-color-brand-pale, #f9a8d4);
+    text-shadow: none;
+  }
+
+  a.rs-grillz-kit-overlay__cta {
+    padding: 13px 28px;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 3px;
+    background: linear-gradient(
+      180deg,
+      var(--rs-color-brand-pale, #f9a8d4) 0%,
+      var(--rs-color-brand, #f472b6) 48%,
+      var(--rs-color-brand-hover, #db2777) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      0 4px 14px rgba(244, 114, 182, 0.45);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+  }
+
+  a.rs-grillz-kit-overlay__cta:hover,
+  a.rs-grillz-kit-overlay__cta:focus-visible {
+    background: linear-gradient(
+      180deg,
+      #fce7f3 0%,
+      var(--rs-color-brand-pale, #f9a8d4) 40%,
+      var(--rs-color-brand-hover, #db2777) 100%
+    );
+    color: var(--rs-color-bg, #fff) !important;
+  }
+
+  .rs-grillz-kit-overlay__panel--era2010 .rs-grillz-overlay__close {
+    top: 10px;
+    right: 12px;
+    color: var(--rs-color-brand-pale, #f9a8d4);
+    font-weight: 700;
+    text-shadow: 0 0 6px rgba(244, 114, 182, 0.5);
+  }
+
+  @media (min-width: 768px) {
+    .rs-grillz-overlay,
+    .rs-grillz-kit-overlay {
+      display: none !important;
+    }
+  }
 </style>
 
 <script>
@@ -786,6 +908,23 @@
       if (section.dataset.rsGrillzOverlaysInit === '1') return;
       section.dataset.rsGrillzOverlaysInit = '1';
 
+      var mobileMq = window.matchMedia('(max-width: 767.98px)');
+      var calUrl = section.getAttribute('data-rs-cal-url') || '';
+      var kitUrl = section.getAttribute('data-rs-kit-url') || '';
+
+      function isMobileOverlay() {
+        return mobileMq.matches;
+      }
+
+      function openExternal(url) {
+        if (!url) return;
+        if (url.indexOf('mailto:') === 0) {
+          window.location.href = url;
+          return;
+        }
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
+
       var btn = section.querySelector('.rs-grillz-rdv-btn');
       var overlay = document.getElementById('rs-grillz-overlay');
       var kitBtn = section.querySelector('.rs-grillz-hotspot--kit.rs-grillz-kit-btn');
@@ -836,7 +975,15 @@
           unlockScroll();
         }
 
-        btn.addEventListener('click', openOverlay);
+        btn.addEventListener('click', function (e) {
+          if (!isMobileOverlay()) {
+            e.preventDefault();
+            e.stopPropagation();
+            openExternal(calUrl);
+            return;
+          }
+          openOverlay(e);
+        });
 
         if (close) {
           close.addEventListener('click', closeOverlay);
@@ -879,7 +1026,15 @@
           unlockScroll();
         }
 
-        kitBtn.addEventListener('click', openKitOverlay);
+        kitBtn.addEventListener('click', function (e) {
+          if (!isMobileOverlay()) {
+            e.preventDefault();
+            e.stopPropagation();
+            openExternal(kitUrl);
+            return;
+          }
+          openKitOverlay(e);
+        });
 
         if (kitClose) {
           kitClose.addEventListener('click', closeKitOverlay);
