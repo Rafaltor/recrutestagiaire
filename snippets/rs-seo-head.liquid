@@ -1,0 +1,55 @@
+{%- liquid
+  assign rs_seo_title = page_title
+  assign rs_seo_description = page_description
+  assign rs_seo_custom = false
+
+  if request.page_type == 'index'
+    assign rs_seo_title = 'Recrute Stagiaire — Label créatif parisien · Mode & textile · Paris'
+    assign rs_seo_description = "Collectif de 11 créatifs parisiens. Chaque vêtement est une offre, chaque achat une candidature. Grillz sur mesure, drops limités, portail communautaire."
+    assign rs_seo_custom = true
+  elsif request.page_type == 'product'
+    if product.handle == 'stagiaire'
+      assign rs_seo_title = 'Stagiaire — T-shirt · Recrute Stagiaire'
+      assign rs_seo_description = "T-shirt Recrute Stagiaire · Collection Mes Basiques d'Amour SS26 · Fabriqué à Paris · 60€"
+      assign rs_seo_custom = true
+    elsif product.handle == 'alternant'
+      assign rs_seo_title = 'Alternant — Sweat · Recrute Stagiaire'
+      assign rs_seo_description = "Sweat zippé Recrute Stagiaire · Collection Mes Basiques d'Amour SS26 · Fabriqué à Paris · 120€"
+      assign rs_seo_custom = true
+    endif
+  elsif request.page_type == 'page' and page.handle == 'about'
+    assign rs_seo_title = 'Le collectif — Recrute Stagiaire'
+    assign rs_seo_description = "11 créatifs parisiens issus des écoles de mode et design. Designer textile, ingénieur, architecte, bijoutière. On a commencé stagiaires."
+    assign rs_seo_custom = true
+  endif
+-%}
+
+{%- if rs_seo_custom -%}
+  <title>{{ rs_seo_title | escape }}</title>
+  {%- if rs_seo_description != blank -%}
+    <meta name="description" content="{{ rs_seo_description | escape }}">
+  {%- endif -%}
+{%- else -%}
+  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+{%- endif -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Recrute Stagiaire",
+  "url": "https://recrutestagiaire.eu",
+  "logo": "https://recrutestagiaire.eu/cdn/shop/files/rs-logo-eu.png",
+  "description": "Label créatif parisien fondé par 11 créatifs issus des écoles de mode. Chaque vêtement est une offre, chaque achat une candidature.",
+  "foundingDate": "2025",
+  "foundingLocation": "Paris, France",
+  "sameAs": [
+    "https://www.instagram.com/recrutestagiaire",
+    "https://www.tiktok.com/@recrutestagiaire",
+    "https://portail.recrutestagiaire.eu"
+  ]
+}
+</script>

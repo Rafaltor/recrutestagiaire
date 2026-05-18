@@ -15,10 +15,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="canonical" href="{{ canonical_url }}">
 
-  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
-  {% if page_description %}
-    <meta name="description" content="{{ page_description | escape }}">
-  {% endif %}
+  {% render 'rs-seo-head' %}
 
   {{ content_for_header }}
 

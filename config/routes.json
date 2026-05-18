@@ -1,0 +1,7 @@
+[
+  {
+    "path": "/llms.txt",
+    "handle": "llms-txt",
+    "template": "llms"
+  }
+]
