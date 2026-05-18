@@ -1,7 +1,7 @@
 {%- liquid
   assign bg = section.settings.background_image
   assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
-  assign calendly_url = section.settings.calendly_url | default: 'https://calendly.com/bolvirg-recrutestagiaire/30min' | strip
+  assign cal_link = section.settings.cal_link | default: 'recrutestagiaire-avpmen/grillz' | strip
   assign home_url = routes.root_url
   assign kit_url = section.settings.kit_url | default: '' | strip
   if kit_url == blank
@@ -18,7 +18,6 @@
   class="rs-grillz-landing rs-home-landing shopify-section section-rs-grillz-landing"
   id="shopify-section-{{ section.id }}"
   data-rs-heading="{{ heading_text | escape }}"
-  data-rs-calendly="{{ calendly_url | escape }}"
   {{ section.shopify_attributes }}>
   <div class="rs-landing-scroller" data-rs-scroller tabindex="-1">
     <div class="rs-landing-scroller__track" data-rs-track>
@@ -76,11 +75,7 @@
   <div class="rs-grillz-overlay" id="rs-grillz-overlay" aria-hidden="true">
     <div class="rs-grillz-overlay__panel" role="dialog" aria-modal="true" aria-label="Prendre rendez-vous">
       <button type="button" class="rs-grillz-overlay__close" aria-label="Fermer">✕</button>
-      <iframe
-        class="rs-grillz-overlay__frame"
-        data-src="https://cal.com/recrutestagiaire-avpmen/grillz?embed=true"
-        title="Prendre rendez-vous grillz">
-      </iframe>
+      <div id="rs-grillz-cal-inline" class="rs-grillz-overlay__cal" aria-label="Calendrier de réservation"></div>
     </div>
   </div>
 </section>
@@ -457,7 +452,7 @@
 
   /* Overlay Cal.com */
   .rs-grillz-overlay {
-    display: none;
+    display: flex;
     position: fixed;
     inset: 0;
     z-index: 2147483000;
@@ -466,10 +461,15 @@
     padding: 16px;
     background: rgba(0, 0, 0, 0.85);
     box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .rs-grillz-overlay.is-open {
-    display: flex !important;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .rs-grillz-overlay__panel {
@@ -481,7 +481,6 @@
     overflow: hidden;
     background: #fff;
     box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
-    transform: translateZ(0);
   }
 
   .rs-grillz-overlay__close {
@@ -505,13 +504,13 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   }
 
-  .rs-grillz-overlay__frame {
+  .rs-grillz-overlay__cal {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    border: 0;
-    display: block;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
     background: #fff;
   }
 
@@ -704,24 +703,85 @@
 
       var close = overlay.querySelector('.rs-grillz-overlay__close');
       var panel = overlay.querySelector('.rs-grillz-overlay__panel');
-      var frame = overlay.querySelector('.rs-grillz-overlay__frame');
+      var calHost = document.getElementById('rs-grillz-cal-inline');
+      var calLink = {{ cal_link | json }};
 
       if (overlay.parentElement !== document.body) {
         document.body.appendChild(overlay);
       }
 
-      function loadFrame() {
-        if (!frame || !panel) return;
-        var panelHeight = panel.getBoundingClientRect().height;
-        if (panelHeight < 1) {
-          panelHeight = Math.min(680, window.innerHeight - 32);
-        }
-        frame.style.width = '100%';
-        frame.style.height = panelHeight + 'px';
+      function bootCalScript() {
+        if (window.Cal && window.Cal.loaded) return;
+        (function (C, A, L) {
+          var push = function (a, ar) {
+            a.q.push(ar);
+          };
+          var doc = C.document;
+          C.Cal =
+            C.Cal ||
+            function () {
+              var cal = C.Cal;
+              var args = arguments;
+              if (!cal.loaded) {
+                cal.ns = {};
+                cal.q = cal.q || [];
+                doc.head.appendChild(doc.createElement('script')).src = A;
+                cal.loaded = true;
+              }
+              if (args[0] === L) {
+                var api = function () {
+                  push(api, arguments);
+                };
+                var ns = args[1];
+                api.q = api.q || [];
+                if (typeof ns === 'string') {
+                  cal.ns[ns] = cal.ns[ns] || api;
+                  push(cal.ns[ns], args);
+                  push(cal, ['initNamespace', ns]);
+                } else {
+                  push(cal, args);
+                }
+                return;
+              }
+              push(cal, args);
+            };
+        })(window, 'https://app.cal.com/embed/embed.js', 'init');
+      }
 
-        if (frame.src) return;
-        var src = frame.getAttribute('data-src');
-        if (src) frame.src = src;
+      function mountCalEmbed() {
+        if (!calHost || !panel) return;
+
+        bootCalScript();
+
+        function renderInline() {
+          if (!window.Cal) return;
+          calHost.innerHTML = '';
+          window.Cal('init', { origin: 'https://cal.com' });
+          window.Cal('inline', {
+            elementOrSelector: '#rs-grillz-cal-inline',
+            calLink: calLink,
+            layout: 'month_view'
+          });
+          window.setTimeout(function () {
+            window.dispatchEvent(new Event('resize'));
+          }, 300);
+        }
+
+        if (calHost.childElementCount > 0) {
+          return;
+        }
+
+        var tries = 0;
+        var timer = window.setInterval(function () {
+          tries += 1;
+          if (window.Cal) {
+            window.clearInterval(timer);
+            renderInline();
+          }
+          if (tries > 60) {
+            window.clearInterval(timer);
+          }
+        }, 50);
       }
 
       function openOverlay(e) {
@@ -736,11 +796,9 @@
 
         void overlay.offsetHeight;
 
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            loadFrame();
-          });
-        });
+        window.setTimeout(function () {
+          mountCalEmbed();
+        }, 200);
       }
 
       function closeOverlay(e) {
@@ -825,9 +883,10 @@
     },
     {
       "type": "text",
-      "id": "calendly_url",
-      "label": "URL Calendly",
-      "default": "https://calendly.com/bolvirg-recrutestagiaire/30min"
+      "id": "cal_link",
+      "label": "Lien Cal.com (ex. utilisateur/30min)",
+      "default": "recrutestagiaire-avpmen/grillz",
+      "info": "Sans https://cal.com/ — utilisé pour l’embed de prise de RDV."
     },
     {
       "type": "text",
