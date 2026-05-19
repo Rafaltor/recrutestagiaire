@@ -1,10 +1,9 @@
 {
   "sections": {
-    "rs_home_landing_next": {
-      "type": "rs-home-landing-next",
+    "rs_home_landing_classic": {
+      "type": "rs-home-landing-classic",
       "settings": {
         "background_image": "shopify://shop_images/pagedacceuil_8ae1177d-704d-4514-acee-1f1765fac173.jpg",
-        "hotspot_plane_scale_pct": 82,
         "heading": "RECRUTE STAGIAIRE",
         "form_label": "REJOINS LA LISTE",
         "email_placeholder": "ton@email.com",
@@ -12,18 +11,13 @@
         "success_message": "Tu es sur la liste.",
         "portal_label": "← LE BUREAU",
         "portal_url": "https://portail.recrutestagiaire.eu",
-        "cal_booking_url": "https://cal.com/recrutestagiaire-avpmen/grillz",
-        "rdv_label": "PRENDRE RENDEZ-VOUS",
-        "kit_postal_label": "KIT POSTAL EMPREINTE",
-        "lookbook_label": "LOOKBOOK ABCDRS",
-        "lookbook_url": "shopify://collections/abcdrs",
-        "kit_overlay_kicker": "KIT POSTAL EMPREINTE",
-        "kit_overlay_cta": "COMMANDER LE KIT →",
-        "kit_url": ""
+        "grillz_label": "LE CABINET A GRILLZ →",
+        "grillz_url": "",
+        "swipe_hint": "Glisse pour explorer"
       }
     }
   },
   "order": [
-    "rs_home_landing_next"
+    "rs_home_landing_classic"
   ]
 }

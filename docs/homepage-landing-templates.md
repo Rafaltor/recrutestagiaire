@@ -4,12 +4,12 @@
 
 | Rôle | Section Liquid | Template JSON |
 |------|----------------|---------------|
-| **Landing classique** (wallpaper / sans Pannellum) | `sections/rs-home-landing-classic.liquid` | Pas de fichier dédié dans le dépôt ; tu peux l’assigner en changeant le **type** de section dans l’éditeur de thème si besoin de rollback. |
-| **Landing 360°** (Pannellum) | `sections/rs-home-landing-next.liquid` | **`templates/index.json`** (accueil par défaut) **et** **`templates/index.next.json`** (`?view=next`) — **mêmes `settings`** dans le dépôt. |
+| **Landing classique** (wallpaper / sans Pannellum) | `sections/rs-home-landing-classic.liquid` | **`templates/index.json`** et **`templates/index.next.json`** — **mêmes `settings`** (section `rs_home_landing_classic`) dans le dépôt actuel. |
+| **Landing 360°** (Pannellum) | `sections/rs-home-landing-next.liquid` | Réactivable en remplaçant la section par `type: "rs-home-landing-next"` (et les `settings` de cette section) dans les deux JSON. |
 
 Les deux sections partagent les mêmes classes CSS / JS (`.rs-home-landing`, etc.).
 
-**Dépôt** : quand tu modifies les réglages par défaut de la landing next dans le JSON, **garde `index.json` et `index.next.json` alignés** (même bloc `settings` pour `rs_home_landing_next`). Le code et le style restent dans **`rs-home-landing-next.liquid`** uniquement.
+**Dépôt** : quand tu modifies les réglages par défaut de l’accueil dans le JSON, **garde `index.json` et `index.next.json` alignés** (même section / mêmes `settings`). La classic vit dans **`rs-home-landing-classic.liquid`** ; la next dans **`rs-home-landing-next.liquid`**.
 
 ## Basculer sans toucher au code
 
