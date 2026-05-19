@@ -99,10 +99,28 @@
     min-height: 100dvh;
   }
 
-  #rs-panorama,
+  #rs-panorama {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    z-index: 0 !important;
+  }
+
   #rs-panorama .pnlm-container {
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
+    height: 100dvh !important;
+  }
+
+  .pnlm-about-msg,
+  .pnlm-load-button,
+  .pnlm-lbar,
+  .pnlm-lbar-fill,
+  .pnlm-lmsg {
+    display: none !important;
   }
 
   @media (max-width: 767.98px) {
@@ -426,8 +444,8 @@
         type: 'equirectangular',
         panorama: 'https://cdn.shopify.com/s/files/1/0997/4821/7214/files/360bg.png?v=1779182961',
         autoLoad: true,
-        autoRotate: -0.5,
-        autoRotateInactivityDelay: 3000,
+        autoRotate: 0,
+        autoRotateInactivityDelay: 0,
         compass: false,
         showZoomCtrl: false,
         showFullscreenCtrl: false,
