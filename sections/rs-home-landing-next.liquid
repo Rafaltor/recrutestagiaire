@@ -808,12 +808,9 @@
     text-decoration: none !important;
   }
 
-  /* Pastilles desktop : léger facteur 0.92 sur le plan (le formulaire suit uniquement la règle prox-ui ci-dessus). */
+  /* Pastilles desktop : typo uniquement — même échelle que le formulaire (règle prox-ui commune, pas de 0.92). */
   @media (min-width: 768px) {
     #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) > .rs-landing-hotspot--prox-ui.rs-landing-overlay__cta--pill {
-      transform: translateZ(0)
-        scale(calc(var(--rs-hotspot-plane, 1) * 0.92 * var(--rs-hotspot-prox-scale, 1)));
-      transform-origin: center center;
       font-size: clamp(11px, 1.12vw, 13px);
       padding: 6px 12px;
       letter-spacing: 0.11em;
