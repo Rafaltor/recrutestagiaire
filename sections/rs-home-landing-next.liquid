@@ -4,27 +4,22 @@
 {%- endcomment -%}
 {%- liquid
   assign portal_url = section.settings.portal_url | default: 'https://portail.recrutestagiaire.eu'
-  assign grillz_url = section.settings.grillz_url | default: '' | strip
-  if grillz_url == blank
-    if pages.grillz != blank
-      assign grillz_url = pages.grillz.url
-    else
-      assign grillz_url = '/pages/grillz'
-    endif
-  endif
   assign cal_booking_url = section.settings.cal_booking_url | default: '' | strip
   if cal_booking_url == blank
     assign cal_booking_url = 'https://cal.com/recrutestagiaire-avpmen/grillz'
   endif
-  assign kit_page_url = grillz_url
-  if kit_page_url contains '?'
-    assign kit_page_url = kit_page_url | append: '&rs-kit=1'
-  else
-    assign kit_page_url = kit_page_url | append: '?rs-kit=1'
-  endif
   assign lookbook_url = section.settings.lookbook_url | default: '' | strip
   if lookbook_url == blank
-    assign lookbook_url = '/collections/abcdrs'
+    if collections['abcdrs'] != blank
+      assign lookbook_url = collections['abcdrs'].url
+    else
+      assign lookbook_url = '/collections/abcdrs'
+    endif
+  endif
+  assign kit_url = section.settings.kit_url | default: '' | strip
+  if kit_url == blank
+    assign kit_subject = 'Kit grillz' | url_param_escape
+    assign kit_url = 'mailto:' | append: shop.email | append: '?subject=' | append: kit_subject
   endif
   assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
 -%}
@@ -127,13 +122,16 @@
       data-rs-ui>
       {{ section.settings.rdv_label | default: 'PRENDRE RENDEZ-VOUS' | escape }}
     </a>
-    <a
+    <button
+      type="button"
       id="rs-pnlm-slot-kit"
       class="rs-landing-hotspot rs-landing-hotspot--kit rs-landing-overlay__cta rs-landing-overlay__cta--pill"
-      href="{{ kit_page_url }}"
-      data-rs-ui>
+      data-rs-ui
+      aria-haspopup="dialog"
+      aria-controls="rs-home-kit-overlay"
+      aria-expanded="false">
       {{ section.settings.kit_postal_label | default: 'KIT POSTAL EMPREINTE' | escape }}
-    </a>
+    </button>
     <a
       id="rs-pnlm-slot-lookbook"
       class="rs-landing-hotspot rs-landing-hotspot--lookbook rs-landing-overlay__cta rs-landing-overlay__cta--pill"
@@ -149,6 +147,48 @@
     aria-hidden="true"
     aria-label="{{ section.settings.swipe_hint | default: 'Glisse pour explorer' | escape }}">
     <span class="rs-landing-swipe-hint__arrows" aria-hidden="true">← →</span>
+  </div>
+
+  <div
+    class="rs-home-kit-overlay"
+    id="rs-home-kit-overlay"
+    data-rs-ui
+    aria-hidden="true">
+    <div
+      class="rs-home-kit-overlay__panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="rs-home-kit-overlay-kicker">
+      <button type="button" class="rs-home-kit-overlay__close" aria-label="Fermer">✕</button>
+
+      <p class="rs-home-kit-overlay__kicker" id="rs-home-kit-overlay-kicker">
+        {{ section.settings.kit_overlay_kicker | default: 'KIT POSTAL EMPREINTE' | escape }}
+      </p>
+
+      <div class="rs-home-kit-overlay__body">
+        {%- if section.settings.kit_overlay_body != blank -%}
+          {{ section.settings.kit_overlay_body }}
+        {%- else -%}
+          <p>T'es pas sur Paris ?</p>
+          <p>On t'envoie un kit de prise d'empreinte chez toi.</p>
+          <p>
+            Tu fais tes empreintes,<br>
+            tu nous les renvoies,<br>
+            on fabrique tes grillz à Paris.
+          </p>
+          <p><strong>+30 € sur le tarif choisi.</strong></p>
+        {%- endif -%}
+      </div>
+
+      <a
+        class="rs-home-kit-overlay__cta"
+        href="{{ kit_url }}"
+        {% if kit_url contains 'http' %}
+          target="_blank" rel="noopener noreferrer"
+        {% endif %}>
+        {{ section.settings.kit_overlay_cta | default: 'COMMANDER LE KIT →' | escape }}
+      </a>
+    </div>
   </div>
 </section>
 
@@ -711,12 +751,14 @@
     text-align: center;
   }
 
-  /* Boutons pilule — portail, RDV, kit, lookbook */
-  .rs-home-landing a.rs-landing-overlay__cta {
+  /* Boutons pilule — portail, RDV, kit, lookbook (liens + bouton kit → overlay) */
+  .rs-home-landing a.rs-landing-overlay__cta,
+  .rs-home-landing button.rs-landing-overlay__cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: auto;
+    margin: 0;
     padding: 4px 8px;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.45);
@@ -735,10 +777,20 @@
       background 0.2s ease,
       border-color 0.2s ease,
       color 0.2s ease;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.28);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .rs-home-landing button.rs-landing-overlay__cta {
+    line-height: 1.2;
   }
 
   .rs-home-landing a.rs-landing-overlay__cta:hover,
-  .rs-home-landing a.rs-landing-overlay__cta:focus-visible {
+  .rs-home-landing a.rs-landing-overlay__cta:focus-visible,
+  .rs-home-landing button.rs-landing-overlay__cta:hover,
+  .rs-home-landing button.rs-landing-overlay__cta:focus-visible {
     background: rgba(0, 0, 0, 0.52);
     border-color: rgba(255, 255, 255, 0.85);
     color: #fff !important;
@@ -746,11 +798,131 @@
   }
 
   @media (min-width: 768px) {
-    .rs-home-landing a.rs-landing-overlay__cta--pill {
-      font-size: clamp(10px, 1.05vw, 12px);
-      padding: 3px 7px;
-      letter-spacing: 0.1em;
+    .rs-home-landing a.rs-landing-overlay__cta--pill,
+    .rs-home-landing button.rs-landing-overlay__cta--pill {
+      font-size: clamp(11px, 1.12vw, 13px);
+      padding: 6px 12px;
+      letter-spacing: 0.11em;
     }
+
+    /* Réduit légèrement la pastille vs le plein écran → moins d’effet « HUD collé au cadre » */
+    #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) .rs-landing-overlay__cta--pill {
+      transform: translateZ(0) scale(0.9);
+      transform-origin: center center;
+    }
+
+    .rs-landing-hotspot--lookbook .rs-landing-overlay__cta--pill {
+      white-space: normal;
+      max-width: 10.5rem;
+      text-align: center;
+      line-height: 1.2;
+    }
+  }
+
+  /* Overlay kit postal (même contenu que la page cabinet, sans quitter l’accueil 360) */
+  .rs-home-kit-overlay {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 2147483640;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(10, 10, 10, 0.88);
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+  }
+
+  .rs-home-kit-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .rs-home-kit-overlay__panel {
+    position: relative;
+    width: min(90vw, 420px);
+    max-width: 420px;
+    padding: 28px 24px 24px;
+    border: 1px solid var(--rs-color-border, #e8e8e4);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12);
+    text-align: center;
+  }
+
+  .rs-home-kit-overlay__close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    z-index: 10;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #6b6b6b;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .rs-home-kit-overlay__kicker {
+    margin: 0 0 12px;
+    color: var(--rs-color-brand, #f472b6);
+    font-family: var(--rs-font-display), 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .rs-home-kit-overlay__body {
+    margin: 0 0 22px;
+    color: #0a0a0a;
+    font-family: var(--rs-font-body), 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: left;
+  }
+
+  .rs-home-kit-overlay__body p {
+    margin: 0 0 12px;
+  }
+
+  .rs-home-kit-overlay__body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .rs-home-kit-overlay__body strong {
+    color: #db2777;
+    font-weight: 700;
+  }
+
+  a.rs-home-kit-overlay__cta {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 8px;
+    background: var(--rs-color-brand, #f472b6);
+    color: #fff !important;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none !important;
+    text-transform: uppercase;
+  }
+
+  a.rs-home-kit-overlay__cta:hover,
+  a.rs-home-kit-overlay__cta:focus-visible {
+    background: #db2777;
+    color: #fff !important;
+  }
+
+  html.rs-home-kit-overlay-open,
+  body.rs-home-kit-overlay-open {
+    overflow: hidden !important;
   }
 
   .rs-landing-swipe-hint {
@@ -844,7 +1016,7 @@
       Yaw : même plage complète que le mobile (-180 / 180) pour pouvoir tourner dans la pièce à la souris.
     */
     /* Plus large = dézoom (on voit plus de décor). 72 = très serré ; ~90 = vue plus large. */
-    var RS_DESKTOP_HFOV = 90;
+    var RS_DESKTOP_HFOV = 86;
 
     function isMobile() {
       return mobileMq.matches;
@@ -958,15 +1130,14 @@
       }
 
       /*
-        Coords yaw / pitch (texture 360°, yaw 0–360 souvent mappé en -180..180).
-        Réglage desktop : fenêtre atelier (waitlist au spawn), mur bureau, RDV Cal.com, kit postal → cabinet, lookbook sur chaise.
-        Affiner après retour visuel sur la scène.
+        Pastilles : regroupées vers le centre de la vue (~180°) pour éviter l’effet « collées au bord de l’écran ».
+        Affiner yaw/pitch après retour sur la texture 360°.
       */
-      addMount('rs-hs-form', 181, 8, waitlist, 'rs-pnlm-hs--form');
-      addMount('rs-hs-portal', 174, 5, portal, 'rs-pnlm-hs--portal');
-      addMount('rs-hs-rdv', -168, -1, rdv, 'rs-pnlm-hs--rdv');
-      addMount('rs-hs-kit', -152, -14, kit, 'rs-pnlm-hs--kit');
-      addMount('rs-hs-lookbook', -118, -26, lookbook, 'rs-pnlm-hs--lookbook');
+      addMount('rs-hs-form', 179, 6, waitlist, 'rs-pnlm-hs--form');
+      addMount('rs-hs-portal', 166, 2, portal, 'rs-pnlm-hs--portal');
+      addMount('rs-hs-rdv', 198, 0, rdv, 'rs-pnlm-hs--rdv');
+      addMount('rs-hs-kit', 172, -4, kit, 'rs-pnlm-hs--kit');
+      addMount('rs-hs-lookbook', 188, -10, lookbook, 'rs-pnlm-hs--lookbook');
     }
 
     function scheduleRsPannellumHotspots(v) {
@@ -1243,6 +1414,78 @@
       window.setTimeout(revealHint, 600);
     }
 
+    function initHomeKitOverlay() {
+      if (window.__rsHomeKitUiInit) return;
+      window.__rsHomeKitUiInit = true;
+
+      function getOverlay() {
+        return document.getElementById('rs-home-kit-overlay');
+      }
+
+      function getKitBtn() {
+        return document.getElementById('rs-pnlm-slot-kit');
+      }
+
+      function openKit() {
+        var overlay = getOverlay();
+        if (!overlay) return;
+        overlay.classList.add('is-open');
+        overlay.setAttribute('aria-hidden', 'false');
+        var b = getKitBtn();
+        if (b) b.setAttribute('aria-expanded', 'true');
+        document.documentElement.classList.add('rs-home-kit-overlay-open');
+        document.body.classList.add('rs-home-kit-overlay-open');
+      }
+
+      function closeKit() {
+        var overlay = getOverlay();
+        if (!overlay) return;
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        var b = getKitBtn();
+        if (b) b.setAttribute('aria-expanded', 'false');
+        document.documentElement.classList.remove('rs-home-kit-overlay-open');
+        document.body.classList.remove('rs-home-kit-overlay-open');
+      }
+
+      document.addEventListener(
+        'click',
+        function (e) {
+          if (!document.body.classList.contains('rs-home-landing-active')) return;
+          var overlay = getOverlay();
+          if (!overlay) return;
+
+          var kitBtn = e.target.closest && e.target.closest('#rs-pnlm-slot-kit');
+          if (kitBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            openKit();
+            return;
+          }
+
+          if (e.target.closest && e.target.closest('.rs-home-kit-overlay__close')) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeKit();
+            return;
+          }
+
+          if (e.target === overlay && overlay.classList.contains('is-open')) {
+            closeKit();
+          }
+        },
+        true
+      );
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        var overlay = getOverlay();
+        if (!overlay || !overlay.classList.contains('is-open')) return;
+        closeKit();
+      });
+    }
+
+    initHomeKitOverlay();
     initSwipeHint();
   })();
 </script>
@@ -1328,13 +1571,30 @@
       "type": "url",
       "id": "lookbook_url",
       "label": "URL lookbook",
-      "info": "Vide = /collections/abcdrs"
+      "info": "Vide = collection abcdrs si elle existe, sinon /collections/abcdrs"
+    },
+    {
+      "type": "text",
+      "id": "kit_overlay_kicker",
+      "label": "Overlay kit — surtitre",
+      "default": "KIT POSTAL EMPREINTE"
+    },
+    {
+      "type": "html",
+      "id": "kit_overlay_body",
+      "label": "Overlay kit — texte"
+    },
+    {
+      "type": "text",
+      "id": "kit_overlay_cta",
+      "label": "Overlay kit — bouton",
+      "default": "COMMANDER LE KIT →"
     },
     {
       "type": "url",
-      "id": "grillz_url",
-      "label": "URL page cabinet (Grillz)",
-      "info": "Utilisée pour le kit postal (?rs-kit=1 ouvre l’overlay sur la page cabinet). Vide = /pages/grillz"
+      "id": "kit_url",
+      "label": "Lien commande kit (overlay)",
+      "info": "Vide = e-mail boutique avec objet « Kit grillz »"
     },
     {
       "type": "text",

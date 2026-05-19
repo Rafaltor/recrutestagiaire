@@ -16,7 +16,9 @@
         "kit_postal_label": "KIT POSTAL EMPREINTE",
         "lookbook_label": "LOOKBOOK ABCDRS",
         "lookbook_url": "shopify://collections/abcdrs",
-        "grillz_url": "shopify://pages/grillz"
+        "kit_overlay_kicker": "KIT POSTAL EMPREINTE",
+        "kit_overlay_cta": "COMMANDER LE KIT →",
+        "kit_url": ""
       }
     }
   },
