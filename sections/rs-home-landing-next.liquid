@@ -1,6 +1,7 @@
 {%- comment -%}
   Accueil 360° (Pannellum) : scroller large (yaw horizontal mobile), pitch au glissé vertical,
   hotspots en position fixe à l’écran comme le wallpaper perçu. Prévisualisation : index.next (?view=next).
+  TODO (suite) : replacer les hotspots dans la track large (coords « papier peint ») pour qu’ils sortent du viewport au scroll.
 {%- endcomment -%}
 {%- liquid
   assign portal_url = section.settings.portal_url | default: 'https://portail.recrutestagiaire.eu'
@@ -498,6 +499,13 @@
       pointer-events: none;
     }
 
+    /* Laisser la souris atteindre le canvas Pannellum (sinon la scène transparente capte les events). */
+    .rs-landing-scroller__track,
+    .rs-landing-scene,
+    .rs-landing-scene--pan-hit {
+      pointer-events: none;
+    }
+
     .rs-landing-scroller__track {
       width: 100vw;
       min-width: 100vw;
@@ -845,11 +853,12 @@
       if (!isMobile()) return;
       var max = maxScrollLeft();
       if (max < 1) {
-        viewer.setYaw(180);
+        viewer.setYaw(180, 0);
         return;
       }
       var t = scroller.scrollLeft / max;
-      viewer.setYaw(90 + t * 180);
+      /* Durée 0 : sans 2e argument Pannellum tween 1000 ms → latence énorme sur mobile. */
+      viewer.setYaw(90 + t * 180, 0);
     }
 
     function initPannellum() {
@@ -922,8 +931,11 @@
       var adx = Math.abs(dx);
       var ady = Math.abs(t.clientY - drag.startY);
 
-      if (drag.lock === null && (adx > 6 || ady > 6)) {
-        drag.lock = adx > ady ? 'x' : 'y';
+      if (drag.lock === null && (adx > 5 || ady > 5)) {
+        var ratio = 1.22;
+        if (ady >= adx * ratio) drag.lock = 'y';
+        else if (adx >= ady * ratio) drag.lock = 'x';
+        else drag.lock = ady > adx ? 'y' : 'x';
       }
 
       if (drag.lock === 'y') {
@@ -934,9 +946,9 @@
             drag.pitchAnchorY = t.clientY;
           }
           var dy = drag.pitchAnchorY - t.clientY;
-          var np = drag.basePitch + dy * 0.12;
+          var np = drag.basePitch + dy * 0.14;
           np = Math.max(-42, Math.min(42, np));
-          viewer.setPitch(np);
+          viewer.setPitch(np, 0);
         }
         return;
       }
@@ -944,6 +956,7 @@
       if (drag.lock === 'x') {
         e.preventDefault();
         scroller.scrollLeft = clampScroll(drag.startScroll - dx);
+        syncYawFromScroll();
       }
     }
 
