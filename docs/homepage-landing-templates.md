@@ -53,7 +53,7 @@ La [documentation Pannellum sur les hot spots](https://pannellum.org/documentati
 
 **Dans ce thème** (`addMount` dans `rs-home-landing-next.liquid`), on fixe pour **tous** les hotspots : `type: 'info'`, **`scale: true`**, `id`, `yaw`, `pitch`, `cssClass`, `createTooltipFunc` (montage du slot Liquid + variable CSS **`--rs-hotspot-plane`** sur le wrapper). **Seuls `yaw` et `pitch` changent** d’un bouton à l’autre pour le **placement** ; un **6ᵉ argument optionnel** `localPlaneMul` (nombre, défaut `1`) permet de multiplier l’échelle plan **par hotspot** dans le JS sans nouveau réglage Shopify.
 
-**Réglage Shopify « profondeur »** : **`hotspot_plane_scale_pct`** (curseur **50–115 %**, défaut **82 %**) — appliqué comme facteur d’échelle sur le contenu du hotspot pour atténuer l’effet « calque devant la sphère » (Pannellum place toujours les divs en overlay avec un `translateZ` élevé ; on ne peut pas supprimer ça sans fork, mais **`scale: true` + échelle CSS** rapprochent le rendu du ressenti d’une sphère unique).
+**Réglage Shopify « profondeur »** : **`hotspot_plane_scale_pct`** (curseur **50–115 %**, défaut **82 %**) — facteur d’échelle sur le contenu du hotspot pour rapprocher visuellement le CTA du fond. **Fork Pannellum** : `assets/pannellum.js` repose sur la **2.5.6** avec un patch **`translateZ(9999px)` → `translateZ(0px)`** sur le positionnement des hot spots (voir **`docs/pannellum-fork.md`**). **`scale: true` + ce curseur** complètent le ressenti d’une sphère unique.
 
 **Suite prévue** : exposer **`yaw` / `pitch`** (et éventuellement `localPlaneMul` ou des curseurs par hotspot) en **réglages de section** pour caler sans retoucher au JS à chaque itération.
 
