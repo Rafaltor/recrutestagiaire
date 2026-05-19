@@ -469,6 +469,21 @@
       overscroll-behavior-y: none;
     }
 
+    /* Safari / WebGL : le canvas peut composer au-dessus des divs sœurs — forcer les hotspots au-dessus. */
+    #rs-panorama .pnlm-render-container {
+      overflow: visible;
+    }
+
+    #rs-panorama canvas {
+      position: relative;
+      z-index: 0;
+    }
+
+    #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs {
+      position: relative;
+      z-index: 30 !important;
+    }
+
     .rs-landing-scroller__track {
       width: 400vw;
       min-width: 400vw;
@@ -914,16 +929,28 @@
       addMount('rs-hs-grillz', -150, -18, grillz, 'rs-pnlm-hs--grillz');
     }
 
-    function wireRsPannellumHotspots(v) {
-      if (!v) return;
-      function go() {
+    function scheduleRsPannellumHotspots(v) {
+      if (!v || typeof v.on !== 'function') return;
+      v.on('load', function () {
+        try {
+          applyPannellumViewportMode();
+          syncPanScroll();
+          syncYawFromScroll();
+        } catch (e1) {}
+        try {
+          if (typeof v.resize === 'function') v.resize();
+        } catch (e2) {}
         registerRsPannellumHotspots(v);
-      }
-      if (typeof v.isLoaded === 'function' && v.isLoaded()) {
-        go();
-        return;
-      }
-      if (typeof v.on === 'function') v.on('load', go);
+        try {
+          if (typeof v.resize === 'function') v.resize();
+        } catch (e3) {}
+        window.requestAnimationFrame(function () {
+          try {
+            syncYawFromScroll();
+            if (v && typeof v.resize === 'function') v.resize();
+          } catch (e4) {}
+        });
+      });
     }
 
     function initPannellum() {
@@ -959,7 +986,7 @@
         touchPanSpeedCoeffFactor: 1.5
       });
 
-      wireRsPannellumHotspots(viewer);
+      scheduleRsPannellumHotspots(viewer);
 
       scroller.addEventListener('scroll', syncYawFromScroll, { passive: true });
 
