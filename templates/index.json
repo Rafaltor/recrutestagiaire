@@ -8,6 +8,13 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "rs_home_landing_classic": {
+      "type": "rs-home-landing-classic",
+      "settings": {}
+    }
+  },
+  "order": [
+    "rs_home_landing_classic"
+  ]
 }
