@@ -727,6 +727,14 @@
     overflow: visible;
   }
 
+  #rs-pnlm-slot-waitlist.rs-landing-hotspot--form {
+    --rs-form-ui-scale: 1;
+    transform: scale(var(--rs-form-ui-scale));
+    transform-origin: center center;
+    transition: transform 0.16s ease-out;
+    will-change: transform;
+  }
+
   .rs-landing-overlay__form-inner {
     width: 100%;
     margin: 0;
@@ -1017,6 +1025,10 @@
     */
     /* Plus large = dézoom (on voit plus de décor). 72 = très serré ; ~90 = vue plus large. */
     var RS_DESKTOP_HFOV = 86;
+    /* Hotspot formulaire (aligné sur addMount rs-hs-form) — proximité vue → --rs-form-ui-scale */
+    var RS_FORM_HS_YAW = -101;
+    var RS_FORM_HS_PITCH = 15;
+    var rsFormProxTimer = null;
 
     function isMobile() {
       return mobileMq.matches;
@@ -1078,6 +1090,40 @@
       viewer.setYaw(yawDeg, 0);
     }
 
+    function yawShortestDeg(fromDeg, toDeg) {
+      return ((fromDeg - toDeg + 540) % 360) - 180;
+    }
+
+    function updateRsFormProximityUi() {
+      var slot = document.getElementById('rs-pnlm-slot-waitlist');
+      if (!viewer || !slot || typeof viewer.getYaw !== 'function' || typeof viewer.getPitch !== 'function') {
+        return;
+      }
+      var dy = yawShortestDeg(viewer.getYaw(), RS_FORM_HS_YAW);
+      var dp = viewer.getPitch() - RS_FORM_HS_PITCH;
+      var dist = Math.sqrt(dy * dy + dp * dp);
+      var near = Math.max(0, Math.min(1, 1 - dist / 40));
+      /* Proche du hotspot : léger zoom UI ; éloigné : léger dézoom (sans toucher au hfov Pannellum). */
+      var scale = 0.94 + near * 0.12;
+      slot.style.setProperty('--rs-form-ui-scale', scale.toFixed(4));
+    }
+
+    function startRsFormProximityTracking() {
+      if (rsFormProxTimer) {
+        clearInterval(rsFormProxTimer);
+        rsFormProxTimer = null;
+      }
+      updateRsFormProximityUi();
+      rsFormProxTimer = window.setInterval(function () {
+        if (!document.body.classList.contains('rs-home-landing-active')) {
+          clearInterval(rsFormProxTimer);
+          rsFormProxTimer = null;
+          return;
+        }
+        updateRsFormProximityUi();
+      }, 90);
+    }
+
     function applyPannellumViewportMode() {
       if (!viewer) return;
       var m = isMobile();
@@ -1131,9 +1177,9 @@
 
       /*
         Pastilles : affiner yaw/pitch sur la texture 360°.
-        Formulaire : ~+90° yaw à droite par rapport à l’ancien centre (~179° → -91°), pitch un peu plus haut.
+        Formulaire : --rs-form-ui-scale (zoom / dézoom léger quand la vue se rapproche en angle).
       */
-      addMount('rs-hs-form', -91, 10, waitlist, 'rs-pnlm-hs--form');
+      addMount('rs-hs-form', RS_FORM_HS_YAW, RS_FORM_HS_PITCH, waitlist, 'rs-pnlm-hs--form');
       addMount('rs-hs-portal', 166, 2, portal, 'rs-pnlm-hs--portal');
       addMount('rs-hs-rdv', 198, 0, rdv, 'rs-pnlm-hs--rdv');
       addMount('rs-hs-kit', 172, -4, kit, 'rs-pnlm-hs--kit');
@@ -1152,6 +1198,7 @@
           if (typeof v.resize === 'function') v.resize();
         } catch (e2) {}
         registerRsPannellumHotspots(v);
+        startRsFormProximityTracking();
         try {
           if (typeof v.resize === 'function') v.resize();
         } catch (e3) {}
