@@ -1023,25 +1023,24 @@
     /* Large ; Pannellum resserre encore selon le FOV vertical (plage utile > qu’avec ±42). */
     var RS_PITCH_MIN = -90;
     var RS_PITCH_MAX = 90;
-    /* hfov : plus haut = plus large (dézoom). Valeurs « classiques » Pannellum (~86–90). */
-    var RS_DESKTOP_HFOV = 86;
+    /* hfov : plus haut = plus large (dézoom). Desktop un peu plus large que le strict 86. */
+    var RS_DESKTOP_HFOV = 100;
     var RS_MOBILE_HFOV = 90;
     /*
       Référentiel spawn : visée caméra au chargement (desktop + mobile après sync scroll).
-      Le formulaire est placé sur la sphère aux mêmes yaw/pitch → **centre de l’écran au spawn**.
-      Ajuste RS_SPAWN_* si le « milieu » de ta texture 360° n’est pas yaw=0, pitch=0 (ex. 180 / 0).
+      Le formulaire : RS_FORM_HS_* (souvent = spawn en yaw/pitch pour centrer le bloc au load).
     */
-    var RS_SPAWN_YAW = 0;
-    var RS_SPAWN_PITCH = 0;
-    var RS_FORM_HS_YAW = RS_SPAWN_YAW;
-    var RS_FORM_HS_PITCH = RS_SPAWN_PITCH;
+    var RS_SPAWN_YAW = 90;
+    var RS_SPAWN_PITCH = 40;
+    var RS_FORM_HS_YAW = 90;
+    var RS_FORM_HS_PITCH = 40;
     /* Multiplicateur « plan » (× curseur section) : gros / moyen / petit pastilles & form */
     var RS_HS_SZ_GROS = 1.22;
     var RS_HS_SZ_MOYEN = 1;
     var RS_HS_SZ_PETIT = 0.78;
     /*
-      Hotspots : yaw/pitch sur la sphère + mul. Le form utilise RS_FORM_HS_* (= spawn).
-      Les autres boutons seront recalés par rapport à RS_SPAWN_* au fil des itérations.
+      Hotspots : yaw/pitch + mul. Le form : RS_FORM_HS_* (ici yaw 90°, pitch 40°).
+      Les autres boutons : à recaler par rapport au spawn / à la scène.
     */
     var RS_HS_DEFS = [
       { hsId: 'rs-hs-form', domId: 'rs-pnlm-slot-waitlist', extraClass: 'rs-pnlm-hs--form', mul: RS_HS_SZ_GROS },
