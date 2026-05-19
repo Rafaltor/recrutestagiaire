@@ -9,12 +9,22 @@
  */
 {
   "sections": {
-    "rs_home_landing_classic": {
-      "type": "rs-home-landing-classic",
-      "settings": {}
+    "rs_home_landing_next": {
+      "type": "rs-home-landing-next",
+      "settings": {
+        "heading": "RECRUTE STAGIAIRE",
+        "form_label": "accès anticipé drop",
+        "email_placeholder": "ton@email.com",
+        "submit_label": "REJOINDRE",
+        "success_message": "Tu es sur la liste.",
+        "portal_label": "← LE BUREAU",
+        "portal_url": "https://portail.recrutestagiaire.eu",
+        "grillz_label": "LE CABINET A GRILLZ →",
+        "grillz_url": "https://recrutestagiaire.eu/pages/grillz"
+      }
     }
   },
   "order": [
-    "rs_home_landing_classic"
+    "rs_home_landing_next"
   ]
 }
