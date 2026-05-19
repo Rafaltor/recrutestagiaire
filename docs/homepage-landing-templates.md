@@ -4,28 +4,30 @@
 
 | Rôle | Section Liquid | Template JSON |
 |------|----------------|---------------|
-| **Sauvegarde** (comportement actuel figé côté code) | `sections/rs-home-landing-classic.liquid` | `templates/index.json` (défaut) |
-| **Nouvelle landing** (360° Pannellum, même UX scroll / hotspots que le wallpaper) | `sections/rs-home-landing-next.liquid` | `templates/index.next.json` |
+| **Landing classique** (wallpaper / sans Pannellum) | `sections/rs-home-landing-classic.liquid` | Pas de fichier dédié dans le dépôt ; tu peux l’assigner en changeant le **type** de section dans l’éditeur de thème si besoin de rollback. |
+| **Landing 360°** (Pannellum) | `sections/rs-home-landing-next.liquid` | **`templates/index.json`** (accueil par défaut) **et** **`templates/index.next.json`** (`?view=next`) — **mêmes `settings`** dans le dépôt. |
 
-Les deux sections partagent les mêmes classes CSS / JS (`.rs-home-landing`, etc.) : une seule est affichée à la fois selon le template.
+Les deux sections partagent les mêmes classes CSS / JS (`.rs-home-landing`, etc.).
+
+**Dépôt** : quand tu modifies les réglages par défaut de la landing next dans le JSON, **garde `index.json` et `index.next.json` alignés** (même bloc `settings` pour `rs_home_landing_next`). Le code et le style restent dans **`rs-home-landing-next.liquid`** uniquement.
 
 ## Basculer sans toucher au code
 
-1. **Prévisualiser la nouvelle landing**  
-   Sur la boutique : ouvre la page d’accueil avec le paramètre  
-   `?view=next`  
-   (ex. `https://ta-boutique.myshopify.com/?view=next` ou ton domaine + `/?view=next`).
+**Pourquoi on parlait de `?view=next` ?**  
+Shopify charge **`/`** avec le modèle **Default** (`index.json`) et **`/?view=next`** avec le modèle alternatif **`index.next.json`**. C’était utile quand les deux fichiers **n’avaient pas** les mêmes sections ou réglages : tu pouvais tester la variante « next » sans changer le modèle assigné à la page d’accueil.
 
-2. **Rendre la nouvelle landing visible pour tout le monde**  
-   Éditeur de thème Shopify → **Modèles** (ou personnalisation de la page d’accueil) → choisir le modèle d’accueil **`next`** / « index next » selon l’intitulé affiché dans l’admin.  
-   Pour revenir à l’ancienne : remettre le modèle par défaut **`Default`** (fichier `index.json`).
+**Aujourd’hui (dépôt)** : les deux JSON sont **alignés** sur la même section et les mêmes `settings`. Pour vérifier ce qui vient du thème dans Git, **l’URL d’accueil normale (`/`) suffit** ; `?view=next` ne montre **pas** une autre version tant que les fichiers restent identiques (sauf si l’éditeur Shopify a enregistré des **surcharges différentes** par modèle — chaque handle de modèle a son propre état dans l’admin).
 
-3. **Réglages par variante**  
-   Chaque template garde ses propres réglages de section dans l’éditeur (images, textes, liens).
+1. **Tester en local / après push** : ouvre la **page d’accueil** (`/`) avec le modèle **Default** si c’est celui que tu utilises en prod.
+
+2. **Changer le modèle assigné dans l’admin** (si tu en as besoin) : personnalisation de la page d’accueil → modèle **Default** (`index.json`) ou **next** (`index.next.json`). Tant que les deux JSON sont synchronisés dans le dépôt, le choix ne change pas le contenu **par défaut** issu des fichiers — seulement quel fichier Shopify met à jour quand tu modifies la page dans l’éditeur.
+
+3. **`?view=next`** : garde-le comme raccourci pour **forcer l’affichage du modèle `next`** (debug, lien partagé, ou futur écart entre les deux JSON). Pas obligatoire si tu ne fais qu’itérer sur la même landing et que `index.json` est déjà à jour.
 
 ## Développement
 
-- Modifier uniquement **`rs-home-landing-next.liquid`** pour itérer sur la nouvelle version.  
+- **`rs-home-landing-next.liquid`** : tout le HTML / CSS / JS de la landing 360°.  
+- **`templates/index.json`** + **`templates/index.next.json`** : mêmes `sections` / `order` ; **mêmes `settings`** pour `rs_home_landing_next` (à synchroniser à chaque changement de défauts côté JSON).  
 - La **classic** sert de référence / rollback : tu peux recopier son contenu vers `next` si besoin.
 - **Next (360°)** : scroller large (yaw sur **360°** via scroll + geste **diagonal** yaw+pitch sur mobile), Pannellum plein écran, **CTAs + liste d’attente en hotspots Pannellum** (yaw/pitch) pour qu’ils suivent le fond.
 - **Pannellum** : pour piloter yaw/pitch depuis le scroll ou le touch, utiliser **`setYaw(angle, 0)`** et **`setPitch(angle, 0)`**. Sans 2ᵉ argument, la lib tween sur **1000 ms** → latence et pitch « bloqué » sur mobile.
