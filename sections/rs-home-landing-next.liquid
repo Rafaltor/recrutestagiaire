@@ -1035,7 +1035,11 @@
     var RS_DESKTOP_HFOV = 86;
     /* Hotspot formulaire (aligné sur addMount rs-hs-form) — proximité vue → --rs-form-ui-scale */
     var RS_FORM_HS_YAW = -101;
-    var RS_FORM_HS_PITCH = 15;
+    var RS_FORM_HS_PITCH = 30;
+    /* Multiplicateur « plan » (× curseur section) : gros / moyen / petit pastilles & form */
+    var RS_HS_SZ_GROS = 1.22;
+    var RS_HS_SZ_MOYEN = 1;
+    var RS_HS_SZ_PETIT = 0.78;
     var rsFormProxTimer = null;
     var sectionRoot = document.getElementById('shopify-section-{{ section.id }}');
     var RS_HOTSPOT_PLANE = 0.82;
@@ -1065,6 +1069,12 @@
       return Math.min(maxScrollLeft(), Math.max(0, x));
     }
 
+    /* Inverse de syncYawFromScroll : yaw = 180 + (t - 0.5) * 360 (t ∈ [0,1]). */
+    function scrollFractionForYaw(yawDeg) {
+      var y = ((yawDeg % 360) + 360) % 360;
+      return (y - 180) / 360 + 0.5;
+    }
+
     function setupHeaderTitle() {
       var topLine = document.querySelector('.header-wrap .rs-header-top-line');
       if (!topLine || topLine.querySelector('.rs-home-header-title')) return;
@@ -1084,7 +1094,13 @@
     function syncPanScroll() {
       if (isMobile()) {
         var max = maxScrollLeft();
-        scroller.scrollLeft = max > 0 ? max / 2 : 0;
+        if (max > 0) {
+          /* Ne pas rester à yaw 180° : Pannellum masque (visibility) les spots hors hémisphère → boutons invisibles au load. */
+          var t0 = scrollFractionForYaw(RS_FORM_HS_YAW);
+          scroller.scrollLeft = clampScroll(t0 * max);
+        } else {
+          scroller.scrollLeft = 0;
+        }
         syncYawFromScroll();
         return;
       }
@@ -1097,7 +1113,7 @@
       if (!isMobile()) return;
       var max = maxScrollLeft();
       if (max < 1) {
-        viewer.setYaw(180, 0);
+        viewer.setYaw(RS_FORM_HS_YAW, 0);
         return;
       }
       var t = scroller.scrollLeft / max;
@@ -1197,14 +1213,14 @@
       }
 
       /*
-        Pastilles : affiner yaw/pitch sur la texture 360°.
-        Formulaire : --rs-form-ui-scale (zoom / dézoom léger quand la vue se rapproche en angle).
+        Pastilles / form : yaw & pitch sur la texture 360° ; 6ᵉ arg = taille (× --rs-hotspot-plane).
+        Mobile : scroll initial aligné sur RS_FORM_HS_YAW pour que Pannellum n’applique pas visibility:hidden au load.
       */
-      addMount('rs-hs-form', RS_FORM_HS_YAW, RS_FORM_HS_PITCH, waitlist, 'rs-pnlm-hs--form');
-      addMount('rs-hs-portal', 166, 2, portal, 'rs-pnlm-hs--portal');
-      addMount('rs-hs-rdv', 198, 0, rdv, 'rs-pnlm-hs--rdv');
-      addMount('rs-hs-kit', 172, -4, kit, 'rs-pnlm-hs--kit');
-      addMount('rs-hs-lookbook', 188, -10, lookbook, 'rs-pnlm-hs--lookbook');
+      addMount('rs-hs-form', RS_FORM_HS_YAW, RS_FORM_HS_PITCH, waitlist, 'rs-pnlm-hs--form', RS_HS_SZ_GROS);
+      addMount('rs-hs-portal', 30, 20, portal, 'rs-pnlm-hs--portal', RS_HS_SZ_GROS);
+      addMount('rs-hs-rdv', -90, 25, rdv, 'rs-pnlm-hs--rdv', RS_HS_SZ_MOYEN);
+      addMount('rs-hs-kit', -150, 10, kit, 'rs-pnlm-hs--kit', RS_HS_SZ_PETIT);
+      addMount('rs-hs-lookbook', 188, -10, lookbook, 'rs-pnlm-hs--lookbook', RS_HS_SZ_MOYEN);
     }
 
     function scheduleRsPannellumHotspots(v) {
@@ -1253,8 +1269,9 @@
         showFullscreenCtrl: false,
         mouseZoom: false,
         hfov: m0 ? 90 : RS_DESKTOP_HFOV,
-        pitch: 0,
-        yaw: 180,
+        /* Vue initiale alignée sur le hotspot formulaire (même yaw/pitch que addMount rs-hs-form). */
+        pitch: RS_FORM_HS_PITCH,
+        yaw: RS_FORM_HS_YAW,
         minYaw: -180,
         maxYaw: 180,
         minHfov: m0 ? 90 : RS_DESKTOP_HFOV,

@@ -10,7 +10,7 @@ Ce dépôt embarque une **copie minifiée** de **Pannellum 2.5.6** avec un **pat
 
 | Fichier | Modification |
 |---------|----------------|
-| `assets/pannellum.js` | Dans la fonction interne qui positionne chaque hot spot (souvent notée **`Ca`** dans le bundle minifié), la chaîne **`translateZ(9999px)`** est remplacée par **`translateZ(0px)`**. |
+| `assets/pannellum.js` | Dans la fonction interne qui positionne chaque hot spot (souvent notée **`Ca`** dans le bundle minifié), la chaîne **`translateZ(9999px)`** est remplacée par **`translateZ(14px)`** (compromis profondeur vs canvas WebGL au-dessus des divs sur mobile). |
 
 **En-tête du fichier** : le commentaire en tête de `pannellum.js` rappelle la présence du fork et pointe vers ce document.
 
@@ -19,12 +19,12 @@ Ce dépôt embarque une **copie minifiée** de **Pannellum 2.5.6** avec un **pat
 1. Télécharger la version souhaitée depuis [mpetroff/pannellum](https://github.com/mpetroff/pannellum) (release ou build `build/pannellum.js`).
 2. Remplacer `assets/pannellum.js` dans le thème.
 3. **Rechercher** dans le nouveau bundle : `translateZ(9999px)` (ou équivalent si le moteur change).
-4. **Réappliquer** le remplacement par `translateZ(0px)` (ou une valeur très petite type `1px` si un navigateur recolle les hot spots **derrière** le canvas — à valider sur Safari / iOS).
+4. **Réappliquer** le remplacement par `translateZ(14px)` (ou ajuster entre **`1px`** et **`40px`** selon navigateurs : trop bas → hot spots sous le canvas ; trop haut → effet « calque » marqué).
 5. Mettre à jour la **ligne de version** en commentaire en tête de fichier.
 
 ## Si les hot spots passent derrière le canvas
 
-- Augmenter légèrement le Z : `translateZ(1px)` … `translateZ(8px)` au lieu de `0px`.
+- Augmenter le Z dans le fork : par ex. **`translateZ(24px)`** … **`translateZ(40px)`** (au-delà, retrouver l’effet « calque »).
 - Vérifier le **z-index** déjà posé côté thème sur `#rs-panorama .pnlm-hotspot-base` dans `sections/rs-home-landing-next.liquid`.
 
 ## Réglages complémentaires (thème, sans toucher au fork)
