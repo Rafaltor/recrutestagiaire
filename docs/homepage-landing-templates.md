@@ -27,11 +27,11 @@ Les deux sections partagent les mêmes classes CSS / JS (`.rs-home-landing`, etc
 
 - Modifier uniquement **`rs-home-landing-next.liquid`** pour itérer sur la nouvelle version.  
 - La **classic** sert de référence / rollback : tu peux recopier son contenu vers `next` si besoin.
-- **Next (360°)** : scroller large (yaw sur **360°** via scroll + geste **diagonal** yaw+pitch sur mobile), Pannellum plein écran, **boutons / formulaire en position fixe** à l’écran (repères comme sur le wallpaper).
+- **Next (360°)** : scroller large (yaw sur **360°** via scroll + geste **diagonal** yaw+pitch sur mobile), Pannellum plein écran, **CTAs + liste d’attente en hotspots Pannellum** (yaw/pitch) pour qu’ils suivent le fond.
 - **Pannellum** : pour piloter yaw/pitch depuis le scroll ou le touch, utiliser **`setYaw(angle, 0)`** et **`setPitch(angle, 0)`**. Sans 2ᵉ argument, la lib tween sur **1000 ms** → latence et pitch « bloqué » sur mobile.
 - **Pitch** : plage **±90°** en config (Pannellum resserre encore selon le FOV vertical). Le geste mobile suit le **même sens que le drag souris** (doigt vers le bas → pitch +).
-- **Desktop** : la scène transparente au-dessus du canvas ne doit pas capter la souris (`pointer-events: none` sur la track / scène en ≥768px) pour que le **drag natif** Pannellum fonctionne.
-- **Suite prévue** : replacer les hotspots dans la **track large** (comme la classic) pour qu’ils suivent le défilement et puissent sortir du viewport.
+- **Desktop** : yaw **limité** à un arc fini (`RS_DESKTOP_YAW_MIN` / `RS_DESKTOP_YAW_MAX`, autour de la vue de départ) pour éviter le 360° infini ; **`hfov`** légèrement réduit (`RS_DESKTOP_HFOV`, ex. 72°) pour gagner un peu de marge haut/bas. `applyPannellumViewportMode()` réapplique les bornes au passage mobile/desktop. La track / scène transparente reste en `pointer-events: none` (≥768px) pour que la souris atteigne le canvas.
+- **Suite prévue** : exposer yaw/pitch des hotspots en **réglages de section** pour caler sans toucher au JS.
 
 ## Ancien fichier
 

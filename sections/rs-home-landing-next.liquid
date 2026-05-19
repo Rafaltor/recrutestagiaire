@@ -1,7 +1,6 @@
 {%- comment -%}
   Accueil 360° (Pannellum) : scroller large (yaw mobile sur 360°), pitch + yaw en diagonal au doigt,
-  hotspots en position fixe à l’écran comme le wallpaper perçu. Prévisualisation : index.next (?view=next).
-  TODO (suite) : replacer les hotspots dans la track large (coords « papier peint ») pour qu’ils sortent du viewport au scroll.
+  CTAs + formulaire en hotspots Pannellum (yaw/pitch) pour qu’ils suivent le fond. Prévisualisation : index.next (?view=next).
 {%- endcomment -%}
 {%- liquid
   assign portal_url = section.settings.portal_url | default: 'https://portail.recrutestagiaire.eu'
@@ -30,7 +29,7 @@
   id="shopify-section-{{ section.id }}"
   data-rs-heading="{{ heading_text | escape }}"
   {{ section.shopify_attributes }}>
-  <div id="rs-panorama" class="rs-landing-pannellum-root" aria-hidden="true"></div>
+  <div id="rs-panorama" class="rs-landing-pannellum-root"></div>
 
   <div class="rs-landing-scroller" data-rs-scroller tabindex="-1">
     <div class="rs-landing-scroller__track" data-rs-track>
@@ -38,15 +37,18 @@
     </div>
   </div>
 
-  <div class="rs-landing-hotspots rs-landing-hotspots--fixed" data-rs-ui>
+  {%- comment -%} Slots montés dans les hotspots Pannellum au load (coords yaw/pitch dans le JS). {%- endcomment -%}
+  <div id="rs-pnlm-hotspot-pool" class="rs-pnlm-hotspot-pool" aria-hidden="true">
     <a
+      id="rs-pnlm-slot-portal"
       class="rs-landing-hotspot rs-landing-hotspot--portal rs-landing-overlay__cta"
       href="{{ portal_url }}"
-      rel="noopener noreferrer">
+      rel="noopener noreferrer"
+      data-rs-ui>
       {{ section.settings.portal_label | default: '← LE BUREAU' | escape }}
     </a>
 
-    <div class="rs-landing-hotspot rs-landing-hotspot--form">
+    <div id="rs-pnlm-slot-waitlist" class="rs-landing-hotspot rs-landing-hotspot--form" data-rs-ui>
       <div class="rs-hero-video__content rs-landing-overlay__waitlist">
         {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-landing-overlay__form-inner' -%}
           <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
@@ -102,7 +104,11 @@
       </div>
     </div>
 
-    <a class="rs-landing-hotspot rs-landing-hotspot--grillz rs-landing-overlay__cta" href="{{ grillz_url }}">
+    <a
+      id="rs-pnlm-slot-grillz"
+      class="rs-landing-hotspot rs-landing-hotspot--grillz rs-landing-overlay__cta"
+      href="{{ grillz_url }}"
+      data-rs-ui>
       {{ section.settings.grillz_label | default: 'LE CABINET A GRILLZ →' | escape }}
     </a>
   </div>
@@ -381,6 +387,29 @@
     display: none !important;
   }
 
+  /* Pool : slots hors écran jusqu’au montage dans Pannellum */
+  .rs-pnlm-hotspot-pool {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+    pointer-events: none;
+  }
+
+  @media (max-width: 767.98px) {
+    /* Laisser les clics atteindre le canvas + hotspots Pannellum ; le scroll reste piloté en JS sur document. */
+    #rs-panorama,
+    #rs-panorama.rs-landing-pannellum-root,
+    #rs-panorama.pnlm-container {
+      pointer-events: auto;
+    }
+  }
+
   @media (min-width: 768px) {
     #rs-panorama,
     #rs-panorama.rs-landing-pannellum-root,
@@ -423,55 +452,26 @@
     min-height: 100dvh;
   }
 
-  /* Hotspots fixes à l’écran (comme repères sur le wallpaper « ressenti ») */
-  .rs-landing-hotspots--fixed {
-    position: fixed;
-    inset: 0;
-    z-index: 12;
-    pointer-events: none;
+  /* Hotspots Pannellum : contenu interactif au-dessus du canvas */
+  #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs {
+    pointer-events: auto;
+    z-index: 5;
   }
 
-  .rs-landing-hotspots--fixed * {
-    pointer-events: none;
-  }
-
-  .rs-landing-hotspots--fixed a,
-  .rs-landing-hotspots--fixed button,
-  .rs-landing-hotspots--fixed input,
-  .rs-landing-hotspots--fixed label,
-  .rs-landing-hotspots--fixed textarea,
-  .rs-landing-hotspots--fixed select {
+  #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs a,
+  #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs button,
+  #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs input,
+  #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs label {
     pointer-events: auto;
   }
 
-  .rs-landing-hotspots--fixed .rs-landing-hotspot {
-    position: absolute;
-    z-index: 1;
-  }
-
-  .rs-landing-hotspots--fixed .rs-landing-hotspot--portal {
-    left: 20%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .rs-landing-hotspots--fixed .rs-landing-hotspot--form {
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+  #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs--form {
     width: min(320px, 82vw);
     max-width: 320px;
   }
 
-  .rs-landing-hotspots--fixed .rs-landing-hotspot--grillz {
-    top: 80%;
-    right: 20%;
-    bottom: auto;
-    transform: translate(50%, -50%);
-  }
-
   @media (min-width: 768px) {
-    .rs-landing-hotspots--fixed .rs-landing-hotspot--form {
+    #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs--form {
       width: min(360px, 32vw);
       max-width: 360px;
     }
@@ -484,6 +484,7 @@
       touch-action: none;
       overscroll-behavior-x: contain;
       overscroll-behavior-y: none;
+      pointer-events: none;
     }
 
     .rs-landing-scroller__track {
@@ -803,6 +804,14 @@
     /* Large ; Pannellum resserre encore selon le FOV vertical (plage utile > qu’avec ±42). */
     var RS_PITCH_MIN = -90;
     var RS_PITCH_MAX = 90;
+    /*
+      Desktop : pas de rotation yaw infinie — arc fini autour de la vue de départ (yaw 180° → stocké -180°).
+      Ajuster min/max pour élargir ou rétrécir l’arc (~110° ici).
+    */
+    var RS_DESKTOP_YAW_MIN = -235;
+    var RS_DESKTOP_YAW_MAX = -125;
+    /* Légère réduction du champ horizontal → plage pitch verticale un peu plus large (clamp interne Pannellum). */
+    var RS_DESKTOP_HFOV = 72;
 
     function isMobile() {
       return mobileMq.matches;
@@ -864,6 +873,77 @@
       viewer.setYaw(yawDeg, 0);
     }
 
+    function applyPannellumViewportMode() {
+      if (!viewer) return;
+      var m = isMobile();
+      try {
+        if (typeof viewer.setYawBounds === 'function') {
+          viewer.setYawBounds(m ? [-180, 180] : [RS_DESKTOP_YAW_MIN, RS_DESKTOP_YAW_MAX]);
+        }
+        if (typeof viewer.setHfovBounds === 'function') {
+          viewer.setHfovBounds(m ? [90, 90] : [RS_DESKTOP_HFOV, RS_DESKTOP_HFOV]);
+        }
+        if (typeof viewer.setHfov === 'function') {
+          viewer.setHfov(m ? 90 : RS_DESKTOP_HFOV, 0);
+        }
+        if (!m && typeof viewer.getYaw === 'function' && typeof viewer.setYaw === 'function') {
+          var gy = viewer.getYaw();
+          if (gy < RS_DESKTOP_YAW_MIN || gy > RS_DESKTOP_YAW_MAX) {
+            viewer.setYaw(Math.max(RS_DESKTOP_YAW_MIN, Math.min(RS_DESKTOP_YAW_MAX, gy)), 0);
+          }
+        }
+      } catch (err) {}
+      try {
+        if (typeof viewer.resize === 'function') viewer.resize();
+      } catch (e2) {}
+    }
+
+    function registerRsPannellumHotspots(v) {
+      if (!v || typeof v.addHotSpot !== 'function') return;
+      try {
+        if (typeof v.removeHotSpot === 'function') {
+          v.removeHotSpot('rs-hs-portal');
+          v.removeHotSpot('rs-hs-form');
+          v.removeHotSpot('rs-hs-grillz');
+        }
+      } catch (e0) {}
+
+      var portal = document.getElementById('rs-pnlm-slot-portal');
+      var waitlist = document.getElementById('rs-pnlm-slot-waitlist');
+      var grillz = document.getElementById('rs-pnlm-slot-grillz');
+
+      function addMount(hsId, yaw, pitch, slot, extraClass) {
+        if (!slot) return;
+        v.addHotSpot({
+          id: hsId,
+          yaw: yaw,
+          pitch: pitch,
+          type: 'info',
+          cssClass: 'pnlm-pointer rs-pnlm-hs ' + (extraClass || ''),
+          createTooltipFunc: function (wrapper) {
+            if (slot.parentNode !== wrapper) wrapper.appendChild(slot);
+          }
+        });
+      }
+
+      /* Yaw / pitch dans la texture 360° (voisin de la vue initiale ~180° / -180° pour rester dans l’arc desktop). */
+      addMount('rs-hs-portal', -205, 5, portal, 'rs-pnlm-hs--portal');
+      addMount('rs-hs-form', -178, -2, waitlist, 'rs-pnlm-hs--form');
+      addMount('rs-hs-grillz', -150, -18, grillz, 'rs-pnlm-hs--grillz');
+    }
+
+    function wireRsPannellumHotspots(v) {
+      if (!v) return;
+      function go() {
+        registerRsPannellumHotspots(v);
+      }
+      if (typeof v.isLoaded === 'function' && v.isLoaded()) {
+        go();
+        return;
+      }
+      if (typeof v.on === 'function') v.on('load', go);
+    }
+
     function initPannellum() {
       if (typeof window.pannellum === 'undefined') {
         setTimeout(initPannellum, 50);
@@ -871,6 +951,8 @@
       }
       if (viewer) return;
       if (!document.getElementById('rs-panorama')) return;
+
+      var m0 = isMobile();
 
       viewer = window.pannellum.viewer('rs-panorama', {
         type: 'equirectangular',
@@ -882,18 +964,20 @@
         showZoomCtrl: false,
         showFullscreenCtrl: false,
         mouseZoom: false,
-        hfov: 90,
+        hfov: m0 ? 90 : RS_DESKTOP_HFOV,
         pitch: 0,
         yaw: 180,
-        minYaw: -180,
-        maxYaw: 180,
-        minHfov: 90,
-        maxHfov: 90,
+        minYaw: m0 ? -180 : RS_DESKTOP_YAW_MIN,
+        maxYaw: m0 ? 180 : RS_DESKTOP_YAW_MAX,
+        minHfov: m0 ? 90 : RS_DESKTOP_HFOV,
+        maxHfov: m0 ? 90 : RS_DESKTOP_HFOV,
         minPitch: RS_PITCH_MIN,
         maxPitch: RS_PITCH_MAX,
         draggable: !isMobile(),
         touchPanSpeedCoeffFactor: 1.5
       });
+
+      wireRsPannellumHotspots(viewer);
 
       scroller.addEventListener('scroll', syncYawFromScroll, { passive: true });
 
@@ -906,6 +990,7 @@
       }
 
       setTimeout(function () {
+        applyPannellumViewportMode();
         syncPanScroll();
         syncYawFromScroll();
         resizeViewer();
@@ -982,6 +1067,7 @@
 
     window.addEventListener('resize', function () {
       syncPanScroll();
+      applyPannellumViewportMode();
       if (viewer && typeof viewer.resize === 'function') {
         try {
           viewer.resize();
@@ -992,6 +1078,7 @@
     if (typeof mobileMq.addEventListener === 'function') {
       mobileMq.addEventListener('change', function () {
         syncPanScroll();
+        applyPannellumViewportMode();
         if (viewer && typeof viewer.resize === 'function') {
           try {
             viewer.resize();
