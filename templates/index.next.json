@@ -1,0 +1,36 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ *
+ * Template alternatif d’accueil — section « nouvelle landing » (brouillon).
+ * Prévisualisation boutique : ajouter ?view=next à l’URL de la page d’accueil.
+ * Voir docs/homepage-landing-templates.md
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "rs_home_landing_next": {
+      "type": "rs-home-landing-next",
+      "settings": {
+        "background_image": "shopify://shop_images/pagedacceuil_8ae1177d-704d-4514-acee-1f1765fac173.jpg",
+        "heading": "RECRUTE STAGIAIRE",
+        "form_label": "REJOINS LA LISTE",
+        "email_placeholder": "ton@email.com",
+        "submit_label": "REJOINDRE",
+        "success_message": "Tu es sur la liste.",
+        "portal_label": "← LE BUREAU",
+        "portal_url": "https://portail.recrutestagiaire.eu",
+        "grillz_label": "LE CABINET A GRILLZ →",
+        "grillz_url": "shopify://pages/grillz"
+      }
+    }
+  },
+  "order": [
+    "rs_home_landing_next"
+  ]
+}

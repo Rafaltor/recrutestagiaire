@@ -175,5 +175,14 @@
         "info": "Ne coller que du code vérifié. Tout script ici s'exécute sur toutes les pages pour tous les visiteurs."
       }
     ]
+  },
+  {
+    "name": "Page d’accueil — landings",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Modèle par défaut (index.json) : landing « wallpaper waitlist » sauvegardée (section rs-home-landing-classic). Nouvelle version : rs-home-landing-next + modèle index.next.json — prévisualiser l’accueil avec ?view=next. Basculer pour tout le monde : éditeur de thème → page d’accueil → modèle « next » ou défaut. Détails : docs/homepage-landing-templates.md"
+      }
+    ]
   }
 ]

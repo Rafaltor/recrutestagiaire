@@ -1,3 +1,7 @@
+{%- comment -%}
+  Sauvegarde de l’accueil « wallpaper waitlist » — ne pas supprimer sans migrer les réglages.
+  Pour itérer sur une nouvelle home : sections/rs-home-landing-next.liquid + template index.next.json
+{%- endcomment -%}
 {%- liquid
   assign bg = section.settings.background_image
   assign portal_url = section.settings.portal_url | default: 'https://portail.recrutestagiaire.eu'
@@ -995,7 +999,7 @@
 
 {% schema %}
 {
-  "name": "Accueil waiting list",
+  "name": "Accueil — wallpaper waitlist (sauvegarde)",
   "tag": "section",
   "class": "section-rs-home-landing",
   "settings": [
@@ -1067,7 +1071,7 @@
   ],
   "presets": [
     {
-      "name": "Accueil waiting list"
+      "name": "Accueil — wallpaper waitlist (sauvegarde)"
     }
   ]
 }
