@@ -1,5 +1,5 @@
 {%- comment -%}
-  Accueil 360° (Pannellum) : scroller large (yaw horizontal mobile), pitch au glissé vertical,
+  Accueil 360° (Pannellum) : scroller large (yaw mobile sur 360°), pitch + yaw en diagonal au doigt,
   hotspots en position fixe à l’écran comme le wallpaper perçu. Prévisualisation : index.next (?view=next).
   TODO (suite) : replacer les hotspots dans la track large (coords « papier peint ») pour qu’ils sortent du viewport au scroll.
 {%- endcomment -%}
@@ -487,8 +487,8 @@
     }
 
     .rs-landing-scroller__track {
-      width: 250vw;
-      min-width: 250vw;
+      width: 400vw;
+      min-width: 400vw;
     }
   }
 
@@ -792,18 +792,17 @@
 
     var drag = {
       active: false,
+      moved: false,
       startX: 0,
       startY: 0,
       startScroll: 0,
-      lock: null,
-      basePitch: null,
-      pitchAnchorY: null
+      startPitch: 0
     };
 
     var viewer = null;
-    /* Plage large : Pannellum resserre ensuite selon le FOV (sinon ~±15° seulement avec ±42). */
-    var RS_PITCH_MIN = -85;
-    var RS_PITCH_MAX = 85;
+    /* Large ; Pannellum resserre encore selon le FOV vertical (plage utile > qu’avec ±42). */
+    var RS_PITCH_MIN = -90;
+    var RS_PITCH_MAX = 90;
 
     function isMobile() {
       return mobileMq.matches;
@@ -860,8 +859,9 @@
         return;
       }
       var t = scroller.scrollLeft / max;
-      /* Durée 0 : sans 2e argument Pannellum tween 1000 ms → latence énorme sur mobile. */
-      viewer.setYaw(90 + t * 180, 0);
+      /* 360° sur toute la largeur scrollable ; t=0.5 → 180° (comme l’ancien centre). */
+      var yawDeg = 180 + (t - 0.5) * 360;
+      viewer.setYaw(yawDeg, 0);
     }
 
     function initPannellum() {
@@ -885,6 +885,8 @@
         hfov: 90,
         pitch: 0,
         yaw: 180,
+        minYaw: -180,
+        maxYaw: 180,
         minHfov: 90,
         maxHfov: 90,
         minPitch: RS_PITCH_MIN,
@@ -916,14 +918,14 @@
       if (!isMobile() || !e.touches || e.touches.length !== 1) return;
       if (isUI(e.target)) return;
 
-      drag.lock = null;
-      drag.basePitch = null;
-
       var t = e.touches[0];
       drag.active = true;
+      drag.moved = false;
       drag.startX = t.clientX;
       drag.startY = t.clientY;
       drag.startScroll = scroller.scrollLeft;
+      drag.startPitch =
+        viewer && typeof viewer.getPitch === 'function' ? viewer.getPitch() : 0;
     }
 
     function onTouchMove(e) {
@@ -931,44 +933,29 @@
 
       var t = e.touches[0];
       var dx = t.clientX - drag.startX;
-      var adx = Math.abs(dx);
-      var ady = Math.abs(t.clientY - drag.startY);
+      var dy = t.clientY - drag.startY;
 
-      if (drag.lock === null && (adx > 5 || ady > 5)) {
-        var ratio = 1.22;
-        if (ady >= adx * ratio) drag.lock = 'y';
-        else if (adx >= ady * ratio) drag.lock = 'x';
-        else drag.lock = ady > adx ? 'y' : 'x';
+      if (!drag.moved) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        drag.moved = true;
       }
 
-      if (drag.lock === 'y') {
-        e.preventDefault();
-        if (viewer && typeof viewer.getPitch === 'function' && typeof viewer.setPitch === 'function') {
-          if (drag.basePitch === null) {
-            drag.basePitch = viewer.getPitch();
-            drag.pitchAnchorY = t.clientY;
-          }
-          /* Même sens que Pannellum (souris) : doigt vers le bas → pitch + → regard vers le haut. */
-          var dy = t.clientY - drag.pitchAnchorY;
-          var np = drag.basePitch + dy * 0.12;
-          np = Math.max(RS_PITCH_MIN, Math.min(RS_PITCH_MAX, np));
-          viewer.setPitch(np, 0);
-        }
-        return;
-      }
+      e.preventDefault();
 
-      if (drag.lock === 'x') {
-        e.preventDefault();
-        scroller.scrollLeft = clampScroll(drag.startScroll - dx);
-        syncYawFromScroll();
+      scroller.scrollLeft = clampScroll(drag.startScroll - dx);
+      syncYawFromScroll();
+
+      if (viewer && typeof viewer.setPitch === 'function') {
+        /* Même sens que Pannellum : doigt vers le bas → pitch +. */
+        var np = drag.startPitch + dy * 0.11;
+        np = Math.max(RS_PITCH_MIN, Math.min(RS_PITCH_MAX, np));
+        viewer.setPitch(np, 0);
       }
     }
 
     function onTouchEnd() {
       drag.active = false;
-      drag.lock = null;
-      drag.basePitch = null;
-      drag.pitchAnchorY = null;
+      drag.moved = false;
     }
 
     document.addEventListener(
