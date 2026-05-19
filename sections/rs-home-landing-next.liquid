@@ -809,26 +809,34 @@
     text-decoration: none !important;
   }
 
+  /* Pastilles dans le panorama : même logique d’échelle que le formulaire (plane × prox), pas de facteur 0.92. */
+  #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) > .rs-landing-hotspot--prox-ui.rs-landing-overlay__cta--pill {
+    transform: translateZ(0) scale(calc(var(--rs-hotspot-plane, 1) * var(--rs-hotspot-prox-scale, 1)));
+    transform-origin: center center;
+    text-shadow:
+      0 0 14px rgba(0, 0, 0, 0.55),
+      0 1px 4px rgba(0, 0, 0, 0.45);
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.35));
+  }
+
   @media (min-width: 768px) {
-    .rs-home-landing a.rs-landing-overlay__cta--pill,
-    .rs-home-landing button.rs-landing-overlay__cta--pill {
-      font-size: clamp(11px, 1.12vw, 13px);
-      padding: 6px 12px;
-      letter-spacing: 0.11em;
-    }
-
-    /* Pastilles : 0.92 × plan × proximité (même logique d’échelle dynamique que le formulaire). */
     #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) > .rs-landing-hotspot--prox-ui.rs-landing-overlay__cta--pill {
-      transform: translateZ(0)
-        scale(calc(var(--rs-hotspot-plane, 1) * 0.92 * var(--rs-hotspot-prox-scale, 1)));
-      transform-origin: center center;
+      font-size: clamp(11px, 1.05vw, 13px);
+      padding: 7px 14px;
     }
 
-    .rs-landing-hotspot--lookbook .rs-landing-overlay__cta--pill {
+    .rs-landing-hotspot--lookbook.rs-landing-overlay__cta--pill {
       white-space: normal;
       max-width: 10.5rem;
       text-align: center;
       line-height: 1.2;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) > .rs-landing-hotspot--prox-ui.rs-landing-overlay__cta--pill {
+      font-size: clamp(11px, 3.2vw, 14px);
+      padding: 6px 11px;
     }
   }
 
@@ -1040,14 +1048,14 @@
     var RS_HS_SZ_PETIT = 0.78;
     /*
       Hotspots : une seule liste pour addMount + proximité UI (évite dérive yaw/pitch).
-      Le formulaire reprend RS_FORM_HS_* ; les autres ont yaw/pitch inline.
+      Le formulaire reprend RS_FORM_HS_* ; les pastilles (portail, RDV, kit, lookbook) sont à **yaw 0 / pitch 40** et **même mul** que le form — elles se superposent ; décale les `yaw` dans `RS_HS_DEFS` si tu veux les espacer.
     */
     var RS_HS_DEFS = [
       { hsId: 'rs-hs-form', domId: 'rs-pnlm-slot-waitlist', extraClass: 'rs-pnlm-hs--form', mul: RS_HS_SZ_GROS },
-      { hsId: 'rs-hs-portal', domId: 'rs-pnlm-slot-portal', yaw: 30, pitch: 20, extraClass: 'rs-pnlm-hs--portal', mul: RS_HS_SZ_GROS },
-      { hsId: 'rs-hs-rdv', domId: 'rs-pnlm-slot-rdv', yaw: -90, pitch: 25, extraClass: 'rs-pnlm-hs--rdv', mul: RS_HS_SZ_MOYEN },
-      { hsId: 'rs-hs-kit', domId: 'rs-pnlm-slot-kit', yaw: -150, pitch: 10, extraClass: 'rs-pnlm-hs--kit', mul: RS_HS_SZ_PETIT },
-      { hsId: 'rs-hs-lookbook', domId: 'rs-pnlm-slot-lookbook', yaw: 188, pitch: -10, extraClass: 'rs-pnlm-hs--lookbook', mul: RS_HS_SZ_MOYEN }
+      { hsId: 'rs-hs-portal', domId: 'rs-pnlm-slot-portal', yaw: 0, pitch: 40, extraClass: 'rs-pnlm-hs--portal', mul: RS_HS_SZ_GROS },
+      { hsId: 'rs-hs-rdv', domId: 'rs-pnlm-slot-rdv', yaw: 0, pitch: 40, extraClass: 'rs-pnlm-hs--rdv', mul: RS_HS_SZ_GROS },
+      { hsId: 'rs-hs-kit', domId: 'rs-pnlm-slot-kit', yaw: 0, pitch: 40, extraClass: 'rs-pnlm-hs--kit', mul: RS_HS_SZ_GROS },
+      { hsId: 'rs-hs-lookbook', domId: 'rs-pnlm-slot-lookbook', yaw: 0, pitch: 40, extraClass: 'rs-pnlm-hs--lookbook', mul: RS_HS_SZ_GROS }
     ];
     var rsHotspotProxTimer = null;
     /* Mobile : scroll horizontal = delta yaw ; strip recentré au centre aux bords → 360° sans butée. */
