@@ -11,7 +11,11 @@
         "success_message": "Tu es sur la liste.",
         "portal_label": "← LE BUREAU",
         "portal_url": "https://portail.recrutestagiaire.eu",
-        "grillz_label": "LE CABINET A GRILLZ →",
+        "cal_booking_url": "https://cal.com/recrutestagiaire-avpmen/grillz",
+        "rdv_label": "PRENDRE RENDEZ-VOUS",
+        "kit_postal_label": "KIT POSTAL EMPREINTE",
+        "lookbook_label": "LOOKBOOK ABCDRS",
+        "lookbook_url": "shopify://collections/abcdrs",
         "grillz_url": "shopify://pages/grillz"
       }
     }

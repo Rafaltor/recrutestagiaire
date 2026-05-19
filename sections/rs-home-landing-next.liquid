@@ -12,6 +12,20 @@
       assign grillz_url = '/pages/grillz'
     endif
   endif
+  assign cal_booking_url = section.settings.cal_booking_url | default: '' | strip
+  if cal_booking_url == blank
+    assign cal_booking_url = 'https://cal.com/recrutestagiaire-avpmen/grillz'
+  endif
+  assign kit_page_url = grillz_url
+  if kit_page_url contains '?'
+    assign kit_page_url = kit_page_url | append: '&rs-kit=1'
+  else
+    assign kit_page_url = kit_page_url | append: '?rs-kit=1'
+  endif
+  assign lookbook_url = section.settings.lookbook_url | default: '' | strip
+  if lookbook_url == blank
+    assign lookbook_url = '/collections/abcdrs'
+  endif
   assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
 -%}
 
@@ -41,7 +55,7 @@
   <div id="rs-pnlm-hotspot-pool" class="rs-pnlm-hotspot-pool" aria-hidden="true">
     <a
       id="rs-pnlm-slot-portal"
-      class="rs-landing-hotspot rs-landing-hotspot--portal rs-landing-overlay__cta"
+      class="rs-landing-hotspot rs-landing-hotspot--portal rs-landing-overlay__cta rs-landing-overlay__cta--pill"
       href="{{ portal_url }}"
       rel="noopener noreferrer"
       data-rs-ui>
@@ -105,11 +119,27 @@
     </div>
 
     <a
-      id="rs-pnlm-slot-grillz"
-      class="rs-landing-hotspot rs-landing-hotspot--grillz rs-landing-overlay__cta"
-      href="{{ grillz_url }}"
+      id="rs-pnlm-slot-rdv"
+      class="rs-landing-hotspot rs-landing-hotspot--rdv rs-landing-overlay__cta rs-landing-overlay__cta--pill"
+      href="{{ cal_booking_url }}"
+      target="_blank"
+      rel="noopener noreferrer"
       data-rs-ui>
-      {{ section.settings.grillz_label | default: 'LE CABINET A GRILLZ →' | escape }}
+      {{ section.settings.rdv_label | default: 'PRENDRE RENDEZ-VOUS' | escape }}
+    </a>
+    <a
+      id="rs-pnlm-slot-kit"
+      class="rs-landing-hotspot rs-landing-hotspot--kit rs-landing-overlay__cta rs-landing-overlay__cta--pill"
+      href="{{ kit_page_url }}"
+      data-rs-ui>
+      {{ section.settings.kit_postal_label | default: 'KIT POSTAL EMPREINTE' | escape }}
+    </a>
+    <a
+      id="rs-pnlm-slot-lookbook"
+      class="rs-landing-hotspot rs-landing-hotspot--lookbook rs-landing-overlay__cta rs-landing-overlay__cta--pill"
+      href="{{ lookbook_url }}"
+      data-rs-ui>
+      {{ section.settings.lookbook_label | default: 'LOOKBOOK ABCDRS' | escape }}
     </a>
   </div>
 
@@ -681,7 +711,7 @@
     text-align: center;
   }
 
-  /* Boutons pilule — portail / cabinet grillz */
+  /* Boutons pilule — portail, RDV, kit, lookbook */
   .rs-home-landing a.rs-landing-overlay__cta {
     display: inline-flex;
     align-items: center;
@@ -713,6 +743,14 @@
     border-color: rgba(255, 255, 255, 0.85);
     color: #fff !important;
     text-decoration: none !important;
+  }
+
+  @media (min-width: 768px) {
+    .rs-home-landing a.rs-landing-overlay__cta--pill {
+      font-size: clamp(10px, 1.05vw, 12px);
+      padding: 3px 7px;
+      letter-spacing: 0.1em;
+    }
   }
 
   .rs-landing-swipe-hint {
@@ -805,7 +843,8 @@
       Desktop : hfov un peu plus bas que le mobile pour un peu plus de marge pitch (clamp interne Pannellum).
       Yaw : même plage complète que le mobile (-180 / 180) pour pouvoir tourner dans la pièce à la souris.
     */
-    var RS_DESKTOP_HFOV = 72;
+    /* Plus large = dézoom (on voit plus de décor). 72 = très serré ; ~90 = vue plus large. */
+    var RS_DESKTOP_HFOV = 90;
 
     function isMobile() {
       return mobileMq.matches;
@@ -892,13 +931,17 @@
         if (typeof v.removeHotSpot === 'function') {
           v.removeHotSpot('rs-hs-portal');
           v.removeHotSpot('rs-hs-form');
-          v.removeHotSpot('rs-hs-grillz');
+          v.removeHotSpot('rs-hs-rdv');
+          v.removeHotSpot('rs-hs-kit');
+          v.removeHotSpot('rs-hs-lookbook');
         }
       } catch (e0) {}
 
       var portal = document.getElementById('rs-pnlm-slot-portal');
       var waitlist = document.getElementById('rs-pnlm-slot-waitlist');
-      var grillz = document.getElementById('rs-pnlm-slot-grillz');
+      var rdv = document.getElementById('rs-pnlm-slot-rdv');
+      var kit = document.getElementById('rs-pnlm-slot-kit');
+      var lookbook = document.getElementById('rs-pnlm-slot-lookbook');
 
       function addMount(hsId, yaw, pitch, slot, extraClass) {
         if (!slot) return;
@@ -914,10 +957,16 @@
         });
       }
 
-      /* Yaw / pitch dans la texture 360° (voisin de la vue initiale ~180° / -180° pour rester dans l’arc desktop). */
-      addMount('rs-hs-portal', -205, 5, portal, 'rs-pnlm-hs--portal');
-      addMount('rs-hs-form', -178, -2, waitlist, 'rs-pnlm-hs--form');
-      addMount('rs-hs-grillz', -150, -18, grillz, 'rs-pnlm-hs--grillz');
+      /*
+        Coords yaw / pitch (texture 360°, yaw 0–360 souvent mappé en -180..180).
+        Réglage desktop : fenêtre atelier (waitlist au spawn), mur bureau, RDV Cal.com, kit postal → cabinet, lookbook sur chaise.
+        Affiner après retour visuel sur la scène.
+      */
+      addMount('rs-hs-form', 181, 8, waitlist, 'rs-pnlm-hs--form');
+      addMount('rs-hs-portal', 174, 5, portal, 'rs-pnlm-hs--portal');
+      addMount('rs-hs-rdv', -168, -1, rdv, 'rs-pnlm-hs--rdv');
+      addMount('rs-hs-kit', -152, -14, kit, 'rs-pnlm-hs--kit');
+      addMount('rs-hs-lookbook', -118, -26, lookbook, 'rs-pnlm-hs--lookbook');
     }
 
     function scheduleRsPannellumHotspots(v) {
@@ -1252,16 +1301,40 @@
       "label": "URL portail"
     },
     {
+      "type": "url",
+      "id": "cal_booking_url",
+      "label": "URL prise de rendez-vous (Cal.com)",
+      "info": "Vide = cal.com/recrutestagiaire-avpmen/grillz"
+    },
+    {
       "type": "text",
-      "id": "grillz_label",
-      "label": "Bouton cabinet grillz",
-      "default": "LE CABINET A GRILLZ →"
+      "id": "rdv_label",
+      "label": "Bouton rendez-vous",
+      "default": "PRENDRE RENDEZ-VOUS"
+    },
+    {
+      "type": "text",
+      "id": "kit_postal_label",
+      "label": "Bouton kit postal empreinte",
+      "default": "KIT POSTAL EMPREINTE"
+    },
+    {
+      "type": "text",
+      "id": "lookbook_label",
+      "label": "Bouton lookbook",
+      "default": "LOOKBOOK ABCDRS"
+    },
+    {
+      "type": "url",
+      "id": "lookbook_url",
+      "label": "URL lookbook",
+      "info": "Vide = /collections/abcdrs"
     },
     {
       "type": "url",
       "id": "grillz_url",
-      "label": "URL page grillz",
-      "info": "Vide = /pages/grillz"
+      "label": "URL page cabinet (Grillz)",
+      "info": "Utilisée pour le kit postal (?rs-kit=1 ouvre l’overlay sur la page cabinet). Vide = /pages/grillz"
     },
     {
       "type": "text",

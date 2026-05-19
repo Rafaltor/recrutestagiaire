@@ -1022,6 +1022,15 @@
             e.stopPropagation();
           });
         }
+
+        try {
+          var kitQ = new URLSearchParams(window.location.search || '');
+          if (kitQ.get('rs-kit') === '1') {
+            window.setTimeout(function () {
+              if (kitBtn) kitBtn.click();
+            }, 120);
+          }
+        } catch (eK) {}
       }
 
       document.addEventListener('keydown', function (e) {
