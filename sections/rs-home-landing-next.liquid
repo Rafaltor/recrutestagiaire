@@ -11,7 +11,7 @@
   assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
 -%}
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+<link rel="stylesheet" href="{{ 'pannellum.css' | asset_url }}">
 <script src="{{ 'pannellum.js' | asset_url }}" defer></script>
 
 {{ 'rs-hero-video.css' | asset_url | stylesheet_tag }}
