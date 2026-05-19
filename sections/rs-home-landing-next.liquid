@@ -566,6 +566,22 @@
       z-index: 30 !important;
     }
 
+    /*
+      Hotspots : sur mobile ils paraissaient trop « collés » à la caméra — on réduit l’échelle (× --rs-hotspot-mobile-depth-mul)
+      en plus de plane × proximité. Le zoom Pannellum mobile reste ~90° (RS_MOBILE_HFOV).
+    */
+    #rs-panorama {
+      --rs-hotspot-mobile-depth-mul: 0.68;
+    }
+
+    #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs > .rs-landing-hotspot--prox-ui {
+      transform: scale(
+        calc(
+          var(--rs-hotspot-plane, 1) * var(--rs-hotspot-prox-scale, 1) * var(--rs-hotspot-mobile-depth-mul, 0.68)
+        )
+      );
+    }
+
     .rs-landing-scroller__track {
       width: 400vw;
       min-width: 400vw;
@@ -837,6 +853,12 @@
     #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) > .rs-landing-hotspot--prox-ui.rs-landing-overlay__cta--pill {
       font-size: clamp(11px, 3.2vw, 14px);
       padding: 6px 11px;
+      transform: translateZ(0)
+        scale(
+          calc(
+            var(--rs-hotspot-plane, 1) * var(--rs-hotspot-prox-scale, 1) * var(--rs-hotspot-mobile-depth-mul, 0.68)
+          )
+        );
     }
   }
 
@@ -1036,9 +1058,9 @@
       hfov : plus la valeur est haute, plus la vue est large (dézoom). Desktop légèrement plus que mobile si besoin de marge pitch.
       Yaw : même plage complète que le mobile (-180 / 180) pour pouvoir tourner dans la pièce à la souris.
     */
-    /* Plus large = dézoom (on voit plus de décor). ~72 serré ; ~90 standard ; ~115–120 très dézoomé. */
+    /* Desktop : dézoom fort. Mobile : ~90° comme avant (moins large que le desktop). */
     var RS_DESKTOP_HFOV = 118;
-    var RS_MOBILE_HFOV = 115;
+    var RS_MOBILE_HFOV = 90;
     /* Hotspot formulaire : yaw/pitch RS_FORM_HS_* ; proximité vue → --rs-hotspot-prox-scale (tous les slots). */
     var RS_FORM_HS_YAW = -101;
     var RS_FORM_HS_PITCH = 30;
