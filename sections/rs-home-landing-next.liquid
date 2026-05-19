@@ -1019,7 +1019,7 @@
       moved: false,
       startX: 0,
       startY: 0,
-      startScroll: 0,
+      lastX: 0,
       startPitch: 0
     };
 
@@ -1041,6 +1041,10 @@
     var RS_HS_SZ_MOYEN = 1;
     var RS_HS_SZ_PETIT = 0.78;
     var rsFormProxTimer = null;
+    /* Mobile : scroll horizontal = delta yaw ; strip recentré au centre aux bords → 360° sans butée. */
+    var rsMobileYawUnb = RS_FORM_HS_YAW;
+    var rsLastMobileSl = -1;
+    var rsSkipNextScrollDelta = false;
     var sectionRoot = document.getElementById('shopify-section-{{ section.id }}');
     var RS_HOTSPOT_PLANE = 0.82;
     if (sectionRoot && sectionRoot.dataset.rsHotspotPlanePct) {
@@ -1069,10 +1073,25 @@
       return Math.min(maxScrollLeft(), Math.max(0, x));
     }
 
-    /* Inverse de syncYawFromScroll : yaw = 180 + (t - 0.5) * 360 (t ∈ [0,1]). */
-    function scrollFractionForYaw(yawDeg) {
-      var y = ((yawDeg % 360) + 360) % 360;
-      return (y - 180) / 360 + 0.5;
+    function normalizeMobileYaw(deg) {
+      var x = ((deg % 360) + 360) % 360;
+      if (x > 180) x -= 360;
+      return x;
+    }
+
+    function mobilePanStripRecenterAfterLayout() {
+      if (!isMobile() || !viewer) return;
+      var max = maxScrollLeft();
+      if (max < 1) return;
+      if (typeof viewer.getYaw === 'function') {
+        rsMobileYawUnb = viewer.getYaw();
+      }
+      rsSkipNextScrollDelta = true;
+      scroller.scrollLeft = max * 0.5;
+      rsLastMobileSl = max * 0.5;
+      try {
+        viewer.setYaw(normalizeMobileYaw(rsMobileYawUnb), 0);
+      } catch (eR) {}
     }
 
     function setupHeaderTitle() {
@@ -1095,15 +1114,20 @@
       if (isMobile()) {
         var max = maxScrollLeft();
         if (max > 0) {
-          /* Ne pas rester à yaw 180° : Pannellum masque (visibility) les spots hors hémisphère → boutons invisibles au load. */
-          var t0 = scrollFractionForYaw(RS_FORM_HS_YAW);
-          scroller.scrollLeft = clampScroll(t0 * max);
+          if (rsLastMobileSl < 0) {
+            rsMobileYawUnb =
+              viewer && typeof viewer.getYaw === 'function' ? viewer.getYaw() : RS_FORM_HS_YAW;
+            rsSkipNextScrollDelta = true;
+            scroller.scrollLeft = max * 0.5;
+            rsLastMobileSl = max * 0.5;
+          }
         } else {
           scroller.scrollLeft = 0;
         }
         syncYawFromScroll();
         return;
       }
+      rsLastMobileSl = -1;
       scroller.scrollLeft = 0;
       syncYawFromScroll();
     }
@@ -1116,10 +1140,33 @@
         viewer.setYaw(RS_FORM_HS_YAW, 0);
         return;
       }
-      var t = scroller.scrollLeft / max;
-      /* 360° sur toute la largeur scrollable ; t=0.5 → 180° (comme l’ancien centre). */
-      var yawDeg = 180 + (t - 0.5) * 360;
-      viewer.setYaw(yawDeg, 0);
+      var sl = scroller.scrollLeft;
+      if (rsSkipNextScrollDelta) {
+        rsSkipNextScrollDelta = false;
+        rsLastMobileSl = sl;
+        try {
+          viewer.setYaw(normalizeMobileYaw(rsMobileYawUnb), 0);
+        } catch (eS) {}
+        return;
+      }
+      /* Proche des bords : recentrer le strip (sans changer le yaw) pour continuer à tourner. */
+      var margin = Math.max(32, max * 0.14);
+      if (sl < margin || sl > max - margin) {
+        rsSkipNextScrollDelta = true;
+        scroller.scrollLeft = max * 0.5;
+        rsLastMobileSl = max * 0.5;
+        try {
+          viewer.setYaw(normalizeMobileYaw(rsMobileYawUnb), 0);
+        } catch (eE) {}
+        return;
+      }
+      var dSl = sl - rsLastMobileSl;
+      rsLastMobileSl = sl;
+      var degPerPx = 360 / max;
+      rsMobileYawUnb += dSl * degPerPx;
+      try {
+        viewer.setYaw(normalizeMobileYaw(rsMobileYawUnb), 0);
+      } catch (eD) {}
     }
 
     function yawShortestDeg(fromDeg, toDeg) {
@@ -1214,7 +1261,7 @@
 
       /*
         Pastilles / form : yaw & pitch sur la texture 360° ; 6ᵉ arg = taille (× --rs-hotspot-plane).
-        Mobile : scroll initial aligné sur RS_FORM_HS_YAW pour que Pannellum n’applique pas visibility:hidden au load.
+        Mobile : strip de scroll centré ; yaw mis à jour par **deltas** + recentrage aux bords → **360° infini** sans butée.
       */
       addMount('rs-hs-form', RS_FORM_HS_YAW, RS_FORM_HS_PITCH, waitlist, 'rs-pnlm-hs--form', RS_HS_SZ_GROS);
       addMount('rs-hs-portal', 30, 20, portal, 'rs-pnlm-hs--portal', RS_HS_SZ_GROS);
@@ -1313,7 +1360,7 @@
       drag.moved = false;
       drag.startX = t.clientX;
       drag.startY = t.clientY;
-      drag.startScroll = scroller.scrollLeft;
+      drag.lastX = t.clientX;
       drag.startPitch =
         viewer && typeof viewer.getPitch === 'function' ? viewer.getPitch() : 0;
     }
@@ -1322,17 +1369,20 @@
       if (!isMobile() || !drag.active || !e.touches || e.touches.length !== 1) return;
 
       var t = e.touches[0];
-      var dx = t.clientX - drag.startX;
+      var dxTotal = t.clientX - drag.startX;
       var dy = t.clientY - drag.startY;
 
       if (!drag.moved) {
-        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        if (Math.abs(dxTotal) < 6 && Math.abs(dy) < 6) return;
         drag.moved = true;
       }
 
       e.preventDefault();
 
-      scroller.scrollLeft = clampScroll(drag.startScroll - dx);
+      /* Incrément : compatible avec le recentrage « 360 infini » du scroll (sinon startScroll désynchronisé). */
+      var ddx = t.clientX - drag.lastX;
+      drag.lastX = t.clientX;
+      scroller.scrollLeft = clampScroll(scroller.scrollLeft - ddx);
       syncYawFromScroll();
 
       if (viewer && typeof viewer.setPitch === 'function') {
@@ -1371,17 +1421,10 @@
     document.addEventListener('touchcancel', onTouchEnd, { passive: true, capture: true });
 
     window.addEventListener('resize', function () {
-      syncPanScroll();
-      applyPannellumViewportMode();
-      if (viewer && typeof viewer.resize === 'function') {
-        try {
-          viewer.resize();
-        } catch (err) {}
-      }
-    });
-
-    if (typeof mobileMq.addEventListener === 'function') {
-      mobileMq.addEventListener('change', function () {
+      window.requestAnimationFrame(function () {
+        if (isMobile()) {
+          mobilePanStripRecenterAfterLayout();
+        }
         syncPanScroll();
         applyPannellumViewportMode();
         if (viewer && typeof viewer.resize === 'function') {
@@ -1389,6 +1432,23 @@
             viewer.resize();
           } catch (err) {}
         }
+      });
+    });
+
+    if (typeof mobileMq.addEventListener === 'function') {
+      mobileMq.addEventListener('change', function () {
+        window.requestAnimationFrame(function () {
+          if (isMobile()) {
+            mobilePanStripRecenterAfterLayout();
+          }
+          syncPanScroll();
+          applyPannellumViewportMode();
+          if (viewer && typeof viewer.resize === 'function') {
+            try {
+              viewer.resize();
+            } catch (err) {}
+          }
+        });
       });
     }
 
