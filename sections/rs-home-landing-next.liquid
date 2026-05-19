@@ -51,14 +51,14 @@
   <div id="rs-pnlm-hotspot-pool" class="rs-pnlm-hotspot-pool" aria-hidden="true">
     <a
       id="rs-pnlm-slot-portal"
-      class="rs-landing-hotspot rs-landing-hotspot--portal rs-landing-overlay__cta rs-landing-overlay__cta--pill"
+      class="rs-landing-hotspot rs-landing-hotspot--prox-ui rs-landing-hotspot--portal rs-landing-overlay__cta rs-landing-overlay__cta--pill"
       href="{{ portal_url }}"
       rel="noopener noreferrer"
       data-rs-ui>
       {{ section.settings.portal_label | default: '← LE BUREAU' | escape }}
     </a>
 
-    <div id="rs-pnlm-slot-waitlist" class="rs-landing-hotspot rs-landing-hotspot--form" data-rs-ui>
+    <div id="rs-pnlm-slot-waitlist" class="rs-landing-hotspot rs-landing-hotspot--prox-ui rs-landing-hotspot--form" data-rs-ui>
       <div class="rs-hero-video__content rs-landing-overlay__waitlist">
         {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-landing-overlay__form-inner' -%}
           <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
@@ -116,7 +116,7 @@
 
     <a
       id="rs-pnlm-slot-rdv"
-      class="rs-landing-hotspot rs-landing-hotspot--rdv rs-landing-overlay__cta rs-landing-overlay__cta--pill"
+      class="rs-landing-hotspot rs-landing-hotspot--prox-ui rs-landing-hotspot--rdv rs-landing-overlay__cta rs-landing-overlay__cta--pill"
       href="{{ cal_booking_url }}"
       target="_blank"
       rel="noopener noreferrer"
@@ -126,7 +126,7 @@
     <button
       type="button"
       id="rs-pnlm-slot-kit"
-      class="rs-landing-hotspot rs-landing-hotspot--kit rs-landing-overlay__cta rs-landing-overlay__cta--pill"
+      class="rs-landing-hotspot rs-landing-hotspot--prox-ui rs-landing-hotspot--kit rs-landing-overlay__cta rs-landing-overlay__cta--pill"
       data-rs-ui
       aria-haspopup="dialog"
       aria-controls="rs-home-kit-overlay"
@@ -135,7 +135,7 @@
     </button>
     <a
       id="rs-pnlm-slot-lookbook"
-      class="rs-landing-hotspot rs-landing-hotspot--lookbook rs-landing-overlay__cta rs-landing-overlay__cta--pill"
+      class="rs-landing-hotspot rs-landing-hotspot--prox-ui rs-landing-hotspot--lookbook rs-landing-overlay__cta rs-landing-overlay__cta--pill"
       href="{{ lookbook_url }}"
       data-rs-ui>
       {{ section.settings.lookbook_label | default: 'LOOKBOOK ABCDRS' | escape }}
@@ -521,9 +521,13 @@
     pointer-events: auto;
   }
 
-  #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs > * {
+  /* Échelle plan + proximité caméra (--rs-hotspot-prox-scale, mis à jour en JS pour chaque slot). */
+  #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs > .rs-landing-hotspot--prox-ui {
+    --rs-hotspot-prox-scale: 1;
     transform-origin: center center;
-    transform: scale(var(--rs-hotspot-plane, 1));
+    transform: scale(calc(var(--rs-hotspot-plane, 1) * var(--rs-hotspot-prox-scale, 1)));
+    transition: transform 0.16s ease-out;
+    will-change: transform;
   }
 
   #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs--form {
@@ -735,14 +739,6 @@
     overflow: visible;
   }
 
-  #rs-pnlm-slot-waitlist.rs-landing-hotspot--form {
-    --rs-form-ui-scale: 1;
-    transform: scale(calc(var(--rs-hotspot-plane, 1) * var(--rs-form-ui-scale, 1)));
-    transform-origin: center center;
-    transition: transform 0.16s ease-out;
-    will-change: transform;
-  }
-
   .rs-landing-overlay__form-inner {
     width: 100%;
     margin: 0;
@@ -821,9 +817,10 @@
       letter-spacing: 0.11em;
     }
 
-    /* Pastilles : facteur 0.92 + échelle « plan » (--rs-hotspot-plane, depuis l’éditeur de section). */
-    #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) .rs-landing-overlay__cta--pill {
-      transform: translateZ(0) scale(calc(var(--rs-hotspot-plane, 1) * 0.92));
+    /* Pastilles : 0.92 × plan × proximité (même logique d’échelle dynamique que le formulaire). */
+    #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) > .rs-landing-hotspot--prox-ui.rs-landing-overlay__cta--pill {
+      transform: translateZ(0)
+        scale(calc(var(--rs-hotspot-plane, 1) * 0.92 * var(--rs-hotspot-prox-scale, 1)));
       transform-origin: center center;
     }
 
@@ -1033,14 +1030,25 @@
     */
     /* Plus large = dézoom (on voit plus de décor). 72 = très serré ; ~90 = vue plus large. */
     var RS_DESKTOP_HFOV = 86;
-    /* Hotspot formulaire (aligné sur addMount rs-hs-form) — proximité vue → --rs-form-ui-scale */
+    /* Hotspot formulaire : yaw/pitch RS_FORM_HS_* ; proximité vue → --rs-hotspot-prox-scale (tous les slots). */
     var RS_FORM_HS_YAW = -101;
     var RS_FORM_HS_PITCH = 30;
     /* Multiplicateur « plan » (× curseur section) : gros / moyen / petit pastilles & form */
     var RS_HS_SZ_GROS = 1.22;
     var RS_HS_SZ_MOYEN = 1;
     var RS_HS_SZ_PETIT = 0.78;
-    var rsFormProxTimer = null;
+    /*
+      Hotspots : une seule liste pour addMount + proximité UI (évite dérive yaw/pitch).
+      Le formulaire reprend RS_FORM_HS_* ; les autres ont yaw/pitch inline.
+    */
+    var RS_HS_DEFS = [
+      { hsId: 'rs-hs-form', domId: 'rs-pnlm-slot-waitlist', extraClass: 'rs-pnlm-hs--form', mul: RS_HS_SZ_GROS },
+      { hsId: 'rs-hs-portal', domId: 'rs-pnlm-slot-portal', yaw: 30, pitch: 20, extraClass: 'rs-pnlm-hs--portal', mul: RS_HS_SZ_GROS },
+      { hsId: 'rs-hs-rdv', domId: 'rs-pnlm-slot-rdv', yaw: -90, pitch: 25, extraClass: 'rs-pnlm-hs--rdv', mul: RS_HS_SZ_MOYEN },
+      { hsId: 'rs-hs-kit', domId: 'rs-pnlm-slot-kit', yaw: -150, pitch: 10, extraClass: 'rs-pnlm-hs--kit', mul: RS_HS_SZ_PETIT },
+      { hsId: 'rs-hs-lookbook', domId: 'rs-pnlm-slot-lookbook', yaw: 188, pitch: -10, extraClass: 'rs-pnlm-hs--lookbook', mul: RS_HS_SZ_MOYEN }
+    ];
+    var rsHotspotProxTimer = null;
     /* Mobile : scroll horizontal = delta yaw ; strip recentré au centre aux bords → 360° sans butée. */
     var rsMobileYawUnb = RS_FORM_HS_YAW;
     var rsLastMobileSl = -1;
@@ -1173,33 +1181,40 @@
       return ((fromDeg - toDeg + 540) % 360) - 180;
     }
 
-    function updateRsFormProximityUi() {
-      var slot = document.getElementById('rs-pnlm-slot-waitlist');
-      if (!viewer || !slot || typeof viewer.getYaw !== 'function' || typeof viewer.getPitch !== 'function') {
+    function updateRsHotspotProximityUi() {
+      if (!viewer || typeof viewer.getYaw !== 'function' || typeof viewer.getPitch !== 'function') {
         return;
       }
-      var dy = yawShortestDeg(viewer.getYaw(), RS_FORM_HS_YAW);
-      var dp = viewer.getPitch() - RS_FORM_HS_PITCH;
-      var dist = Math.sqrt(dy * dy + dp * dp);
-      var near = Math.max(0, Math.min(1, 1 - dist / 40));
-      /* Proche du hotspot : léger zoom UI ; éloigné : léger dézoom (sans toucher au hfov Pannellum). */
-      var scale = 0.94 + near * 0.12;
-      slot.style.setProperty('--rs-form-ui-scale', scale.toFixed(4));
+      var vy = viewer.getYaw();
+      var vp = viewer.getPitch();
+      for (var i = 0; i < RS_HS_DEFS.length; i++) {
+        var def = RS_HS_DEFS[i];
+        var slot = document.getElementById(def.domId);
+        if (!slot) continue;
+        var hy = def.hsId === 'rs-hs-form' ? RS_FORM_HS_YAW : def.yaw;
+        var hp = def.hsId === 'rs-hs-form' ? RS_FORM_HS_PITCH : def.pitch;
+        var dy = yawShortestDeg(vy, hy);
+        var dp = vp - hp;
+        var dist = Math.sqrt(dy * dy + dp * dp);
+        var near = Math.max(0, Math.min(1, 1 - dist / 40));
+        var scale = 0.94 + near * 0.12;
+        slot.style.setProperty('--rs-hotspot-prox-scale', scale.toFixed(4));
+      }
     }
 
-    function startRsFormProximityTracking() {
-      if (rsFormProxTimer) {
-        clearInterval(rsFormProxTimer);
-        rsFormProxTimer = null;
+    function startRsHotspotProximityTracking() {
+      if (rsHotspotProxTimer) {
+        clearInterval(rsHotspotProxTimer);
+        rsHotspotProxTimer = null;
       }
-      updateRsFormProximityUi();
-      rsFormProxTimer = window.setInterval(function () {
+      updateRsHotspotProximityUi();
+      rsHotspotProxTimer = window.setInterval(function () {
         if (!document.body.classList.contains('rs-home-landing-active')) {
-          clearInterval(rsFormProxTimer);
-          rsFormProxTimer = null;
+          clearInterval(rsHotspotProxTimer);
+          rsHotspotProxTimer = null;
           return;
         }
-        updateRsFormProximityUi();
+        updateRsHotspotProximityUi();
       }, 90);
     }
 
@@ -1234,12 +1249,6 @@
         }
       } catch (e0) {}
 
-      var portal = document.getElementById('rs-pnlm-slot-portal');
-      var waitlist = document.getElementById('rs-pnlm-slot-waitlist');
-      var rdv = document.getElementById('rs-pnlm-slot-rdv');
-      var kit = document.getElementById('rs-pnlm-slot-kit');
-      var lookbook = document.getElementById('rs-pnlm-slot-lookbook');
-
       function addMount(hsId, yaw, pitch, slot, extraClass, localPlaneMul) {
         if (!slot) return;
         var mul =
@@ -1260,14 +1269,16 @@
       }
 
       /*
-        Pastilles / form : yaw & pitch sur la texture 360° ; 6ᵉ arg = taille (× --rs-hotspot-plane).
-        Mobile : strip de scroll centré ; yaw mis à jour par **deltas** + recentrage aux bords → **360° infini** sans butée.
+        Hotspots : RS_HS_DEFS (yaw/pitch + taille) ; proximité caméra → --rs-hotspot-prox-scale sur chaque slot.
+        Mobile : strip de scroll centré ; yaw par deltas + recentrage → 360° infini.
       */
-      addMount('rs-hs-form', RS_FORM_HS_YAW, RS_FORM_HS_PITCH, waitlist, 'rs-pnlm-hs--form', RS_HS_SZ_GROS);
-      addMount('rs-hs-portal', 30, 20, portal, 'rs-pnlm-hs--portal', RS_HS_SZ_GROS);
-      addMount('rs-hs-rdv', -90, 25, rdv, 'rs-pnlm-hs--rdv', RS_HS_SZ_MOYEN);
-      addMount('rs-hs-kit', -150, 10, kit, 'rs-pnlm-hs--kit', RS_HS_SZ_PETIT);
-      addMount('rs-hs-lookbook', 188, -10, lookbook, 'rs-pnlm-hs--lookbook', RS_HS_SZ_MOYEN);
+      for (var hi = 0; hi < RS_HS_DEFS.length; hi++) {
+        var def = RS_HS_DEFS[hi];
+        var yaw = def.hsId === 'rs-hs-form' ? RS_FORM_HS_YAW : def.yaw;
+        var pitch = def.hsId === 'rs-hs-form' ? RS_FORM_HS_PITCH : def.pitch;
+        var slotEl = document.getElementById(def.domId);
+        addMount(def.hsId, yaw, pitch, slotEl, def.extraClass, def.mul);
+      }
     }
 
     function scheduleRsPannellumHotspots(v) {
@@ -1282,7 +1293,7 @@
           if (typeof v.resize === 'function') v.resize();
         } catch (e2) {}
         registerRsPannellumHotspots(v);
-        startRsFormProximityTracking();
+        startRsHotspotProximityTracking();
         try {
           if (typeof v.resize === 'function') v.resize();
         } catch (e3) {}
