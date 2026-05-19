@@ -27,7 +27,7 @@ Les deux sections partagent les mêmes classes CSS / JS (`.rs-home-landing`, etc
 
 - Modifier uniquement **`rs-home-landing-next.liquid`** pour itérer sur la nouvelle version.  
 - La **classic** sert de référence / rollback : tu peux recopier son contenu vers `next` si besoin.
-- **Next (360°)** : même structure que le wallpaper (`rs-landing-scroller`, track 250vw sur mobile, hotspots qui se déplacent avec le scroll, hint « glisse »). Le fond est Pannellum plein écran ; sur mobile le **scroll horizontal** pilote le **yaw** ; sur desktop le **drag** se fait dans la sphère (Pannellum).
+- **Next (360°)** : scroller large (yaw via scroll horizontal + geste vertical pour le pitch sur mobile), Pannellum plein écran, **boutons / formulaire en position fixe** à l’écran (repères comme sur le wallpaper).
 
 ## Ancien fichier
 
