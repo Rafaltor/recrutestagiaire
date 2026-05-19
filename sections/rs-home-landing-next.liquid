@@ -521,13 +521,12 @@
     pointer-events: auto;
   }
 
-  /* Échelle plan + proximité caméra (--rs-hotspot-prox-scale, mis à jour en JS pour chaque slot). */
+  /* Échelle plan + proximité (très douce, voir updateRsHotspotProximityUi). */
   #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs > .rs-landing-hotspot--prox-ui {
     --rs-hotspot-prox-scale: 1;
     transform-origin: center center;
     transform: scale(calc(var(--rs-hotspot-plane, 1) * var(--rs-hotspot-prox-scale, 1)));
-    transition: transform 0.16s ease-out;
-    will-change: transform;
+    transition: transform 0.2s ease-out;
   }
 
   #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs--form {
@@ -564,22 +563,6 @@
     #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs {
       position: relative;
       z-index: 30 !important;
-    }
-
-    /*
-      Hotspots : sur mobile ils paraissaient trop « collés » à la caméra — on réduit l’échelle (× --rs-hotspot-mobile-depth-mul)
-      en plus de plane × proximité. Le zoom Pannellum mobile reste ~90° (RS_MOBILE_HFOV).
-    */
-    #rs-panorama {
-      --rs-hotspot-mobile-depth-mul: 0.68;
-    }
-
-    #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs > .rs-landing-hotspot--prox-ui {
-      transform: scale(
-        calc(
-          var(--rs-hotspot-plane, 1) * var(--rs-hotspot-prox-scale, 1) * var(--rs-hotspot-mobile-depth-mul, 0.68)
-        )
-      );
     }
 
     .rs-landing-scroller__track {
@@ -825,20 +808,15 @@
     text-decoration: none !important;
   }
 
-  /* Pastilles dans le panorama : même logique d’échelle que le formulaire (plane × prox), pas de facteur 0.92. */
-  #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) > .rs-landing-hotspot--prox-ui.rs-landing-overlay__cta--pill {
-    transform: translateZ(0) scale(calc(var(--rs-hotspot-plane, 1) * var(--rs-hotspot-prox-scale, 1)));
-    transform-origin: center center;
-    text-shadow:
-      0 0 14px rgba(0, 0, 0, 0.55),
-      0 1px 4px rgba(0, 0, 0, 0.45);
-    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.35));
-  }
-
+  /* Pastilles desktop : léger facteur 0.92 sur le plan (le formulaire suit uniquement la règle prox-ui ci-dessus). */
   @media (min-width: 768px) {
     #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) > .rs-landing-hotspot--prox-ui.rs-landing-overlay__cta--pill {
-      font-size: clamp(11px, 1.05vw, 13px);
-      padding: 7px 14px;
+      transform: translateZ(0)
+        scale(calc(var(--rs-hotspot-plane, 1) * 0.92 * var(--rs-hotspot-prox-scale, 1)));
+      transform-origin: center center;
+      font-size: clamp(11px, 1.12vw, 13px);
+      padding: 6px 12px;
+      letter-spacing: 0.11em;
     }
 
     .rs-landing-hotspot--lookbook.rs-landing-overlay__cta--pill {
@@ -853,12 +831,6 @@
     #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) > .rs-landing-hotspot--prox-ui.rs-landing-overlay__cta--pill {
       font-size: clamp(11px, 3.2vw, 14px);
       padding: 6px 11px;
-      transform: translateZ(0)
-        scale(
-          calc(
-            var(--rs-hotspot-plane, 1) * var(--rs-hotspot-prox-scale, 1) * var(--rs-hotspot-mobile-depth-mul, 0.68)
-          )
-        );
     }
   }
 
@@ -1054,30 +1026,25 @@
     /* Large ; Pannellum resserre encore selon le FOV vertical (plage utile > qu’avec ±42). */
     var RS_PITCH_MIN = -90;
     var RS_PITCH_MAX = 90;
-    /*
-      hfov : plus la valeur est haute, plus la vue est large (dézoom). Desktop légèrement plus que mobile si besoin de marge pitch.
-      Yaw : même plage complète que le mobile (-180 / 180) pour pouvoir tourner dans la pièce à la souris.
-    */
-    /* Desktop : dézoom fort. Mobile : ~90° comme avant (moins large que le desktop). */
-    var RS_DESKTOP_HFOV = 118;
+    /* hfov : plus haut = plus large (dézoom). Valeurs « classiques » Pannellum (~86–90). */
+    var RS_DESKTOP_HFOV = 86;
     var RS_MOBILE_HFOV = 90;
-    /* Hotspot formulaire : yaw/pitch RS_FORM_HS_* ; proximité vue → --rs-hotspot-prox-scale (tous les slots). */
+    /* Hotspot formulaire : aligné sur RS_HS_DEFS (addMount + proximité). */
     var RS_FORM_HS_YAW = -101;
-    var RS_FORM_HS_PITCH = 30;
+    var RS_FORM_HS_PITCH = 15;
     /* Multiplicateur « plan » (× curseur section) : gros / moyen / petit pastilles & form */
     var RS_HS_SZ_GROS = 1.22;
     var RS_HS_SZ_MOYEN = 1;
     var RS_HS_SZ_PETIT = 0.78;
     /*
-      Hotspots : une seule liste pour addMount + proximité UI (évite dérive yaw/pitch).
-      Le formulaire reprend RS_FORM_HS_* ; les pastilles (portail, RDV, kit, lookbook) sont à **yaw 0 / pitch 40** et **même mul** que le form — elles se superposent ; décale les `yaw` dans `RS_HS_DEFS` si tu veux les espacer.
+      Hotspots : positions par défaut sur la sphère (yaw / pitch) + mul plan. Modifier ici uniquement.
     */
     var RS_HS_DEFS = [
       { hsId: 'rs-hs-form', domId: 'rs-pnlm-slot-waitlist', extraClass: 'rs-pnlm-hs--form', mul: RS_HS_SZ_GROS },
-      { hsId: 'rs-hs-portal', domId: 'rs-pnlm-slot-portal', yaw: 0, pitch: 40, extraClass: 'rs-pnlm-hs--portal', mul: RS_HS_SZ_GROS },
-      { hsId: 'rs-hs-rdv', domId: 'rs-pnlm-slot-rdv', yaw: 0, pitch: 40, extraClass: 'rs-pnlm-hs--rdv', mul: RS_HS_SZ_GROS },
-      { hsId: 'rs-hs-kit', domId: 'rs-pnlm-slot-kit', yaw: 0, pitch: 40, extraClass: 'rs-pnlm-hs--kit', mul: RS_HS_SZ_GROS },
-      { hsId: 'rs-hs-lookbook', domId: 'rs-pnlm-slot-lookbook', yaw: 0, pitch: 40, extraClass: 'rs-pnlm-hs--lookbook', mul: RS_HS_SZ_GROS }
+      { hsId: 'rs-hs-portal', domId: 'rs-pnlm-slot-portal', yaw: 166, pitch: 2, extraClass: 'rs-pnlm-hs--portal', mul: RS_HS_SZ_GROS },
+      { hsId: 'rs-hs-rdv', domId: 'rs-pnlm-slot-rdv', yaw: 198, pitch: 0, extraClass: 'rs-pnlm-hs--rdv', mul: RS_HS_SZ_MOYEN },
+      { hsId: 'rs-hs-kit', domId: 'rs-pnlm-slot-kit', yaw: 172, pitch: -4, extraClass: 'rs-pnlm-hs--kit', mul: RS_HS_SZ_PETIT },
+      { hsId: 'rs-hs-lookbook', domId: 'rs-pnlm-slot-lookbook', yaw: 188, pitch: -10, extraClass: 'rs-pnlm-hs--lookbook', mul: RS_HS_SZ_MOYEN }
     ];
     var rsHotspotProxTimer = null;
     /* Mobile : scroll horizontal = delta yaw ; strip recentré au centre aux bords → 360° sans butée. */
@@ -1227,8 +1194,9 @@
         var dy = yawShortestDeg(vy, hy);
         var dp = vp - hp;
         var dist = Math.sqrt(dy * dy + dp * dp);
-        var near = Math.max(0, Math.min(1, 1 - dist / 40));
-        var scale = 0.94 + near * 0.12;
+        /* Léger ajustement quand la vue s’aligne sur le hotspot (évite effet « tout passe au-dessus » trop marqué). */
+        var near = Math.max(0, Math.min(1, 1 - dist / 55));
+        var scale = 0.98 + near * 0.04;
         slot.style.setProperty('--rs-hotspot-prox-scale', scale.toFixed(4));
       }
     }
