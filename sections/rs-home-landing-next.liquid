@@ -227,11 +227,7 @@
     display: none !important;
   }
 
-  body.rs-home-landing-active .rs-header-mobile-bar__menu-btn,
-  body.rs-home-landing-active .rs-header-burger-btn,
-  body.rs-home-landing-active #rs-header-mobile-menu-btn {
-    display: none !important;
-  }
+  /* Ne pas masquer le menu mobile : les utilisateurs le voyaient « invisible » sur l’accueil 360. */
 
   body.rs-home-landing-active .rs-ticker,
   body.rs-home-landing-active .rs-header-kitsch-pop,
@@ -555,14 +551,21 @@
       overflow: visible;
     }
 
+    /*
+      Safari / iOS : le layer WebGL peut se composer au-dessus des divs sœurs malgré le z-index.
+      Opacité < 1 sur le canvas force un plan de composition où les hotspots (après le canvas dans le DOM) redeviennent cliquables / visibles.
+    */
     #rs-panorama canvas {
       position: relative;
       z-index: 0;
+      opacity: 0.998;
     }
 
     #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs {
       position: relative;
       z-index: 30 !important;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
     }
 
     .rs-landing-scroller__track {
@@ -690,6 +693,8 @@
     border: 0 !important;
     background: transparent !important;
     color: #fff !important;
+    -webkit-text-fill-color: #fff;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.9), 0 1px 2px rgba(0, 0, 0, 0.55);
     font-family: 'Syne', sans-serif !important;
     font-size: clamp(14px, 3.8vw, 16px) !important;
     font-weight: 600 !important;
@@ -1023,23 +1028,23 @@
     /* Large ; Pannellum resserre encore selon le FOV vertical (plage utile > qu’avec ±42). */
     var RS_PITCH_MIN = -90;
     var RS_PITCH_MAX = 90;
-    /* hfov : plus haut = plus large (dézoom). Desktop un peu plus large que le strict 86. */
-    var RS_DESKTOP_HFOV = 100;
+    /* hfov : plus haut = plus large (dézoom). */
+    var RS_DESKTOP_HFOV = 108;
     var RS_MOBILE_HFOV = 90;
     /*
       Référentiel spawn : visée caméra au chargement (desktop + mobile après sync scroll).
-      Le formulaire : RS_FORM_HS_* (souvent = spawn en yaw/pitch pour centrer le bloc au load).
+      Le formulaire : RS_FORM_HS_* (aligné sur le spawn pour centrer le bloc au load).
     */
-    var RS_SPAWN_YAW = 90;
-    var RS_SPAWN_PITCH = 40;
-    var RS_FORM_HS_YAW = 90;
-    var RS_FORM_HS_PITCH = 40;
+    var RS_SPAWN_YAW = -60;
+    var RS_SPAWN_PITCH = 30;
+    var RS_FORM_HS_YAW = -60;
+    var RS_FORM_HS_PITCH = 30;
     /* Multiplicateur « plan » (× curseur section) : gros / moyen / petit pastilles & form */
     var RS_HS_SZ_GROS = 1.22;
     var RS_HS_SZ_MOYEN = 1;
     var RS_HS_SZ_PETIT = 0.78;
     /*
-      Hotspots : yaw/pitch + mul. Le form : RS_FORM_HS_* (ici yaw 90°, pitch 40°).
+      Hotspots : yaw/pitch + mul. Le form : RS_FORM_HS_* (= spawn -60° / 30°).
       Les autres boutons : à recaler par rapport au spawn / à la scène.
     */
     var RS_HS_DEFS = [
