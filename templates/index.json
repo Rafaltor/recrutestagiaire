@@ -5,16 +5,17 @@
  * This file may be updated by the Shopify admin theme editor
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
+ * ------------------------------------------------------------
  *
- * Accueil par défaut : section « wallpaper waitlist » (sauvegarde).
- * Brouillon / nouvelle landing : template index.next.json (?view=next).
+ * Template alternatif d’accueil — section « nouvelle landing » (brouillon).
+ * Prévisualisation boutique : ajouter ?view=next à l’URL de la page d’accueil.
  * Voir docs/homepage-landing-templates.md
  * ------------------------------------------------------------
  */
 {
   "sections": {
-    "rs_home_landing": {
-      "type": "rs-home-landing-classic",
+    "rs_home_landing_next": {
+      "type": "rs-home-landing-next",
       "settings": {
         "background_image": "shopify://shop_images/pagedacceuil_8ae1177d-704d-4514-acee-1f1765fac173.jpg",
         "heading": "RECRUTE STAGIAIRE",
@@ -30,6 +31,6 @@
     }
   },
   "order": [
-    "rs_home_landing"
+    "rs_home_landing_next"
   ]
 }
