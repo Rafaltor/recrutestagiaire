@@ -1130,10 +1130,10 @@
       }
 
       /*
-        Pastilles : regroupées vers le centre de la vue (~180°) pour éviter l’effet « collées au bord de l’écran ».
-        Affiner yaw/pitch après retour sur la texture 360°.
+        Pastilles : affiner yaw/pitch sur la texture 360°.
+        Formulaire : ~+90° yaw à droite par rapport à l’ancien centre (~179° → -91°), pitch un peu plus haut.
       */
-      addMount('rs-hs-form', 179, 6, waitlist, 'rs-pnlm-hs--form');
+      addMount('rs-hs-form', -91, 10, waitlist, 'rs-pnlm-hs--form');
       addMount('rs-hs-portal', 166, 2, portal, 'rs-pnlm-hs--portal');
       addMount('rs-hs-rdv', 198, 0, rdv, 'rs-pnlm-hs--rdv');
       addMount('rs-hs-kit', 172, -4, kit, 'rs-pnlm-hs--kit');
