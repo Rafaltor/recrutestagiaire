@@ -801,6 +801,9 @@
     };
 
     var viewer = null;
+    /* Plage large : Pannellum resserre ensuite selon le FOV (sinon ~±15° seulement avec ±42). */
+    var RS_PITCH_MIN = -85;
+    var RS_PITCH_MAX = 85;
 
     function isMobile() {
       return mobileMq.matches;
@@ -884,8 +887,8 @@
         yaw: 180,
         minHfov: 90,
         maxHfov: 90,
-        minPitch: -42,
-        maxPitch: 42,
+        minPitch: RS_PITCH_MIN,
+        maxPitch: RS_PITCH_MAX,
         draggable: !isMobile(),
         touchPanSpeedCoeffFactor: 1.5
       });
@@ -945,9 +948,10 @@
             drag.basePitch = viewer.getPitch();
             drag.pitchAnchorY = t.clientY;
           }
-          var dy = drag.pitchAnchorY - t.clientY;
-          var np = drag.basePitch + dy * 0.14;
-          np = Math.max(-42, Math.min(42, np));
+          /* Même sens que Pannellum (souris) : doigt vers le bas → pitch + → regard vers le haut. */
+          var dy = t.clientY - drag.pitchAnchorY;
+          var np = drag.basePitch + dy * 0.12;
+          np = Math.max(RS_PITCH_MIN, Math.min(RS_PITCH_MAX, np));
           viewer.setPitch(np, 0);
         }
         return;

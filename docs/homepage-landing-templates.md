@@ -29,6 +29,7 @@ Les deux sections partagent les mêmes classes CSS / JS (`.rs-home-landing`, etc
 - La **classic** sert de référence / rollback : tu peux recopier son contenu vers `next` si besoin.
 - **Next (360°)** : scroller large (yaw via scroll horizontal + geste vertical pour le pitch sur mobile), Pannellum plein écran, **boutons / formulaire en position fixe** à l’écran (repères comme sur le wallpaper).
 - **Pannellum** : pour piloter yaw/pitch depuis le scroll ou le touch, utiliser **`setYaw(angle, 0)`** et **`setPitch(angle, 0)`**. Sans 2ᵉ argument, la lib tween sur **1000 ms** → latence et pitch « bloqué » sur mobile.
+- **Pitch** : garder une plage **large** (`minPitch` / `maxPitch`, ex. ±85°) : Pannellum réduit déjà la plage visible selon le FOV ; avec ±42° l’exploration verticale reste ~±15° sur desktop. Le geste vertical mobile doit suivre le **même sens que le drag souris** (doigt vers le bas → regard vers le haut).
 - **Desktop** : la scène transparente au-dessus du canvas ne doit pas capter la souris (`pointer-events: none` sur la track / scène en ≥768px) pour que le **drag natif** Pannellum fonctionne.
 - **Suite prévue** : replacer les hotspots dans la **track large** (comme la classic) pour qu’ils suivent le défilement et puissent sortir du viewport.
 
