@@ -37,6 +37,7 @@
   class="rs-home-landing shopify-section section-rs-home-landing"
   id="shopify-section-{{ section.id }}"
   data-rs-heading="{{ heading_text | escape }}"
+  data-rs-hotspot-plane-pct="{{ section.settings.hotspot_plane_scale_pct | default: 82 }}"
   {{ section.shopify_attributes }}>
   <div id="rs-panorama" class="rs-landing-pannellum-root"></div>
 
@@ -506,9 +507,11 @@
   }
 
   /* Hotspots Pannellum : contenu interactif au-dessus du canvas */
+  /* --rs-hotspot-plane : échelle « dans la sphère » (réglage section + option Pannellum scale). */
   #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs {
     pointer-events: auto;
     z-index: 5;
+    --rs-hotspot-plane: 1;
   }
 
   #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs a,
@@ -516,6 +519,11 @@
   #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs input,
   #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs label {
     pointer-events: auto;
+  }
+
+  #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs > * {
+    transform-origin: center center;
+    transform: scale(var(--rs-hotspot-plane, 1));
   }
 
   #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs--form {
@@ -729,7 +737,7 @@
 
   #rs-pnlm-slot-waitlist.rs-landing-hotspot--form {
     --rs-form-ui-scale: 1;
-    transform: scale(var(--rs-form-ui-scale));
+    transform: scale(calc(var(--rs-hotspot-plane, 1) * var(--rs-form-ui-scale, 1)));
     transform-origin: center center;
     transition: transform 0.16s ease-out;
     will-change: transform;
@@ -813,9 +821,9 @@
       letter-spacing: 0.11em;
     }
 
-    /* Réduit légèrement la pastille vs le plein écran → moins d’effet « HUD collé au cadre » */
+    /* Pastilles : facteur 0.92 + échelle « plan » (--rs-hotspot-plane, depuis l’éditeur de section). */
     #rs-panorama .pnlm-hotspot-base.rs-pnlm-hs:not(.rs-pnlm-hs--form) .rs-landing-overlay__cta--pill {
-      transform: translateZ(0) scale(0.9);
+      transform: translateZ(0) scale(calc(var(--rs-hotspot-plane, 1) * 0.92));
       transform-origin: center center;
     }
 
@@ -1029,6 +1037,14 @@
     var RS_FORM_HS_YAW = -101;
     var RS_FORM_HS_PITCH = 15;
     var rsFormProxTimer = null;
+    var sectionRoot = document.getElementById('shopify-section-{{ section.id }}');
+    var RS_HOTSPOT_PLANE = 0.82;
+    if (sectionRoot && sectionRoot.dataset.rsHotspotPlanePct) {
+      var pct = parseInt(sectionRoot.dataset.rsHotspotPlanePct, 10);
+      if (isFinite(pct)) {
+        RS_HOTSPOT_PLANE = Math.min(1.2, Math.max(0.45, pct / 100));
+      }
+    }
 
     function isMobile() {
       return mobileMq.matches;
@@ -1161,15 +1177,20 @@
       var kit = document.getElementById('rs-pnlm-slot-kit');
       var lookbook = document.getElementById('rs-pnlm-slot-lookbook');
 
-      function addMount(hsId, yaw, pitch, slot, extraClass) {
+      function addMount(hsId, yaw, pitch, slot, extraClass, localPlaneMul) {
         if (!slot) return;
+        var mul =
+          typeof localPlaneMul === 'number' && isFinite(localPlaneMul) ? localPlaneMul : 1;
         v.addHotSpot({
           id: hsId,
           yaw: yaw,
           pitch: pitch,
           type: 'info',
+          scale: true,
           cssClass: 'pnlm-pointer rs-pnlm-hs ' + (extraClass || ''),
           createTooltipFunc: function (wrapper) {
+            var plane = RS_HOTSPOT_PLANE * mul;
+            wrapper.style.setProperty('--rs-hotspot-plane', String(plane));
             if (slot.parentNode !== wrapper) wrapper.appendChild(slot);
           }
         });
@@ -1548,6 +1569,17 @@
       "id": "background_image",
       "label": "Image (non utilisée — vue 360)",
       "info": "La scène utilise Pannellum + fichier 360° Shopify. Champ conservé pour compatibilité JSON."
+    },
+    {
+      "type": "range",
+      "id": "hotspot_plane_scale_pct",
+      "min": 50,
+      "max": 115,
+      "step": 1,
+      "unit": "%",
+      "label": "Pastilles 360 — profondeur (échelle sur la sphère)",
+      "default": 82,
+      "info": "Baisse (ex. 70–85 %) si les boutons semblent sur un plan trop proche ; monte si trop petits. S’ajoute à l’option Pannellum « scale » (liée au zoom)."
     },
     {
       "type": "text",

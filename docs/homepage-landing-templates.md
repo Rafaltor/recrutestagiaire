@@ -29,11 +29,33 @@ Shopify charge **`/`** avec le modèle **Default** (`index.json`) et **`/?view=n
 - **`rs-home-landing-next.liquid`** : tout le HTML / CSS / JS de la landing 360°.  
 - **`templates/index.json`** + **`templates/index.next.json`** : mêmes `sections` / `order` ; **mêmes `settings`** pour `rs_home_landing_next` (à synchroniser à chaque changement de défauts côté JSON).  
 - La **classic** sert de référence / rollback : tu peux recopier son contenu vers `next` si besoin.
-- **Next (360°)** : scroller large (yaw sur **360°** via scroll + geste **diagonal** yaw+pitch sur mobile), Pannellum plein écran, **CTAs + liste d’attente en hotspots Pannellum** (yaw/pitch) pour qu’ils suivent le fond.
+- **Next (360°)** : scroller large (yaw sur **360°** via scroll + geste **diagonal** yaw+pitch sur mobile), Pannellum plein écran, **CTAs + liste d’attente en hotspots Pannellum** pour qu’ils suivent le fond.
 - **Pannellum** : pour piloter yaw/pitch depuis le scroll ou le touch, utiliser **`setYaw(angle, 0)`** et **`setPitch(angle, 0)`**. Sans 2ᵉ argument, la lib tween sur **1000 ms** → latence et pitch « bloqué » sur mobile.
 - **Pitch** : plage **±90°** en config (Pannellum resserre encore selon le FOV vertical). Le geste mobile suit le **même sens que le drag souris** (doigt vers le bas → pitch +).
-- **Desktop** : yaw **complet** (-180° / 180°) ; **`hfov`** desktop (`RS_DESKTOP_HFOV`, ~**86°**) ; `applyPannellumViewportMode()` réapplique hfov au passage mobile/desktop. Hotspots : liste d’attente, bureau, **Cal.com** (`cal_booking_url`), **kit postal** (overlay sur l’accueil, texte + lien `kit_url`), **lookbook** — positions yaw/pitch dans le JS (`registerRsPannellumHotspots`), à affiner sur la texture 360°. La track / scène transparente reste en `pointer-events: none` (≥768px) pour que la souris atteigne le canvas.
-- **Suite prévue** : exposer yaw/pitch des hotspots en **réglages de section** pour caler sans toucher au JS.
+- **Desktop** : yaw **complet** (-180° / 180°) ; **`hfov`** desktop (`RS_DESKTOP_HFOV`, ~**86°**) ; `applyPannellumViewportMode()` réapplique hfov au passage mobile/desktop. Hotspots : liste d’attente, bureau, **Cal.com** (`cal_booking_url`), **kit postal** (overlay sur l’accueil, texte + lien `kit_url`), **lookbook** — positions dans le JS (`registerRsPannellumHotspots`). La track / scène transparente reste en `pointer-events: none` (≥768px) pour que la souris atteigne le canvas.
+
+### Hotspots Pannellum : doc officielle vs ce qu’on utilise
+
+La [documentation Pannellum sur les hot spots](https://pannellum.org/documentation/examples/hot-spots/) décrit **beaucoup plus** que deux champs. En général un hotspot peut inclure entre autres :
+
+| Champ (exemples) | Rôle |
+|-------------------|------|
+| **`yaw`**, **`pitch`** | Position sur la sphère (obligatoires pour placer le point). |
+| **`type`** | `info`, `scene`, etc. — change le comportement / le style par défaut. |
+| **`id`** | Identifiant stable (`removeHotSpot`, debug). |
+| **`text`** | Infobulle texte intégrée à Pannellum. |
+| **`URL`** / **`sceneId`** | Lien externe ou changement de scène. |
+| **`cssClass`** | Classes sur le conteneur (on s’en sert pour le style + pointer). |
+| **`createTooltipFunc`** / **`createTooltipArgs`** | Rendu custom du contenu dans le hotspot (notre cas : on **déplace** un nœud DOM Shopify dans le wrapper). |
+| **`clickHandlerFunc`** | Clic custom. |
+| **`targetYaw`**, **`targetPitch`**, **`targetHfov`** | Cibles pour les transitions de type `scene`. |
+| **`scale`** (booléen) | Si **`true`**, Pannellum [met à l’échelle le hotspot](https://pannellum.org/documentation/reference/#hot-spots) quand le **hfov** change (mieux ancré visuellement dans la vue par rapport au zoom). |
+
+**Dans ce thème** (`addMount` dans `rs-home-landing-next.liquid`), on fixe pour **tous** les hotspots : `type: 'info'`, **`scale: true`**, `id`, `yaw`, `pitch`, `cssClass`, `createTooltipFunc` (montage du slot Liquid + variable CSS **`--rs-hotspot-plane`** sur le wrapper). **Seuls `yaw` et `pitch` changent** d’un bouton à l’autre pour le **placement** ; un **6ᵉ argument optionnel** `localPlaneMul` (nombre, défaut `1`) permet de multiplier l’échelle plan **par hotspot** dans le JS sans nouveau réglage Shopify.
+
+**Réglage Shopify « profondeur »** : **`hotspot_plane_scale_pct`** (curseur **50–115 %**, défaut **82 %**) — appliqué comme facteur d’échelle sur le contenu du hotspot pour atténuer l’effet « calque devant la sphère » (Pannellum place toujours les divs en overlay avec un `translateZ` élevé ; on ne peut pas supprimer ça sans fork, mais **`scale: true` + échelle CSS** rapprochent le rendu du ressenti d’une sphère unique).
+
+**Suite prévue** : exposer **`yaw` / `pitch`** (et éventuellement `localPlaneMul` ou des curseurs par hotspot) en **réglages de section** pour caler sans retoucher au JS à chaque itération.
 
 ## Ancien fichier
 

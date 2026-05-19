@@ -4,6 +4,7 @@
       "type": "rs-home-landing-next",
       "settings": {
         "background_image": "shopify://shop_images/pagedacceuil_8ae1177d-704d-4514-acee-1f1765fac173.jpg",
+        "hotspot_plane_scale_pct": 82,
         "heading": "RECRUTE STAGIAIRE",
         "form_label": "REJOINS LA LISTE",
         "email_placeholder": "ton@email.com",
