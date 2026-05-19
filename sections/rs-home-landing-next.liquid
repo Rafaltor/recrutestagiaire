@@ -1025,11 +1025,12 @@
     var RS_PITCH_MIN = -90;
     var RS_PITCH_MAX = 90;
     /*
-      Desktop : hfov un peu plus bas que le mobile pour un peu plus de marge pitch (clamp interne Pannellum).
+      hfov : plus la valeur est haute, plus la vue est large (dézoom). Desktop légèrement plus que mobile si besoin de marge pitch.
       Yaw : même plage complète que le mobile (-180 / 180) pour pouvoir tourner dans la pièce à la souris.
     */
-    /* Plus large = dézoom (on voit plus de décor). 72 = très serré ; ~90 = vue plus large. */
-    var RS_DESKTOP_HFOV = 86;
+    /* Plus large = dézoom (on voit plus de décor). ~72 serré ; ~90 standard ; ~115–120 très dézoomé. */
+    var RS_DESKTOP_HFOV = 118;
+    var RS_MOBILE_HFOV = 115;
     /* Hotspot formulaire : yaw/pitch RS_FORM_HS_* ; proximité vue → --rs-hotspot-prox-scale (tous les slots). */
     var RS_FORM_HS_YAW = -101;
     var RS_FORM_HS_PITCH = 30;
@@ -1226,10 +1227,10 @@
           viewer.setYawBounds([-180, 180]);
         }
         if (typeof viewer.setHfovBounds === 'function') {
-          viewer.setHfovBounds(m ? [90, 90] : [RS_DESKTOP_HFOV, RS_DESKTOP_HFOV]);
+          viewer.setHfovBounds(m ? [RS_MOBILE_HFOV, RS_MOBILE_HFOV] : [RS_DESKTOP_HFOV, RS_DESKTOP_HFOV]);
         }
         if (typeof viewer.setHfov === 'function') {
-          viewer.setHfov(m ? 90 : RS_DESKTOP_HFOV, 0);
+          viewer.setHfov(m ? RS_MOBILE_HFOV : RS_DESKTOP_HFOV, 0);
         }
       } catch (err) {}
       try {
@@ -1326,14 +1327,14 @@
         showZoomCtrl: false,
         showFullscreenCtrl: false,
         mouseZoom: false,
-        hfov: m0 ? 90 : RS_DESKTOP_HFOV,
+        hfov: m0 ? RS_MOBILE_HFOV : RS_DESKTOP_HFOV,
         /* Vue initiale alignée sur le hotspot formulaire (même yaw/pitch que addMount rs-hs-form). */
         pitch: RS_FORM_HS_PITCH,
         yaw: RS_FORM_HS_YAW,
         minYaw: -180,
         maxYaw: 180,
-        minHfov: m0 ? 90 : RS_DESKTOP_HFOV,
-        maxHfov: m0 ? 90 : RS_DESKTOP_HFOV,
+        minHfov: m0 ? RS_MOBILE_HFOV : RS_DESKTOP_HFOV,
+        maxHfov: m0 ? RS_MOBILE_HFOV : RS_DESKTOP_HFOV,
         minPitch: RS_PITCH_MIN,
         maxPitch: RS_PITCH_MAX,
         draggable: !isMobile(),
