@@ -334,7 +334,7 @@
     isolation: isolate;
   }
 
-  /* Vue 360 Pannellum — plein viewport (canvas + conteneur WebGL) */
+  /* Vue 360 Pannellum — plein viewport ; au-dessus du scroller (scroll piloté en JS) pour touches WebGL + hotspots */
   #rs-panorama,
   #rs-panorama.rs-landing-pannellum-root,
   #rs-panorama.pnlm-container {
@@ -351,10 +351,10 @@
     min-height: -webkit-fill-available;
     margin: 0;
     padding: 0;
-    z-index: 0;
+    z-index: 4;
     overflow: hidden;
     box-sizing: border-box;
-    pointer-events: none;
+    pointer-events: auto;
   }
 
   #rs-panorama .pnlm-render-container,
@@ -401,28 +401,11 @@
     pointer-events: none;
   }
 
-  @media (max-width: 767.98px) {
-    /* Laisser les clics atteindre le canvas + hotspots Pannellum ; le scroll reste piloté en JS sur document. */
-    #rs-panorama,
-    #rs-panorama.rs-landing-pannellum-root,
-    #rs-panorama.pnlm-container {
-      pointer-events: auto;
-    }
-  }
-
-  @media (min-width: 768px) {
-    #rs-panorama,
-    #rs-panorama.rs-landing-pannellum-root,
-    #rs-panorama.pnlm-container {
-      pointer-events: auto;
-    }
-  }
-
-  /* Canvas panoramique — scroll horizontal (yaw piloté en JS) */
+  /* Scroller sous le canvas : scrollLeft piloté en JS ; les gestes touchent le panorama (z-index plus haut) */
   .rs-landing-scroller {
     position: fixed;
     inset: 0;
-    z-index: 3;
+    z-index: 1;
     pointer-events: auto;
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
@@ -484,7 +467,6 @@
       touch-action: none;
       overscroll-behavior-x: contain;
       overscroll-behavior-y: none;
-      pointer-events: none;
     }
 
     .rs-landing-scroller__track {
