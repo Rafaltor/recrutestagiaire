@@ -1191,9 +1191,12 @@
         var dy = yawShortestDeg(vy, hy);
         var dp = vp - hp;
         var dist = Math.sqrt(dy * dy + dp * dp);
-        /* Léger ajustement quand la vue s’aligne sur le hotspot (évite effet « tout passe au-dessus » trop marqué). */
-        var near = Math.max(0, Math.min(1, 1 - dist / 55));
-        var scale = 0.98 + near * 0.04;
+        /* dist° = éloignement angulaire (toutes directions) ; 0 = visée pile sur le hotspot. */
+        var refDeg = 48;
+        var near = Math.max(0, Math.min(1, 1 - dist / refDeg));
+        var sMin = 0.86;
+        var sMax = 1.06;
+        var scale = sMin + near * (sMax - sMin);
         slot.style.setProperty('--rs-hotspot-prox-scale', scale.toFixed(4));
       }
     }
@@ -1254,7 +1257,8 @@
           yaw: yaw,
           pitch: pitch,
           type: 'info',
-          scale: true,
+          /* false : avec true, Pannellum ajoute scale(…/h) ; h→0 → bouton qui explose en taille (« zoom infini »). L’échelle vient du CSS (--rs-hotspot-plane + proximité). */
+          scale: false,
           cssClass: 'pnlm-pointer rs-pnlm-hs ' + (extraClass || ''),
           createTooltipFunc: function (wrapper) {
             var plane = RS_HOTSPOT_PLANE * mul;
@@ -1265,8 +1269,8 @@
       }
 
       /*
-        Hotspots : RS_HS_DEFS (yaw/pitch + taille) ; proximité caméra → --rs-hotspot-prox-scale sur chaque slot.
-        Mobile : strip de scroll centré ; yaw par deltas + recentrage → 360° infini.
+        Hotspots : RS_HS_DEFS ; Pannellum scale: false (sinon zoom explosif) ; proximité → --rs-hotspot-prox-scale.
+        Mobile : strip de scroll ; yaw par deltas + recentrage → 360° infini.
       */
       for (var hi = 0; hi < RS_HS_DEFS.length; hi++) {
         var def = RS_HS_DEFS[hi];

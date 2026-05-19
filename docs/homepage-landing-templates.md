@@ -49,11 +49,11 @@ La [documentation Pannellum sur les hot spots](https://pannellum.org/documentati
 | **`createTooltipFunc`** / **`createTooltipArgs`** | Rendu custom du contenu dans le hotspot (notre cas : on **déplace** un nœud DOM Shopify dans le wrapper). |
 | **`clickHandlerFunc`** | Clic custom. |
 | **`targetYaw`**, **`targetPitch`**, **`targetHfov`** | Cibles pour les transitions de type `scene`. |
-| **`scale`** (booléen) | Si **`true`**, Pannellum [met à l’échelle le hotspot](https://pannellum.org/documentation/reference/#hot-spots) quand le **hfov** change (mieux ancré visuellement dans la vue par rapport au zoom). |
+| **`scale`** (booléen) | Si **`true`**, Pannellum ajoute un facteur d’échelle lié à la géométrie de la vue — **peut diverger** quand l’angle tend vers certains cas (effet « zoom infini »). Ici on utilise **`scale: false`** et on gère l’échelle en **CSS** (`--rs-hotspot-plane` + `--rs-hotspot-prox-scale`). |
 
-**Dans ce thème** (`addMount` + **`RS_HS_DEFS`** dans `rs-home-landing-next.liquid`) : `type: 'info'`, **`scale: true`**, `id`, `yaw`, `pitch`, `cssClass`, `createTooltipFunc`, **`mul`**. Slots **`rs-landing-hotspot--prox-ui`** : **même** `transform: scale( plane × --rs-hotspot-prox-scale )` pour le formulaire et les pastilles (proximité très douce, voir JS).
+**Dans ce thème** (`addMount` + **`RS_HS_DEFS`**) : `type: 'info'`, **`scale: false`** (voir tableau ci-dessus), `id`, `yaw`, `pitch`, `cssClass`, `createTooltipFunc`, **`mul`**. Slots **`rs-landing-hotspot--prox-ui`** : `scale( plane × --rs-hotspot-prox-scale )` où **proximité** = plus grand quand la visée est **alignée** sur le hotspot, plus petit quand tu t’**éloignes** en yaw/pitch (plage ~0,86–1,06).
 
-**Réglage Shopify « profondeur »** : **`hotspot_plane_scale_pct`** (curseur **50–115 %**, défaut **82 %**) — facteur d’échelle sur le contenu du hotspot pour rapprocher visuellement le CTA du fond. **`assets/pannellum.js`** est la **2.5.6** telle que fournie par Pannellum (upstream), **sans patch** sur le `translateZ` des hot spots. **`scale: true` + ce curseur** complètent le ressenti d’une sphère unique.
+**Réglage Shopify « profondeur »** : **`hotspot_plane_scale_pct`** (curseur **50–115 %**, défaut **82 %**) — facteur d’échelle sur le contenu du hotspot pour rapprocher visuellement le CTA du fond. **`assets/pannellum.js`** est la **2.5.6** upstream. Hotspots en **`scale: false`** côté Pannellum ; l’échelle vient du **CSS** (`transform: scale(...)` avec **`--rs-hotspot-plane`** et **`--rs-hotspot-prox-scale`**).
 
 **Suite prévue** : exposer **`yaw` / `pitch`** (et éventuellement `localPlaneMul` ou des curseurs par hotspot) en **réglages de section** pour caler sans retoucher au JS à chaque itération.
 
