@@ -1026,15 +1026,22 @@
     /* hfov : plus haut = plus large (dézoom). Valeurs « classiques » Pannellum (~86–90). */
     var RS_DESKTOP_HFOV = 86;
     var RS_MOBILE_HFOV = 90;
-    /* Hotspot formulaire : aligné sur RS_HS_DEFS (addMount + proximité). */
-    var RS_FORM_HS_YAW = -101;
-    var RS_FORM_HS_PITCH = 15;
+    /*
+      Référentiel spawn : visée caméra au chargement (desktop + mobile après sync scroll).
+      Le formulaire est placé sur la sphère aux mêmes yaw/pitch → **centre de l’écran au spawn**.
+      Ajuste RS_SPAWN_* si le « milieu » de ta texture 360° n’est pas yaw=0, pitch=0 (ex. 180 / 0).
+    */
+    var RS_SPAWN_YAW = 0;
+    var RS_SPAWN_PITCH = 0;
+    var RS_FORM_HS_YAW = RS_SPAWN_YAW;
+    var RS_FORM_HS_PITCH = RS_SPAWN_PITCH;
     /* Multiplicateur « plan » (× curseur section) : gros / moyen / petit pastilles & form */
     var RS_HS_SZ_GROS = 1.22;
     var RS_HS_SZ_MOYEN = 1;
     var RS_HS_SZ_PETIT = 0.78;
     /*
-      Hotspots : positions par défaut sur la sphère (yaw / pitch) + mul plan. Modifier ici uniquement.
+      Hotspots : yaw/pitch sur la sphère + mul. Le form utilise RS_FORM_HS_* (= spawn).
+      Les autres boutons seront recalés par rapport à RS_SPAWN_* au fil des itérations.
     */
     var RS_HS_DEFS = [
       { hsId: 'rs-hs-form', domId: 'rs-pnlm-slot-waitlist', extraClass: 'rs-pnlm-hs--form', mul: RS_HS_SZ_GROS },
@@ -1327,9 +1334,9 @@
         showFullscreenCtrl: false,
         mouseZoom: false,
         hfov: m0 ? RS_MOBILE_HFOV : RS_DESKTOP_HFOV,
-        /* Vue initiale alignée sur le hotspot formulaire (même yaw/pitch que addMount rs-hs-form). */
-        pitch: RS_FORM_HS_PITCH,
-        yaw: RS_FORM_HS_YAW,
+        /* Vue initiale = référentiel spawn (formulaire au centre de l’écran à l’ouverture). */
+        pitch: RS_SPAWN_PITCH,
+        yaw: RS_SPAWN_YAW,
         minYaw: -180,
         maxYaw: 180,
         minHfov: m0 ? RS_MOBILE_HFOV : RS_DESKTOP_HFOV,
