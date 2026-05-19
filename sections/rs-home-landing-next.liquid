@@ -1,0 +1,518 @@
+{%- liquid
+  assign portal_url = section.settings.portal_url | default: 'https://portail.recrutestagiaire.eu'
+  assign grillz_url = section.settings.grillz_url | default: '' | strip
+  if grillz_url == blank
+    if pages.grillz != blank
+      assign grillz_url = pages.grillz.url
+    else
+      assign grillz_url = '/pages/grillz'
+    endif
+  endif
+  assign heading_text = section.settings.heading | default: 'RECRUTE STAGIAIRE'
+-%}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+
+{{ 'rs-hero-video.css' | asset_url | stylesheet_tag }}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+
+<section
+  class="rs-home-landing shopify-section section-rs-home-landing"
+  id="shopify-section-{{ section.id }}"
+  data-rs-heading="{{ heading_text | escape }}"
+  {{ section.shopify_attributes }}>
+
+  <div id="rs-panorama" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;"></div>
+
+<div class="rs-landing-overlay-root rs-landing-hotspots" data-rs-ui>
+    
+      class="rs-landing-hotspot rs-landing-hotspot--portal rs-landing-overlay__cta"
+      href="{{ portal_url }}"
+      rel="noopener noreferrer">
+      {{ section.settings.portal_label | default: '← LE BUREAU' | escape }}
+    </a>
+
+    <div class="rs-landing-hotspot rs-landing-hotspot--form">
+      <div class="rs-hero-video__content rs-landing-overlay__waitlist">
+        {%- form 'customer', id: 'rs-waitlist-form', class: 'rs-landing-overlay__form-inner' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter,waiting-list">
+          {%- if form.posted_successfully? -%}
+            <p class="rs-hero-video__subtitle rs-landing-overlay__success" role="status">
+              {{ section.settings.success_message | default: 'Tu es sur la liste.' | escape }}
+            </p>
+          {%- else -%}
+            {%- if form.errors -%}
+              <p class="rs-landing-overlay__error" role="alert">{{ form.errors | default_errors }}</p>
+            {%- endif -%}
+            <div class="rs-hero-video__badge">
+              <span class="rs-hero-video__badge-dot"></span>
+              <span>{{ section.settings.form_label | default: 'accès anticipé drop' | escape }}</span>
+            </div>
+            <div class="rs-hero-video__search">
+              <span class="rs-hero-video__search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <circle cx="10.5" cy="10.5" r="6.25" stroke="currentColor" stroke-width="2" fill="none"/>
+                  <path d="M15.2 15.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+                </svg>
+              </span>
+              <label class="visually-hidden" for="rs-waitlist-email">
+                {{ section.settings.form_label | default: 'accès anticipé drop' | escape }}
+              </label>
+              <input
+                id="rs-waitlist-email"
+                class="rs-hero-video__search-input"
+                type="email"
+                name="contact[email]"
+                value="{{ form.email }}"
+                placeholder="{{ section.settings.email_placeholder | default: 'ton@email.com' | escape }}"
+                autocomplete="email"
+                required
+                {% if form.errors contains 'email' %}aria-invalid="true"{% endif %}>
+              <button
+                type="submit"
+                class="rs-hero-video__search-btn rs-landing-search-btn--arrow"
+                aria-label="{{ section.settings.submit_label | default: 'REJOINDRE' | escape }}">
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <p class="rs-landing-drop-tagline">DROP - I LOVE STAGIAIRE</p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+
+    <a class="rs-landing-hotspot rs-landing-hotspot--grillz rs-landing-overlay__cta" href="{{ grillz_url }}">
+      {{ section.settings.grillz_label | default: 'LE CABINET A GRILLZ →' | escape }}
+    </a>
+  </div>
+</section>
+
+<style>
+  .section-rs-home-landing {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  #rs-panorama,
+  #rs-panorama .pnlm-container {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767.98px) {
+    html.rs-home-landing-active,
+    body.rs-home-landing-active {
+      overflow: hidden;
+      height: 100%;
+      overscroll-behavior: none;
+    }
+    body.rs-home-landing-active > main {
+      overflow: hidden;
+      min-height: 100dvh;
+      height: 100dvh;
+    }
+    .section-rs-home-landing {
+      overflow: hidden;
+      height: 100dvh;
+      max-height: 100dvh;
+    }
+  }
+
+  body.rs-home-landing-active .rs-site-footer,
+  body.rs-home-landing-active footer.footer {
+    display: none !important;
+  }
+
+  body.rs-home-landing-active .rs-header-mobile-bar__menu-btn,
+  body.rs-home-landing-active .rs-header-burger-btn,
+  body.rs-home-landing-active #rs-header-mobile-menu-btn {
+    display: none !important;
+  }
+
+  body.rs-home-landing-active .rs-ticker,
+  body.rs-home-landing-active .rs-header-kitsch-pop,
+  body.rs-home-landing-active .rs-ph-navdesk,
+  body.rs-home-landing-active .rs-banner-top__actions,
+  body.rs-home-landing-active .rs-ph-brandlink-title,
+  body.rs-home-landing-active .rs-ph-brandlink-title-hit,
+  body.rs-home-landing-active .rs-nav-brand__name.logo {
+    display: none !important;
+  }
+
+  body.rs-home-landing-active .header-wrap.rs-header {
+    z-index: 100 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  body.rs-home-landing-active .header-wrap.rs-header:not(.rs-header--scroll-solid) .rs-header-two-tier,
+  body.rs-home-landing-active .header-wrap.rs-header.rs-header--scroll-solid .rs-header-two-tier {
+    background: transparent !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    border-bottom-color: rgba(255,255,255,0.12) !important;
+    box-shadow: none !important;
+  }
+
+  @media (min-width: 768px) {
+    body.rs-home-landing-active .rs-header-mobile-bar {
+      display: none !important;
+    }
+    body.rs-home-landing-active .rs-header-top-line {
+      display: grid !important;
+      grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+      align-items: center;
+      width: 100%;
+      gap: 1rem;
+    }
+    body.rs-home-landing-active .rs-header-pole-brand.rs-banner-top {
+      grid-column: 1;
+      justify-self: start;
+    }
+    body.rs-home-landing-active .rs-home-header-title {
+      grid-column: 2;
+      justify-self: center;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      font-family: var(--font-display), 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      line-height: 1.2;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-align: center;
+      white-space: nowrap;
+      text-shadow: 0 0 14px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.45);
+      pointer-events: none;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    body.rs-home-landing-active .rs-header-mobile-bar {
+      display: grid !important;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      min-height: 64px;
+      padding: 0 12px;
+      position: relative;
+    }
+    body.rs-home-landing-active .rs-header-mobile-bar__brand {
+      grid-column: 1;
+      justify-self: start;
+      z-index: 2;
+    }
+    body.rs-home-landing-active .rs-header-mobile-bar__title {
+      display: block !important;
+      visibility: visible !important;
+      position: absolute !important;
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%,-50%) !important;
+      width: max-content !important;
+      max-width: calc(100% - 96px) !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      text-align: center !important;
+      font-family: var(--font-display), 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(11px,3.4vw,17px);
+      letter-spacing: 0.045em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      z-index: 3;
+      color: #fff !important;
+      -webkit-text-fill-color: #fff !important;
+      text-shadow: 0 0 14px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.45);
+    }
+  }
+
+  .rs-landing-overlay-root {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .rs-landing-overlay-root * { pointer-events: none; }
+
+  .rs-landing-overlay-root a,
+  .rs-landing-overlay-root button,
+  .rs-landing-overlay-root input,
+  .rs-landing-overlay-root label,
+  .rs-landing-overlay-root textarea,
+  .rs-landing-overlay-root select {
+    pointer-events: auto;
+  }
+
+  .rs-landing-hotspot {
+    position: absolute;
+    z-index: 1;
+  }
+
+  .rs-landing-hotspot--portal {
+    left: 20%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+  }
+
+  .rs-landing-hotspot--form {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: min(320px,82vw);
+  }
+
+  .rs-landing-hotspot--grillz {
+    top: 80%;
+    right: 20%;
+    transform: translate(50%,-50%);
+  }
+
+  @media (min-width: 768px) {
+    .rs-landing-hotspot--form {
+      width: min(360px,32vw);
+    }
+  }
+
+  .rs-landing-overlay__waitlist.rs-hero-video__content {
+    position: relative;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    transform: none;
+    text-align: center;
+  }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__badge {
+    margin: 0 auto 12px;
+    color: #0a0a0a;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(0,0,0,0.12);
+    backdrop-filter: blur(8px);
+  }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__badge span { color: #0a0a0a; }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 7px 8px 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.45);
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+  }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__search-icon {
+    flex: 0 0 auto;
+    color: rgba(255,255,255,0.65);
+    line-height: 0;
+  }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__search-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: clamp(12px,3.45vw,14.5px);
+    letter-spacing: 0.06em;
+    color: #fff;
+    outline: none;
+  }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__search-input::placeholder {
+    color: rgba(255,255,255,0.5);
+  }
+
+  .rs-landing-overlay__waitlist .rs-hero-video__search-btn {
+    flex: 0 0 auto;
+    padding: 4px 6px !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #fff !important;
+    font-size: clamp(14px,3.8vw,16px) !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+  }
+
+  .rs-landing-drop-tagline {
+    margin: 14px auto 0;
+    font-family: var(--font-display), 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(13px,3.8vw,17px);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 14px rgba(0,0,0,0.45), 0 1px 3px rgba(0,0,0,0.4);
+  }
+
+  .rs-landing-overlay__success {
+    margin: 0;
+    color: #fff;
+    font-size: 15px;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.45);
+  }
+
+  .rs-landing-overlay__error {
+    margin: 0 0 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #ffb4b4;
+    background: rgba(80,0,0,0.35);
+    border: 1px solid rgba(255,120,120,0.35);
+    text-align: center;
+  }
+
+  .rs-home-landing a.rs-landing-overlay__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.45);
+    background: rgba(0,0,0,0.35);
+    color: #fff !important;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: clamp(12px,3.45vw,14.5px);
+    letter-spacing: 0.14em;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    white-space: nowrap;
+    backdrop-filter: blur(8px);
+  }
+
+  .rs-home-landing a.rs-landing-overlay__cta:hover {
+    background: rgba(0,0,0,0.52);
+    border-color: rgba(255,255,255,0.85);
+  }
+</style>
+
+<script>
+  (function () {
+    document.documentElement.classList.add('rs-home-landing-active');
+    document.body.classList.add('rs-home-landing-active');
+
+    function initPannellum() {
+      if (typeof pannellum === 'undefined') {
+        setTimeout(initPannellum, 100);
+        return;
+      }
+      pannellum.viewer('rs-panorama', {
+        type: 'equirectangular',
+        panorama: 'https://cdn.shopify.com/s/files/1/0997/4821/7214/files/360bg.png?v=1779182961',
+        autoLoad: true,
+        autoRotate: -0.5,
+        autoRotateInactivityDelay: 3000,
+        compass: false,
+        showZoomCtrl: false,
+        showFullscreenCtrl: false,
+        mouseZoom: false,
+        hfov: 90,
+        pitch: 0,
+        yaw: 180,
+        minHfov: 90,
+        maxHfov: 90,
+        draggable: true,
+        touchPanSpeedCoeffFactor: 1.5
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPannellum);
+    } else {
+      initPannellum();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Accueil landing 360",
+  "tag": "section",
+  "class": "section-rs-home-landing",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titre header",
+      "default": "RECRUTE STAGIAIRE"
+    },
+    {
+      "type": "text",
+      "id": "form_label",
+      "label": "Label formulaire",
+      "default": "accès anticipé drop"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Placeholder email",
+      "default": "ton@email.com"
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Libellé bouton",
+      "default": "REJOINDRE"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Message de confirmation",
+      "default": "Tu es sur la liste."
+    },
+    {
+      "type": "text",
+      "id": "portal_label",
+      "label": "Bouton portail",
+      "default": "← LE BUREAU"
+    },
+    {
+      "type": "url",
+      "id": "portal_url",
+      "label": "URL portail"
+    },
+    {
+      "type": "text",
+      "id": "grillz_label",
+      "label": "Bouton grillz",
+      "default": "LE CABINET A GRILLZ →"
+    },
+    {
+      "type": "url",
+      "id": "grillz_url",
+      "label": "URL page grillz"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accueil — nouvelle landing"
+    }
+  ]
+}
+{% endschema %}
