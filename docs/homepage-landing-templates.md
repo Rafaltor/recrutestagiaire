@@ -5,7 +5,7 @@
 | Rôle | Section Liquid | Template JSON |
 |------|----------------|---------------|
 | **Sauvegarde** (comportement actuel figé côté code) | `sections/rs-home-landing-classic.liquid` | `templates/index.json` (défaut) |
-| **Nouvelle landing** (à personnaliser) | `sections/rs-home-landing-next.liquid` | `templates/index.next.json` |
+| **Nouvelle landing** (360° Pannellum, même UX scroll / hotspots que le wallpaper) | `sections/rs-home-landing-next.liquid` | `templates/index.next.json` |
 
 Les deux sections partagent les mêmes classes CSS / JS (`.rs-home-landing`, etc.) : une seule est affichée à la fois selon le template.
 
@@ -27,6 +27,7 @@ Les deux sections partagent les mêmes classes CSS / JS (`.rs-home-landing`, etc
 
 - Modifier uniquement **`rs-home-landing-next.liquid`** pour itérer sur la nouvelle version.  
 - La **classic** sert de référence / rollback : tu peux recopier son contenu vers `next` si besoin.
+- **Next (360°)** : même structure que le wallpaper (`rs-landing-scroller`, track 250vw sur mobile, hotspots qui se déplacent avec le scroll, hint « glisse »). Le fond est Pannellum plein écran ; sur mobile le **scroll horizontal** pilote le **yaw** ; sur desktop le **drag** se fait dans la sphère (Pannellum).
 
 ## Ancien fichier
 
