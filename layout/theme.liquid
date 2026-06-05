@@ -20,16 +20,14 @@
   {{ content_for_header }}
 
   {%- comment -%}
-    Favicon : après content_for_header pour que nos balises gagnent sur l’icône injectée par Shopify
-    (sinon l’onglet peut rester sur l’ancienne image / le logo boutique).
+    Favicon Recrute Stagiaire (assets) — après content_for_header pour écraser l’icône Shopify.
   {%- endcomment -%}
-  {%- if settings.favicon != blank -%}
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
-    <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180 }}">
-  {%- else -%}
-    <link rel="icon" type="image/png" href="{{ 'favicon.png' | asset_url }}">
-    <link rel="apple-touch-icon" href="{{ 'favicon.png' | asset_url }}">
-  {%- endif -%}
+  <link rel="icon" type="image/png" href="{{ 'favicon-96x96.png' | asset_url }}" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="{{ 'favicon.svg' | asset_url }}">
+  <link rel="shortcut icon" href="{{ 'favicon.ico' | asset_url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ 'apple-touch-icon.png' | asset_url }}">
+  <meta name="apple-mobile-web-app-title" content="RecruteStagiaire">
+  <link rel="manifest" href="{{ 'site.webmanifest' | asset_url }}">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
