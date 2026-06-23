@@ -5,6 +5,8 @@
   assign rs_p_vote = settings.rs_portail_url_vote | default: 'https://portail.recrutestagiaire.eu/swipe'
   assign rs_p_login = settings.rs_portail_url_connexion | default: 'https://portail.recrutestagiaire.eu/connexion'
 
+  assign rs_home_url = settings.rs_home_url | default: 'https://recrutestagiaire.eu'
+
   assign rs_default_logo = 'rs-logo-eu.png'
   if section.settings.brand_image != blank
     assign brand_image = section.settings.brand_image
@@ -46,22 +48,6 @@
   if brand_logo_max > 200
     assign brand_logo_max = 200
   endif
-
-  assign rs_boutique_url = section.settings.boutique_link | default: '' | strip
-  if rs_boutique_url == blank
-    assign rs_boutique_url = '/collections/mes-basiques-damour'
-    if collections['mes-basiques-damour'] != blank
-      assign rs_boutique_url = collections['mes-basiques-damour'].url
-    elsif collections['les-stagiaires-de-base'] != blank
-      assign rs_boutique_url = collections['les-stagiaires-de-base'].url
-    endif
-  endif
-
-  assign rs_grillz_url = section.settings.menu_grillz_link | default: '' | strip
-  if rs_grillz_url == blank
-    assign rs_grillz_url = '/pages/grillz'
-  endif
-  assign nav_grillz_lbl = section.settings.menu_grillz_label | default: 'Grillz' | strip
 
   if section.settings.site_title != blank
     assign rs_brand_title = section.settings.site_title
@@ -116,7 +102,7 @@
     <div class="container">
       <header class="rs-header-two-tier" aria-label="En-tête du site">
         <div class="rs-header-mobile-bar" data-rs-header-mobile-bar>
-          <a class="rs-header-mobile-bar__brand rs-ph-mbrand" href="{{ routes.root_url }}">
+          <a class="rs-header-mobile-bar__brand rs-ph-mbrand" href="{{ rs_home_url }}">
             {%- if brand_image != blank -%}
               <img
                 class="rs-header-mobile-bar__logo"
@@ -128,7 +114,7 @@
                 decoding="async">
             {%- endif -%}
           </a>
-          <a class="rs-header-mobile-bar__title" href="{{ routes.root_url }}">
+          <a class="rs-header-mobile-bar__title" href="{{ rs_home_url }}">
             {{ rs_brand_line_one | escape }}{%- if rs_brand_line_two != blank -%}<br class="rs-brand-title-break" aria-hidden="true"> {{ rs_brand_line_two | escape }}{%- endif -%}
           </a>
           <button
@@ -152,7 +138,7 @@
             <div class="rs-banner-top rs-header-pole-brand rs-header-pole-title">
               <a
                 class="nav-brand rs-nav-brand rs-nav-brand--title-row rs-ph-brandlink text-decoration-none"
-                href="{{ routes.root_url }}"
+                href="{{ rs_home_url }}"
                 aria-label="{{ shop.name | escape }} — Accueil">
                 {%- if brand_image != blank -%}
                   <span class="rs-ph-brandlink-logo-hit">
@@ -180,8 +166,6 @@
             </div>
 
             <nav class="rs-ph-navdesk" aria-label="Navigation principale">
-              <a href="{{ rs_boutique_url }}">Boutique</a>
-              <a href="{{ rs_grillz_url }}">{{ nav_grillz_lbl | escape }}</a>
               <a href="{{ c1 }}" rel="noopener noreferrer">{{ nav_portail_lbl | escape }}</a>
               <a href="{{ c3 }}" rel="noopener noreferrer">{{ nav_vote_lbl | escape }}</a>
               <a href="{{ k1 }}">Le collectif</a>
@@ -236,8 +220,6 @@
       <nav class="rs-header-drawer__nav" aria-label="Navigation principale">
         <div class="rs-header-drawer__section">
           <div class="rs-header-drawer__sublinks">
-            <a href="{{ rs_boutique_url }}">Boutique</a>
-            <a href="{{ rs_grillz_url }}">{{ nav_grillz_lbl | escape }}</a>
             <a href="{{ c1 }}" rel="noopener noreferrer">{{ nav_portail_lbl | escape }}</a>
             <a href="{{ c3 }}" rel="noopener noreferrer">{{ nav_vote_lbl | escape }}</a>
             <a href="{{ k1 }}">Le collectif</a>

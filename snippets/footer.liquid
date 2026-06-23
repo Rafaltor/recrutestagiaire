@@ -1,12 +1,13 @@
 {%- liquid
   assign rs_footer_swipe = settings.rs_portail_url_vote | default: 'https://portail.recrutestagiaire.eu/swipe'
   assign rs_footer_all = routes.all_products_collection_url
+  assign rs_home_url = settings.rs_home_url | default: 'https://recrutestagiaire.eu'
 -%}
 <footer class="footer rs-site-footer" role="contentinfo">
   <div class="container">
     <div class="rs-site-footer__columns">
       <div class="rs-site-footer__col rs-site-footer__col--brand">
-        <a href="{{ routes.root_url }}" class="rs-site-footer__brand-link text-decoration-none">
+        <a href="{{ rs_home_url }}" class="rs-site-footer__brand-link text-decoration-none">
           <span class="rs-site-footer__brand-name">{{ shop.name | upcase }}</span>
         </a>
         <p class="rs-site-footer__intro">
