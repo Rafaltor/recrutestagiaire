@@ -91,7 +91,7 @@
                     class="btn btn-primary w-100 rs-cart-btn-primary"
                     style="font-size:{{ block.settings.font_size }}px;padding:{{ block.settings.padding }}px;font-weight:600;border-radius:{{ block.settings.radius }}px;"
                     {{ block.shopify_attributes }}>
-                    {{ block.settings.label | default: 'Soumettre ma candidature' }}
+                    {{ block.settings.label | default: 'Procéder à l''achat' }}
                   </button>
 
                 {%- elsif block.type == 'continue_button' -%}
@@ -318,7 +318,7 @@
           "type": "text",
           "id": "label",
           "label": "Texte du bouton",
-          "default": "Soumettre ma candidature"
+          "default": "Procéder à l'achat"
         },
         {
           "type": "range",
