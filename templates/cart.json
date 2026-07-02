@@ -11,23 +11,41 @@
   "sections": {
     "main": {
       "type": "main-cart",
-      "settings": {},
       "blocks": {
         "order_summary": {
           "type": "order_summary",
-          "settings": {}
+          "settings": {
+            "title": "Récapitulatif",
+            "subtotal_label": "Sous-total",
+            "shipping_label": "Livraison",
+            "shipping_text": "Calculée à l'étape suivante",
+            "total_label": "Total"
+          }
         },
         "checkout_button": {
           "type": "checkout_button",
-          "settings": {}
+          "settings": {
+            "label": "Procéder au paiement",
+            "font_size": 15,
+            "padding": "12",
+            "radius": 6
+          }
         },
         "continue_button": {
           "type": "continue_button",
-          "settings": {}
+          "settings": {
+            "label": "Voir d'autres offres",
+            "font_size": 13,
+            "padding": "10",
+            "radius": 6
+          }
         },
         "trust_text": {
           "type": "trust_text",
-          "settings": {}
+          "settings": {
+            "text": "Paiement sécurisé — Retours sous 14 jours",
+            "font_size": 11
+          }
         }
       },
       "block_order": [
@@ -35,8 +53,25 @@
         "checkout_button",
         "continue_button",
         "trust_text"
-      ]
+      ],
+      "settings": {
+        "page_title": "Mon dossier de candidature",
+        "title_size": 22,
+        "title_weight": "600",
+        "thumb_size": 72,
+        "thumb_radius": 8,
+        "remove_label": "Retirer",
+        "summary_radius": 8,
+        "summary_padding": 20,
+        "empty_title": "Votre dossier est vide",
+        "empty_text": "Vous n'avez encore postulé à aucun poste.",
+        "empty_btn_label": "Consulter les offres",
+        "padding_top": 24,
+        "padding_bottom": 48
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
