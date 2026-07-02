@@ -162,9 +162,9 @@
     <div class="rs-pro-mock__left-top">
       <div class="rs-pro-mock__tag-row">
         {% if cv.available %}
-          <span class="rs-pro-mock__tag rs-pro-mock__tag--green rs-pro-mock__tag--open">Candidatures ouvertes</span>
+          <span class="rs-pro-mock__tag rs-pro-mock__tag--green rs-pro-mock__tag--open">En stock</span>
         {% else %}
-          <span class="rs-pro-mock__tag rs-pro-mock__tag--muted">Poste pourvu</span>
+          <span class="rs-pro-mock__tag rs-pro-mock__tag--muted">Rupture de stock</span>
         {% endif %}
         {% if collection %}
           <span class="rs-pro-mock__tag rs-pro-mock__tag--blue">{{ collection.title }}</span>
@@ -187,6 +187,9 @@
       </div>
 
       <h1 class="rs-pro-mock__job-title">{{ product.title }}</h1>
+      {%- if product.type != blank -%}
+        <p class="rs-pro-mock__product-type">{{ product.type | escape }}</p>
+      {%- endif -%}
 
       {%- if product.featured_image -%}
         {%- liquid
@@ -237,53 +240,18 @@
     </div>
 
     <div class="rs-pro-mock__left-body">
-      <div class="rs-pro-mock__meta-grid">
-        <div class="rs-pro-mock__meta-item">
-          <div class="rs-pro-mock__meta-label">Type de contrat</div>
-          <div class="rs-pro-mock__meta-value">{{ rs_contract_meta }}</div>
-        </div>
-        <div class="rs-pro-mock__meta-item">
-          <div class="rs-pro-mock__meta-label">Disponibilité</div>
-          <div class="rs-pro-mock__meta-value">{{ rs_avail_meta }}</div>
-        </div>
-        <div class="rs-pro-mock__meta-item">
-          <div class="rs-pro-mock__meta-label">Département</div>
-          <div class="rs-pro-mock__meta-value">{{ rs_dept_meta }}</div>
-        </div>
-        <div class="rs-pro-mock__meta-item">
-          <div class="rs-pro-mock__meta-label">Matière</div>
-          <div class="rs-pro-mock__meta-value">{{ rs_matiere }}</div>
-        </div>
-      </div>
-
-      {%- if product.metafields.custom.missions != blank -%}
-        <div class="rs-pro-mock__section">
-          <div class="rs-pro-mock__section-title">{{ section.settings.missions_title | default: 'Missions du poste' }}</div>
-          <div class="rs-pro-mock__mf-body rs-pro-mock__mf-body--missions">{{ product.metafields.custom.missions | metafield_tag }}</div>
-        </div>
-      {%- endif -%}
-      <div class="rs-pro-mock__section">
-        <div class="rs-pro-mock__section-title">{{ section.settings.profil_title | default: 'Profil recherché' }}</div>
-        {%- if product.metafields.custom.profil_recherche != blank -%}
-          {%- capture _rs_profil_html -%}{{ product.metafields.custom.profil_recherche | metafield_tag }}{%- endcapture -%}
-          <div class="rs-pro-mock__mf-body">
-            {{ _rs_profil_html
-              | replace: 'mettre les dimensions', 'Taille XS à XL'
-              | replace: 'Mettre les dimensions', 'Taille XS à XL'
-              | replace: 'Mettre les Dimensions', 'Taille XS à XL' }}
+      {%- if rs_matiere != blank and rs_matiere != '—' -%}
+        <div class="rs-pro-mock__product-specs">
+          <div class="rs-pro-mock__product-spec">
+            <span class="rs-pro-mock__product-spec-label">Matière</span>
+            <span class="rs-pro-mock__product-spec-value">{{ rs_matiere }}</span>
           </div>
-        {%- endif -%}
-      </div>
-      {%- if product.metafields.custom.avantages != blank -%}
-        <div class="rs-pro-mock__section">
-          <div class="rs-pro-mock__section-title">{{ section.settings.avantages_title | default: 'Avantages du poste' }}</div>
-          <div class="rs-pro-mock__mf-body">{{ product.metafields.custom.avantages | metafield_tag }}</div>
         </div>
       {%- endif -%}
 
       {% if product.description != blank %}
         <div class="rs-pro-mock__section">
-          <div class="rs-pro-mock__section-title">{{ section.settings.description_title | default: 'Description du poste' }}</div>
+          <div class="rs-pro-mock__section-title">{{ section.settings.description_title | default: 'Description' }}</div>
           {%- capture _rs_desc_html -%}{{ product.description }}{%- endcapture -%}
           <div class="rs-pro-mock__mf-body rs-pro-mock__mf-body--desc">
             {{ _rs_desc_html
@@ -299,14 +267,11 @@
       <div class="rs-pro-mock__apply-card" id="apply-section">
           {% if cv.available %}
             {%- liquid
-              assign rs_d1 = rs_re1 | default: section.settings.reassurance_default_1
-              assign rs_d2 = rs_re2 | default: section.settings.reassurance_default_2
-              assign rs_d3 = rs_re3 | default: section.settings.reassurance_default_3
+              assign rs_d1 = section.settings.reassurance_default_1
+              assign rs_d2 = section.settings.reassurance_default_2
+              assign rs_d3 = section.settings.reassurance_default_3
               assign rs_has_re = false
               if rs_d1 != blank or rs_d2 != blank or rs_d3 != blank
-                assign rs_has_re = true
-              endif
-              if rs_reassurance_block != blank
                 assign rs_has_re = true
               endif
             -%}
@@ -314,7 +279,7 @@
               <input type="hidden" name="id" id="product-variant-id" value="{{ cv.id }}">
 
               <div class="rs-pro-mock__price-block">
-                <div class="rs-pro-mock__price-label">{{ section.settings.price_label | default: 'Rémunération du poste' }}</div>
+                <div class="rs-pro-mock__price-label">{{ section.settings.price_label | default: 'Prix' }}</div>
                 <div class="rs-pro-mock__price" id="rs-pro-price">{% render 'rs-money-fr', amount: cv.price %}</div>
                 {% if section.settings.free_shipping_text != blank %}
                   <div class="rs-pro-mock__price-sub">{{ section.settings.free_shipping_text }}</div>
@@ -327,7 +292,7 @@
                 {%- liquid
                   assign rs_variant_lead = section.settings.apply_lead_text | strip
                   if rs_variant_lead == blank
-                    assign rs_variant_lead = section.settings.variant_heading | default: 'Sélectionne ta taille'
+                    assign rs_variant_lead = section.settings.variant_heading | default: 'Choisissez votre taille'
                   endif
                 -%}
                 <div class="rs-pro-mock__size-section">
@@ -370,7 +335,7 @@
                   aria-label="{{ section.settings.qty_label | default: 'Quantité' }}">
               </div>
 
-              <button type="submit" class="rs-pro-mock__apply-btn">{{ section.settings.add_to_cart_text | default: 'Postuler - ajouter au panier' }}</button>
+              <button type="submit" class="rs-pro-mock__apply-btn">{{ section.settings.add_to_cart_text | default: 'Ajouter au panier' }}</button>
 
               {% if rs_has_re %}
                 <div class="rs-pro-mock__delivery-info">
@@ -401,28 +366,13 @@
                       </div>
                     {% endunless %}
                   {% endif %}
-                  {% if rs_reassurance_block != blank %}
-                    {% assign _re_lines = rs_reassurance_block | newline_to_br | split: '<br />' %}
-                    {% for _re_piece in _re_lines %}
-                      {% assign _re_piece = _re_piece | strip %}
-                      {%- assign _re_piece_l = _re_piece | downcase -%}
-                      {% if _re_piece != blank %}
-                        {% unless _re_piece_l contains 'fabriqu' and _re_piece_l contains 'france' %}
-                          <div class="rs-pro-mock__delivery-row">
-                            <span class="rs-pro-mock__dot"></span>
-                            <span>{{ _re_piece }}</span>
-                          </div>
-                        {% endunless %}
-                      {% endif %}
-                    {% endfor %}
-                  {% endif %}
                 </div>
               {% endif %}
 
             </form>
           {% else %}
-            <p class="text-muted mb-0">{{ section.settings.sold_out_message | default: 'Ce poste est actuellement pourvu.' }}</p>
-            <a href="{{ routes.all_products_collection_url }}" class="rs-btn rs-btn--secondary mt-3 d-inline-flex align-items-center justify-content-center text-decoration-none">{{ section.settings.sold_out_cta | default: 'Voir les autres offres' }}</a>
+            <p class="text-muted mb-0">{{ section.settings.sold_out_message | default: 'Ce produit est actuellement indisponible.' }}</p>
+            <a href="{{ routes.all_products_collection_url }}" class="rs-btn rs-btn--secondary mt-3 d-inline-flex align-items-center justify-content-center text-decoration-none">{{ section.settings.sold_out_cta | default: 'Voir la boutique' }}</a>
           {% endif %}
     </div>
   </div>
@@ -430,16 +380,31 @@
 
   {% if similar_products.size > 1 %}
     <div class="rs-pro-mock__more-jobs">
-      <h2 class="rs-pro-mock__more-jobs-title">{{ section.settings.similar_title | default: "D'autres postes à pourvoir" }}</h2>
-      {% assign _mj = 0 %}
-      {% for sim in similar_products limit: 12 %}
-        {% unless sim.id == product.id %}
-          {% assign _mj = _mj | plus: 1 %}
-          {% if _mj <= 2 %}
-            {% render 'rs-indeed-job-row', product: sim, collection: similar_collection %}
-          {% endif %}
-        {% endunless %}
-      {% endfor %}
+      <h2 class="rs-pro-mock__similar-title">{{ section.settings.similar_title | default: 'Vous aimerez aussi' }}</h2>
+      <div class="rs-pro-mock__similar-grid">
+        {% assign _mj = 0 %}
+        {% for sim in similar_products limit: 12 %}
+          {% unless sim.id == product.id %}
+            {% assign _mj = _mj | plus: 1 %}
+            {% if _mj <= 4 %}
+              {%- assign sim_cv = sim.selected_or_first_available_variant -%}
+              <a href="{{ sim.url }}" class="rs-pro-mock__similar-card text-decoration-none">
+                {%- if sim.featured_image != blank -%}
+                  <img
+                    class="rs-pro-mock__similar-card-img"
+                    src="{{ sim.featured_image | image_url: width: 400 }}"
+                    alt="{{ sim.featured_image.alt | default: sim.title | escape }}"
+                    width="200"
+                    height="200"
+                    loading="lazy">
+                {%- endif -%}
+                <span class="rs-pro-mock__similar-card-title">{{ sim.title | escape }}</span>
+                <span class="rs-pro-mock__similar-card-price">{% render 'rs-money-fr', amount: sim_cv.price %}</span>
+              </a>
+            {% endif %}
+          {% endunless %}
+        {% endfor %}
+      </div>
     </div>
   {% endif %}
 </div>

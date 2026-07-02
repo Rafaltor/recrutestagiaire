@@ -1782,6 +1782,73 @@ ul.skills .skilltag:hover { background: var(--rs-logo-blue); color: #fff; border
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
+.rs-pro-mock__product-type {
+  margin: -0.35rem 0 1rem;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(0, 26, 87, 0.72);
+}
+.rs-pro-mock__product-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 1.25rem;
+  padding: 12px 14px;
+  border: 1px solid rgba(0, 51, 171, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+}
+.rs-pro-mock__product-spec {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 120px;
+}
+.rs-pro-mock__product-spec-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(0, 26, 87, 0.55);
+}
+.rs-pro-mock__product-spec-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--rs-black, #111);
+}
+.rs-pro-mock__similar-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(0, 51, 171, 0.12);
+  border-radius: 10px;
+  background: #fff;
+  color: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.rs-pro-mock__similar-card:hover {
+  border-color: rgba(0, 51, 171, 0.28);
+  box-shadow: 0 4px 14px rgba(0, 26, 87, 0.08);
+}
+.rs-pro-mock__similar-card-img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #f4f6fb;
+}
+.rs-pro-mock__similar-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--rs-black, #111);
+}
+.rs-pro-mock__similar-card-price {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--rs-logo-blue, #0033ab);
+}
 @media (max-width: 640px) {
   .rs-pro-mock__similar-grid {
     grid-template-columns: repeat(2, 1fr);

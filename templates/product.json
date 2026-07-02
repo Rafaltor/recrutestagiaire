@@ -12,11 +12,18 @@
     "main": {
       "type": "main-product",
       "settings": {
-        "add_to_cart_text": "Postuler - ajouter au panier",
-        "free_shipping_text": "Livraison offerte dès 200 € de candidatures",
-        "reassurance_default_1": "Poste disponible immédiatement",
+        "price_label": "Prix",
+        "apply_lead_text": "Choisissez votre taille",
+        "variant_heading": "Choisissez votre taille",
+        "add_to_cart_text": "Ajouter au panier",
+        "free_shipping_text": "Livraison offerte dès 200 € d'achat",
+        "similar_title": "Vous aimerez aussi",
+        "description_title": "Description",
+        "sold_out_message": "Ce produit est actuellement indisponible.",
+        "sold_out_cta": "Voir la boutique",
+        "reassurance_default_1": "Disponible immédiatement",
         "reassurance_default_2": "Expédition sous 48h ouvrées",
-        "reassurance_default_3": "Retour sous 14 jours si inadéquation"
+        "reassurance_default_3": "Retours sous 14 jours"
       }
     }
   },
